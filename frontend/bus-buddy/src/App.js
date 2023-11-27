@@ -2,13 +2,16 @@ import logo from './logo.svg';
 import './App.css';
 import axios from "axios";
 import React, { useState , useEffect} from 'react';
+import {useParams} from 'react-router';
 
 function App() {
 
   const [word, setWord] = useState("inital");
 
+
   useEffect(()=>{
-    axios.get('http://localhost:8080/')
+
+    axios.get(`http://localhost:8080/`)
   .then((res)=>{
     setWord(res.data);
   }).catch((err)=>{
