@@ -1,37 +1,24 @@
 package com.example.BusBuddy.user;
 
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import java.util.Collection;
 import java.util.List;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
 @Entity
 @Table(name = "_user")
-public class User implements UserDetails{
-
-    public User(String firstname, String lastname, String email, String password, Role role) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String username;
 
     private String firstname;
 
@@ -52,13 +39,9 @@ public class User implements UserDetails{
 
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
-    @Override
-    public String getUsername() {
-        return email;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
