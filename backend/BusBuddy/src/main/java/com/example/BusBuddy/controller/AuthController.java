@@ -1,5 +1,7 @@
 package com.example.BusBuddy.controller;
 
+import com.example.BusBuddy.dto.JwtAuthResponse;
+import com.example.BusBuddy.dto.SignInRequest;
 import com.example.BusBuddy.dto.SignUpRequest;
 import com.example.BusBuddy.services.AuthService;
 import com.example.BusBuddy.user.User;
@@ -21,6 +23,11 @@ public class AuthController {
     public ResponseEntity<User> signUp(@RequestBody SignUpRequest signUpRequest){
         return ResponseEntity.ok(authService.signUp(signUpRequest));
 
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtAuthResponse> signIn(@RequestBody SignInRequest signInRequest){
+        return ResponseEntity.ok(authService.signIn(signInRequest));
     }
 
 }
