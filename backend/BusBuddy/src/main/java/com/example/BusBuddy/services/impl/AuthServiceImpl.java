@@ -11,6 +11,9 @@ import com.example.BusBuddy.user.UserRepository;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -31,15 +34,20 @@ public class AuthServiceImpl implements AuthService {
 
     private final JWTService jwtService;
     public User signUp(SignUpRequest signUpRequest){
-        User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setEmail(signUpRequest.getEmail());
-        user.setFirstname(signUpRequest.getFirstname());
-        user.setLastname(signUpRequest.getLastname());
-        user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
+        try{
+            User user = new User();
+            user.setUsername(signUpRequest.getUsername());
+            user.setEmail(signUpRequest.getEmail());
+            user.setFirstname(signUpRequest.getFirstname());
+            user.setLastname(signUpRequest.getLastname());
+            user.setRole(Role.USER);
+            user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
-        return userRepository.save(user);
+            return userRepository.save(user);
+        } catch (Exception e){
+            throw e;
+        }
+
     }
 
     public JwtAuthResponse signIn(SignInRequest signInRequest){

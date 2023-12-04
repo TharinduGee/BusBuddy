@@ -6,6 +6,8 @@ import com.example.BusBuddy.dto.SignUpRequest;
 import com.example.BusBuddy.services.AuthService;
 import com.example.BusBuddy.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +22,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signUp(@RequestBody SignUpRequest signUpRequest){
-        return ResponseEntity.ok(authService.signUp(signUpRequest));
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest){
+        try{
+            //return ResponseEntity.ok(authService.signUp(signUpRequest));
+            authService.signUp(signUpRequest);
+            return ResponseEntity.ok("User signed up successfully!");
+        }catch(DataIntegrityViolationException e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
 
     }
 
