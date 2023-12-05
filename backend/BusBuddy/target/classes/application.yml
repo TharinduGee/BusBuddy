@@ -1,4 +1,5 @@
 spring:
+
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
@@ -13,3 +14,6 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+security:
+  jwt:
+    secret-key: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
