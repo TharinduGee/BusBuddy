@@ -8,15 +8,10 @@ import com.example.BusBuddy.services.JWTService;
 import com.example.BusBuddy.user.Role;
 import com.example.BusBuddy.user.User;
 import com.example.BusBuddy.user.UserRepository;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,34 +39,22 @@ public class AuthServiceImpl implements AuthService {
             user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
 
             return userRepository.save(user);
-        } catch (Exception e){
+        } catch(DataIntegrityViolationException e){
             throw e;
         }
+
 
     }
 
     public JwtAuthResponse signIn(SignInRequest signInRequest){
 
-        try {
 
-
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            signInRequest.getEmail(),
-                            signInRequest.getPassword()
-                    )
-            );
-        } catch (AuthenticationException e) {
-            // Handle authentication error, log or throw a specific exception
-            e.printStackTrace(); // or log.error("Authentication failed", e);
-        }
-
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        signInRequest.getEmail(),
-//                        signInRequest.getPassword()
-//                )
-//        );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        signInRequest.getEmail(),
+                        signInRequest.getPassword()
+                )
+        );
 
         var user = userRepository.findByEmail(signInRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
         var jwt = jwtService.generateToken(user);
