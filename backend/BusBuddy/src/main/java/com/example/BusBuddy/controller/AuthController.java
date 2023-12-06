@@ -27,10 +27,9 @@ public class AuthController {
             //return ResponseEntity.ok(authService.signUp(signUpRequest));
             authService.signUp(signUpRequest);
             return ResponseEntity.ok("User signed up successfully!");
-        }catch(DataIntegrityViolationException e){
+        }catch(DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-
 
     }
 
