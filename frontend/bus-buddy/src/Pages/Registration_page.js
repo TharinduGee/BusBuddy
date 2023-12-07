@@ -1,9 +1,11 @@
 import React from "react";
+import Header from "../Components/Header.jsx";
 
 function Registration_page() {
   return (
     <div>
-      <div style={{ width: "100%", height: "100%", background: "#EFA818" }} />
+      <Header />
+      <div className="registration-page registration-page-sm"></div>
     </div>
   );
 }
