@@ -1,6 +1,7 @@
 package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.JwtAuthenticationResponse;
+import com.example.BusBuddy.dto.RefreshTokenRequest;
 import com.example.BusBuddy.dto.SignInRequest;
 import com.example.BusBuddy.dto.SignUpRequest;
 import com.example.BusBuddy.services.AuthenticationService;
@@ -25,5 +26,11 @@ public class AuthenticationController {
     @PostMapping("/signin")
     public JwtAuthenticationResponse signin(@RequestBody SignInRequest request) {
         return authenticationService.signin(request);
+    }
+
+
+    @PostMapping("/refreshtoken")
+    public JwtAuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authenticationService.refreshToken(refreshTokenRequest);
     }
 }

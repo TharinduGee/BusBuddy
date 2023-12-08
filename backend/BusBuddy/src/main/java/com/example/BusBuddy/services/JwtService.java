@@ -1,5 +1,6 @@
 package com.example.BusBuddy.services;
 
+import com.example.BusBuddy.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -23,6 +24,9 @@ public class JwtService {
 
   @Value("${token.expirationms}")
   Long jwtExpirationMs;
+
+  @Value("${refreshtoken.expirationms}")
+  Long refreshJWTExpirationMs;
 
   public String extractUserName(String token) {
       return extractClaim(token, Claims::getSubject);
@@ -53,6 +57,15 @@ public class JwtService {
         .compact();
   }
 
+
+    public String generateRefreshToken(Map<String, Object> extractClaims , UserDetails userDetails){
+        return Jwts.builder().setClaims(extractClaims).setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60*24))
+                .signWith(getSigningKey(),  SignatureAlgorithm.HS256)
+                .compact();
+    }
+
   private boolean isTokenExpired(String token) {
       return extractExpiration(token).before(new Date());
   }
@@ -74,5 +87,6 @@ public class JwtService {
       byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
       return Keys.hmacShaKeyFor(keyBytes);
   }
-  
+
+
 }

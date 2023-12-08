@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       final String authHeader = request.getHeader("Authorization");
       final String jwt;
       final String userEmail;
+      final String refreshtoken;
       if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
           filterChain.doFilter(request, response);
           return;
@@ -53,6 +54,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             context.setAuthentication(authToken);
             SecurityContextHolder.setContext(context);
           }
+          //there shoud be logic to check the validity of refresh token
+
       }
       filterChain.doFilter(request, response);
   }

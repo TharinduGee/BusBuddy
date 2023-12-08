@@ -1,6 +1,7 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.dto.JwtAuthenticationResponse;
+import com.example.BusBuddy.dto.RefreshTokenRequest;
 import com.example.BusBuddy.dto.SignInRequest;
 import com.example.BusBuddy.dto.SignUpRequest;
 import com.example.BusBuddy.models.Role;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +47,23 @@ public class AuthenticationService {
       var user = userRepository.findByEmail(request.getEmail())
               .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
       var jwt = jwtService.generateToken(user);
-      return JwtAuthenticationResponse.builder().token(jwt).build();
+      var refreshToken = jwtService.generateRefreshToken(new HashMap<>(),user);
+      return JwtAuthenticationResponse.builder().token(jwt).refreshToken(refreshToken).build();
+  }
+
+  public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+      String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
+      User user = userRepository.findByEmail(userEmail).orElseThrow();
+      if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user )){
+          var jwt = jwtService.generateToken(user);
+          //sould do buider implementation
+          JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+
+          jwtAuthenticationResponse.setToken(jwt);
+          jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+          return jwtAuthenticationResponse;
+      }
+      return null;
   }
   
 }
