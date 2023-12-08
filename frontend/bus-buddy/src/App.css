@@ -9,8 +9,6 @@
   margin-left: 91.5px;
   margin-right: 91.5px;
 }
-<<<<<<< HEAD
-=======
 .registration-page {
   background-image: url("./Assets/Registration_bg.png");
   display: flex;
@@ -19,7 +17,6 @@
   width: auto;
   background-position: center;
 }
->>>>>>> BUS-172-authentication-backend-bugfix
 
 @media (max-width: 576px) {
   .custom-margin-sm {
