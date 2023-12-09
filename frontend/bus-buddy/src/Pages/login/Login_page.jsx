@@ -7,11 +7,11 @@ function Login_page() {
   return (
     <div>
       <Header />
-      <div className="row justify-content-around registration-page registration-page-sm">
-        <div className="col-4 d-flex justify-content-center pt-4">
-          <h1>JOIN WITH US</h1>
+      <div className="row d-flex justify-content-around registration-page registration-page-sm">
+        <div className="col-4 m-5 d-flex justify-content-center pt-4">
+          <h1 className="ml-5 pl-5">JOIN WITH US</h1>
         </div>
-        <div className="col-4 mt-5">
+        <div className="col-5 m-5">
           <div>
             <form>
               <div>
@@ -26,17 +26,17 @@ function Login_page() {
                 <input type="password" placeholder="Enter Password" className="form-d" />
               </div>
               <div className="d-flex justify-content-center">
-                <button className="m-4 continue_button ">Continue</button>
+                <button className="m-4 continue_button " style={{ width: '200px' }}>Continue</button>
               </div>
               <div className="text-center fw-bold m-5">
                 Or connect with social media
               </div>
-              <div className="row text-center">
-                <button className="col m-3 extra_button bg-yellow d-flex justify-content-center align-items-center">
+              <div className="row text-center justify-content-between">
+                <button className="col m-3 p-3 extra_button bg-yellow d-flex justify-content-center align-items-center">
                   <FaGoogle className="icon me-2" />
                   Sign in with Google
                 </button>
-                <button className="col m-3 extra_button bg-yellow d-flex justify-content-center align-items-center">
+                <button className="col m-3 p-3 extra_button bg-yellow d-flex justify-content-center align-items-center">
                   <FaInstagram className="icon me-2" />
                   Sign in with Instagram
                 </button>
