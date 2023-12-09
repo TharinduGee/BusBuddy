@@ -1,0 +1,62 @@
+
+h1 {
+    font-size: 3rem;
+    font-weight: 500;
+    text-align: end;
+    color: #efa818;
+    
+}
+
+h3 {
+    font-size: 3rem;
+    font-weight: 500;
+    text-align: left;
+    color: #efa818;
+}
+form {
+    margin-top: 20px;
+}
+.formfild {
+    margin-bottom: 10px;
+}
+label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #efa818;
+    
+}
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #efa818;
+    border-radius: 30px;
+}
+
+button {
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+.continue_button {
+    background-color: #efa818;
+}
+
+@media (max-width: 576px) {
+    .registration-page-sm {
+    width: 100%;
+    margin: 0;
+    }
+}
+
+.registration-page {
+    background-image: url("../../Assets/Registration_bg.png");
+    display: flex;
+    background-size: cover;
+    height: 853px;
+    width: auto;
+    background-position: center;
+}

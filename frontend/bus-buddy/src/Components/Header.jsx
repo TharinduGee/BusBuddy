@@ -27,7 +27,7 @@ function Header() {
 
         <a
           class="btn btn-light fw-bold px-3 py-2 rounded-3  "
-          href="#"
+          href="/Registration_page"
           role="button"
           style={{ fontFamily: "Inter" }}
         >
