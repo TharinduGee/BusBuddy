@@ -1,6 +1,7 @@
 import React from "react";
 import Header from "../../Components/Header.jsx";
 import './Login_page.css';
+import { FaGoogle,FaInstagram } from "react-icons/fa6";
 
 function Login_page() {
   return (
@@ -30,9 +31,15 @@ function Login_page() {
               <div className="text-center fw-bold m-5">
                 Or connect with social media
               </div>
-              <div className="row">
-                <button className="col m-3 extra_button bg-yellow">Sign from Google</button>
-                <button className="col m-3 extra_button bg-yellow">Sign from Instagram</button>
+              <div className="row text-center">
+                <button className="col m-3 extra_button bg-yellow d-flex justify-content-center align-items-center">
+                  <FaGoogle className="icon me-2" />
+                  Sign in with Google
+                </button>
+                <button className="col m-3 extra_button bg-yellow d-flex justify-content-center align-items-center">
+                  <FaInstagram className="icon me-2" />
+                  Sign in with Instagram
+                </button>
               </div>
             </form>
           </div>

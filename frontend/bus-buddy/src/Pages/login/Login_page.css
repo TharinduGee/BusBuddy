@@ -39,10 +39,15 @@ button {
     border-radius: 30px;
     font-size: 1.2rem;
     font-weight: 400;
+    
 }
+
 
 .continue_button {
     background-color: #efa818;
+}
+.continue_button:hover {
+    background-color: #bc8009;
 }
 
 @media (max-width: 576px) {
@@ -59,4 +64,12 @@ button {
     height: 853px;
     width: auto;
     background-position: center;
+}
+
+
+.icon {
+    width:max-content;
+    height:max-content;
+    color: black;
+
 }
