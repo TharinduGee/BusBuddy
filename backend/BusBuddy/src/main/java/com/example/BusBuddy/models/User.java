@@ -14,27 +14,70 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
+@Entity(name = "users")
 @ToString
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "user_email_unique", columnNames = "email"),
+                @UniqueConstraint(name = "user_password_unique", columnNames = "password")
+        }
+)
 public class User implements UserDetails {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id@SequenceGenerator(
+          name = "user_sequence",
+          sequenceName = "user_sequence",
+          allocationSize = 1
+  )
+  @GeneratedValue(
+          strategy = GenerationType.SEQUENCE,
+          generator =  "user_sequence"
+  )
+  @Column(
+          name = "id",
+          updatable = false
+  )
   Long id;
 
+  @Column(
+          name = "first_name",
+          nullable = false,
+          columnDefinition = "TEXT"
+  )
   String firstName;
 
-
+  @Column(
+          name = "last_name",
+          nullable = false,
+          columnDefinition = "TEXT"
+  )
   String lastName;
 
-  @Column(unique = true)
+  @Column(
+          name = "email",
+          columnDefinition = "TEXT",
+          updatable = false
+  )
   String email;
 
+  @Column(
+          name = "password",
+          columnDefinition = "TEXT",
+          updatable = false
+  )
   String password;
 
   @Enumerated(EnumType.STRING)
   Role role;
+
+  @Column(
+          name = "mobile_no",
+          columnDefinition = "TEXT",
+          unique = true
+  )
+  String mobileNo;
+
 
   LocalDateTime createdAt;
 
@@ -47,8 +90,8 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-      // our "username" for security is the email field
-      return email;
+    //username is combination of first and last name
+      return getFirstName() + getLastName();
   }
 
   @Override
