@@ -14,7 +14,7 @@ function Landing_page() {
   };
 
   const imgStyle1 = {
-    width: "100%", // Full width
+    width: "100%",
     height: "auto",
     position: "relative",
   };
@@ -53,7 +53,7 @@ function Landing_page() {
     padding: "10px 20px",
     cursor: "pointer",
     position: "relative",
-    top: "50px", // Set the top position
+    top: "50px",
   };
 
   const imagesContainerStyle = {

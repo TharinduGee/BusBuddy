@@ -1,5 +1,5 @@
 // Header.js
-import "../App.css";
+import "./Header.css";
 import React from "react";
 
 function Header() {
@@ -26,7 +26,7 @@ function Header() {
         </a>
 
         <a
-          class="btn btn-light fw-bold px-3 py-2 rounded-3  "
+          class="btn btn-light fw-bold px-3 py-2  rounded-3  "
           href="/Registration_page"
           role="button"
           style={{ fontFamily: "Inter" }}

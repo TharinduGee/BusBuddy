@@ -1,0 +1,25 @@
+.footer {
+  width: 100%;
+  height: fit-content;
+  background: #efa818;
+  background-size: contain;
+}
+
+.bold-text {
+  color: #000;
+
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.normal-text {
+  color: #000;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

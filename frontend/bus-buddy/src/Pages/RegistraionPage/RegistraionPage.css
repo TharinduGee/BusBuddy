@@ -1,0 +1,82 @@
+.registration-page {
+  background-image: url("../../Assets/Registration_bg.png");
+  background-size: 100% auto;
+  background-position: bottom center;
+  margin: 0;
+  padding: 0;
+  height: fit-content;
+  background-repeat: no-repeat;
+  display: flex;
+}
+.sized-box {
+  height: 100px;
+}
+.join-text {
+  color: #efa818;
+  font-family: Poppins;
+
+  font-size: 54px;
+  font-style: normal;
+  font-weight: 700;
+}
+.sign-up-text {
+  color: #fa8316;
+  font-family: Inter;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.label {
+  color: #000;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.transparent-box {
+  background-color: transparent;
+  border-color: #000;
+}
+
+.creat-account-btn {
+  display: flex;
+  width: 190px;
+  height: 40px;
+  padding: 8px 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border-color: transparent;
+  background: #efa818;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.creat-account-btn:hover {
+  background-color: #fcc963;
+  border-color: transparent; /* Change this to your desired hover color */
+  /* You can also modify other styles on hover if needed */
+}
+.clickable-text {
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+a {
+  color: var(--Blue, #0070d2);
+  text-decoration: none;
+}
+
+.text-box-width {
+  width: 280px;
+}
