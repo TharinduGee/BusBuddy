@@ -8,6 +8,9 @@ import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +28,9 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
-  public JwtAuthenticationResponse signup(SignUpRequest request) {
+  public ResponseEntity<String> signUp(SignUpRequest request) {
+
+
       var user = User
                   .builder()
                   .firstName(request.getFirstName())
@@ -33,22 +38,23 @@ public class AuthenticationService {
                   .email(request.getEmail())
                   .password(passwordEncoder.encode(request.getPassword()))
                   .role(Role.ROLE_USER)
+                   .mobileNo(request.getMobileNo())
                   .build();
 
       user = userService.save(user);
       var jwt = jwtService.generateToken(user);
-      return JwtAuthenticationResponse.builder().token(jwt).build();
+      return ResponseEntity.status(HttpStatus.CREATED).body("Successfully Registered !");
   }
 
 
-  public JwtAuthenticationResponse signin(SignInRequest request) {
+  public ResponseEntity<String> signIn(SignInRequest request) {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
       var user = userRepository.findByEmail(request.getEmail())
               .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
       var jwt = jwtService.generateToken(user);
       var refreshToken = jwtService.generateRefreshToken(new HashMap<>(),user);
-      return JwtAuthenticationResponse.builder().token(jwt).refreshToken(refreshToken).build();
+      return ResponseEntity.status(HttpStatus.OK).body("Successfully LoggedIn !");
   }
 
   public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
