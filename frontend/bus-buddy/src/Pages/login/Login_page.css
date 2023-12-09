@@ -2,9 +2,9 @@
 h1 {
     font-size: 3rem;
     font-weight: 500;
-    text-align: center;
+    text-align: end;
     color: #efa818;
-    text-align: right;
+    
 }
 
 h3 {
@@ -31,42 +31,32 @@ input {
     border: 1px solid #efa818;
     border-radius: 30px;
 }
-.continue_buttton {
-    margin-top: 20px;
-    text-align: center;
-}  
+
 button {
-    width: 60%;
+    width: 50%;
     padding: 10px;
-    background-color: #efa818;
-    color: #fff;
     border: none;
     border-radius: 30px;
     font-size: 1.2rem;
-}
-.extra_buttton {
-    margin-top: 20px;
-    justify-content: space-between; 
+    font-weight: 400;
 }
 
-.extra_buttton button {
-    margin: 10px 0; 
-    padding: 15px 20px; 
-    display: flex;
-    align-items: center;
-    justify-content: space-between; 
-}
-.extra_buttton button i {
-    margin-right: 10px;
-    font-size: 1.5rem;
-}
-.extra_buttton button:hover {
+.continue_button {
     background-color: #efa818;
-    color: #fff;
 }
+
 @media (max-width: 576px) {
     .registration-page-sm {
     width: 100%;
     margin: 0;
     }
+}
+
+.registration-page {
+    background-image: url("../../Assets/Registration_bg.png");
+    display: flex;
+    background-size: cover;
+    height: 853px;
+    width: auto;
+    background-position: center;
 }
