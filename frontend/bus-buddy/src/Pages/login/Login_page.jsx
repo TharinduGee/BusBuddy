@@ -2,6 +2,8 @@ import React from "react";
 import Header from "../../Components/Header.jsx";
 import './Login_page.css';
 import { FaGoogle,FaInstagram } from "react-icons/fa6";
+import SocialMediaBar from '../../Components/SocialMediaBar.jsx'
+import Footer from '../../Components/Footer.jsx'
 
 function Login_page() {
   return (
@@ -9,7 +11,7 @@ function Login_page() {
       <Header />
       <div className="row d-flex justify-content-around registration-page registration-page-sm">
         <div className="col-4 m-5 d-flex justify-content-center pt-4">
-          <h1 className="ml-5 pl-5">JOIN WITH US</h1>
+          <h1>JOIN WITH US</h1>
         </div>
         <div className="col-5 m-5">
           <div>
@@ -45,6 +47,8 @@ function Login_page() {
           </div>
         </div>
       </div>
+      <SocialMediaBar />
+      <Footer />
     </div>
   )
 }
