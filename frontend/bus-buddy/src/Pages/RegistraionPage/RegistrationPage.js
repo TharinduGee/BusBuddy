@@ -62,7 +62,7 @@ function RegistrationPage() {
               <div class="label mt-3">Password*</div>
 
               <input
-                type="text"
+                type="password"
                 class="form-control transparent-box mt-2"
                 placeholder="Your Password"
                 aria-label="password"
@@ -79,18 +79,10 @@ function RegistrationPage() {
                 * Use at least one special characters
               </div>
 
-              <div class="label mt-3">Password*</div>
+              <div class="label mt-3">Confirm Password*</div>
 
               <input
-                type="text"
-                class="form-control transparent-box mt-2"
-                placeholder="Your Password"
-                aria-label="Password"
-              />
-              <div class="label mt-3">Password*</div>
-
-              <input
-                type="text"
+                type="password"
                 class="form-control transparent-box mt-2"
                 placeholder="Confirm Your Password"
                 aria-label="confirm_password"
