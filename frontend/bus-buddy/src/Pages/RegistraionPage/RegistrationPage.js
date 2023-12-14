@@ -24,13 +24,12 @@ function RegistrationPage() {
 
   const handlePostRequest = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8081/api/v1/signUp",
-        user
-      );
 
-      // Handle the response
-      console.log("Response:", response.data);
+      const response = await axios.post('http://localhost:8081/api/v1/signUp', user);
+      
+      
+      console.log('Response:', response.data);
+
     } catch (error) {
       // Handle errors
       console.error("Error:", error);
@@ -45,6 +44,7 @@ function RegistrationPage() {
           <div className="row">
             <div className="col-12 col-md-6 justify">
               <div className="join-text   ps-4">JOIN WITH US</div>
+              <h1>hhhh</h1>
             </div>
             <div className="col-12 col-md-6 ps-5">
               <div className="sign-up-text">SIGN UP</div>
@@ -170,7 +170,7 @@ function RegistrationPage() {
               </div>
               <div class="d-flex flex-row mt-3 mb-5">
                 <div class="mt-3 label">Already have an account?</div>
-                <a href="">
+                <a href="SignUp">
                   <div class="mt-3 ms-2 clickable-text mb-3 ">Sign in here</div>
                 </a>
               </div>

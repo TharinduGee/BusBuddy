@@ -6,27 +6,27 @@ import com.example.BusBuddy.dto.SignInRequest;
 import com.example.BusBuddy.dto.SignUpRequest;
 import com.example.BusBuddy.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    @CrossOrigin(origins = "http://localhost:8081/api/v1/signUp")
     @PostMapping("/signUp")
     public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
         try{
             return authenticationService.signUp(request);
-        }catch(Exception e){
+        }catch(DataIntegrityViolationException e){
             //only triggered when server error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }

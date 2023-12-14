@@ -11,7 +11,7 @@ root.render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route path="/" element={<Landing_page />} />
+        <Route path="/" element={<Landing_page/>} />
         <Route path="/Registration_page" element={<RegistrationPage />} />
         <Route path="/Login_page" element={<Login_page />} />
         <Route path="/Admin_Dashboard" element={<Admin_Dashboard/>}/>

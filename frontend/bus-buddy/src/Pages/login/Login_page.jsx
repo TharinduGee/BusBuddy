@@ -1,17 +1,54 @@
-import React from "react";
+import React, {useState} from "react";
 import Header from "../../Components/Header.jsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import './Login_page.css';
 import { FaGoogle,FaInstagram } from "react-icons/fa6";
 import SocialMediaBar from '../../Components/SocialMediaBar.jsx'
 import Footer from '../../Components/Footer.jsx'
 
 function Login_page() {
+
+  
+  
+  const [credentials , setCredentials] = useState({
+    email : '',
+    password : ''
+  });
+  const navigate = useNavigate();
+
+  const handleChange = (e)=>{
+    const value = e.target.value;
+    setCredentials({
+      ...credentials,
+      [e.target.name] : value
+    });
+  }
+
+  const handlePostRequest = async ()=>{
+    try{
+      
+      console.log("Sign In....")
+      const response = await axios.post("http://localhost:8081/api/v1/signIn" , credentials);
+      console.log("Done");
+      setTimeout(()=>{
+        navigate("/Admin_Dashboard");
+      })
+      
+      
+      console.log("Response " , response.data);
+    }catch(error){
+      console.error("Error " , error);
+    }
+  }
+
   return (
     <div>
       <Header />
       <div className="row d-flex justify-content-around registration-page registration-page-sm">
         <div className="col-4 m-5 d-flex justify-content-center pt-4">
           <h1>JOIN WITH US</h1>
+          
         </div>
         <div className="col-5 m-5">
           <div>
@@ -21,14 +58,14 @@ function Login_page() {
               </div>
               <div className="formfield m-2">
                 <label htmlFor="email">Email</label>
-                <input type="email" placeholder="Enter Email" className="form-d" />
+                <input onChange={handleChange} type="email" placeholder="Enter Email" className="form-d" />
               </div>
               <div className="formfield m-2">
                 <label htmlFor="psw">Password</label>
-                <input type="password" placeholder="Enter Password" className="form-d" />
+                <input onChange={handleChange} type="password" placeholder="Enter Password" className="form-d" />
               </div>
               <div className="d-flex justify-content-center">
-                <button className="m-4 continue_button " style={{ width: '200px' }}>Continue</button>
+                <button className="m-4 continue_button " onClick={handlePostRequest} style={{ width: '200px' }}>Continue</button>
               </div>
               <div className="text-center fw-bold m-5">
                 Or connect with social media

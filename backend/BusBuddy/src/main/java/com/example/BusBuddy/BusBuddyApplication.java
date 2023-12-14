@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @SpringBootApplication
+@CrossOrigin(origins = "http://localhost:3000")
 public class BusBuddyApplication implements CommandLineRunner {
 
 	@Autowired
