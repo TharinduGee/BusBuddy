@@ -1,4 +1,4 @@
-import React , {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Header from "../../Components/Header.jsx";
 import SocialMediaBar from "../../Components/SocialMediaBar.jsx";
@@ -6,36 +6,36 @@ import Footer from "../../Components/Footer.jsx";
 import "./RegistraionPage.css";
 
 function RegistrationPage() {
-
-
   const [user, setUser] = useState({
-    firstName: '',
-    lastName: '',
-    email : '',
-    password : '',
-    mobileNo : ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    mobileNo: "",
   });
 
   const handleChange = (e) => {
     const value = e.target.value;
     setUser({
       ...user,
-      [e.target.name]: value
+      [e.target.name]: value,
     });
   };
 
   const handlePostRequest = async () => {
     try {
-      const response = await axios.post('http://localhost:8081/api/v1/signUp', user);
-      
+      const response = await axios.post(
+        "http://localhost:8081/api/v1/signUp",
+        user
+      );
+
       // Handle the response
-      console.log('Response:', response.data);
+      console.log("Response:", response.data);
     } catch (error) {
       // Handle errors
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
-
 
   return (
     <div>
@@ -69,9 +69,9 @@ function RegistrationPage() {
                   </div>
                   <div class="col">
                     <input
-                    value={user.lastName}
-                    onChange={handleChange}
-                    name="lastName"
+                      value={user.lastName}
+                      onChange={handleChange}
+                      name="lastName"
                       type="text"
                       class="form-control transparent-box"
                       placeholder="Last name"
@@ -84,9 +84,9 @@ function RegistrationPage() {
               <div class="label mt-3">Email*</div>
 
               <input
-              value={user.email}
-              onChange={handleChange}
-              name="email"
+                value={user.email}
+                onChange={handleChange}
+                name="email"
                 type="text"
                 class="form-control transparent-box mt-2"
                 placeholder="Email"
@@ -95,9 +95,9 @@ function RegistrationPage() {
               <div class="label mt-3">Mobile Phone Number*</div>
 
               <input
-              value={user.mobileNo}
-              onChange={handleChange}
-              name="mobileNo"
+                value={user.mobileNo}
+                onChange={handleChange}
+                name="mobileNo"
                 type="text"
                 class="form-control transparent-box text-box-width  mt-2"
                 placeholder="+947611223344"
@@ -106,9 +106,9 @@ function RegistrationPage() {
               <div class="label mt-3">Password*</div>
 
               <input
-              value={user.password}
-              onChange={handleChange}
-              name="password"
+                value={user.password}
+                onChange={handleChange}
+                name="password"
                 type="text"
                 class="form-control transparent-box mt-2"
                 placeholder="Your Password"
@@ -126,18 +126,10 @@ function RegistrationPage() {
                 * Use at least one special characters
               </div>
 
-              <div class="label mt-3">Password*</div>
+              <div class="label mt-3">Confirm Password*</div>
 
               <input
-                type="text"
-                class="form-control transparent-box mt-2"
-                placeholder="Your Password"
-                aria-label="Password"
-              />
-              <div class="label mt-3">Password*</div>
-
-              <input
-                type="text"
+                type="password"
                 class="form-control transparent-box mt-2"
                 placeholder="Confirm Your Password"
                 aria-label="confirm_password"
