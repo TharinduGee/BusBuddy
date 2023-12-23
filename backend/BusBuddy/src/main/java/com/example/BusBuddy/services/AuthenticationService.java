@@ -4,6 +4,7 @@ import com.example.BusBuddy.dto.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.RefreshTokenRequest;
 import com.example.BusBuddy.dto.SignInRequest;
 import com.example.BusBuddy.dto.SignUpRequest;
+import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
@@ -27,23 +28,29 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final BusinessService businessService;
 
   public ResponseEntity<String> signUp(SignUpRequest request) {
 
 
+      var business =  Business.builder().build();
+      business = businessService.save(business);
       var user = User
                   .builder()
                   .firstName(request.getFirstName())
                   .lastName(request.getLastName())
                   .email(request.getEmail())
                   .password(passwordEncoder.encode(request.getPassword()))
-                  .role(Role.ROLE_USER)
-                   .mobileNo(request.getMobileNo())
+                  .role(Role.ROLE_ADMIN)
+                  .mobileNo(request.getMobileNo())
+                  .business(business)
                   .build();
 
       user = userService.save(user);
       var jwt = jwtService.generateToken(user);
-      return ResponseEntity.status(HttpStatus.CREATED).body("Successfully Registered !");
+
+
+      return ResponseEntity.status(HttpStatus.CREATED).body("Admin Successfully Registered !");
   }
 
 

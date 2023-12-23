@@ -26,9 +26,10 @@ public class AuthenticationController {
     public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
         try{
             return authenticationService.signUp(request);
-        }catch(DataIntegrityViolationException e){
-            //only triggered when server error
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }catch(DataIntegrityViolationException e){//trigger when duplicate key value appears
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }catch (Exception e){//trigger for other errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
