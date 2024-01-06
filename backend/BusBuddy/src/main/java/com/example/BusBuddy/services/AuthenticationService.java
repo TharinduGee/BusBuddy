@@ -8,6 +8,7 @@ import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,10 +31,11 @@ public class AuthenticationService {
   private final AuthenticationManager authenticationManager;
   private final BusinessService businessService;
 
-  public ResponseEntity<String> signUp(SignUpRequest request) {
+  @Transactional
+  public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(SignUpRequest request) {
 
 
-      var business =  Business.builder().build();
+      var business =  new Business();
       business = businessService.save(business);
       var user = User
                   .builder()
@@ -41,27 +43,63 @@ public class AuthenticationService {
                   .lastName(request.getLastName())
                   .email(request.getEmail())
                   .password(passwordEncoder.encode(request.getPassword()))
-                  .role(Role.ROLE_ADMIN)
+                  .role(request.getRole())
                   .mobileNo(request.getMobileNo())
                   .business(business)
                   .build();
 
       user = userService.save(user);
       var jwt = jwtService.generateToken(user);
+      var refreshToken = jwtService.generateRefreshToken(user);
 
+      var jwtAuthenticationResponse =  JwtAuthenticationResponse.builder()
+              .token(jwt)
+              .refreshToken(refreshToken)
+              .role(user.getRole())
+              .build();
 
-      return ResponseEntity.status(HttpStatus.CREATED).body("Admin Successfully Registered !");
+      return ResponseEntity.status(HttpStatus.CREATED).body(jwtAuthenticationResponse);
   }
 
+    public ResponseEntity<JwtAuthenticationResponse> signUp(SignUpRequest request) {
 
-  public ResponseEntity<String> signIn(SignInRequest request) {
+        var user = User
+                .builder()
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(request.getRole())
+                .mobileNo(request.getMobileNo())
+                .build();
+
+        user = userService.save(user);
+        var jwt = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
+
+        var jwtAuthenticationResponse =  JwtAuthenticationResponse.builder()
+                .token(jwt)
+                .refreshToken(refreshToken)
+                .role(user.getRole())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(jwtAuthenticationResponse);
+    }
+
+
+  public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {
       authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
       var user = userRepository.findByEmail(request.getEmail())
               .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
       var jwt = jwtService.generateToken(user);
-      var refreshToken = jwtService.generateRefreshToken(new HashMap<>(),user);
-      return ResponseEntity.status(HttpStatus.OK).body("Successfully LoggedIn !");
+      var refreshToken = jwtService.generateRefreshToken(user);
+      var jwtAuthenticationResponse = JwtAuthenticationResponse.builder()
+              .token(jwt)
+              .refreshToken(refreshToken)
+              .role(user.getRole()).build();
+
+      return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
   }
 
   public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){

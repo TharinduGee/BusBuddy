@@ -4,5 +4,9 @@ public enum Role {
 
   ROLE_SYSTEM_ADMIN,
   ROLE_ADMIN,
-  ROLE_USER
+  ROLE_DRIVER,
+  ROLE_CONDUCTOR,
+  ROLE_SUPPORTER
+
+
 }

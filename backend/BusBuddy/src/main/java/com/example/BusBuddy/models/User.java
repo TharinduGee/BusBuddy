@@ -32,7 +32,8 @@ public class User implements UserDetails {
   )
   @SequenceGenerator(
           name = "user_sequence",
-          sequenceName = "user_sequence"
+          sequenceName = "user_sequence",
+          allocationSize = 1
   )
   @Column(
           name = "id",
@@ -78,9 +79,20 @@ public class User implements UserDetails {
   )
   String mobileNo;
 
-  @OneToOne
-  @JoinColumn(name = "businessID", nullable = false)
+  @ManyToOne
+  @JoinColumn(name = "bId"
+          ,foreignKey = @ForeignKey(name = "fk_bId")
+  )
   private Business business;
+
+  @OneToOne
+  @JoinColumn(
+          name = "empId",
+          foreignKey =  @ForeignKey(name = "fk_empId")
+  )
+  private  Employee employee;
+
+
 
   LocalDateTime createdAt;
 

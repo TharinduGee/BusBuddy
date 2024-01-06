@@ -1,6 +1,5 @@
 package com.example.BusBuddy.dto;
 
-import com.example.BusBuddy.models.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtAuthenticationResponse {
-  String token;
-  String refreshToken;
-  Role role;
+public class BusinessEditInfoReq {
+    Long bId;
+    String bName;
+    String registrationNo;
+    String email;
+    String address;
 }

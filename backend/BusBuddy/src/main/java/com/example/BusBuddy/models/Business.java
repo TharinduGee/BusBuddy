@@ -4,48 +4,50 @@ package com.example.BusBuddy.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "business")
-@ToString
 @Table(
         name = "business",
         uniqueConstraints = {
                 @UniqueConstraint(name = "business_email_unique" , columnNames = "email"),
-                @UniqueConstraint(name = "business_registrationNo_unique" , columnNames = "registrationNo"),
         }
 )
 public class Business {
 
     @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE ,
+            generator = "business_sequence"
+    )
     @SequenceGenerator(
             name = "business_sequence",
             sequenceName = "business_sequence",
             allocationSize = 1
     )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE ,
-            generator = "user_sequence"
-    )
     @Column(
                     name = "bId",
                     updatable = false
     )
-    Long bId;
+    private Long bId;
 
     @Column(
             name = "bName",
-            columnDefinition = "TEXT default 'Your Bus Business'"
+            columnDefinition = "TEXT default 'Your Bus Business'",
+            nullable = false
     )
-    String bName;
+    String bName = "Your Bus Business";
 
     @Column(
             name = "registrationNo",
-            columnDefinition = "TEXT default 'REG00001'"
+            columnDefinition = "TEXT default 'REG00001'",
+            nullable = false
     )
-    String registrationNo;
+    String registrationNo = "REG00001";
 
     @Column(
             name = "email",
@@ -59,7 +61,10 @@ public class Business {
     )
     String address;
 
+    @OneToMany(mappedBy = "business")
+    private Set<User> users;
 
-
+    @OneToMany(mappedBy = "business")
+    private Set<Bus> buses;
 
 }
