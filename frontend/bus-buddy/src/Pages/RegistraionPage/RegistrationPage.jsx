@@ -4,6 +4,7 @@ import Header from "../../Components/Header.jsx";
 import SocialMediaBar from "../../Components/SocialMediaBar.jsx";
 import Footer from "../../Components/Footer.jsx";
 import "./RegistraionPage.css";
+import TextField from '@mui/material/TextField';
 
 function RegistrationPage() {
   const [user, setUser] = useState({
@@ -12,6 +13,7 @@ function RegistrationPage() {
     email: "",
     password: "",
     mobileNo: "",
+    confirm_password: "",
   });
 
   const handleChange = (e) => {
@@ -39,80 +41,79 @@ function RegistrationPage() {
   return (
     <div>
       <Header />
-      <div className="d-flex justify-content-center registration-page registration-page-sm ">
-        <div className="container">
-          <div className="row">
-            <div className="col-12 col-md-6 justify">
-              <div className="join-text   ps-4">JOIN WITH US</div>
-              <h1>hhhh</h1>
-            </div>
-            <div className="col-12 col-md-6 ps-5">
-              <div className="sign-up-text">SIGN UP</div>
-              <div>
-                <div className="row row-cols-2 mt-3">
-                  <div class="col label">First Name*</div>
-                  <div class="col label">Last Name*</div>
-                </div>
-              </div>
+        <div className="d-flex justify-content-center">
+        <div className="container_width shadow p-5 m-5 rounded-4 p-4 border">
+              <div className="sign-up-text">Sign up to Busbuddy</div>
               <div>
                 <div class="row row-cols-2 mt-2">
                   <div class="col">
-                    <input
+                    <TextField
                       value={user.firstName}
                       onChange={handleChange}
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
                       name="firstName"
-                      type="text"
-                      class="form-control transparent-box"
-                      placeholder="First name"
-                      aria-label="First name"
-                    />
+                      autoComplete="firstName"
+                      autoFocus
+                    />                    
                   </div>
                   <div class="col">
-                    <input
+                    <TextField
                       value={user.lastName}
                       onChange={handleChange}
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
                       name="lastName"
-                      type="text"
-                      class="form-control transparent-box"
-                      placeholder="Last name"
-                      aria-label="Last name"
+                      autoComplete="lastName"
+                      autoFocus
                     />
                   </div>
                 </div>
               </div>
 
-              <div class="label mt-3">Email*</div>
-
-              <input
+              <TextField
                 value={user.email}
                 onChange={handleChange}
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
                 name="email"
-                type="text"
-                class="form-control transparent-box mt-2"
-                placeholder="Email"
-                aria-label="Email"
+                autoComplete="email"
+                autoFocus
               />
-              <div class="label mt-3">Mobile Phone Number*</div>
-
-              <input
+              
+              <TextField
                 value={user.mobileNo}
                 onChange={handleChange}
+                margin="normal"
+                required
+                fullWidth
+                id="mobileNo"
+                label="Mobile Number"
+                placeholder="+94711234567"
                 name="mobileNo"
-                type="text"
-                class="form-control transparent-box text-box-width  mt-2"
-                placeholder="+947611223344"
-                aria-label="MobileNo"
+                autoComplete="mobileNo"
+                autoFocus
               />
-              <div class="label mt-3">Password*</div>
-
-              <input
+              <TextField
                 value={user.password}
                 onChange={handleChange}
+                margin="normal"
+                required
+                fullWidth
+                id="password"
+                label="Password"
+                type="password"
                 name="password"
-                type="text"
-                class="form-control transparent-box mt-2"
-                placeholder="Your Password"
-                aria-label="password"
+                autoComplete="password"
               />
               <div class="label mt-3">
                 * Something at least 8 characters Long
@@ -126,13 +127,17 @@ function RegistrationPage() {
                 * Use at least one special characters
               </div>
 
-              <div class="label mt-3">Confirm Password*</div>
-
-              <input
+              <TextField
+                value={user.confirm_password}
+                onChange={handleChange}
+                margin="normal"
+                required
+                fullWidth
+                id="confirm_password"
+                label="Confirm Password"
                 type="password"
-                class="form-control transparent-box mt-2"
-                placeholder="Confirm Your Password"
-                aria-label="confirm_password"
+                name="confirm_password"
+                autoComplete="confirm_password"
               />
               <div className="row ms-1  mt-3">
                 <input
@@ -159,7 +164,7 @@ function RegistrationPage() {
                 </label>
               </div>
 
-              <div class="d-grid gap-2 mt-3 d-md-flex justify-content-md-start ">
+              <div class="d-grid gap-2 mt-3 d-md-flex justify-content-center ">
                 <button
                   class="btn btn-primary me-md-2 creat-account-btn"
                   type="button"
@@ -174,8 +179,6 @@ function RegistrationPage() {
                   <div class="mt-3 ms-2 clickable-text mb-3 ">Sign in here</div>
                 </a>
               </div>
-            </div>
-          </div>
         </div>
       </div>
       <SocialMediaBar />

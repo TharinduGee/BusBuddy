@@ -45,7 +45,7 @@ function Login_page() {
   return (
     <div>
       <Header />
-      <div className="row d-flex justify-content-around registration-page registration-page-sm">
+      <div className="comtaimer-main">
         <div className="col-4 m-5 d-flex justify-content-center pt-4">
           <h1>JOIN WITH US</h1>
           
