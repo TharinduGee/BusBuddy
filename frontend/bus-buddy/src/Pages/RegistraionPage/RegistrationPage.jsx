@@ -42,7 +42,10 @@ function RegistrationPage() {
     <div>
       <Header />
         <div className="d-flex justify-content-center">
-        <div className="container_width shadow p-5 m-5 rounded-4 p-4 border">
+        <div className="container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
+            <div className="justify-content-start">
+              Back
+            </div>
               <div className="sign-up-text-main">Sign up to Busbuddy</div>
               <div>
                 <div class="row row-cols-2 mt-2">
