@@ -4,11 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
+import java.security.DomainLoadStoreParameter;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -41,6 +44,10 @@ public class Employee {
     )
     private String name;
 
+    @Lob
+    @Column(name = "image", columnDefinition = "BYTEA")
+    private byte[] imageData;
+
     @Column(
             name = "joinedDate"
     )
@@ -62,13 +69,29 @@ public class Employee {
     )
     private Float Salary;
 
+    @Enumerated(EnumType.STRING)
+   private EmployeeType designation;
+
     @OneToOne(mappedBy = "employee")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "bId",
+            foreignKey = @ForeignKey(name = "fk_bId")
+    )
+    private Business business;
+
+    @OneToOne(
+            mappedBy = "employee"
+    )
+    private Document document;
+
 
     @Transient
     public Integer getAge() {
         if (bDay == null) {
-            return null; // Handle the case where birthday is not set
+            return null;
         }
 
         LocalDate birthDate = bDay.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -77,7 +100,6 @@ public class Employee {
         return Period.between(birthDate, currentDate).getYears();
     }
 
-    // Update age before persisting or updating
     @PrePersist
     @PreUpdate
     private void updateAge() {

@@ -3,6 +3,8 @@ package com.example.BusBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Set;
 
@@ -53,18 +55,85 @@ public class Business {
             name = "email",
             columnDefinition = "TEXT"
     )
-    String email;
+    private String email;
 
     @Column(
             name = "address",
             columnDefinition = "TEXT"
     )
-    String address;
+    private String address;
 
-    @OneToMany(mappedBy = "business")
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Set<User> users;
 
-    @OneToMany(mappedBy = "business")
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Bus> buses;
+
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Employee> employees;
+
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Route> routes;
+
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Document> document;
+
+    @OneToMany(
+            mappedBy =  "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Advertisement> advertisements;
+
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Review> reviews;
+
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Ledger> ledgers;
+
+    @OneToMany(
+            mappedBy = "business",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<Trip>  trips;
+
 
 }
