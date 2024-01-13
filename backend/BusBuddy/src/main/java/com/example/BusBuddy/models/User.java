@@ -92,8 +92,6 @@ public class User implements UserDetails {
   )
   private  Employee employee;
 
-
-
   LocalDateTime createdAt;
 
   LocalDateTime updatedAt;

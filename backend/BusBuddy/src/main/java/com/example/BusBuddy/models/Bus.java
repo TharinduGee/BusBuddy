@@ -5,10 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.awt.*;
 import java.util.Date;
-import java.util.UUID;
+import java.util.Set;
 
 @Data
 @Builder
@@ -38,10 +39,7 @@ public class Bus {
     @Column(name = "image", columnDefinition = "BYTEA")
     private byte[] imageData;
 
-    @Column(
-            name = "type",
-            nullable = false
-    )
+    @Enumerated(EnumType.STRING)
     private BusType type;
 
     @Column(
@@ -64,9 +62,26 @@ public class Bus {
     @ManyToOne
     @JoinColumn(
             name = "bId",
-            foreignKey = @ForeignKey(name = "fk_bId")
+            foreignKey = @ForeignKey(name = "fk_bId"  )
     )
     private Business business;
 
+    @OneToMany(
+            mappedBy = "bus" ,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "bus")
+    private Set<Trip> trips;
+
+    @OneToOne(
+            mappedBy = "bus",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    private Document document;
 
 }
