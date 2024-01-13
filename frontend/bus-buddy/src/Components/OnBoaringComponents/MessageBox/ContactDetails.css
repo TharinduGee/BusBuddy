@@ -1,0 +1,62 @@
+.main-bg {
+  background-color: #ffbe8c;
+  max-width: 507px;
+  width: fit-content;
+  display: inline-flex;
+  height: fit-content;
+  padding: 84.354px 51px 84.354px 67.865px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 16px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.content-div {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.icon-email {
+  width: 45.457px;
+  height: 30.088px;
+}
+
+.icon-phone {
+  width: 29.211px;
+  margin-left: 8px;
+  margin-right: 8px;
+  height: 46.737px;
+}
+
+.icon-loc {
+  width: 45px;
+  height: 46px;
+}
+
+.main-header {
+  color: var(--Main-Black, #1b1b1b);
+  padding-left: 41px;
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.sub-para {
+  color: var(--Main-Black, #1b1b1b);
+  padding-left: 41px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}

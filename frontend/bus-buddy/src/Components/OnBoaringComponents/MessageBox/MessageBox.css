@@ -1,0 +1,43 @@
+.main-bg-box {
+  width: 980px;
+  min-width: 990px;
+  height: 536px;
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+}
+@media (max-width: 990px) {
+  .main-bg-box {
+    width: fit-content; /* Set to 100% for smaller screens */
+    min-width: auto; /* Reset min-width for smaller screens */
+  }
+}
+
+.textfield-input {
+  margin-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 24px;
+  padding-right: 24px;
+  width: fit-content;
+}
+
+.form-control {
+  border-radius: 9px;
+
+  border-width: 1px;
+  width: 440px;
+  height: 135.9px;
+  border-color: var(--Main-Black, #1b1b1b);
+  color: var(--Main-Black, #1b1b1b);
+  font-family: Roboto;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 400;
+  resize: none;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.form-control::placeholder {
+  color: var(--Main-Black, #1b1b1b);
+}

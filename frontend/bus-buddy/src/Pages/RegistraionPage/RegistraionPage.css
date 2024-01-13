@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
-.sign-up-text-main{
+.sign-up-text-main {
   text-transform: uppercase;
   text-align: center;
   font-family: Roboto;
@@ -19,7 +19,6 @@
   line-height: normal;
 }
 
-
 .creat-account-btn {
   display: flex;
   height: 40px;
@@ -31,7 +30,7 @@
   flex-shrink: 0;
   border-radius: 8px;
   border-color: transparent;
-  background: #FF7A00;
+  background: #ff7a00;
   font-family: Inter;
   font-size: 15px;
   font-style: normal;
@@ -40,7 +39,7 @@
 
 .creat-account-btn:hover {
   background-color: #e06c00;
-  border-color: #e06c00; 
+  border-color: #e06c00;
 }
 .clickable-text {
   font-family: Inter;
@@ -57,11 +56,11 @@ a {
 
 @media (min-width: 900px) {
   .container_width {
-    width: 70%; 
+    width: 70%;
   }
 }
 @media (min-width: 1200px) {
   .container_width {
-    width: 592px; 
+    width: 592px;
   }
 }

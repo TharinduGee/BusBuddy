@@ -37,7 +37,6 @@ function RegistrationPage() {
 
   return (
     <div>
-      <Header />
       <div className="d-flex justify-content-center">
         <div className="container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
           <div className="justify-content-start">Back</div>
@@ -174,8 +173,6 @@ function RegistrationPage() {
           </div>
         </div>
       </div>
-      <SocialMediaBar />
-      <Footer />
     </div>
   );
 }
