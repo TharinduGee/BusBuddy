@@ -1,0 +1,67 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+.sign-up-text-main{
+  text-transform: uppercase;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.label {
+  color: #000;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+
+.creat-account-btn {
+  display: flex;
+  height: 40px;
+  width: 300px;
+  padding: 8px 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border-color: transparent;
+  background: #FF7A00;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.creat-account-btn:hover {
+  background-color: #e06c00;
+  border-color: #e06c00; 
+}
+.clickable-text {
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+a {
+  color: var(--Blue, #0070d2);
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .container_width {
+    width: 70%; 
+  }
+}
+@media (min-width: 1200px) {
+  .container_width {
+    width: 592px; 
+  }
+}
