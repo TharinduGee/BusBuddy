@@ -54,12 +54,7 @@ a {
   text-decoration: none;
 }
 
-@media (min-width: 900px) {
-  .container_width {
-    width: 70%;
-  }
-}
-@media (min-width: 1200px) {
+@media (min-width: 688px) {
   .container_width {
     width: 592px;
   }
