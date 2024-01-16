@@ -161,11 +161,11 @@ function RegistrationPage() {
 
           <div class="d-grid gap-2 mt-3 d-md-flex justify-content-center ">
             <button
-              class="btn btn-primary me-md-2 creat-account-btn"
+              class="me-md-2 next-btn"
               type="button"
               onClick={handlePostRequest}
             >
-              CREATE ACCOOUNT
+              Next Step
             </button>
           </div>
           <div class="d-flex flex-row mt-3 mb-5">
