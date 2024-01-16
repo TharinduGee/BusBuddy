@@ -60,3 +60,38 @@
   line-height: 24px;
   letter-spacing: 0.5px;
 }
+
+@media (max-width: 990px) {
+  .main-bg {
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .main-header {
+    font-size: 15px;
+    line-height: 16px;
+  }
+
+  .sub-para {
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .icon-email {
+    width: 35.457px;
+    height: 20.088px;
+  }
+
+  .icon-phone {
+    width: 19.211px;
+
+    height: auto;
+  }
+
+  .icon-loc {
+    width: 35px;
+    height: 36px;
+  }
+}

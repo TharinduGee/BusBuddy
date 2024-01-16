@@ -25,6 +25,10 @@ const CustomButton = styled(Button)({
   "&:hover": {
     backgroundColor: "#ff9933",
   },
+  "@media (max-width: 630px)": {
+    width: "150px",
+    fontSize: "10px", // Adjust the width for smaller devices
+  },
 });
 const CustomButton_2 = styled(Button)({
   backgroundColor: "white",
@@ -47,6 +51,10 @@ const CustomButton_2 = styled(Button)({
   transition: "background-color 0.3s",
   "&:hover": {
     backgroundColor: "#ff9933",
+  },
+  "@media (max-width: 630px)": {
+    width: "150px",
+    fontSize: "10px", // Adjust the width for smaller devices
   },
 });
 function StepDetails() {

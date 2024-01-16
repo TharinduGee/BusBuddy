@@ -69,6 +69,7 @@ function RegistrationPage() {
                   name="lastName"
                   autoComplete="lastName"
                   autoFocus
+                
                 />
               </div>
             </div>

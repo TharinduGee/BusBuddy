@@ -3,27 +3,19 @@
   min-width: 990px;
   height: 536px;
   border-radius: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
   background-color: rgb(255, 255, 255);
 }
-@media (max-width: 990px) {
-  .main-bg-box {
-    width: fit-content; /* Set to 100% for smaller screens */
-    min-width: auto; /* Reset min-width for smaller screens */
-  }
-}
-
 .textfield-input {
-  margin-left: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 24px;
-  padding-right: 24px;
-  width: fit-content;
+
+  width: 100%;
 }
 
 .form-control {
   border-radius: 9px;
-
   border-width: 1px;
   width: 440px;
   height: 135.9px;
@@ -36,6 +28,25 @@
   resize: none;
   line-height: 24px;
   letter-spacing: 0.5px;
+}
+
+@media (max-width: 990px) {
+  .main-bg-box {
+    width: 100%; /* Set to 100% for smaller screens */
+    min-width: auto;
+    flex-direction: column;
+    height: fit-content; /* Reset min-width for smaller screens */
+  }
+
+  .textfield-input {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%;
+  }
+
+  .form-control {
+    width: 100%;
+  }
 }
 
 .form-control::placeholder {

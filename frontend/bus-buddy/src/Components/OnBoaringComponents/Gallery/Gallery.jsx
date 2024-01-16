@@ -24,6 +24,18 @@ export default function QuiltedImageList() {
           width: "860px",
           height: "639px",
           overflow: "visible",
+          "@media (max-width: 870px)": {
+            width: "750px", // Adjust the width for smaller devices
+            padding: "10px", // Adjust the height for smaller devices
+          },
+          "@media (max-width: 770px)": {
+            width: "650px", // Adjust the width for smaller devices
+            padding: "10px", // Adjust the height for smaller devices
+          },
+          "@media (max-width: 640px)": {
+            width: "350px", // Adjust the width for smaller devices
+            padding: "10px", // Adjust the height for smaller devices
+          },
         }}
         variant="quilted"
         cols={5}

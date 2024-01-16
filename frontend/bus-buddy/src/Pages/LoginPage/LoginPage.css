@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
-.sign-up-text-main {
-  text-transform: capitalize;
+.loin-text-main {
+  
   text-align: center;
   font-family: Roboto;
   font-size: 24px;
@@ -10,10 +10,12 @@
   line-height: normal;
 }
 
-<<<<<<< HEAD
+.container_width {
+  width: 513px; 
+  height: 529px; 
+  margin: 217px auto 0; 
+}
 
-=======
->>>>>>> 6c6f00fe5c64bb15cfdbe8b515f5fc5119b9795d
 .label {
   color: #000;
   font-family: Inter;
