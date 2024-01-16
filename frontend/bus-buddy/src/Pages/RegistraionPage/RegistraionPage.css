@@ -11,9 +11,9 @@
 }
 
 .container_width {
-  width: 513px; /* Adjust the width as needed */
-  height: 529px; /* Adjust the height as needed */
-  margin: 217px auto 0; /* Center horizontally and set the top margin */
+  width: 513px; 
+  height: 529px; 
+  margin: 217px auto 0; 
 }
 
 .label {
