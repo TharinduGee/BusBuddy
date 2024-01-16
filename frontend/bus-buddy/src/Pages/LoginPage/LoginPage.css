@@ -1,7 +1,6 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
 .loin-text-main {
-  
   text-align: center;
   font-family: Roboto;
   font-size: 24px;
@@ -11,9 +10,9 @@
 }
 
 .container_width {
-  width: 513px; 
-  height: 529px; 
-  margin: 217px auto 0; 
+  width: 513px;
+  height: 529px;
+  margin: 217px auto 0;
 }
 
 .label {
