@@ -1,21 +1,37 @@
--- Table: public.advertisement
+create sequence advertisement_sequence start with 1 increment by 1;
 
--- DROP TABLE IF EXISTS public.advertisement;
+create sequence bus_sequence start with 1 increment by 1;
 
-CREATE TABLE IF NOT EXISTS public.advertisement
+create sequence business_sequence start with 1 increment by 1;
+
+create sequence document_sequence start with 1 increment by 1;
+
+create sequence employee_sequence start with 1 increment by 1;
+
+create sequence ledger_sequence start with 1 increment by 1;
+
+create sequence review_sequence start with 1 increment by 1;
+
+create sequence route_sequence start with 1 increment by 1;
+
+create sequence trip_sequence start with 1 increment by 1;
+
+create sequence user_sequence start with 1 increment by 1;
+
+-- Table: public.business
+
+-- DROP TABLE IF EXISTS public.business;
+
+CREATE TABLE IF NOT EXISTS public.business
 (
-    advertisement_id bigint NOT NULL,
-    end_date timestamp(6) without time zone NOT NULL,
-    image bytea,
-    start_date timestamp(6) without time zone NOT NULL,
-    b_id bigint,
-    CONSTRAINT advertisement_pkey PRIMARY KEY (advertisement_id),
-    CONSTRAINT fk_bid FOREIGN KEY (b_id)
-        REFERENCES public.business (b_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-
+    b_id bigint NOT NULL,
+    address text COLLATE pg_catalog."default",
+    b_name text COLLATE pg_catalog."default" NOT NULL DEFAULT 'Your Bus Business'::text,
+    email text COLLATE pg_catalog."default",
+    registration_no text COLLATE pg_catalog."default" NOT NULL DEFAULT 'REG00001'::text,
+    CONSTRAINT business_pkey PRIMARY KEY (b_id),
+    CONSTRAINT business_email_unique UNIQUE (email)
+);
 
 -- Table: public.bus
 
@@ -37,23 +53,165 @@ CREATE TABLE IF NOT EXISTS public.bus
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT bus_type_check CHECK (type::text = ANY (ARRAY['LUXURY'::character varying, 'SEMI_LUXURY'::character varying, 'NORMAL'::character varying]::text[]))
-)
+);
 
 
--- Table: public.business
+-- Table: public.employee
 
--- DROP TABLE IF EXISTS public.business;
+-- DROP TABLE IF EXISTS public.employee;
 
-CREATE TABLE IF NOT EXISTS public.business
+CREATE TABLE IF NOT EXISTS public.employee
 (
-    b_id bigint NOT NULL,
-    address text COLLATE pg_catalog."default",
-    b_name text COLLATE pg_catalog."default" NOT NULL DEFAULT 'Your Bus Business'::text,
-    email text COLLATE pg_catalog."default",
-    registration_no text COLLATE pg_catalog."default" NOT NULL DEFAULT 'REG00001'::text,
-    CONSTRAINT business_pkey PRIMARY KEY (b_id),
-    CONSTRAINT business_email_unique UNIQUE (email)
-)
+    emp_id bigint NOT NULL,
+    salary real,
+    age integer,
+    b_day timestamp(6) without time zone NOT NULL,
+    designation character varying(255) COLLATE pg_catalog."default",
+    image bytea,
+    joined_date timestamp(6) without time zone,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    b_id bigint,
+    CONSTRAINT employee_pkey PRIMARY KEY (emp_id),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+        REFERENCES public.business (b_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT employee_designation_check CHECK (designation::text = ANY (ARRAY['EMPLOYEE_TYPE_DRIVER'::character varying, 'EMPLOYEE_TYPE_CONDUCTOR'::character varying]::text[]))
+);
+
+-- Table: public.ledger
+
+-- DROP TABLE IF EXISTS public.ledger;
+
+CREATE TABLE IF NOT EXISTS public.ledger
+(
+    ledger_id bigint NOT NULL,
+    credit double precision,
+    debit double precision,
+    running_balance double precision,
+    "timestamp" timestamp(6) without time zone NOT NULL,
+    type character varying(255) COLLATE pg_catalog."default",
+    b_id bigint,
+    CONSTRAINT ledger_pkey PRIMARY KEY (ledger_id),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+        REFERENCES public.business (b_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT ledger_type_check CHECK (type::text = ANY (ARRAY['TRANSACTION_TYPE_TICKET'::character varying, 'TRANSACTION_TYPE_UNSPECIFIED'::character varying, 'TRANSACTION_TYPE_SERVICE'::character varying]::text[]))
+);
+
+
+-- Table: public.route
+
+-- DROP TABLE IF EXISTS public.route;
+
+CREATE TABLE IF NOT EXISTS public.route
+(
+    routeid bigint NOT NULL,
+    distance double precision,
+    end_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    no_of_sections integer,
+    permit_exp_date timestamp(6) without time zone NOT NULL,
+    start_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    b_id bigint,
+    CONSTRAINT route_pkey PRIMARY KEY (routeid),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+        REFERENCES public.business (b_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
+
+-- Table: public.trip
+
+-- DROP TABLE IF EXISTS public.trip;
+
+CREATE TABLE IF NOT EXISTS public.trip
+(
+    trip_id bigint NOT NULL,
+    date timestamp(6) without time zone NOT NULL,
+    end_time time(6) without time zone NOT NULL,
+    expense double precision,
+    income double precision,
+    start_time time(6) without time zone NOT NULL,
+    ticket_api character varying(255) COLLATE pg_catalog."default",
+    bus bigint,
+    conductor bigint,
+    driver bigint,
+    route bigint,
+    b_id bigint,
+    CONSTRAINT trip_pkey PRIMARY KEY (trip_id),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+            REFERENCES public.business (b_id) MATCH SIMPLE
+            ON UPDATE CASCADE
+            ON DELETE CASCADE,
+    CONSTRAINT fk_bus FOREIGN KEY (bus)
+        REFERENCES public.bus (bus_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_employee_conductor FOREIGN KEY (conductor)
+        REFERENCES public.employee (emp_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_employee_driver FOREIGN KEY (driver)
+        REFERENCES public.employee (emp_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_route FOREIGN KEY (route)
+        REFERENCES public.route (routeid) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
+);
+
+
+-- Table: public.review
+
+-- DROP TABLE IF EXISTS public.review;
+
+CREATE TABLE IF NOT EXISTS public.review
+(
+    review_id bigint NOT NULL,
+    comment character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    rating double precision,
+    "timestamp" timestamp(6) without time zone NOT NULL,
+    bus_review_id bigint,
+    b_id bigint,
+    employee_review_id bigint,
+    CONSTRAINT review_pkey PRIMARY KEY (review_id),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+        REFERENCES public.business (b_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_bus_review FOREIGN KEY (bus_review_id)
+        REFERENCES public.bus (bus_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_employee_review FOREIGN KEY (employee_review_id)
+        REFERENCES public.employee (emp_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
+);
+
+
+
+-- Table: public.advertisement
+
+-- DROP TABLE IF EXISTS public.advertisement;
+
+CREATE TABLE IF NOT EXISTS public.advertisement
+(
+    advertisement_id bigint NOT NULL,
+    end_date timestamp(6) without time zone NOT NULL,
+    image bytea,
+    start_date timestamp(6) without time zone NOT NULL,
+    b_id bigint,
+    CONSTRAINT advertisement_pkey PRIMARY KEY (advertisement_id),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+        REFERENCES public.business (b_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
+
 
 
 CREATE TABLE IF NOT EXISTS public.document
@@ -100,146 +258,7 @@ CREATE TABLE IF NOT EXISTS public.document
         ON UPDATE CASCADE
         ON DELETE SET NULL,
     CONSTRAINT document_category_check CHECK (category::text = ANY (ARRAY['DOC_CATEGORY_NIC'::character varying, 'DOC_CATEGORY_SERVICE_AGREEMENT'::character varying]::text[]))
-)
-
-
-
--- Table: public.employee
-
--- DROP TABLE IF EXISTS public.employee;
-
-CREATE TABLE IF NOT EXISTS public.employee
-(
-    emp_id bigint NOT NULL,
-    salary real,
-    age integer,
-    b_day timestamp(6) without time zone NOT NULL,
-    designation character varying(255) COLLATE pg_catalog."default",
-    image bytea,
-    joined_date timestamp(6) without time zone,
-    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    b_id bigint,
-    CONSTRAINT employee_pkey PRIMARY KEY (emp_id),
-    CONSTRAINT fk_bid FOREIGN KEY (b_id)
-        REFERENCES public.business (b_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT employee_designation_check CHECK (designation::text = ANY (ARRAY['EMPLOYEE_TYPE_DRIVER'::character varying, 'EMPLOYEE_TYPE_CONDUCTOR'::character varying]::text[]))
-)
-
-
--- Table: public.ledger
-
--- DROP TABLE IF EXISTS public.ledger;
-
-CREATE TABLE IF NOT EXISTS public.ledger
-(
-    ledger_id bigint NOT NULL,
-    credit double precision,
-    debit double precision,
-    running_balance double precision,
-    "timestamp" timestamp(6) without time zone NOT NULL,
-    type character varying(255) COLLATE pg_catalog."default",
-    b_id bigint,
-    CONSTRAINT ledger_pkey PRIMARY KEY (ledger_id),
-    CONSTRAINT fk_bid FOREIGN KEY (b_id)
-        REFERENCES public.business (b_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT ledger_type_check CHECK (type::text = ANY (ARRAY['TRANSACTION_TYPE_TICKET'::character varying, 'TRANSACTION_TYPE_UNSPECIFIED'::character varying, 'TRANSACTION_TYPE_SERVICE'::character varying]::text[]))
-)
-
-
--- Table: public.review
-
--- DROP TABLE IF EXISTS public.review;
-
-CREATE TABLE IF NOT EXISTS public.review
-(
-    review_id bigint NOT NULL,
-    comment character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    rating double precision,
-    "timestamp" timestamp(6) without time zone NOT NULL,
-    bus_review_id bigint,
-    b_id bigint,
-    employee_review_id bigint,
-    CONSTRAINT review_pkey PRIMARY KEY (review_id),
-    CONSTRAINT fk_bid FOREIGN KEY (b_id)
-        REFERENCES public.business (b_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CONSTRAINT fk_bus_review FOREIGN KEY (bus_review_id)
-        REFERENCES public.bus (bus_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE SET NULL,
-    CONSTRAINT fk_employee_review FOREIGN KEY (employee_review_id)
-        REFERENCES public.employee (emp_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE SET NULL,
-)
-
-
--- Table: public.route
-
--- DROP TABLE IF EXISTS public.route;
-
-CREATE TABLE IF NOT EXISTS public.route
-(
-    routeid bigint NOT NULL,
-    distance double precision,
-    end_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    no_of_sections integer,
-    permit_exp_date timestamp(6) without time zone NOT NULL,
-    start_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    b_id bigint,
-    CONSTRAINT route_pkey PRIMARY KEY (routeid),
-    CONSTRAINT fk_bid FOREIGN KEY (b_id)
-        REFERENCES public.business (b_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
-)
-
-
--- Table: public.trip
-
--- DROP TABLE IF EXISTS public.trip;
-
-CREATE TABLE IF NOT EXISTS public.trip
-(
-    trip_id bigint NOT NULL,
-    date timestamp(6) without time zone NOT NULL,
-    end_time time(6) without time zone NOT NULL,
-    expense double precision,
-    income double precision,
-    start_time time(6) without time zone NOT NULL,
-    ticket_api character varying(255) COLLATE pg_catalog."default",
-    bus bigint,
-    conductor bigint,
-    driver bigint,
-    route bigint,
-    CONSTRAINT trip_pkey PRIMARY KEY (trip_id),
-    CONSTRAINT fk_bid FOREIGN KEY (b_id)
-            REFERENCES public.business (b_id) MATCH SIMPLE
-            ON UPDATE CASCADE
-            ON DELETE CASCADE,
-    CONSTRAINT fk_bus FOREIGN KEY (bus)
-        REFERENCES public.bus (bus_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE SET NULL,
-    CONSTRAINT fk_employee_conductor FOREIGN KEY (conductor)
-        REFERENCES public.employee (emp_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE SET NULL,
-    CONSTRAINT fk_employee_driver FOREIGN KEY (driver)
-        REFERENCES public.employee (emp_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE SET NULL,
-    CONSTRAINT fk_route FOREIGN KEY (route)
-        REFERENCES public.route (routeid) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE SET NULL,
-)
-
+);
 
 
 -- Table: public.users
@@ -273,5 +292,5 @@ CREATE TABLE IF NOT EXISTS public.users
         ON UPDATE CASCADE
         ON DELETE SET NULL,
     CONSTRAINT users_role_check CHECK (role::text = ANY (ARRAY['ROLE_SYSTEM_ADMIN'::character varying, 'ROLE_ADMIN'::character varying, 'ROLE_DRIVER'::character varying, 'ROLE_CONDUCTOR'::character varying, 'ROLE_SUPPORTER'::character varying]::text[]))
-)
+);
 

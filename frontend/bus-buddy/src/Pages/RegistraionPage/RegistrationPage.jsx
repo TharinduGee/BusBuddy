@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./RegistraionPage.css";
 import TextField from "@mui/material/TextField";
+import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 
 function RegistrationPage() {
   const [user, setUser] = useState({
@@ -259,6 +260,9 @@ function RegistrationPage() {
             </a>
           </div>
         </div>
+      </div>
+      <div className="footer-full">
+        <Footer />
       </div>
     </div>
   );

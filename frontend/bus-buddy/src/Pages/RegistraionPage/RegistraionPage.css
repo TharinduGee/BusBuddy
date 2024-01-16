@@ -49,6 +49,11 @@
   text-decoration: none;
 }
 
+.form-check-input{
+  height: 20px;
+  width: 20px;
+}
+
 a {
   color: var(--Blue, #0070d2);
   text-decoration: none;
