@@ -38,13 +38,19 @@ const CssTextField = styled(TextField)({
 
     width: "440px",
     height: "48px",
+
+    "@media (max-width: 630px)": {
+      width: "300px",
+      fontSize: "14px",
+      // Adjust the width for smaller devices
+    },
   },
 });
 
 function MessageBox() {
   return (
-    <div className="d-flex flex-lg-row  flex-sm-column justify-content-start mx-4 align-items-center  main-bg-box">
-      <Box className="d-flex flex-column pb-4">
+    <div className="d-flex flex-lg-row  justify-content-start  align-items-center main-bg-box">
+      <div className="d-flex flex-column pb-4 justify-content-start">
         <div className="textfield-input">
           <CssTextField label="Name" id="Name" />
         </div>
@@ -63,7 +69,7 @@ function MessageBox() {
             placeholder="Your Message"
           ></textarea>
         </div>
-      </Box>
+      </div>
       <ContactDetail />
     </div>
   );

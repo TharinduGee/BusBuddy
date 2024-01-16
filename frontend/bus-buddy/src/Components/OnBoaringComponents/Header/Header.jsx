@@ -125,7 +125,7 @@ function Header() {
         <CustomButton_sign_up variant="contained">Sign up</CustomButton_sign_up>
         <Subscriptions variant="contained">Subscriptions</Subscriptions>
       </div>
-      <div className="Simplify-Finances-div">Our Partners</div>
+      <div className="out-partners">Our Partners</div>
       <div className="partner-row">
         <img className="partner-icon-1" alt="logo" src={Partner_1} />
         <img className="partner-icon-2" alt="logo" src={Partner_2} />

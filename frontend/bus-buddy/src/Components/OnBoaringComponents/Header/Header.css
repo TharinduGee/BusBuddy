@@ -6,16 +6,17 @@
 .header-main {
   background-position: top center;
   margin-top: 0px;
-
   justify-content: space-between;
   display: flex;
   align-items: center;
 }
 .whole-page {
-  background-image: url("../../../Assets/Mask\ group.png");
+  background-image: url("../../../Assets/Mask_group.png");
   background-size: 100% auto;
-  height: auto;
+  background-position-x: left;
+  height: 1000px;
   background-repeat: no-repeat;
+  background-position-y: -100px;
 }
 
 .items-labels {
@@ -40,7 +41,7 @@
 }
 .simplyfy-your-div {
   margin-top: 160px;
-  color: var(--Main-White, var(--Main-White, #a93d3d));
+  color: var(--Main-White, var(--Main-White, #ffffff));
   text-align: center;
   font-family: Raleway;
   font-size: 57px;
@@ -53,8 +54,20 @@
   margin-left: 500px;
   margin-right: 500px;
 }
+
+.out-partners {
+  color: var(--Main-White, var(--Main-White, #ffffff));
+  text-align: center;
+  font-family: Roboto;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  margin-top: 45px;
+  margin-bottom: 10px;
+}
 .busbuddy-makes-div {
-  color: var(--Main-White, var(--Main-White, #9c3d3d));
+  color: var(--Main-White, var(--Main-White, #ffffff));
   text-align: center;
   margin-top: 31px;
   font-family: Raleway;
@@ -62,9 +75,11 @@
   font-style: normal;
   font-weight: 400;
   line-height: 32px;
+  margin-left: 600px;
+  margin-right: 600px;
 }
 .Simplify-Finances-div {
-  color: var(--Main-White, var(--Main-White, #cf5c5c));
+  color: var(--Main-White, var(--Main-White, #ffffff));
   text-align: center;
   font-family: Roboto;
   font-size: 22px;
@@ -122,14 +137,82 @@
     margin-left: 200px;
     margin-right: 200px;
   }
+
+  .whole-page {
+    background-image: url("../../../Assets/Mask_group.png");
+    background-size: 100% auto;
+    background-position-x: left;
+    height: 900px;
+    background-repeat: no-repeat;
+    background-position-y: -40px;
+  }
+
+  .busbuddy-makes-div {
+    margin-left: 400px;
+    margin-right: 400px;
+  }
 }
+
+@media (max-width: 1550px) {
+  .whole-page {
+    background-image: url("../../../Assets/Mask_group.png");
+    background-size: 100% auto;
+    background-position-x: left;
+    height: 840px;
+    background-repeat: no-repeat;
+  }
+
+  .simplyfy-your-div {
+    margin-top: 50px;
+  }
+}
+
+@media (max-width: 1400px) {
+  .whole-page {
+    background-size: cover;
+    height: 850px;
+    background-position: center top;
+  }
+}
+
+@media (max-width: 1200px) {
+  .busbuddy-makes-div {
+    margin-left: 200px;
+    margin-right: 200px;
+  }
+}
+
+@media (max-width: 900px) {
+  .whole-page {
+    height: 900px;
+  }
+}
+
 @media (max-width: 870px) {
   .simplyfy-your-div {
     margin-left: 100px;
     margin-right: 100px;
   }
+  .busbuddy-makes-div {
+    margin-left: 200px;
+    margin-right: 200px;
+  }
 }
-@media (max-width: 630px) {
+
+@media (max-width: 800px) {
+  .whole-page {
+    height: 1000px;
+  }
+}
+
+@media (max-width: 750px) {
+  .busbuddy-makes-div {
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+}
+
+@media (max-width: 640px) {
   .header-main {
     flex-direction: column;
     background-size: cover;
@@ -141,6 +224,8 @@
 
   .text-label {
     font-size: 14px;
+    margin-left: 10px;
+    margin-right: 10px;
   }
   .simplyfy-your-div {
     margin-left: 50px;
@@ -150,11 +235,10 @@
     margin-top: 30px;
   }
   .Simplify-Finances-div {
-    font-size: 15px;
-    margin-top: 10px;
+    font-size: 18px;
     line-height: 28px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
 
   .busbuddy-makes-div {
@@ -164,5 +248,16 @@
     line-height: 32px;
     margin-left: 10px;
     margin-right: 10px;
+  }
+
+  .busbuddy-makes-div {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+
+  .whole-page {
+    background-size: cover;
+    height: 900px;
+    background-position: center top;
   }
 }
