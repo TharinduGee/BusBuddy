@@ -218,6 +218,10 @@ CREATE TABLE IF NOT EXISTS public.trip
     driver bigint,
     route bigint,
     CONSTRAINT trip_pkey PRIMARY KEY (trip_id),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+            REFERENCES public.business (b_id) MATCH SIMPLE
+            ON UPDATE CASCADE
+            ON DELETE CASCADE,
     CONSTRAINT fk_bus FOREIGN KEY (bus)
         REFERENCES public.bus (bus_id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -236,4 +240,38 @@ CREATE TABLE IF NOT EXISTS public.trip
         ON DELETE SET NULL,
 )
 
+
+
+-- Table: public.users
+
+-- DROP TABLE IF EXISTS public.users;
+
+CREATE TABLE IF NOT EXISTS public.users
+(
+    id bigint NOT NULL,
+    created_at timestamp(6) without time zone,
+    email text COLLATE pg_catalog."default",
+    first_name text COLLATE pg_catalog."default" NOT NULL,
+    last_name text COLLATE pg_catalog."default" NOT NULL,
+    mobile_no text COLLATE pg_catalog."default",
+    password text COLLATE pg_catalog."default",
+    role character varying(255) COLLATE pg_catalog."default",
+    updated_at timestamp(6) without time zone,
+    b_id bigint,
+    emp_id bigint,
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT uk_39smkrxk7iywhmw463bgxc0a UNIQUE (emp_id),
+    CONSTRAINT uk_p0ph17e6328j6uu1cr2tyd8vb UNIQUE (mobile_no),
+    CONSTRAINT user_email_unique UNIQUE (email),
+    CONSTRAINT user_password_unique UNIQUE (password),
+    CONSTRAINT fk_bid FOREIGN KEY (b_id)
+        REFERENCES public.business (b_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+    CONSTRAINT fk_empid FOREIGN KEY (emp_id)
+        REFERENCES public.employee (emp_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT users_role_check CHECK (role::text = ANY (ARRAY['ROLE_SYSTEM_ADMIN'::character varying, 'ROLE_ADMIN'::character varying, 'ROLE_DRIVER'::character varying, 'ROLE_CONDUCTOR'::character varying, 'ROLE_SUPPORTER'::character varying]::text[]))
+)
 

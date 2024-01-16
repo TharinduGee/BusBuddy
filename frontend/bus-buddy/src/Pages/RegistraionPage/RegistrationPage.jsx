@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./RegistraionPage.css";
 import TextField from "@mui/material/TextField";
@@ -21,18 +21,42 @@ function RegistrationPage() {
     });
   };
 
+  const [touchedFields, setTouchedFields] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+    mobileNo: false,
+    password: false,
+    confirm_password: false,
+  });
+
   const handlePostRequest = async () => {
     try {
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
         user
       );
-
+      window.location.href = "/user";
       console.log("Response:", response.data);
     } catch (error) {
-      // Handle errors
       console.error("Error:", error);
     }
+  };
+
+  const [checkbox1, setCheckbox1] = useState(false);
+  const [checkbox2, setCheckbox2] = useState(false);
+  const handleCheckbox1Change = () => {
+    setCheckbox1(!checkbox1);
+  };
+
+  const handleCheckbox2Change = () => {
+    setCheckbox2(!checkbox2);
+  };
+  const isButtonDisabled = !checkbox1 || !checkbox2;
+
+  const buttonStyle = {
+    backgroundColor: isButtonDisabled ? "grey" : "#FF7A00",
+    color: "#ffffff",
   };
 
   return (
@@ -47,14 +71,21 @@ function RegistrationPage() {
                 <TextField
                   value={user.firstName}
                   onChange={handleChange}
-                  margin="normal"
+                  onBlur={() =>
+                    setTouchedFields({ ...touchedFields, firstName: true })
+                  }
+                  helperText={
+                    touchedFields.firstName && user.firstName.length === 0
+                      ? "Required field"
+                      : ""
+                  }
+                  error={touchedFields.firstName && user.firstName.length === 0}
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   name="firstName"
-                  autoComplete="firstName"
-                  autoFocus
+                  margin="normal"
                 />
               </div>
               <div class="col">
@@ -62,13 +93,20 @@ function RegistrationPage() {
                   value={user.lastName}
                   onChange={handleChange}
                   margin="normal"
+                  onBlur={() =>
+                    setTouchedFields({ ...touchedFields, lastName: true })
+                  }
+                  helperText={
+                    touchedFields.lastName && user.lastName.length === 0
+                      ? "Required field"
+                      : ""
+                  }
+                  error={touchedFields.lastName && user.lastName.length === 0}
                   required
                   fullWidth
                   id="lastName"
                   label="Last Name"
                   name="lastName"
-                  autoComplete="lastName"
-                  autoFocus
                 />
               </div>
             </div>
@@ -80,11 +118,16 @@ function RegistrationPage() {
             margin="normal"
             required
             fullWidth
+            onBlur={() => setTouchedFields({ ...touchedFields, email: true })}
+            helperText={
+              touchedFields.email && user.email.length === 0
+                ? "Required field"
+                : ""
+            }
+            error={touchedFields.email && user.email.length === 0}
             id="email"
             label="Email Address"
             name="email"
-            autoComplete="email"
-            autoFocus
           />
 
           <TextField
@@ -93,12 +136,25 @@ function RegistrationPage() {
             margin="normal"
             required
             fullWidth
+            onBlur={() =>
+              setTouchedFields({ ...touchedFields, mobileNo: true })
+            }
+            helperText={
+              touchedFields.mobileNo && user.mobileNo.length === 0
+                ? "Required field"
+                : ""
+            }
+            error={touchedFields.mobileNo && user.mobileNo.length === 0}
             id="mobileNo"
             label="Mobile Number"
             placeholder="+94711234567"
             name="mobileNo"
-            autoComplete="mobileNo"
-            autoFocus
+            onKeyPress={(e) => {
+              const isNumeric = /^[0-9+]$/.test(e.key);
+              if (!isNumeric) {
+                e.preventDefault();
+              }
+            }}
           />
           <TextField
             value={user.password}
@@ -106,6 +162,15 @@ function RegistrationPage() {
             margin="normal"
             required
             fullWidth
+            onBlur={() =>
+              setTouchedFields({ ...touchedFields, password: true })
+            }
+            helperText={
+              touchedFields.password && user.password.length === 0
+                ? "Required field"
+                : ""
+            }
+            error={touchedFields.password && user.password.length === 0}
             id="password"
             label="Password"
             type="password"
@@ -126,6 +191,22 @@ function RegistrationPage() {
             margin="normal"
             required
             fullWidth
+            onBlur={() =>
+              setTouchedFields({ ...touchedFields, confirm_password: true })
+            }
+            helperText={
+              touchedFields.confirm_password &&
+              user.confirm_password.length === 0
+                ? "Required field"
+                : user.password !== user.confirm_password
+                ? "Passwords do not match"
+                : ""
+            }
+            error={
+              (touchedFields.confirm_password &&
+                user.confirm_password.length === 0) ||
+              user.password !== user.confirm_password
+            }
             id="confirm_password"
             label="Confirm Password"
             type="password"
@@ -137,6 +218,8 @@ function RegistrationPage() {
               class="col-1 form-check-input transparent-box"
               type="checkbox"
               id="gridCheck_1"
+              checked={checkbox1}
+              onChange={handleCheckbox1Change}
             />
             <label class="col  label" for="gridCheck_1">
               Sign me up for the wish list weekly newsletter
@@ -147,6 +230,8 @@ function RegistrationPage() {
               class="col-1 form-check-input transparent-box "
               type="checkbox"
               id="gridCheck_2"
+              checked={checkbox2}
+              onChange={handleCheckbox2Change}
             />
             <label className="col label" htmlFor="gridCheck_2">
               By clicking the checkbox, I hereby (i) accept{" "}
@@ -161,6 +246,8 @@ function RegistrationPage() {
               class="btn btn-primary me-md-2 creat-account-btn"
               type="button"
               onClick={handlePostRequest}
+              disabled={isButtonDisabled}
+              style={buttonStyle}
             >
               CREATE ACCOOUNT
             </button>
