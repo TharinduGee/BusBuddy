@@ -10,10 +10,6 @@
   line-height: normal;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 6c6f00fe5c64bb15cfdbe8b515f5fc5119b9795d
 .label {
   color: #000;
   font-family: Inter;
@@ -51,6 +47,11 @@
   font-style: normal;
   font-weight: 400;
   text-decoration: none;
+}
+
+.form-check-input{
+  height: 20px;
+  width: 20px;
 }
 
 a {

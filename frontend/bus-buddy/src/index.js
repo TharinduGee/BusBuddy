@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Boarding_Page from "./Pages/on_Boarding_Page/Boarding_Page";
 import Registration_Page from "./Pages/RegistraionPage/RegistrationPage";
 import LoginPage from "./Pages/LoginPage/LoginPage"
+import userSelectPage from "./Pages/UserSelectPage/UserSelectPage"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -13,6 +14,7 @@ root.render(
         <Route path="/" element={<Boarding_Page />} />
         <Route path="/signup" element={<Registration_Page />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/userrole" element={<userSelectPage />} />
       </Routes>
     </Router>
   </React.StrictMode>
