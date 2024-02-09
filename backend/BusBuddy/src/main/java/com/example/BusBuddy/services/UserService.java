@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,11 @@ public class UserService {
                       .orElseThrow(() -> new UsernameNotFoundException("User not found"));
           }
       };
+  }
+  public List<User> findUnassignedUsersByUsername(String query){
+      List<User> users = userRepository.findAll(query);
+
+      return users;
   }
 
   public User save(User newUser) {
