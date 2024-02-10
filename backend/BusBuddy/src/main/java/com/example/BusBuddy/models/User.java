@@ -104,7 +104,7 @@ public class User implements UserDetails {
   @Override
   public String getUsername() {
     //username is combination of first and last name
-      return getFirstName() + getLastName();
+      return getEmail();
   }
 
   @Override
