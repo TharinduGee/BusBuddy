@@ -27,26 +27,12 @@ public class AuthenticationController {
     //@CrossOrigin(origins = "http://localhost:8081/api/v1/signUpAdmin")
     @PostMapping("/signUpAdmin")
     public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(@RequestBody SignUpRequest request) {
-        try{
-            return authenticationService.signUpAdmin(request);
-        }catch(DataIntegrityViolationException e){//trigger when duplicate key value appears
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-            // throw new DataIntegrityViolationException(e.getMessage());
-        }catch (Exception e){//trigger for other errors
-            throw  new InternalAuthenticationServiceException(e.getMessage());
-        }
+        return authenticationService.signUpAdmin(request);
     }
 
     @PostMapping("/signUp")
     public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody SignUpRequest request) {
-        try{
-            return authenticationService.signUp(request);
-        }catch(DataIntegrityViolationException e){//trigger when duplicate key value appears
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-            // throw new DataIntegrityViolationException(e.getMessage());
-        }catch (Exception e){//trigger for other errors
-            throw  new InternalAuthenticationServiceException(e.getMessage());
-        }
+        return authenticationService.signUp(request);
     }
 
     @PostMapping("/signIn")
