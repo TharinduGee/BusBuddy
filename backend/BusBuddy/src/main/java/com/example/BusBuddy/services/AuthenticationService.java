@@ -10,6 +10,7 @@ import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,7 @@ public class AuthenticationService {
       return ResponseEntity.status(HttpStatus.CREATED).body(jwtAuthenticationResponse);
   }
 
+
     public ResponseEntity<JwtAuthenticationResponse> signUp(SignUpRequest request) {
 
         var user = User
@@ -88,18 +90,24 @@ public class AuthenticationService {
 
 
   public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {
-      authenticationManager.authenticate(
-              new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-      var user = userRepository.findByEmail(request.getEmail())
-              .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
-      var jwt = jwtService.generateToken(user);
-      var refreshToken = jwtService.generateRefreshToken(user);
-      var jwtAuthenticationResponse = JwtAuthenticationResponse.builder()
-              .token(jwt)
-              .refreshToken(refreshToken)
-              .role(user.getRole()).build();
 
-      return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
+      try {
+          authenticationManager.authenticate(
+                  new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+          var user = userRepository.findByEmail(request.getEmail())
+                  .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
+          var jwt = jwtService.generateToken(user);
+          var refreshToken = jwtService.generateRefreshToken(user);
+          var jwtAuthenticationResponse = JwtAuthenticationResponse.builder()
+                  .token(jwt)
+                  .refreshToken(refreshToken)
+                  .role(user.getRole()).build();
+
+          return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
+      }catch(DataIntegrityViolationException ex){
+          throw  new DataIntegrityViolationException(ex.getMessage());
+      }
+
   }
 
   public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
