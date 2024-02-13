@@ -32,7 +32,11 @@ public class JwtService {
       return extractClaim(token, Claims::getSubject);
   }
 
-  public String generateToken(UserDetails userDetails) {
+    public String extractBId(String token) {
+        return extractClaim(token, Claims::getAudience);
+    }
+
+  public String generateToken(User userDetails) {
       return generateToken(new HashMap<>(), userDetails);
   }
 
@@ -50,10 +54,12 @@ public class JwtService {
       return claimsResolvers.apply(claims);
   }
 
-  private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+  private String generateToken(Map<String, Object> extraClaims, User userDetails) {
+      extraClaims.put("b_id", userDetails.getBusiness().getBId().toString());
       return Jwts
         .builder()
         .setClaims(extraClaims)
+              .setAudience(userDetails.getBusiness().getBId().toString())
         .setSubject(userDetails.getUsername())
         .setIssuedAt(new Date(System.currentTimeMillis()))
         .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
@@ -63,7 +69,9 @@ public class JwtService {
 
 
     private String generateRefreshToken(Map<String, Object> extractClaims , UserDetails userDetails){
-        return Jwts.builder().setClaims(extractClaims).setSubject(userDetails.getUsername())
+        return Jwts.builder()
+                .setClaims(extractClaims)
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 *60*24))
                 .signWith(getSigningKey(),  SignatureAlgorithm.HS256)
@@ -86,6 +94,7 @@ public class JwtService {
         .parseClaimsJws(token)
         .getBody();
   }
+
 
   private Key getSigningKey() {
       byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);

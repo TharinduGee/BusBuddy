@@ -35,18 +35,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       final String authHeader = request.getHeader("Authorization");
       final String jwt;
       final String userEmail;
+      final String bId;
       final String refreshtoken;
       if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
           filterChain.doFilter(request, response);
           return;
       }
       jwt = authHeader.substring(7);
-      log.debug("JWT - {}", jwt.toString());
+      log.debug("JWT - {}", jwt);
       userEmail = jwtService.extractUserName(jwt);
+      bId = jwtService.extractBId(jwt);
+      log.debug("Username - {}", userEmail.toString());
+      log.debug("b_id - {}", bId);
       if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
           UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
           if (jwtService.isTokenValid(jwt, userDetails)) {
-            log.debug("User - {}", userDetails);
             SecurityContext context = SecurityContextHolder.createEmptyContext();
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities());
@@ -55,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.setContext(context);
           }
           //there shoud be logic to check the validity of refresh token
-
+          request.setAttribute("b_id", bId);
       }
       filterChain.doFilter(request, response);
   }

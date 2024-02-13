@@ -7,6 +7,7 @@ import Partner_1 from "../../../Assets/partner_1.png";
 import Partner_2 from "../../../Assets/partner_2.png";
 import Partner_3 from "../../../Assets/partner_3.png";
 import Partner_4 from "../../../Assets/partner_4.png";
+import { useNavigate } from "react-router-dom";
 
 const CustomButton = styled(Button)({
   backgroundColor: "#FF7A00",
@@ -23,7 +24,7 @@ const CustomButton = styled(Button)({
   marginBottom: "20px",
   marginTop: "20px",
   borderRadius: "4px",
-  border: "1px solid #FF7A00", // Set the border property with the correct syntax
+  border: "1px solid #FF7A00",
   justifyContent: "center",
   alignItems: "center",
   transition: "background-color 0.3s",
@@ -34,7 +35,7 @@ const CustomButton = styled(Button)({
   "@media (max-width: 600px)": {
     width: "150px",
     height: "40px",
-    fontSize: "12px", // Change the width for screens smaller than 600px
+    fontSize: "12px",
   },
 });
 
@@ -53,7 +54,7 @@ const CustomButton_sign_up = styled(Button)({
   marginBottom: "20px",
 
   borderRadius: "4px",
-  border: "1px solid #FF7A00", // Set the border property with the correct syntax
+  border: "1px solid #FF7A00",
   justifyContent: "center",
   alignItems: "center",
   transition: "background-color 0.3s",
@@ -93,7 +94,13 @@ const Subscriptions = styled(Button)({
   },
 });
 
+const handleSignUpClick = () => {
+  window.location.href = "/signup";
+};
+
 function Header() {
+  const navigate = useNavigate();
+
   return (
     <div className="d-flex flex-column whole-page">
       <div className="header-main">
@@ -101,14 +108,24 @@ function Header() {
           <img className="logo" alt="logo" src={Logo} />
         </div>
         <div className="items-labels">
-          <div className="text-label">Features</div>
-          <div className="text-label">News & Blog</div>
-          <div className="text-label">Subscriptions</div>
-          <div className="text-label">About</div>
+          <a href="" className="text-label">
+            Features
+          </a>
+          <a href="" className="text-label">
+            News & Blog
+          </a>
+          <a href="" className="text-label">
+            Subscriptions
+          </a>
+          <a href="" className="text-label">
+            About
+          </a>
         </div>
 
         <div className="d-flex flex-row align-items-center me-4">
-          <div className="text-label">Login</div>
+          <a href="/login" className="text-label">
+            Login
+          </a>
           <CustomButton variant="contained">Get started free</CustomButton>
         </div>
       </div>
@@ -122,7 +139,9 @@ function Header() {
       </div>
       <div className="Simplify-Finances-div">Sign Up and Simplify Finances</div>
       <div className="d-flex flex-row  btn-2-div">
-        <CustomButton_sign_up variant="contained">Sign up</CustomButton_sign_up>
+        <CustomButton_sign_up variant="contained" onClick={handleSignUpClick}>
+          Sign up
+        </CustomButton_sign_up>
         <Subscriptions variant="contained">Subscriptions</Subscriptions>
       </div>
       <div className="out-partners">Our Partners</div>

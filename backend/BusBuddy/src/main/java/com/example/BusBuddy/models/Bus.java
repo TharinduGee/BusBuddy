@@ -35,16 +35,16 @@ public class Bus {
     )
     private Long busId;
 
-    @Lob
-    @Column(name = "image", columnDefinition = "BYTEA")
-    private byte[] imageData;
+//    @Lob
+//    @Column(name = "image", columnDefinition = "BYTEA")
+//    @Basic(fetch = FetchType.LAZY)
+//    private byte[] imageData;
 
     @Enumerated(EnumType.STRING)
     private BusType type;
 
     @Column(
-            name = "numberPlate",
-            nullable = false
+            name = "numberPlate"
     )
     private String numberPlate;
 

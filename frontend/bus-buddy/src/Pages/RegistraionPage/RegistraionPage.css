@@ -19,8 +19,9 @@
   line-height: normal;
 }
 
-.creat-account-btn {
+.next-btn {
   display: flex;
+  color: white;
   height: 40px;
   width: 300px;
   padding: 8px 18px;
@@ -35,9 +36,12 @@
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
+  background-color: #ff7a00;
+  display: flex;
+  
 }
 
-.creat-account-btn:hover {
+.next-btn:hover {
   background-color: #e06c00;
   border-color: #e06c00;
 }
@@ -47,6 +51,11 @@
   font-style: normal;
   font-weight: 400;
   text-decoration: none;
+}
+
+.form-check-input{
+  height: 20px;
+  width: 20px;
 }
 
 a {
