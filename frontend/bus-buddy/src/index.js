@@ -16,6 +16,7 @@ import Filelibrary from "./Pages/Bus_Owner_Pages/File_Library";
 import TaxInsight from "./Pages/Bus_Owner_Pages/Tax_Insight";
 import RouteManagement from "./Pages/Bus_Owner_Pages/Route_Management";
 import TripManagement from "./Pages/Bus_Owner_Pages/Trip_Management";
+import AddEmployee from "./Pages/Bus_Owner_Pages/Team_Directory_Add_Employee";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -37,6 +38,7 @@ root.render(
         <Route path="/taxinsights" element={<TaxInsight />} />
         <Route path="/routemanagement" element={<RouteManagement />} />
         <Route path="/tripmanagement" element={<TripManagement />} />
+        <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
