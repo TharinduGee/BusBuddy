@@ -24,14 +24,13 @@ public class AuthenticationController {
     @Autowired
     private final AuthenticationService authenticationService;
 
-    //@CrossOrigin(origins = "http://localhost:8081/api/v1/signUpAdmin")
     @PostMapping("/signUpAdmin")
     public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(@RequestBody SignUpRequest request) {
         return authenticationService.signUpAdmin(request);
     }
 
     @PostMapping("/signUp")
-    public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody SignUpRequest request) {
+    public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
         return authenticationService.signUp(request);
     }
 

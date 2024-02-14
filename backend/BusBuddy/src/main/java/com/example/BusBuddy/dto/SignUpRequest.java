@@ -24,6 +24,6 @@ public class SignUpRequest {
   @NotNull
   @Pattern(regexp = "^\\+?[0-9]{1,3}?[-. ]?\\(?\\d{3}\\)?[-. ]?\\d{3}[-. ]?\\d{4}$\n")
   String mobileNo;
-  @NotNull
+
   Role role;
 }

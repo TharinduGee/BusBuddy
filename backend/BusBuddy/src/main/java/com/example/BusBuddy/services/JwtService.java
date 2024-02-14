@@ -55,7 +55,13 @@ public class JwtService {
   }
 
   private String generateToken(Map<String, Object> extraClaims, User userDetails) {
-      extraClaims.put("b_id", userDetails.getBusiness().getBId().toString());
+      if(userDetails.getBusiness().getBId() == null){
+          extraClaims.put("b_id", null);
+      }else{
+          extraClaims.put("b_id", userDetails.getBusiness().getBId().toString());
+      }
+
+
       return Jwts
         .builder()
         .setClaims(extraClaims)

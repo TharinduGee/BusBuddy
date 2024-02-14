@@ -1,7 +1,6 @@
 package com.example.BusBuddy.dto.Employee;
 
 import com.example.BusBuddy.models.EmployeeType;
-import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,11 +13,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeAddRequest {
+public class EmployeeResponse {
+    private String empId;
     private String name;
     private Float salary;
-    private User user;
     private Date bDay;
+    private Integer age;
     private Date joinedDate;
     private EmployeeType designation;
 }

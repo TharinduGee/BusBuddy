@@ -63,7 +63,7 @@ public class AuthenticationService {
   }
 
 
-    public ResponseEntity<JwtAuthenticationResponse> signUp(SignUpRequest request) {
+    public ResponseEntity<String> signUp(SignUpRequest request) {
 
         var user = User
                 .builder()
@@ -76,16 +76,8 @@ public class AuthenticationService {
                 .build();
 
         user = userService.save(user);
-        var jwt = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
 
-        var jwtAuthenticationResponse =  JwtAuthenticationResponse.builder()
-                .token(jwt)
-                .refreshToken(refreshToken)
-                .role(user.getRole())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(jwtAuthenticationResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Account is successfully created.");
     }
 
 
