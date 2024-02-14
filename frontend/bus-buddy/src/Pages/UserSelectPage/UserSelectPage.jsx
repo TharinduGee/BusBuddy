@@ -34,12 +34,11 @@ function UserSelectPage() {
     try {
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
-        { ...user, role: selectedRole } // Include selected role in the request
+        { ...user, role: selectedRole } 
       );
 
       console.log("Response:", response.data);
     } catch (error) {
-      // Handle errors
       console.error("Error:", error);
     }
   };
@@ -113,7 +112,7 @@ function UserSelectPage() {
             </div>
           </div>
 
-          {/* Create Account Button */}
+          
           <div className="d-grid gap-2 mt-3 d-md-flex justify-content-center">
             <button
               className="btn me-md-2 create-btn"
