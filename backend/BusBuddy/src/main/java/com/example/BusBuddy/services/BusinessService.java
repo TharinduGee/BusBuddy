@@ -3,6 +3,7 @@ package com.example.BusBuddy.services;
 import com.example.BusBuddy.dto.BusinessEditInfoReq;
 import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.repositories.BusinessRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,12 @@ public class BusinessService {
 
         return ResponseEntity.status(HttpStatus.OK).body("Edited successfully");
 
+    }
+
+    public Business extractBId(HttpServletRequest httpServletRequest){
+        String str = (String) httpServletRequest.getAttribute("b_id");
+        long bId = Long.parseLong(str);
+        Business business = businessRepository.findBybId(bId).orElseThrow(() -> new RuntimeException("Business not found."));
+        return business;
     }
 }

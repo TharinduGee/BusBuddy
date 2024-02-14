@@ -2,6 +2,7 @@ package com.example.BusBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "employee")
@@ -67,7 +69,7 @@ public class Employee {
     @Column(
             name = "salary"
     )
-    private Float Salary;
+    private Float salary;
 
     @Enumerated(EnumType.STRING)
    private EmployeeType designation;

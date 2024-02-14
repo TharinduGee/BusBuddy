@@ -6,7 +6,6 @@ import SteeringWheel from "../../Assets/SteeringWheel.png"
 import User from "../../Assets/User.png"
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 
-
 function UserSelectPage() {
   const [user, setUser] = useState({
     firstName: "",
@@ -17,6 +16,8 @@ function UserSelectPage() {
     confirm_password: "",
   });
 
+  const [selectedRole, setSelectedRole] = useState("");
+
   const handleChange = (e) => {
     const value = e.target.value;
     setUser({
@@ -25,16 +26,19 @@ function UserSelectPage() {
     });
   };
 
+  const handleRoleSelect = (role) => {
+    setSelectedRole(role);
+  };
+
   const handlePostRequest = async () => {
     try {
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
-        user
+        { ...user, role: selectedRole } 
       );
 
       console.log("Response:", response.data);
     } catch (error) {
-      // Handle errors
       console.error("Error:", error);
     }
   };
@@ -47,67 +51,75 @@ function UserSelectPage() {
           <div className="userrole-text-main">Select User Role</div>
           
           <div className="row d-flex justify-content-around">
-
             <div className="col d-flex justify-content-center ">
-                <div className="user-container d-flex flex-column justify-content-center ">
-                  <div className="d-flex flex-column justify-content-center text-center ">
-                    <div className="row d-flex justify-content-center">
-                      <img
-                        className=" icon-style mb-4"
-                        alt="briefcaseIcon"
-                        src={Briefcase}
-                      />
-                    </div>
-                    <div className="row">
-                      <div className="role-text">Owner</div>
-                    </div>
+              <button 
+                className={`user-container d-flex flex-column justify-content-center ${selectedRole === "Owner" ? "selected" : ""}`}
+                onClick={() => handleRoleSelect("Owner")}
+              >
+                <div className="d-flex flex-column justify-content-center text-center ">
+                  <div className="row d-flex justify-content-center">
+                    <img
+                      className=" icon-style mb-4"
+                      alt="briefcaseIcon"
+                      src={Briefcase}
+                    />
+                  </div>
+                  <div className="row">
+                    <div className="role-text">Owner</div>
                   </div>
                 </div>
+              </button>
             </div>
 
             <div className="col d-flex justify-content-center ">
-                <div className="user-container d-flex flex-column justify-content-center ">
-                  <div className="d-flex flex-column justify-content-center text-center ">
-                    <div className="row d-flex justify-content-center">
-                      <img
-                        className=" icon-style mb-4"
-                        alt="steeringWheelIcon"
-                        src={SteeringWheel}
-                      />
-                    </div>
-                    <div className="row">
-                      <div className="role-text">Driver</div>
-                    </div>
+              <button 
+                className={`user-container d-flex flex-column justify-content-center ${selectedRole === "Driver" ? "selected" : ""}`}
+                onClick={() => handleRoleSelect("Driver")}
+              >
+                <div className="d-flex flex-column justify-content-center text-center ">
+                  <div className="row d-flex justify-content-center">
+                    <img
+                      className=" icon-style mb-4"
+                      alt="steeringWheelIcon"
+                      src={SteeringWheel}
+                    />
+                  </div>
+                  <div className="row">
+                    <div className="role-text">Driver</div>
                   </div>
                 </div>
+              </button>
             </div>
 
             <div className="col d-flex justify-content-center ">
-                <div className="user-container d-flex flex-column justify-content-center ">
-                  <div className="d-flex flex-column justify-content-center text-center ">
-                    <div className="row d-flex justify-content-center">
-                      <img
-                        className=" icon-style mb-4"
-                        alt="userIcon"
-                        src={User}
-                      />
-                    </div>
-                    <div className="row">
-                      <div className="role-text">Conductor</div>
-                    </div>
+              <button 
+                className={`user-container d-flex flex-column justify-content-center ${selectedRole === "Conductor" ? "selected" : ""}`}
+                onClick={() => handleRoleSelect("Conductor")}
+              >
+                <div className="d-flex flex-column justify-content-center text-center ">
+                  <div className="row d-flex justify-content-center">
+                    <img
+                      className=" icon-style mb-4"
+                      alt="userIcon"
+                      src={User}
+                    />
+                  </div>
+                  <div className="row">
+                    <div className="role-text">Conductor</div>
                   </div>
                 </div>
+              </button>
             </div>
-
           </div>
 
-          <div class="d-grid gap-2 mt-3 d-md-flex justify-content-center ">
+          
+          <div className="d-grid gap-2 mt-3 d-md-flex justify-content-center">
             <button
-              class="btn me-md-2 create-btn"
+              className="btn me-md-2 create-btn"
               type="button"
               onClick={handlePostRequest}
             >
-              CREATE ACCOOUNT
+              CREATE ACCOUNT
             </button>
           </div>
           
@@ -116,7 +128,6 @@ function UserSelectPage() {
       <div className="footer-full">
         <Footer />
       </div>
-      
     </div>
   );
 }
