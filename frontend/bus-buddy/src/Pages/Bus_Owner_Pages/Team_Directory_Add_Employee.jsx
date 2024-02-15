@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
@@ -10,8 +10,15 @@ import { IoIosArrowBack } from "react-icons/io";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 function Team_Directory_Add_Employee() {
+  const [rows_, setRows] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [selectionModel, setSelectionModel] = useState([]);
+
+  const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
+
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -69,38 +76,70 @@ function Team_Directory_Add_Employee() {
     },
   });
 
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+
+    const token =
+      "eyJhbGciOiJIUzI1NiJ9.eyJiX2lkIjoiNSIsImF1ZCI6IjUiLCJzdWIiOiJuZWRmc2ZhIiwiaWF0IjoxNzA4MDI4NTgyLCJleHAiOjE3MDgwMzIxODJ9.lVFQCz1tAEJj5nOU4r-YDHho1--HUMVNOMsUxdV2TTk";
+    axios
+      .get(
+        `http://localhost:8081/api/v1/nullBusinessAndEmail?email=${searchInput}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        const fetchedData = response.data;
+        const formattedData = fetchedData.map((user) => ({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          mobileNo: user.mobileNo,
+          role: user.role,
+        }));
+        setRows(formattedData);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  };
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "firstName", headerName: "First name", width: 130 },
     { field: "lastName", headerName: "Last name", width: 130 },
-    {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      width: 90,
-    },
-    {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || " "} ${params.row.lastName || ""}`,
-    },
+
+    { field: "email", headerName: "Email", width: 300 },
+    { field: "mobileNo", headerName: "Mobile No", width: 130 },
+    { field: "role", headerName: "Role", width: 160 },
+    // {
+    //   field: "fullName",
+    //   headerName: "Full name",
+    //   description: "This column has a value getter and is not sortable.",
+    //   sortable: false,
+    //   width: 160,
+    //   valueGetter: (params) =>
+    //     `${params.row.firstName || " "} ${params.row.lastName || ""}`,
+    // },
   ];
 
-  const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  const [selectedemail, setselectedemail] = useState("");
+  const [selectedmobile, setselectedmobile] = useState("");
+  const [selectedfullname, setselectedfullname] = useState("");
+  const [selectedID, setselectedID] = useState("");
+  const [selectedRole, setselectedRole] = useState("");
+  const handleRowClick = (params) => {
+    setselectedID(params.row.id);
+    setselectedemail(params.row.email);
+    setselectedmobile(params.row.mobileNo);
+    setselectedfullname(params.row.firstName + " " + params.row.lastName);
+    setselectedRole(params.row.role);
+  };
+
   return (
     <div>
       <Sidebar>
@@ -112,8 +151,9 @@ function Team_Directory_Add_Employee() {
             <ThemeProvider theme={theme}>
               <TextField
                 id="outlined-basic"
-                label="Search"
+                label="Search by Email"
                 variant="outlined"
+                onChange={handleSearchInputChange}
                 InputProps={{
                   sx: {
                     backgroundColor: "#F4F4F4",
@@ -147,13 +187,14 @@ function Team_Directory_Add_Employee() {
             >
               <ThemeProvider theme={table_theme}>
                 <DataGrid
-                  rows={rows}
+                  rows={rows_}
                   columns={columns}
                   initialState={{
                     pagination: {
                       paginationModel: { page: 0, pageSize: 5 },
                     },
                   }}
+                  onRowClick={handleRowClick}
                   pageSizeOptions={[5, 10]}
                   rowHeight={40}
                 />
@@ -162,22 +203,19 @@ function Team_Directory_Add_Employee() {
           </div>
           <div className="d-flex flex-wrap justify-content-center align-items-center">
             <div>
-              <img className="photo-view" src={avatar} alt="Add Icon" />
+              <img className="photo-view" src={avatar} alt="profile Icon" />
             </div>
 
             <div className="d-flex flex-column">
-              <lable className="profession">Driver</lable>
-              <lable class="name-avatar">Kamal Fernando </lable>
+              <lable className="profession">{selectedRole.split("_")[1]}</lable>
+              <lable class="name-avatar">{selectedfullname}</lable>
               <div className="normal-details">
                 <lable>ID :</lable>
-                <lable> PV13289290</lable>
+                <lable> {selectedID}</lable>
               </div>
-              <lable className="normal-details"> Kamalfernando@gmail.com</lable>
-              <lable className="normal-details"> +94726465466</lable>
-              <div className="normal-details">
-                <lable>Salary :</lable>
-                <lable> 45000/=</lable>
-              </div>
+              <lable className="normal-details">{selectedemail}</lable>
+              <lable className="normal-details"> {selectedmobile}</lable>
+
               <Button_
                 className="mx-4 my-2"
                 style={{
