@@ -18,6 +18,11 @@
   font-weight: 400;
   line-height: normal;
 }
+/* .container_width {
+  width: 513px;
+  height: 750px;
+  margin: 217px auto 0;
+} */
 
 .next-btn {
   display: flex;
