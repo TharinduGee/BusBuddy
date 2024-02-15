@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
 
 :root {
-  --sidebar-color: rgb(255, 255, 255);
+  --sidebarOwner-color: rgb(255, 255, 255);
   --text-color: rgb(0, 0, 0);
   --menu-text-color: rgb(0, 0, 0);
   --menu-hover-color: #ffdfc7;
@@ -22,7 +22,7 @@
   text-decoration: none;
   font-family: "Outfit", sans-serif;
 }
-.sidebar-container {
+.sidebarOwner-container {
   display: flex;
 }
 
@@ -65,21 +65,21 @@
   display: none;
 }
 
-.sidebaricon_main {
+.sidebarOwnericon_main {
   width: 40px;
   padding-left: 10px;
   margin-right: 20px;
   margin-left: 15px;
   height: auto;
 }
-.sidebaricon {
+.sidebarOwnericon {
   width: 40px;
   padding-left: 10px;
   margin-right: 20px;
   height: auto;
 }
 
-.sidebaricon2 {
+.sidebarOwnericon2 {
   width: 33px;
   padding-left: 10px;
   margin-left: 4px;
@@ -107,7 +107,7 @@
   color: var(--menu-text-color);
 }
 
-.sidebar {
+.sidebarOwner {
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -116,7 +116,7 @@
   height: 100%;
   overflow: hidden;
   padding: 20px 0px;
-  background-color: var(--sidebar-color);
+  background-color: var(--sidebarOwner-color);
   transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
   z-index: 50;
   box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
@@ -125,11 +125,11 @@
   display: none;
 }
 
-.mini-sidebar {
+.mini-sidebarOwner {
   width: 80px;
 }
 
-.sidebar span {
+.sidebarOwner span {
   width: 100px;
   white-space: nowrap;
   font-size: 18px;
@@ -138,13 +138,13 @@
   transition: opacity 0.5s ease, width 0.5s ease;
 }
 
-.sidebar span.hidden {
+.sidebarOwner span.hidden {
   opacity: 0;
   width: 0;
 }
 
 /*------------> Page Name */
-.sidebar .page-name {
+.sidebarOwner .page-name {
   width: 100%;
   height: 45px;
   color: var(--text-color);
@@ -153,44 +153,44 @@
   align-items: center;
 }
 
-.sidebar .page-name ion-icon {
+.sidebarOwner .page-name ion-icon {
   min-width: 50px;
   font-size: 40px;
   cursor: pointer;
 }
 
-.sidebar .page-name span {
+.sidebarOwner .page-name span {
   margin-left: 5px;
   font-size: 25px;
 }
 
 /*--------------> Navigation Menu*/
-.sidebar .navigation {
+.sidebarOwner .navigation {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.sidebar .navigation::-webkit-scrollbar {
+.sidebarOwner .navigation::-webkit-scrollbar {
   width: 5px;
 }
 
-.sidebar .navigation::-webkit-scrollbar-thumb {
+.sidebarOwner .navigation::-webkit-scrollbar-thumb {
   background-color: var(--scroll-color);
   border-radius: 5px;
 }
 
-.sidebar .navigation::-webkit-scrollbar-thumb:hover {
+.sidebarOwner .navigation::-webkit-scrollbar-thumb:hover {
   background-color: var(--scroll-hover-color);
 }
 
-.sidebar .navigation li {
+.sidebarOwner .navigation li {
   list-style: none;
   display: flex;
   margin-bottom: 25px;
 }
 
-.sidebar .navigation a {
+.sidebarOwner .navigation a {
   width: 100%;
   height: 45px;
   display: flex;
@@ -202,13 +202,13 @@
 .active-link {
   background-color: #ffdfc7;
 }
-.sidebar .navigation a:hover {
+.sidebarOwner .navigation a:hover {
   background-color: var(--menu-hover-color);
   color: var(--menu-hover-text-color);
 }
 
 /*-----------------> Line*/
-.sidebar .line {
+.sidebarOwner .line {
   width: 100%;
   height: 1px;
   margin-top: 15px;
@@ -217,18 +217,18 @@
 }
 
 /*---------------> User*/
-.sidebar .user {
+.sidebarOwner .user {
   width: 100%;
   display: flex;
 }
 
-.sidebar .user img {
+.sidebarOwner .user img {
   width: 50px;
   min-width: 50px;
   border-radius: 10px;
 }
 
-.sidebar .user .user-info {
+.sidebarOwner .user .user-info {
   width: 100%;
   display: flex;
   align-items: center;
@@ -237,39 +237,39 @@
   overflow: hidden;
 }
 
-.sidebar .user .name-email {
+.sidebarOwner .user .name-email {
   width: 100%;
   display: flex;
   flex-direction: column;
   margin-left: 5px;
 }
 
-.sidebar .user .name {
+.sidebarOwner .user .name {
   font-size: 15px;
   font-weight: 600;
 }
 
-.sidebar .user .email {
+.sidebarOwner .user .email {
   font-size: 13px;
 }
 
-.sidebar .user ion-icon {
+.sidebarOwner .user ion-icon {
   font-size: 20px;
 }
 
 @media (max-height: 660px) {
-  .sidebar .page-name {
+  .sidebarOwner .page-name {
     margin-bottom: 5px;
   }
 }
 
 @media (max-width: 600px) {
-  .sidebar {
+  .sidebarOwner {
     position: fixed;
     left: -250px;
   }
 
-  .max-sidebar {
+  .max-sidebarOwner {
     left: 0;
   }
 
