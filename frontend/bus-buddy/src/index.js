@@ -18,6 +18,12 @@ import RouteManagement from "./Pages/Bus_Owner_Pages/Route_Management";
 import TripManagement from "./Pages/Bus_Owner_Pages/Trip_Management";
 import AddEmployee from "./Pages/Bus_Owner_Pages/Team_Directory_Add_Employee";
 
+import Membership from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Membership";
+import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactInfo";
+import Notifications from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Notifications";
+import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -39,6 +45,16 @@ root.render(
         <Route path="/routemanagement" element={<RouteManagement />} />
         <Route path="/tripmanagement" element={<TripManagement />} />
         <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
+        
+        <Route path="/membership" element={<Membership />} />
+        <Route path="/contactInfo" element={<ContactInfo />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/passwordSecurity" element={<PasswordSecurity />} />
+
+
+      
+
+        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
