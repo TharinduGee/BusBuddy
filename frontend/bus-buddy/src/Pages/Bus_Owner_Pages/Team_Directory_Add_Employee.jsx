@@ -9,8 +9,66 @@ import "./Team_Directory.css";
 import { IoIosArrowBack } from "react-icons/io";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function Team_Directory_Add_Employee() {
+  const table_theme = createTheme({
+    components: {
+      MuiDataGrid: {
+        styleOverrides: {
+          root: {
+            border: "none",
+          },
+          row: {
+            "&:hover": {
+              backgroundColor: "#FFDFC7",
+            },
+            "&.Mui-selected": {
+              backgroundColor: "#FFDFC7",
+            },
+            "&.Mui-selected:hover": {
+              backgroundColor: "#FFDFC7",
+            },
+
+            "& .MuiDataGrid-row": {
+              "&:first-child .MuiDataGrid-cell": {
+                borderRadius: "10px 10px 0 0",
+              },
+              "&:last-child .MuiDataGrid-cell": {
+                borderRadius: "0 0 10px 10px",
+              },
+            },
+          },
+          cell: {
+            border: "none",
+            height: 2,
+
+            "&.MuiDataGrid-cell--selected": {
+              borderColor: "transparent",
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const theme = createTheme({
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              border: "none",
+            },
+          },
+          notchedOutline: {
+            borderWidth: "0",
+          },
+        },
+      },
+    },
+  });
+
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "firstName", headerName: "First name", width: 130 },
@@ -46,21 +104,26 @@ function Team_Directory_Add_Employee() {
   return (
     <div>
       <Sidebar>
-        <div>
-          <div class="d-flex flex-wrap align-items-center  justify-content-between">
-            <TextField
-              id="outlined-basic"
-              label="Search"
-              variant="outlined"
-              InputProps={{
-                sx: {
-                  backgroundColor: "#F4F4F4",
-                  width: 400,
-                  borderRadius: 10,
-                  borderColor: "FF760D",
-                },
-              }}
-            />
+        <div className="d-flex flex-column align-items-center  justify-content-end">
+          <div
+            style={{ width: "80%" }}
+            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+          >
+            <ThemeProvider theme={theme}>
+              <TextField
+                id="outlined-basic"
+                label="Search"
+                variant="outlined"
+                InputProps={{
+                  sx: {
+                    backgroundColor: "#F4F4F4",
+                    width: 350,
+                    borderRadius: 10,
+                    borderColor: "FF760D",
+                  },
+                }}
+              />
+            </ThemeProvider>
             <div className="d-flex  py-3">
               <Button
                 href="/teamdirectory"
@@ -74,18 +137,28 @@ function Team_Directory_Add_Employee() {
               </Button>
             </div>
           </div>
-          <div className="d-flex py-4" style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-            />
+          <div
+            className="justify-content-center align-items-center d-flex py-4"
+            style={{ height: 400, width: "100%" }}
+          >
+            <div
+              className="justify-content-center align-items-center"
+              style={{ width: "80%", height: 325 }}
+            >
+              <ThemeProvider theme={table_theme}>
+                <DataGrid
+                  rows={rows}
+                  columns={columns}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  pageSizeOptions={[5, 10]}
+                  rowHeight={40}
+                />
+              </ThemeProvider>
+            </div>
           </div>
           <div className="d-flex flex-wrap justify-content-center align-items-center">
             <div>
