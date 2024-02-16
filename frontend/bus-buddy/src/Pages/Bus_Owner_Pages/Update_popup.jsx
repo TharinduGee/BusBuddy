@@ -11,7 +11,7 @@ function Update_popup(props) {
     <Dialog open={openPopup}>
       <DialogTitle>
         <div className="d-flex flex-row align-items-center justify-content-between">
-          <div>Update Salary</div>
+          <div>{title}</div>
           <IconButton
             style={{ color: "red" }}
             className="mx-2"

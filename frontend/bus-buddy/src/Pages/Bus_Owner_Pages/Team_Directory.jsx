@@ -211,7 +211,11 @@ function Team_Directory() {
           </div>
         </div>
       </div>
-      <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
+      <Popup
+        title="Update Employee Salary"
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+      >
         <div className="d-flex flex-wrap justify-content-center align-items-center">
           <div>
             <img className="photo-view" src={avatar} alt="Add Icon" />

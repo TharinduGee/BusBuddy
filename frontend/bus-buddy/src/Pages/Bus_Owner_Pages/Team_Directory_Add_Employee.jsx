@@ -11,8 +11,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import Popup from "./Update_popup";
+import { DialogTitle } from "@mui/material";
 
 function Team_Directory_Add_Employee() {
+  const [openPopup, setOpenPopup] = useState(false);
   const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [selectionModel, setSelectionModel] = useState([]);
@@ -80,7 +83,7 @@ function Team_Directory_Add_Employee() {
     setSearchInput(event.target.value);
 
     const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJiX2lkIjoiNSIsImF1ZCI6IjUiLCJzdWIiOiJuZWRmc2ZhIiwiaWF0IjoxNzA4MDI4NTgyLCJleHAiOjE3MDgwMzIxODJ9.lVFQCz1tAEJj5nOU4r-YDHho1--HUMVNOMsUxdV2TTk";
+      "eyJhbGciOiJIUzI1NiJ9.eyJiX2lkIjoiNiIsImF1ZCI6IjYiLCJzdWIiOiJuZWRmc3lyeWZhIiwiaWF0IjoxNzA4MTEyNjQ0LCJleHAiOjE3MDgxMTYyNDR9.0tH3rYp92j3aLtouaOxueSj7Uc957wUQqSwEdl570GY";
     axios
       .get(
         `http://localhost:8081/api/v1/nullBusinessAndEmail?email=${searchInput}`,
@@ -218,6 +221,7 @@ function Team_Directory_Add_Employee() {
 
               <Button_
                 className="mx-4 my-2"
+                onClick={() => setOpenPopup(true)}
                 style={{
                   color: "#FF760D",
                   width: "200px",
@@ -231,6 +235,48 @@ function Team_Directory_Add_Employee() {
             </div>
           </div>
         </div>
+        <Popup
+          title="Add Employee"
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+        >
+          <div className="d-flex flex-wrap justify-content-center align-items-center">
+            <div>
+              <img className="photo-view" src={avatar} alt="Add Icon" />
+            </div>
+
+            <div className="d-flex flex-column align-items-center">
+              <lable className="profession">{selectedRole.split("_")[1]}</lable>
+              <lable class="name-avatar">{selectedfullname}</lable>
+              <div className="normal-details">
+                <lable>ID :</lable>
+                <lable> {selectedID}</lable>
+              </div>
+
+              <TextField
+                id="outlined-basic"
+                label="Enter the salary"
+                variant="outlined"
+                InputProps={{
+                  sx: {
+                    backgroundColor: "#F4F4F4",
+                    width: 350,
+                    borderRadius: 2,
+                  },
+                }}
+              />
+              <div className="d-flex my-4 justify-content-center">
+                <Button_
+                  onClick={() => setOpenPopup(false)}
+                  style={{ width: 200 }}
+                  variant="outlined"
+                >
+                  ADD
+                </Button_>
+              </div>
+            </div>
+          </div>
+        </Popup>
       </Sidebar>
     </div>
   );
