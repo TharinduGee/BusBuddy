@@ -4,8 +4,8 @@
   --sidebarOwner-color: rgb(255, 255, 255);
   --text-color: rgb(0, 0, 0);
   --menu-text-color: rgb(0, 0, 0);
-  --menu-hover-color: #ffdfc7;
-  --menu-hover-text-color: rgb(0, 0, 0);
+  --menu-hover-color: rgb(180, 180, 180);
+  --settings-hover-text-color: #FF760D;
   --button-color: rgb(0, 0, 0);
   --button-text-color: rgb(255, 255, 255);
   --line-color: rgb(180, 180, 180);
@@ -200,11 +200,10 @@
   color: var(--menu-text-color);
 }
 .active-link {
-  background-color: #ffdfc7;
+  color: var(--settings-hover-text-color);
 }
 .sidebarOwner .navigation a:hover {
-  background-color: var(--menu-hover-color);
-  color: var(--menu-hover-text-color);
+  color: var(--settings-hover-text-color);
 }
 
 /*-----------------> Line*/
