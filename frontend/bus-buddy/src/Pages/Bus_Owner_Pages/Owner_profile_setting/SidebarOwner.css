@@ -197,10 +197,11 @@
   align-items: center;
   text-decoration: none;
   border-radius: 10px;
-  color: var(--menu-text-color);
+  
 }
-.active-link {
-  color: var(--settings-hover-text-color);
+.activeOwner-link {
+  color: #FF760D ;
+  font-weight: bold;
 }
 .sidebarOwner .navigation a:hover {
   color: var(--settings-hover-text-color);
@@ -283,4 +284,14 @@
   .main-content-hidden {
     margin-left: 0px;
   }
+
+
+}
+
+
+.title-text{
+  text-align: center;
+  font-weight: bold;
+  font-size: 40px;
+  margin: top 5px;;
 }

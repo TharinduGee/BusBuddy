@@ -9,7 +9,7 @@ function SidebarOwner({ children }) {
   const [sidebarOwnerClass, setSidebarOwnerClass] = useState("sidebarOwner");
   const [mainClass, setmainClass] = useState("main-content");
   const spans = document.querySelectorAll("span");
-  const [activeLink, setActiveLink] = useState("");
+  const [activeOwnerLink, setActiveOwnerLink] = useState("");
   const location = useLocation();
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
@@ -27,7 +27,7 @@ function SidebarOwner({ children }) {
         : setmainClass("main-content-hidden")
     );
 
-    setActiveLink(location.pathname);
+    setActiveOwnerLink(location.pathname);
   }, [sidebarOwnerClass]);
 
   const togglemenu = () => {
@@ -82,13 +82,16 @@ function SidebarOwner({ children }) {
             </div>
           </div>
         </div>
+        <div className="title-text">
+          <span>Profile & Settings</span>
+        </div>
         <div className="line"></div>
         <nav className="navigation">
           <ul className="px-3">
             <li>
               <a
                 href="/membership"
-                className={activeLink === "/membership" ? "active-link" : ""}
+                className={activeOwnerLink === "/membership" ? "activeOwner-link" : ""}
               >
                 <span>Membership</span>
               </a>
@@ -96,7 +99,7 @@ function SidebarOwner({ children }) {
             <li>
               <a
                 href="/contactInfo"
-                className={activeLink === "/contactInfo" ? "active-link" : ""}
+                className={activeOwnerLink === "/contactInfo" ? "activeOwner-link" : ""}
               >
                 <span>ContactInfo</span>
               </a>
@@ -105,7 +108,7 @@ function SidebarOwner({ children }) {
               <a
                 href="/passwordSecurity"
                 className={
-                  activeLink === "/passwordSecurity" ? "active-link" : ""
+                  activeOwnerLink === "/passwordSecurity" ? "activeOwner-link" : ""
                 }
               >
                 <span>Password & Security</span>
@@ -115,7 +118,7 @@ function SidebarOwner({ children }) {
               <a
                 href="/notifications"
                 className={
-                  activeLink === "/notifications" ? "active-link" : ""
+                  activeOwnerLink === "/notifications" ? "activeOwner-link" : ""
                 }
               >
                 <span>Notifications</span>
