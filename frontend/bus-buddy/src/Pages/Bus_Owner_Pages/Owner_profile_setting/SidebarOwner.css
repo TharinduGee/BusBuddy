@@ -201,7 +201,9 @@
 }
 .activeOwner-link {
   color: #FF760D ;
-  font-weight: bold;
+}
+.notactiveOwner-link {
+  color: black ;
 }
 .sidebarOwner .navigation a:hover {
   color: var(--settings-hover-text-color);
