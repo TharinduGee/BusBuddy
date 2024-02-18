@@ -36,7 +36,7 @@ public class BusController {
     }
 
     @GetMapping("/bus/findAll")
-    public ResponseEntity<BusPaginationResponse> findAll(@RequestParam(value = "pageNo", defaultValue = "1" , required = false) int pageNumber,
+    public ResponseEntity<BusPaginationResponse> findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                          @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize) {
         return busService.findAll(pageNumber , pageSize);
     }

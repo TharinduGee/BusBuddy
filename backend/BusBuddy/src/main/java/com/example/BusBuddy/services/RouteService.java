@@ -58,7 +58,7 @@ public class RouteService {
                 .collect(Collectors.toList());
 
         RoutePaginationResponse routePaginationResponse = RoutePaginationResponse.builder()
-                .content(routes)
+                .content(routeResponses)
                 .pageSize(routePage.getSize())
                 .pageNo(routePage.getNumber())
                 .totalElements(routePage.getTotalElements())
@@ -91,7 +91,7 @@ public class RouteService {
                 .collect(Collectors.toList());
 
         RoutePaginationResponse routePaginationResponse = RoutePaginationResponse.builder()
-                .content(routes)
+                .content(routeResponses)
                 .pageSize(routePage.getSize())
                 .pageNo(routePage.getNumber())
                 .totalElements(routePage.getTotalElements())

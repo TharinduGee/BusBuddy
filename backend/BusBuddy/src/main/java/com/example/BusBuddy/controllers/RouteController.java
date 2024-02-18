@@ -17,9 +17,9 @@ public class RouteController {
 
     private  final RouteService routeService;
 
-    @PostMapping("findRoutes")
+    @GetMapping("findRoutes")
     public ResponseEntity<RoutePaginationResponse> findRoutes(HttpServletRequest httpServletRequest,
-                                                              @RequestParam(value = "pageNo", defaultValue = "1" , required = false)int pageNumber,
+                                                              @RequestParam(value = "pageNo", defaultValue = "0" , required = false)int pageNumber,
                                                               @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize,
                                                               @RequestParam(required = false) String startDestination
                                                               ){
@@ -27,9 +27,9 @@ public class RouteController {
 
     }
 
-    @PostMapping("findAll")
+    @GetMapping("findAll")
     public ResponseEntity<RoutePaginationResponse> findAll(
-                                                              @RequestParam(value = "pageNo", defaultValue = "1" , required = false)int pageNumber,
+                                                              @RequestParam(value = "pageNo", defaultValue = "0" , required = false)int pageNumber,
                                                               @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize
 
     ){

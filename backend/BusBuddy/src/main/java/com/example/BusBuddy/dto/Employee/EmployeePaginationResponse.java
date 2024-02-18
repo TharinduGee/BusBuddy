@@ -1,19 +1,16 @@
-package com.example.BusBuddy.dto.Route;
+package com.example.BusBuddy.dto.Employee;
 
-import com.example.BusBuddy.dto.Bus.BusResponse;
-import com.example.BusBuddy.models.Route;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class RoutePaginationResponse {
-    private List<RouteResponse> content;
+public class EmployeePaginationResponse {
+    private List<EmployeeResponse> content;
     private int pageNo;
     private int pageSize;
     private long totalElements;
