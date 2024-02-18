@@ -203,6 +203,7 @@
 }
 .activeOwner-link {
   color: #FF760D ;
+  font-weight: 600;
 }
 .notactiveOwner-link {
   color: black ;

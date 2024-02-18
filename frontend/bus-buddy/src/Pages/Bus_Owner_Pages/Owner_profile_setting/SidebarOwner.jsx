@@ -101,7 +101,7 @@ function SidebarOwner({ children }) {
                 href="/contactInfo"
                 className={activeOwnerLink === "/contactInfo" ? "activeOwner-link" : "notactiveOwner-link"}
               >
-                {activeOwnerLink === "/contactInfo" ? <span>|  ContactInfo</span> : <span>ContactInfo</span>}
+                {activeOwnerLink === "/contactInfo" ? <span>|  Contact Info</span> : <span>Contact Info</span>}
                 
               </a>
             </li>
