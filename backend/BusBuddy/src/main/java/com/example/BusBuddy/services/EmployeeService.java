@@ -4,6 +4,7 @@ import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Employee.EmployeeAddRequest;
 import com.example.BusBuddy.dto.Employee.EmployeeEditReq;
 import com.example.BusBuddy.dto.Employee.EmployeeResponse;
+import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Employee;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.BusinessRepository;
@@ -29,18 +30,20 @@ public class EmployeeService {
 
     @Transactional
     public EmployeeResponse save(HttpServletRequest httpRequest , EmployeeAddRequest request){
+        Business business = businessService.extractBId(httpRequest);
         Employee employee = Employee.builder()
                 .designation(request.getDesignation())
                 .salary(request.getSalary())
                 .bDay(request.getBDay())
                 .name(request.getName())
                 .joinedDate(request.getJoinedDate())
-                .business(businessService.extractBId(httpRequest))
+                .business(business)
                 .build();
 
         employeeRepository.save(employee);
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()->new EntityNotFoundException("User Not found."));
         user.setEmployee(employee);
+        user.setBusiness(business);
         userRepository.save(user);
 
         return modelMapper.map(employee, EmployeeResponse.class);

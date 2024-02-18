@@ -1,6 +1,7 @@
 package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Route.RouteEditRequest;
+import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.dto.Route.RouteRequest;
 import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.services.RouteService;
@@ -15,6 +16,26 @@ import org.springframework.web.bind.annotation.*;
 public class RouteController {
 
     private  final RouteService routeService;
+
+    @PostMapping("findRoutes")
+    public ResponseEntity<RoutePaginationResponse> findRoutes(HttpServletRequest httpServletRequest,
+                                                              @RequestParam(value = "pageNo", defaultValue = "1" , required = false)int pageNumber,
+                                                              @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize,
+                                                              @RequestParam(required = false) String startDestination
+                                                              ){
+        return routeService.findRoutes(httpServletRequest, pageNumber, pageSize, startDestination);
+
+    }
+
+    @PostMapping("findAll")
+    public ResponseEntity<RoutePaginationResponse> findAll(
+                                                              @RequestParam(value = "pageNo", defaultValue = "1" , required = false)int pageNumber,
+                                                              @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize
+
+    ){
+        return routeService.findAll( pageNumber, pageSize);
+
+    }
 
     @PostMapping("/add")
     public ResponseEntity<RouteResponse> add(HttpServletRequest httpServletRequest, @RequestBody RouteRequest request){

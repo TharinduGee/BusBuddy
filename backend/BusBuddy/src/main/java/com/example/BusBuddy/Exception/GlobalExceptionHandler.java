@@ -5,6 +5,7 @@ import org.modelmapper.spi.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,10 +36,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ex.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(UserNotAssignedException.class)
     public ResponseEntity<ErrorMessage> handleUserNotAssignedException(UserNotAssignedException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
                 .body(new ErrorMessage("User not assigned for this operation."));
     }
 
@@ -73,9 +81,9 @@ public class GlobalExceptionHandler {
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(Exception.class)
-//    public void handleInternalServerError(Exception ex) {
-//        throw new InternalError(ex.getMessage());
-//    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public void handleInternalServerError(Exception ex) {
+        throw new InternalError(ex.getMessage());
+    }
 }

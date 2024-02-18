@@ -186,7 +186,7 @@ function RegistrationPage() {
           </div>
           <div class="label mt-1">* Use at least one special characters</div>
 
-          <TextField
+          <TextField 
             value={user.confirm_password}
             onChange={handleChange}
             margin="normal"
@@ -244,7 +244,7 @@ function RegistrationPage() {
 
           <div class="d-grid gap-2 mt-3 d-md-flex justify-content-center ">
             <button
-              class="me-md-2 next-btn"
+              className="btn me-md-2 next-btn"
               type="button"
               onClick={handlePostRequest}
               disabled={isButtonDisabled}
@@ -255,7 +255,11 @@ function RegistrationPage() {
           </div>
           <div class="d-flex flex-row mt-3 mb-5">
             <div class="mt-3 label">Already have an account?</div>
+<<<<<<< HEAD
+            <a href="login">
+=======
             <a className="register-link" href="SignUp">
+>>>>>>> c400b7bc24b69ccc30c51acf942ebc7dcc61a07e
               <div class="mt-3 ms-2 clickable-text mb-3 ">Sign in here</div>
             </a>
           </div>

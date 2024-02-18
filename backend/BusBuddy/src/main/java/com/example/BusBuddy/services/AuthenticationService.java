@@ -1,5 +1,6 @@
 package com.example.BusBuddy.services;
 
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.Exception.UserNotAssignedException;
 import com.example.BusBuddy.dto.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.RefreshTokenRequest;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -83,12 +85,11 @@ public class AuthenticationService {
 
 
   public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {
-
-      try {
+        var user = userRepository.findByEmail(request.getEmail())
+              .orElseThrow(() -> new EntityNotFoundException("User is not found."));
           authenticationManager.authenticate(
                   new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-          var user = userRepository.findByEmail(request.getEmail())
-                  .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
+
           if(user.getBusiness() == null){
               throw new UserNotAssignedException();
           }
@@ -100,9 +101,7 @@ public class AuthenticationService {
                   .role(user.getRole()).build();
 
           return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
-      }catch(DataIntegrityViolationException ex){
-          throw  new DataIntegrityViolationException(ex.getMessage());
-      }
+
 
   }
 
@@ -111,7 +110,6 @@ public class AuthenticationService {
       User user = userRepository.findByEmail(userEmail).orElseThrow();
       if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user )){
           var jwt = jwtService.generateToken(user);
-          //sould do buider implementation
           JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
 
           jwtAuthenticationResponse.setToken(jwt);
