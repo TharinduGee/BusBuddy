@@ -12,7 +12,6 @@ import routemanagement from "../../Assets/Navbar/Route_Manage.png";
 import tripManagement from "../../Assets/Navbar/Trip_management.png";
 import { IoIosMenu, IoIosClose } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
-import Finacial_Center from "../../Pages/Bus_Owner_Pages/Finacial_Center";
 import { useLocation } from "react-router-dom";
 
 function Sidebar({ children }) {
@@ -127,7 +126,12 @@ function Sidebar({ children }) {
             <li>
               <a
                 href="/teamdirectory"
-                className={activeLink === "/teamdirectory" ? "active-link" : ""}
+                className={
+                  activeLink === "/teamdirectory" ||
+                  activeLink === "/teamdirectory/addemployee"
+                    ? "active-link"
+                    : ""
+                }
               >
                 <img src={TeamDirectory} className="sidebaricon" />
                 <span>Team Directory</span>
