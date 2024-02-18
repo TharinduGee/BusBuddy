@@ -1,5 +1,6 @@
 package com.example.BusBuddy.dto.Employee;
 
+import com.example.BusBuddy.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +13,6 @@ import java.util.Date;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class EmployeeEditReq {
-    Long empId;
-    byte[] imageData;
-    Date bDay;
-    Float salary;
+    private Long empId;
+    private Float salary;
 }

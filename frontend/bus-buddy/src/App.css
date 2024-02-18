@@ -6,14 +6,14 @@
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 body {
-    margin: 0;
-    line-height: normal;
+  margin: 0;
+  line-height: normal;
 }
 :root {
   /* fonts */
-    --body-text-bt-large-medium: Roboto;
-    --headline-s-desktop-medium: Inter;
-    --headline-fonts-headline-large-bold: Raleway;
-    --headline-small: Lexend;
-    --font-josefin-sans: "Josefin Sans";
+  --body-text-bt-large-medium: Roboto;
+  --headline-s-desktop-medium: Inter;
+  --headline-fonts-headline-large-bold: Raleway;
+  --headline-small: Lexend;
+  --font-josefin-sans: "Josefin Sans";
 }

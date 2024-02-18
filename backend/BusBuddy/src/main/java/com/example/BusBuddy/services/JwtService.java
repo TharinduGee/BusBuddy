@@ -55,7 +55,13 @@ public class JwtService {
   }
 
   private String generateToken(Map<String, Object> extraClaims, User userDetails) {
-      extraClaims.put("b_id", userDetails.getBusiness().getBId().toString());
+      if(userDetails.getBusiness().getBId() == null){
+          extraClaims.put("b_id", null);
+      }else{
+          extraClaims.put("b_id", userDetails.getBusiness().getBId().toString());
+      }
+
+
       return Jwts
         .builder()
         .setClaims(extraClaims)
@@ -73,7 +79,7 @@ public class JwtService {
                 .setClaims(extractClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60*24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 *60*24*1000))
                 .signWith(getSigningKey(),  SignatureAlgorithm.HS256)
                 .compact();
     }

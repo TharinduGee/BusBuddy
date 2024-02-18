@@ -107,14 +107,14 @@ CREATE TABLE IF NOT EXISTS public.ledger
 
 CREATE TABLE IF NOT EXISTS public.route
 (
-    routeid bigint NOT NULL,
+    route_id bigint NOT NULL,
     distance double precision,
     end_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
     no_of_sections integer,
     permit_exp_date timestamp(6) without time zone NOT NULL,
     start_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
     b_id bigint,
-    CONSTRAINT route_pkey PRIMARY KEY (routeid),
+    CONSTRAINT route_pkey PRIMARY KEY (route_id),
     CONSTRAINT fk_bid FOREIGN KEY (b_id)
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE

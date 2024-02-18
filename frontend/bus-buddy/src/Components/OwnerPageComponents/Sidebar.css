@@ -45,6 +45,7 @@
 }
 
 .main-content {
+  width: 100%;
   margin-left: 250px;
   padding: 20px;
   transition: margin-left 0.5s ease;
@@ -53,6 +54,7 @@
   margin-left: 80px;
   padding: 20px;
   transition: margin-left 0.5s ease;
+  width: 100%;
 }
 
 .menuIconOpen {

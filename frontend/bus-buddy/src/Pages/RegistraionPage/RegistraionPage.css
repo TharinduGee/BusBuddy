@@ -63,8 +63,8 @@
   width: 20px;
 }
 
-a {
-  color: var(--Blue, #0070d2);
+.register-link {
+  color: blue;
   text-decoration: none;
 }
 

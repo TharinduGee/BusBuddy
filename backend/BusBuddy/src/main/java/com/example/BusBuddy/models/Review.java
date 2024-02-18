@@ -2,8 +2,6 @@ package com.example.BusBuddy.models;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,8 +46,6 @@ public class Review {
     private String comment;
 
     @Column(name = "rating")
-    @Min(value = 0, message = "Value must be greater than or equal to 1")
-    @Max(value = 5, message = "Value must be less than or equal to 100")
     private double rating;
 
     @ManyToOne

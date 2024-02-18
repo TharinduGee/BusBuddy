@@ -1,0 +1,303 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap");
+
+:root {
+  --sidebarOwner-color: rgb(255, 255, 255);
+  --text-color: rgb(0, 0, 0);
+  --menu-text-color: rgb(0, 0, 0);
+  --menu-hover-color: rgb(180, 180, 180);
+  --settings-hover-text-color: #FF760D;
+  --button-color: rgb(0, 0, 0);
+  --button-text-color: rgb(255, 255, 255);
+  --line-color: rgb(180, 180, 180);
+  --switch-base-color: rgb(201, 202, 206);
+  --switch-circle-color: rgb(241, 241, 241);
+  --scroll-color: rgb(192, 192, 192);
+  --scroll-hover-color: rgb(134, 134, 134);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: "Outfit", sans-serif;
+}
+.sidebarOwner-container {
+  display: flex;
+}
+
+/*-----------------Menu*/
+.menu {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+  right: 15px;
+  top: 15px;
+  z-index: 100;
+}
+
+.main-content {
+  width: 100%;
+  margin-left: 250px;
+  padding: 20px;
+  transition: margin-left 0.5s ease;
+}
+.main-content-hidden {
+  margin-left: 80px;
+  padding: 20px;
+  transition: margin-left 0.5s ease;
+  width: 100%;
+}
+
+.menuIconOpen {
+  display: block;
+  height: 100px;
+}
+.menu .menuIconClose {
+  display: none;
+}
+
+.sidebarOwnericon_main {
+  width: 40px;
+  padding-left: 10px;
+  margin-right: 20px;
+  margin-left: 15px;
+  height: auto;
+}
+.sidebarOwnericon {
+  width: 40px;
+  padding-left: 10px;
+  margin-right: 20px;
+  height: auto;
+}
+
+.sidebarOwnericon2 {
+  width: 33px;
+  padding-left: 10px;
+  margin-left: 4px;
+
+  margin-right: 17px;
+  height: auto;
+}
+
+.logout-btn {
+  width: 33px;
+  padding-left: 10px;
+  margin-left: 4px;
+  color: black;
+  margin-right: 17px;
+  height: auto;
+}
+
+.logout {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 10px;
+  color: var(--menu-text-color);
+}
+
+.sidebarOwner {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 250px;
+  height: 100%;
+  overflow: hidden;
+  padding: 20px 0px;
+  background-color: var(--sidebarOwner-color);
+  transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+  z-index: 50;
+  box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
+}
+.hide {
+  display: none;
+}
+
+.mini-sidebarOwner {
+  width: 80px;
+}
+
+.sidebarOwner span {
+  margin-left: 0; 
+  margin-right: 5px;
+  width: 100px;
+  white-space: nowrap;
+  font-size: 18px;
+  text-align: left;
+  opacity: 1;
+  transition: opacity 0.5s ease, width 0.5s ease;
+}
+
+.sidebarOwner span.hidden {
+  opacity: 0;
+  width: 0;
+}
+
+/*------------> Page Name */
+.sidebarOwner .page-name {
+  width: 100%;
+  height: 45px;
+  color: var(--text-color);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebarOwner .page-name ion-icon {
+  min-width: 50px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.sidebarOwner .page-name span {
+  margin-left: 5px;
+  font-size: 25px;
+}
+
+/*--------------> Navigation Menu*/
+.sidebarOwner .navigation {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebarOwner .navigation::-webkit-scrollbar {
+  width: 5px;
+}
+
+.sidebarOwner .navigation::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-color);
+  border-radius: 5px;
+}
+
+.sidebarOwner .navigation::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-hover-color);
+}
+
+.sidebarOwner .navigation li {
+  list-style: none;
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.sidebarOwner .navigation a {
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  border-radius: 10px;
+  
+}
+.activeOwner-link {
+  color: #FF760D ;
+  font-weight: 600;
+}
+.notactiveOwner-link {
+  color: black ;
+}
+.sidebarOwner .navigation a:hover {
+  color: var(--settings-hover-text-color);
+  background-color: whitesmoke;
+}
+
+/*-----------------> Line*/
+.sidebarOwner .line {
+  width: 100%;
+  height: 1px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: var(--line-color);
+}
+
+/*---------------> User*/
+.sidebarOwner .user {
+  width: 100%;
+  display: flex;
+}
+
+.sidebarOwner .user img {
+  width: 50px;
+  min-width: 50px;
+  border-radius: 10px;
+}
+
+.sidebarOwner .user .user-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-color);
+  overflow: hidden;
+}
+
+.sidebarOwner .user .name-email {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+.sidebarOwner .user .name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sidebarOwner .user .email {
+  font-size: 13px;
+}
+
+.sidebarOwner .user ion-icon {
+  font-size: 20px;
+}
+
+@media (max-height: 660px) {
+  .sidebarOwner .page-name {
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebarOwner {
+    position: fixed;
+    left: -250px;
+  }
+
+  .max-sidebarOwner {
+    left: 0;
+  }
+
+  .menu {
+    display: flex;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .main-content-hidden {
+    margin-left: 0px;
+  }
+
+
+}
+
+
+.title-text{
+  text-align: center;
+  font-weight: bold;
+  font-size: 40px;
+  margin: top 5px;;
+}

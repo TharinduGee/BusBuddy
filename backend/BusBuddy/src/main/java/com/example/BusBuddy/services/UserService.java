@@ -1,5 +1,6 @@
 package com.example.BusBuddy.services;
 
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.User.UserResponse;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
@@ -7,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +27,7 @@ public class UserService {
           @Override
           public UserDetails loadUserByUsername(String username) {
               return userRepository.findByEmail(username)
-                      .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                      .orElseThrow(() -> new EntityNotFoundException("User not found"));
           }
       };
   }
@@ -42,6 +43,8 @@ public class UserService {
                     .collect(Collectors.toList());
         }
     }
+
+
 
   public User save(User newUser) {
     if (newUser.getId() == null) {

@@ -1,7 +1,9 @@
 package com.example.BusBuddy.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -14,6 +16,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "employee")
@@ -42,11 +45,12 @@ public class Employee {
             name = "name",
             nullable = false
     )
+    @NotNull(message = "Name is mandatory")
     private String name;
 
-    @Lob
-    @Column(name = "image", columnDefinition = "BYTEA")
-    private byte[] imageData;
+//    @Lob
+//    @Column(name = "image", columnDefinition = "BYTEA")
+//    private byte[] imageData;
 
     @Column(
             name = "joinedDate"
@@ -55,7 +59,7 @@ public class Employee {
 
     @Column(
             name = "bDay",
-            nullable = false
+            nullable = true
     )
     private Date bDay;
 
@@ -67,12 +71,12 @@ public class Employee {
     @Column(
             name = "salary"
     )
-    private Float Salary;
+    private Float salary;
 
     @Enumerated(EnumType.STRING)
    private EmployeeType designation;
 
-    @OneToOne(mappedBy = "employee")
+    @OneToOne(mappedBy = "employee" ,cascade = CascadeType.ALL)
     private User user;
 
     @ManyToOne
