@@ -8,6 +8,7 @@ import WelcomeUser from "./Pages/WelcomeUser";
 import UserSelectPage from "./Pages/UserSelectPage/UserSelectPage";
 import Dashboard from "./Pages/Bus_Owner_Pages/Dashboard";
 import Sidebar from "./Components/OwnerPageComponents/Sidebar";
+import SidebarDriver from "./Components/DriverPageComponents/SidebarDriver";
 import Finacial_Center from "./Pages/Bus_Owner_Pages/Finacial_Center";
 import Operation_hub from "./Pages/Bus_Owner_Pages/Operation_hub";
 import Team_Directory from "./Pages/Bus_Owner_Pages/Team_Directory";
@@ -16,6 +17,11 @@ import Filelibrary from "./Pages/Bus_Owner_Pages/File_Library";
 import TaxInsight from "./Pages/Bus_Owner_Pages/Tax_Insight";
 import RouteManagement from "./Pages/Bus_Owner_Pages/Route_Management";
 import TripManagement from "./Pages/Bus_Owner_Pages/Trip_Management";
+<<<<<<< HEAD
+import DriverDashboard from "./Pages/Bus_Driver_Pages/DriverDashboard";
+import DriverBusManagement from "./Pages/Bus_Driver_Pages/DriverBusManagement";
+import DriverFinancial from "./Pages/Bus_Driver_Pages/DriverFinancial";
+=======
 import AddEmployee from "./Pages/Bus_Owner_Pages/Team_Directory_Add_Employee";
 
 import Membership from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Membership";
@@ -23,6 +29,7 @@ import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactIn
 import Notifications from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Notifications";
 import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
 
+>>>>>>> c400b7bc24b69ccc30c51acf942ebc7dcc61a07e
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -35,6 +42,7 @@ root.render(
         <Route path="/user" element={<WelcomeUser />} />
         <Route path="/userrole" element={<UserSelectPage />} />
         <Route path="/Sidebar" element={<Sidebar />} />
+        <Route path="/SidebarDriver" element={<SidebarDriver />} />
         <Route path="/dashbord" element={<Dashboard />} />
         <Route path="/finacialcenter" element={<Finacial_Center />} />
         <Route path="/operationhub" element={<Operation_hub />} />
@@ -44,6 +52,11 @@ root.render(
         <Route path="/taxinsights" element={<TaxInsight />} />
         <Route path="/routemanagement" element={<RouteManagement />} />
         <Route path="/tripmanagement" element={<TripManagement />} />
+<<<<<<< HEAD
+        <Route path="/DriverDashboard" element={<DriverDashboard/>} />
+        <Route path="/DriverBusManagement" element={<DriverBusManagement/>}/>
+        <Route path="/DriverFinancial" element={<DriverFinancial/>}/>
+=======
         <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
         
         <Route path="/membership" element={<Membership />} />
@@ -55,6 +68,7 @@ root.render(
       
 
         
+>>>>>>> c400b7bc24b69ccc30c51acf942ebc7dcc61a07e
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
