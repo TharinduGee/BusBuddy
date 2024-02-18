@@ -207,6 +207,7 @@
 }
 .sidebarOwner .navigation a:hover {
   color: var(--settings-hover-text-color);
+  background-color: whitesmoke;
 }
 
 /*-----------------> Line*/
