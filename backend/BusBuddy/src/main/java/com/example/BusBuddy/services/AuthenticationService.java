@@ -1,5 +1,6 @@
 package com.example.BusBuddy.services;
 
+import com.example.BusBuddy.Exception.UserNotAssignedException;
 import com.example.BusBuddy.dto.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.RefreshTokenRequest;
 import com.example.BusBuddy.dto.SignInRequest;
@@ -88,6 +89,9 @@ public class AuthenticationService {
                   new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
           var user = userRepository.findByEmail(request.getEmail())
                   .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
+          if(user.getBusiness() == null){
+              throw new UserNotAssignedException();
+          }
           var jwt = jwtService.generateToken(user);
           var refreshToken = jwtService.generateRefreshToken(user);
           var jwtAuthenticationResponse = JwtAuthenticationResponse.builder()

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -35,7 +36,7 @@ public class Trip {
             name = "date",
             nullable = false
     )
-    private Date date;
+    private LocalDate date;
 
     @Column(
             name = "startTime",

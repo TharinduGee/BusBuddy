@@ -29,7 +29,11 @@ public class Route {
             sequenceName = "route_sequence",
             allocationSize = 1
     )
-    private Long routeID;
+    @Column(
+            name = "routeId",
+            updatable = false
+    )
+    private Long routeId;
 
     @Column(
             name = "startDestination" ,
@@ -51,7 +55,7 @@ public class Route {
 
     @Column(
             name = "permitExpDate",
-            nullable = false
+            nullable = true
     )
     private Date permitExpDate;
 
@@ -64,17 +68,14 @@ public class Route {
 
     @OneToMany(
             mappedBy = "route",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
-    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Trip> trips;
 
     @OneToOne(
             mappedBy = "route"
     )
     private Document document;
-
-
 
 }

@@ -1,8 +1,11 @@
 package com.example.BusBuddy.dto.Employee;
 
+import com.example.BusBuddy.dto.User.UserResponse;
 import com.example.BusBuddy.models.EmployeeType;
 import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +20,7 @@ import java.util.Date;
 public class EmployeeAddRequest {
     private String name;
     private Float salary;
-    private User user;
+    private String email;
     private Date bDay;
     private Date joinedDate;
     private EmployeeType designation;
