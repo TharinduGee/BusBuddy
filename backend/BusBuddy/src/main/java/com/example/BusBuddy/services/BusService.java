@@ -65,7 +65,8 @@ public class BusService {
         Page<Bus> busPage = busRepository.findAll(pageable);
 
         List<Bus> buses = busPage.getContent();
-        List<BusResponse> busResponses = buses.stream().map((element) -> modelMapper.map(element, BusResponse.class))
+        List<BusResponse> busResponses = buses.stream()
+                .map((element) -> modelMapper.map(element, BusResponse.class))
                 .collect(Collectors.toList());
 
         BusPaginationResponse busPaginationResponse = BusPaginationResponse.builder()
