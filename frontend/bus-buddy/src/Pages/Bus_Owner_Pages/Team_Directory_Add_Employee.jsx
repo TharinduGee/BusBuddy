@@ -18,9 +18,6 @@ function Team_Directory_Add_Employee() {
   const [openPopup, setOpenPopup] = useState(false);
   const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [selectionModel, setSelectionModel] = useState([]);
-
-  const [rowSelectionModel, setRowSelectionModel] = React.useState([]);
 
   const table_theme = createTheme({
     components: {
