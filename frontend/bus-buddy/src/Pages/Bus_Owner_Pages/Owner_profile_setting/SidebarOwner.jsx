@@ -93,7 +93,7 @@ function SidebarOwner({ children }) {
                 href="/membership"
                 className={activeOwnerLink === "/membership" ? "activeOwner-link" : "notactiveOwner-link"}
               >
-                <span>Membership</span>
+                {activeOwnerLink === "/membership" ? <span>|  Membership</span> : <span>Membership</span>}
               </a>
             </li>
             <li>
@@ -101,7 +101,8 @@ function SidebarOwner({ children }) {
                 href="/contactInfo"
                 className={activeOwnerLink === "/contactInfo" ? "activeOwner-link" : "notactiveOwner-link"}
               >
-                <span>ContactInfo</span>
+                {activeOwnerLink === "/contactInfo" ? <span>|  ContactInfo</span> : <span>ContactInfo</span>}
+                
               </a>
             </li>
             <li>
@@ -111,7 +112,8 @@ function SidebarOwner({ children }) {
                   activeOwnerLink === "/passwordSecurity" ? "activeOwner-link" : "notactiveOwner-link"
                 }
               >
-                <span>Password & Security</span>
+                {activeOwnerLink === "/passwordSecurity" ? <span>|  Password & Security</span> : <span>Password & Security</span>}
+              
               </a>
             </li>
             <li>
@@ -121,7 +123,8 @@ function SidebarOwner({ children }) {
                   activeOwnerLink === "/notifications" ? "activeOwner-link" : "notactiveOwner-link"
                 }
               >
-                <span>Notifications</span>
+                {activeOwnerLink === "/notifications" ? <span>|  Notifications</span> : <span>Notifications</span>}
+                
               </a>
             </li>
           </ul>

@@ -130,6 +130,8 @@
 }
 
 .sidebarOwner span {
+  margin-left: 0; 
+  margin-right: 5px;
   width: 100px;
   white-space: nowrap;
   font-size: 18px;
