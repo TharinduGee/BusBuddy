@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import com.example.BusBuddy.Exception.UserNotAssignedException;
 import com.example.BusBuddy.dto.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.RefreshTokenRequest;
@@ -12,17 +12,12 @@ import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor

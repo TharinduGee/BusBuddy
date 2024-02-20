@@ -1,13 +1,13 @@
 package com.example.BusBuddy.Exception;
 
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -42,6 +42,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
+
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ResponseEntity<?> handleBadCredentialsException(ConstraintViolationException ex){
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(ex.getConstraintViolations());
+//    }
+
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(UserNotAssignedException.class)

@@ -1,6 +1,6 @@
 package com.example.BusBuddy.controllers;
 
-import com.example.BusBuddy.Exception.BusNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
 import com.example.BusBuddy.dto.Bus.BusAddRequest;
 import com.example.BusBuddy.dto.Bus.BusAddResponse;
 import com.example.BusBuddy.dto.Bus.BusEditRequest;
@@ -11,8 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @AllArgsConstructor

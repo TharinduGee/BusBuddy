@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
 import com.example.BusBuddy.dto.Trip.TripAddRequest;
 import com.example.BusBuddy.models.Bus;
@@ -14,7 +14,6 @@ import com.example.BusBuddy.repositories.TripRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.ExpiresFilter;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,54 +51,94 @@ public class TripService {
     }
 
     private void addSingleTrip(HttpServletRequest httpServletRequest, @RequestBody TripAddRequest tripAddRequest , @RequestParam LocalDate localDate){
-        Bus bus = busRepository.findById(tripAddRequest.getBusId())
-                .orElseThrow(()->new EntityNotFoundException("Bus is not found"));
-        Employee driver = employeeRepository.findById(tripAddRequest.getDriverId())
-                .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
-        Employee conductor = employeeRepository.findById(tripAddRequest.getCondocterId())
-                .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
-        Route route = routeRepository.findById(tripAddRequest.getRouteId())
-                .orElseThrow(() -> new EntityNotFoundException("Route is not found"));
+        Bus bus;
+        Employee driver;
+        Employee conductor;
+        Route route;
+        if(tripAddRequest.getBusId() != null){
+            bus = busRepository.findById(tripAddRequest.getBusId())
+                    .orElseThrow(()->new EntityNotFoundException("Bus is not found"));
+        }else{
+            bus = null;
+        }
+        if(tripAddRequest.getDriverId() != null){
+            driver = employeeRepository.findById(tripAddRequest.getDriverId())
+                    .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
+        }else{
+            driver = null;
+        }
+        if(tripAddRequest.getCondocterId() != null){
+            conductor = employeeRepository.findById(tripAddRequest.getCondocterId())
+                    .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
+        }else{
+            conductor = null;
+        }
+        if(tripAddRequest.getRouteId() != null){
+            route = routeRepository.findById(tripAddRequest.getRouteId())
+                    .orElseThrow(() -> new EntityNotFoundException("Route is not found"));
+        }else{
+            route = null;
+        }
 
         Trip trip = Trip.builder()
                 .date(localDate)
                 .stratTime(tripAddRequest.getStartTime())
                 .endTime(tripAddRequest.getEndTime())
-                .income(0).expense(0)
+                .income(0)
+                .expense(0)
+                .bus(bus)
+                .conductor(conductor)
+                .driver(driver)
+                .route(route)
                 .business(businessService.extractBId(httpServletRequest))
                 .build();
-
-        trip.setBus(bus);
-        trip.setDriver(driver);
-        trip.setConductor(conductor);
-        trip.setRoute(route);
 
         tripRepository.save(trip);
 
     }
 
     public ResponseEntity<String> addTrip(HttpServletRequest httpServletRequest, @RequestBody TripAddRequest tripAddRequest , @RequestParam LocalDate date){
-        Bus bus = busRepository.findById(tripAddRequest.getBusId())
-                .orElseThrow(()->new EntityNotFoundException("Bus is not found"));
-        Employee driver = employeeRepository.findById(tripAddRequest.getDriverId())
-                .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
-        Employee conductor = employeeRepository.findById(tripAddRequest.getCondocterId())
-                .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
-        Route route = routeRepository.findById(tripAddRequest.getRouteId())
-                .orElseThrow(() -> new EntityNotFoundException("Route is not found"));
+        Bus bus;
+        Employee driver;
+        Employee conductor;
+        Route route;
+        if(tripAddRequest.getBusId() != null){
+             bus = busRepository.findById(tripAddRequest.getBusId())
+                    .orElseThrow(()->new EntityNotFoundException("Bus is not found"));
+        }else{
+            bus = null;
+        }
+        if(tripAddRequest.getDriverId() != null){
+             driver = employeeRepository.findById(tripAddRequest.getDriverId())
+                    .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
+        }else{
+            driver = null;
+        }
+        if(tripAddRequest.getCondocterId() != null){
+            conductor = employeeRepository.findById(tripAddRequest.getCondocterId())
+                    .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
+        }else{
+            conductor = null;
+        }
+        if(tripAddRequest.getRouteId() != null){
+            route = routeRepository.findById(tripAddRequest.getRouteId())
+                    .orElseThrow(() -> new EntityNotFoundException("Route is not found"));
+        }else{
+            route = null;
+        }
 
         Trip trip = Trip.builder()
                     .date(date)
                     .stratTime(tripAddRequest.getStartTime())
                     .endTime(tripAddRequest.getEndTime())
-                    .income(0).expense(0)
+                    .income(0)
+                    .expense(0)
+                    .bus(bus)
+                    .conductor(conductor)
+                    .driver(driver)
+                    .route(route)
                     .business(businessService.extractBId(httpServletRequest))
                     .build();
-
-        trip.setBus(bus);
-        trip.setDriver(driver);
-        trip.setConductor(conductor);
-        trip.setRoute(route);
 
         tripRepository.save(trip);
 

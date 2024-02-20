@@ -1,5 +1,6 @@
 package com.example.BusBuddy.dto.Trip;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TripAddForDurationRequest {
+    @NotNull(message = "FirstDate should be specified.")
     private LocalDate firstDate;
     private LocalDate LastDate;
     private TripAddRequest tripAddRequest;

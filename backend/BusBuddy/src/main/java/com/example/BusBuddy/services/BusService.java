@@ -1,7 +1,7 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.BusNotFoundException;
-import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import com.example.BusBuddy.dto.Bus.*;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.repositories.BusRepository;
