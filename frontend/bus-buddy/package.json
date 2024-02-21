@@ -16,12 +16,9 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
-<<<<<<< HEAD
     "chart.js": "^4.4.1",
-    "install": "^0.13.0",
-=======
     "dayjs": "^1.11.10",
->>>>>>> c400b7bc24b69ccc30c51acf942ebc7dcc61a07e
+    "install": "^0.13.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-chartjs-2": "^5.2.0",

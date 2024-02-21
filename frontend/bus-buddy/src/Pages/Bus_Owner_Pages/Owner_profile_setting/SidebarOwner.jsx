@@ -86,7 +86,7 @@ function SidebarOwner({ children }) {
           <span>Profile & Settings</span>
         </div>
         <div className="line"></div>
-        <nav className="navigationOwner">
+        <nav className="navigation">
           <ul className="px-3">
             <li>
               <a
