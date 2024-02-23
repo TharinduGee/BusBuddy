@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -39,17 +40,17 @@ public class Document {
             name = "uploadDate",
             nullable = false
     )
-    private Date uploadDate ;
+    private LocalDate uploadDate ;
 
     @Enumerated(EnumType.STRING)
     private DocCategory category;
 
-
+    @Lob
     @Column(
             name = "url",
             nullable = false
     )
-    private String url;
+    private byte[] data;
 
     @ManyToOne
     @JoinColumn(
