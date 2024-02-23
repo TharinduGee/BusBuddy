@@ -2,9 +2,7 @@ package com.example.BusBuddy.controllers;
 
 
 import com.example.BusBuddy.dto.BusinessEditInfoReq;
-import com.example.BusBuddy.models.DocCategory;
 import com.example.BusBuddy.services.BusinessService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
