@@ -4,6 +4,7 @@ import com.example.BusBuddy.dto.Document.DocumentRequest;
 import com.example.BusBuddy.models.DocCategory;
 import com.example.BusBuddy.services.DocumentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

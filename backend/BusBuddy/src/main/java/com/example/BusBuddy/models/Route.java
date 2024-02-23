@@ -55,7 +55,7 @@ public class Route {
 
     @Column(
             name = "permitExpDate",
-            nullable = true
+            nullable = false
     )
     private Date permitExpDate;
 
