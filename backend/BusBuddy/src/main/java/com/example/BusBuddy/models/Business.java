@@ -130,8 +130,7 @@ public class Business {
     @OneToMany(
             mappedBy = "business",
             cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY
+            orphanRemoval = true
     )
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Trip>  trips;

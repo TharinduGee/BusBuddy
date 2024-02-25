@@ -1,4 +1,4 @@
-package com.example.BusBuddy.Exception.EntityNotFoundExceptions;
+package com.example.BusBuddy.Exception;
 
 public class EntityNotFoundException extends RuntimeException{
     public EntityNotFoundException(String message){

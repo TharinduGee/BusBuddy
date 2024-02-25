@@ -186,7 +186,7 @@ function RegistrationPage() {
           </div>
           <div class="label mt-1">* Use at least one special characters</div>
 
-          <TextField 
+          <TextField
             value={user.confirm_password}
             onChange={handleChange}
             margin="normal"
@@ -244,7 +244,7 @@ function RegistrationPage() {
 
           <div class="d-grid gap-2 mt-3 d-md-flex justify-content-center ">
             <button
-              className="btn me-md-2 next-btn"
+              class="me-md-2 next-btn"
               type="button"
               onClick={handlePostRequest}
               disabled={isButtonDisabled}

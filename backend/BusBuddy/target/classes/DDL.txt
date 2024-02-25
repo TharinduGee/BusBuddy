@@ -158,9 +158,9 @@ CREATE TABLE IF NOT EXISTS public.trip
         ON UPDATE CASCADE
         ON DELETE SET NULL,
     CONSTRAINT fk_route FOREIGN KEY (route)
-        REFERENCES public.route (route_id) MATCH SIMPLE
+        REFERENCES public.route (routeid) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE SET NULL
 );
 
 

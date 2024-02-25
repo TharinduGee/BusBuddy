@@ -1,6 +1,5 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import com.example.BusBuddy.Exception.UserNotAssignedException;
 import com.example.BusBuddy.dto.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.RefreshTokenRequest;
@@ -12,12 +11,16 @@ import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -80,11 +83,12 @@ public class AuthenticationService {
 
 
   public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {
-        var user = userRepository.findByEmail(request.getEmail())
-              .orElseThrow(() -> new EntityNotFoundException("User is not found."));
+
+      try {
           authenticationManager.authenticate(
                   new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
+          var user = userRepository.findByEmail(request.getEmail())
+                  .orElseThrow(() -> new IllegalArgumentException("Invalid email or password."));
           if(user.getBusiness() == null){
               throw new UserNotAssignedException();
           }
@@ -96,7 +100,9 @@ public class AuthenticationService {
                   .role(user.getRole()).build();
 
           return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
-
+      }catch(DataIntegrityViolationException ex){
+          throw  new DataIntegrityViolationException(ex.getMessage());
+      }
 
   }
 
@@ -105,6 +111,7 @@ public class AuthenticationService {
       User user = userRepository.findByEmail(userEmail).orElseThrow();
       if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user )){
           var jwt = jwtService.generateToken(user);
+          //sould do buider implementation
           JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
 
           jwtAuthenticationResponse.setToken(jwt);

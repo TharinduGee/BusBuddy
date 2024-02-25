@@ -36,7 +36,14 @@ public class AuthenticationController {
 
     @PostMapping("/signIn")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody SignInRequest request) {
-        return authenticationService.signIn(request);
+        try{
+            return authenticationService.signIn(request);
+        }catch(BadCredentialsException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
     }
 
 

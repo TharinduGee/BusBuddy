@@ -2,7 +2,6 @@ package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Employee.EmployeeAddRequest;
 import com.example.BusBuddy.dto.Employee.EmployeeEditReq;
-import com.example.BusBuddy.dto.Employee.EmployeePaginationResponse;
 import com.example.BusBuddy.dto.Employee.EmployeeResponse;
 import com.example.BusBuddy.models.Employee;
 import com.example.BusBuddy.services.EmployeeService;
@@ -19,13 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-
-    @GetMapping("/findEmployees")
-    public ResponseEntity<EmployeePaginationResponse>  findAll(HttpServletRequest httpServletRequest,
-                                                               @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
-                                                               @RequestParam(value = "pageSize", defaultValue = "6" , required = false)int pageSize){
-        return employeeService.findEmployees(httpServletRequest, pageNumber, pageSize);
-    }
 
     @PostMapping("/add")
     public ResponseEntity<EmployeeResponse>  addEmployee(HttpServletRequest httpRequest ,  @RequestBody EmployeeAddRequest request){

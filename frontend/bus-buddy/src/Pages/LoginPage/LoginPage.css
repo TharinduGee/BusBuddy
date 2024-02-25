@@ -1,21 +1,21 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
- .loin-text-main{
+.loin-text-main {
   text-align: center;
   font-family: Roboto;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-} 
+}
 
-.container_width-login {
+.container_width {
   width: 513px;
-  height: 510px;
+  height: 529px;
   margin: 217px auto 0;
 }
 
-.label-login {
+.label {
   color: #000;
   font-family: Inter;
   font-size: 15px;
@@ -24,7 +24,7 @@
   line-height: normal;
 }
 
-.creat-account-btn-login {
+.creat-account-btn {
   display: flex;
   height: 40px;
   width: 300px;
@@ -42,16 +42,11 @@
   font-weight: 600;
 }
 
-.text {
-  width: 384px;
-  height: 44;
-}
-
- .creat-account-btn-login:hover {
+.creat-account-btn:hover {
   background-color: #e06c00;
   border-color: #e06c00;
-} 
-.clickable-text-login {
+}
+.clickable-text {
   font-family: Inter;
   font-size: 15px;
   font-style: normal;
@@ -59,12 +54,7 @@
   text-decoration: none;
 }
 
-.next-btn-loing:hover {
-  background-color: #e06c00;
-  border-color: #e06c00;
-}
-
-/* a {
+a {
   color: var(--Blue, #0070d2);
   text-decoration: none;
 }
@@ -73,4 +63,4 @@
   .container_width {
     width: 592px;
   }
-}  */
+} */
