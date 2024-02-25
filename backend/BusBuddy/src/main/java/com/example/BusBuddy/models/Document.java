@@ -83,7 +83,7 @@ public class Document {
     )
     private Route route;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name ="tripId",
             foreignKey = @ForeignKey(name = "fk_tripId"),

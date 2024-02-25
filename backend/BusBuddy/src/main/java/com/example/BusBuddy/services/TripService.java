@@ -17,11 +17,16 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -82,10 +87,11 @@ public class TripService {
 
         Trip trip = Trip.builder()
                 .date(localDate)
-                .stratTime(tripAddRequest.getStartTime())
+                .startTime(tripAddRequest.getStartTime())
                 .endTime(tripAddRequest.getEndTime())
                 .income(0)
                 .expense(0)
+                .status(TripStatus.TRIP_STATUS_SCHEDULED)
                 .bus(bus)
                 .conductor(conductor)
                 .driver(driver)
@@ -129,11 +135,12 @@ public class TripService {
 
         Trip trip = Trip.builder()
                     .date(date)
-                    .stratTime(tripAddRequest.getStartTime())
+                    .startTime(tripAddRequest.getStartTime())
                     .endTime(tripAddRequest.getEndTime())
-                    .income(0)
-                    .expense(0)
                     .bus(bus)
+                .income(0)
+                .expense(0)
+                .status(TripStatus.TRIP_STATUS_SCHEDULED)
                     .conductor(conductor)
                     .driver(driver)
                     .route(route)
@@ -150,8 +157,25 @@ public class TripService {
         return ResponseEntity.status(HttpStatus.OK).body("Trip is successfully deleted");
     }
 
+    @Scheduled(fixedRate = 360000)// check every 6 minutes
+    public void checkTrips(){
+        Time currentTime = Time.valueOf(LocalTime.now());
+        LocalDate date = LocalDate.now();
+        List<Trip> trips = tripRepository.findByDateAndStartTimeBefore(date, currentTime);
+        for(Trip trip : trips){
+            if(trip.getEndTime().before(currentTime)){
+                trip.setStatus(TripStatus.TRIP_STATUS_COMPLETED);
+                tripRepository.save(trip);
+                System.out.println("Trip is over.");
+                // there should be logic to trigger ledger document after the trip is over.
+            }else{
+                trip.setStatus(TripStatus.TRIP_STATUS_ONGOING);
+                tripRepository.save(trip);
+                System.out.println("Trip is ongoing.");
+            }
+        }
 
-
+    }
 
 
 }
