@@ -1,11 +1,13 @@
 package com.example.BusBuddy.Exception;
 
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,25 +37,40 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
-    @ExceptionHandler(UserNotAssignedException.class)
-    public ResponseEntity<ErrorMessage> handleUserNotAssignedException(UserNotAssignedException ex) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorMessage("User not assigned for this operation."));
+                .body(ex.getMessage());
     }
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public Map<String, String> handleValidationExceptions(
-//            MethodArgumentNotValidException ex) {
-//        Map<String, String> errors = new HashMap<>();
-//        ex.getBindingResult().getAllErrors().forEach((error) -> {
-//            String fieldName = ((FieldError) error).getField();
-//            String errorMessage = error.getDefaultMessage();
-//            errors.put(fieldName, errorMessage);
-//        });
-//        return errors;
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    public ResponseEntity<?> handleBadCredentialsException(ConstraintViolationException ex){
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body(ex.getConstraintViolations());
 //    }
+
+
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler(UserNotAssignedException.class)
+    public ResponseEntity<ErrorMessage> handleUserNotAssignedException(UserNotAssignedException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                .body(new ErrorMessage("User not assigned for this operation."));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex){
@@ -73,9 +90,9 @@ public class GlobalExceptionHandler {
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    @ExceptionHandler(Exception.class)
-//    public void handleInternalServerError(Exception ex) {
-//        throw new InternalError(ex.getMessage());
-//    }
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public void handleInternalServerError(Exception ex) {
+        throw new InternalError(ex.getMessage());
+    }
 }

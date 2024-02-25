@@ -8,6 +8,7 @@ import WelcomeUser from "./Pages/WelcomeUser";
 import UserSelectPage from "./Pages/UserSelectPage/UserSelectPage";
 import Dashboard from "./Pages/Bus_Owner_Pages/Dashboard";
 import Sidebar from "./Components/OwnerPageComponents/Sidebar";
+import SidebarDriver from "./Components/DriverPageComponents/SidebarDriver";
 import Finacial_Center from "./Pages/Bus_Owner_Pages/Finacial_Center";
 import Operation_hub from "./Pages/Bus_Owner_Pages/Operation_hub";
 import Team_Directory from "./Pages/Bus_Owner_Pages/Team_Directory";
@@ -16,6 +17,9 @@ import Filelibrary from "./Pages/Bus_Owner_Pages/File_Library";
 import TaxInsight from "./Pages/Bus_Owner_Pages/Tax_Insight";
 import RouteManagement from "./Pages/Bus_Owner_Pages/Route_Management";
 import TripManagement from "./Pages/Bus_Owner_Pages/Trip_Management";
+import DriverDashboard from "./Pages/Bus_Driver_Pages/DriverDashboard";
+import DriverBusManagement from "./Pages/Bus_Driver_Pages/DriverBusManagement";
+import DriverFinancial from "./Pages/Bus_Driver_Pages/DriverFinancial";
 import AddEmployee from "./Pages/Bus_Owner_Pages/Team_Directory_Add_Employee";
 
 import Membership from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Membership";
@@ -35,6 +39,7 @@ root.render(
         <Route path="/user" element={<WelcomeUser />} />
         <Route path="/userrole" element={<UserSelectPage />} />
         <Route path="/Sidebar" element={<Sidebar />} />
+        <Route path="/SidebarDriver" element={<SidebarDriver />} />
         <Route path="/dashbord" element={<Dashboard />} />
         <Route path="/finacialcenter" element={<Finacial_Center />} />
         <Route path="/operationhub" element={<Operation_hub />} />
@@ -44,6 +49,9 @@ root.render(
         <Route path="/taxinsights" element={<TaxInsight />} />
         <Route path="/routemanagement" element={<RouteManagement />} />
         <Route path="/tripmanagement" element={<TripManagement />} />
+        <Route path="/DriverDashboard" element={<DriverDashboard/>} />
+        <Route path="/DriverBusManagement" element={<DriverBusManagement/>}/>
+        <Route path="/DriverFinancial" element={<DriverFinancial/>}/>
         <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
         
         <Route path="/membership" element={<Membership />} />

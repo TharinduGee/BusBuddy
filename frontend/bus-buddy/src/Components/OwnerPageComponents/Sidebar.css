@@ -176,12 +176,12 @@
 }
 
 .sidebar .navigation::-webkit-scrollbar-thumb {
-  background-color: #ffdfc7;
+  background-color: var(--scroll-color);
   border-radius: 5px;
 }
 
 .sidebar .navigation::-webkit-scrollbar-thumb:hover {
-  background-color: #ffdfc7;
+  background-color: var(--scroll-hover-color);
 }
 
 .sidebar .navigation li {

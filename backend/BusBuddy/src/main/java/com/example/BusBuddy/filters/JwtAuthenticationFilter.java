@@ -56,9 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             context.setAuthentication(authToken);
             SecurityContextHolder.setContext(context);
+            request.setAttribute("b_id", bId);
           }
           //there shoud be logic to check the validity of refresh token
-          request.setAttribute("b_id", bId);
+
       }
       filterChain.doFilter(request, response);
   }

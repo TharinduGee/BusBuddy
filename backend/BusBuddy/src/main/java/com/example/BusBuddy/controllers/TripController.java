@@ -31,4 +31,6 @@ public class TripController {
     public ResponseEntity<String> remove(@RequestParam Long tripId){
         return tripService.remove(tripId);
     }
+
+
 }

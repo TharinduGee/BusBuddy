@@ -1,12 +1,16 @@
 package com.example.BusBuddy.models;
 
 import ch.qos.logback.classic.net.SMTPAppender;
+import com.example.BusBuddy.services.TripStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
+import java.io.StringBufferInputStream;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.Date;
@@ -42,7 +46,7 @@ public class Trip {
             name = "startTime",
             nullable = false
     )
-    private Time stratTime;
+    private Time startTime;
 
     @Column(
             name = "endTime",
@@ -59,28 +63,31 @@ public class Trip {
     @Column(name = "ticketApi")
     private String ticketApi;
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
+    private TripStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "bus",
             foreignKey = @ForeignKey(name = "fk_bus")
     )
     private Bus bus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "route",
             foreignKey = @ForeignKey(name = "fk_route")
     )
     private Route route;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "driver",
             foreignKey = @ForeignKey(name = "fk_employee_driver")
     )
     private Employee driver ;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "conductor",
             foreignKey = @ForeignKey(name = "fk_employee_conductor")
@@ -92,7 +99,7 @@ public class Trip {
     )
     private Document document;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "bId",
             foreignKey = @ForeignKey(name = "fk_bId")

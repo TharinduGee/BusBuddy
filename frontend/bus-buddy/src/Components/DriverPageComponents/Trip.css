@@ -1,0 +1,15 @@
+.trip-information-container {
+  border: 1px solid #c5b3b3; /* Add border */
+  padding: 10px;
+  width: 250px; /* Add padding */
+  margin-bottom: 10px; /* Add margin */
+  background-color: #e1dbdb; 
+  border-radius: 10px ;
+  border-bottom-width: 1vmax;
+  border-bottom-color: rgb(236, 130, 55);/* Add background color */
+}
+
+.trip-text{
+  font-size: 18px;
+  text-decoration: solid;
+}

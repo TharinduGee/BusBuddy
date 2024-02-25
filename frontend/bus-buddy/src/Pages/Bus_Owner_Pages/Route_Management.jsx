@@ -14,7 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button_ from "@mui/material/Button";
 import axios from "axios";
 import dayjs from "dayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateField } from "@mui/x-date-pickers/DateField";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -282,16 +282,10 @@ function Route_Management() {
               <div className="input-and-label">
                 <label class="form-label">Permite Expire Date*</label>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DatePicker"]}>
-                    <DatePicker
+                  <DemoContainer components={["DateField"]}>
+                    <DateField
                       value={value}
                       onChange={(newValue) => setValue(newValue)}
-                      sx={{
-                        "& .MuiInputBase-root": {
-                          borderRadius: "10px",
-                          width: "300px",
-                        },
-                      }}
                     />
                   </DemoContainer>
                 </LocalizationProvider>
