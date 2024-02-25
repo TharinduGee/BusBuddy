@@ -12,6 +12,7 @@
   height: 40px;
   width: 400px;
   padding-left: 10px;
+  border-color: rgb(198, 198, 198);
 }
 
 .input-field-choosefile {

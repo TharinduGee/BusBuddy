@@ -4,8 +4,7 @@
   --sidebarOwner-color: rgb(255, 255, 255);
   --text-color: rgb(0, 0, 0);
   --menu-text-color: rgb(0, 0, 0);
-  --menu-hover-color: rgb(180, 180, 180);
-  --settings-hover-text-color: #FF760D;
+  --settings-hover-text-color: #ff760d;
   --button-color: rgb(0, 0, 0);
   --button-text-color: rgb(255, 255, 255);
   --line-color: rgb(180, 180, 180);
@@ -130,7 +129,7 @@
 }
 
 .sidebarOwner span {
-  margin-left: 0; 
+  margin-left: 0;
   margin-right: 5px;
   width: 100px;
   white-space: nowrap;
@@ -199,14 +198,13 @@
   align-items: center;
   text-decoration: none;
   border-radius: 10px;
-  
 }
 .activeOwner-link {
-  color: #FF760D ;
+  color: #ff760d;
   font-weight: 600;
 }
 .notactiveOwner-link {
-  color: black ;
+  color: black;
 }
 .sidebarOwner .navigation a:hover {
   color: var(--settings-hover-text-color);
@@ -290,14 +288,11 @@
   .main-content-hidden {
     margin-left: 0px;
   }
-
-
 }
 
-
-.title-text{
+.title-text {
   text-align: center;
   font-weight: bold;
   font-size: 40px;
-  margin: top 5px;;
+  margin: top 5px;
 }
