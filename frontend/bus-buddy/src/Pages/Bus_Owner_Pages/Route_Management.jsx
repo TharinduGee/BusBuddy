@@ -14,8 +14,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button_ from "@mui/material/Button";
 import axios from "axios";
 import dayjs from "dayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
@@ -92,6 +91,12 @@ function Route_Management() {
           },
         },
       },
+    },
+  });
+
+  const theme_2 = createTheme({
+    shape: {
+      borderRadius: 12,
     },
   });
 
@@ -279,18 +284,18 @@ function Route_Management() {
               </div>
             </div>
             <div className="choosefile-expiredate">
-              <div className="input-and-label">
+              <div className="d-flex flex-column input-and-label">
                 <label class="form-label">Permite Expire Date*</label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DateField"]}>
-                    <DateField
+                <ThemeProvider theme={theme_2}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      sx={{ width: 300 }}
                       value={value}
                       onChange={(newValue) => setValue(newValue)}
                     />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  </LocalizationProvider>
+                </ThemeProvider>
               </div>
-
               <div
                 style={{
                   width: 340,
