@@ -19,7 +19,7 @@ public class RouteController {
 
     private  final RouteService routeService;
 
-    @GetMapping("findRoutes")
+    @GetMapping("/findRoutes")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RoutePaginationResponse> findRoutes(HttpServletRequest httpServletRequest,
                                                               @RequestParam(value = "pageNo", defaultValue = "0" , required = false)int pageNumber,

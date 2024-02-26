@@ -10,6 +10,7 @@ import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,21 +20,25 @@ public class BusController {
     private final BusService busService;
 
     @PostMapping("/bus/add")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BusAddResponse> add(HttpServletRequest httpRequest, @RequestBody BusAddRequest request){
         return busService.add(httpRequest,request);
     }
 
     @GetMapping("/bus/findById")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Bus> findById(@RequestParam Long busId) throws BusNotFoundException {
         return busService.findByBusId(busId);
     }
 
     @PostMapping("/bus/edit")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Bus> edit(@RequestBody BusEditRequest request) throws BusNotFoundException {
         return busService.editBus(request);
     }
 
     @GetMapping("/bus/findAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BusPaginationResponse> findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                          @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize) {
         return busService.findAll(pageNumber , pageSize);

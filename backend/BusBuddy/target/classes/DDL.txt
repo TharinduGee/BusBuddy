@@ -131,9 +131,10 @@ CREATE TABLE IF NOT EXISTS public.trip
     trip_id bigint NOT NULL,
     date timestamp(6) without time zone NOT NULL,
     end_time time(6) without time zone NOT NULL,
-    expense double precision,
-    income double precision,
+    expense double precision DEFAULT 0,
+    income double precision DEFAULT 0,
     start_time time(6) without time zone NOT NULL,
+	status character varying(255) COLLATE pg_catalog."default",
     ticket_api character varying(255) COLLATE pg_catalog."default",
     bus bigint,
     conductor bigint,
@@ -141,6 +142,7 @@ CREATE TABLE IF NOT EXISTS public.trip
     route bigint,
     b_id bigint,
     CONSTRAINT trip_pkey PRIMARY KEY (trip_id),
+	CONSTRAINT status_status_check CHECK (status::text = ANY (ARRAY['TRIP_STATUS_ONGOING'::character varying::text, 'TRIP_STATUS_COMPLETED'::character varying::text, 'TRIP_STATUS_SCHEDULED'::character varying::text])),
     CONSTRAINT fk_bid FOREIGN KEY (b_id)
             REFERENCES public.business (b_id) MATCH SIMPLE
             ON UPDATE CASCADE
@@ -160,7 +162,7 @@ CREATE TABLE IF NOT EXISTS public.trip
     CONSTRAINT fk_route FOREIGN KEY (route)
         REFERENCES public.route (route_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE SET NULL
 );
 
 
