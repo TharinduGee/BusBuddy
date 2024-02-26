@@ -2,6 +2,7 @@ package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
+
 import com.example.BusBuddy.dto.Trip.TripAddRequest;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.models.Employee;
@@ -163,15 +164,19 @@ public class TripService {
         LocalDate date = LocalDate.now();
         List<Trip> trips = tripRepository.findByDateAndStartTimeBefore(date, currentTime);
         for(Trip trip : trips){
-            if(trip.getEndTime().before(currentTime)){
-                trip.setStatus(TripStatus.TRIP_STATUS_COMPLETED);
-                tripRepository.save(trip);
-                System.out.println("Trip is over.");
-                // there should be logic to trigger ledger document after the trip is over.
+            if(trip.getEndTime().before(currentTime) ){
+                if(trip.getStatus() == TripStatus.TRIP_STATUS_ONGOING){
+                    trip.setStatus(TripStatus.TRIP_STATUS_COMPLETED);
+                    tripRepository.save(trip);
+                    System.out.println("Trip is over.");
+                    // there should be logic to trigger ledger document after the trip is over.
+                }
             }else{
-                trip.setStatus(TripStatus.TRIP_STATUS_ONGOING);
-                tripRepository.save(trip);
-                System.out.println("Trip is ongoing.");
+                if(trip.getStatus() == TripStatus.TRIP_STATUS_SCHEDULED){
+                    trip.setStatus(TripStatus.TRIP_STATUS_ONGOING);
+                    tripRepository.save(trip);
+                    System.out.println("Trip is ongoing.");
+                }
             }
         }
 

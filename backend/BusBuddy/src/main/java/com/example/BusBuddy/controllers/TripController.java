@@ -1,6 +1,7 @@
 package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
+
 import com.example.BusBuddy.dto.Trip.TripAddRequest;
 import com.example.BusBuddy.services.TripService;
 import jakarta.servlet.http.HttpServletRequest;
