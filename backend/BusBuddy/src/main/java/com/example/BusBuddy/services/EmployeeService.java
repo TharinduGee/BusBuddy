@@ -89,4 +89,10 @@ public class EmployeeService {
         employeeRepository.deleteById(empId);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully Deleted.");
     }
+
+    public Employee extractEmpId(HttpServletRequest httpServletRequest){
+        String str = (String) httpServletRequest.getAttribute("emp_id");
+        long bId = Long.parseLong(str);
+        return employeeRepository.findById(bId).orElseThrow(() -> new RuntimeException("Business not found."));
+    }
 }

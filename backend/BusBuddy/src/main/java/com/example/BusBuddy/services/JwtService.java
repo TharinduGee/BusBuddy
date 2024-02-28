@@ -36,6 +36,11 @@ public class JwtService {
         return extractClaim(token, Claims::getAudience);
     }
 
+    public String extractEmpId(String jwt) {
+            Claims claims = extractAllClaims(jwt);
+            return extractClaim(jwt, claims1 -> claims.get("emp_id", String.class));
+    }
+
   public String generateToken(User userDetails) {
       return generateToken(new HashMap<>(), userDetails);
   }
@@ -55,10 +60,11 @@ public class JwtService {
   }
 
   private String generateToken(Map<String, Object> extraClaims, User userDetails) {
-      if(userDetails.getBusiness().getBId() == null){
-          extraClaims.put("b_id", null);
-      }else{
-          extraClaims.put("b_id", userDetails.getBusiness().getBId().toString());
+
+      if(userDetails.getEmployee() == null){ // set empId null if normal user not enrolled
+          extraClaims.put("emp_id", null);
+      }else{ // otherwise retrieve the id and set it in the token
+          extraClaims.put("emp_id", userDetails.getEmployee().getEmpId().toString());
       }
 
 
@@ -106,6 +112,5 @@ public class JwtService {
       byte[] keyBytes = Decoders.BASE64.decode(jwtSecretKey);
       return Keys.hmacShaKeyFor(keyBytes);
   }
-
 
 }
