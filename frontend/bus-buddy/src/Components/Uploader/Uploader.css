@@ -1,0 +1,39 @@
+.form-upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #1475cf;
+  height: 300px;
+  width: 500px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.delete-doc {
+  margin: 10px;
+  cursor: pointer;
+}
+
+.uploaded-row {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-radius: 5px;
+  background-color: #e9f0ff;
+  max-width: 500px;
+}
+
+@media (max-width: 500px) {
+  .form-upload {
+    height: 150px;
+    width: 250px;
+  }
+
+  .uploaded-row {
+    max-width: 250px;
+    flex-shrink: inherit;
+  }
+}
