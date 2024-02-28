@@ -23,44 +23,47 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-  
-  private final JwtService jwtService;
-  private final UserService userService;
 
-  @Override
-  protected void doFilterInternal(HttpServletRequest request,
-        HttpServletResponse response, 
-        FilterChain filterChain)
-        throws ServletException, IOException {
-      final String authHeader = request.getHeader("Authorization");
-      final String jwt;
-      final String userEmail;
-      final String bId;
-      final String refreshtoken;
-      if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
-          filterChain.doFilter(request, response);
-          return;
-      }
-      jwt = authHeader.substring(7);
-      log.debug("JWT - {}", jwt);
-      userEmail = jwtService.extractUserName(jwt);
-      bId = jwtService.extractBId(jwt);
-      log.debug("Username - {}", userEmail.toString());
-      log.debug("b_id - {}", bId);
-      if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
-          UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
-          if (jwtService.isTokenValid(jwt, userDetails)) {
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            context.setAuthentication(authToken);
-            SecurityContextHolder.setContext(context);
-            request.setAttribute("b_id", bId);
-          }
-          //there shoud be logic to check the validity of refresh token
+    private final JwtService jwtService;
+    private final UserService userService;
 
-      }
-      filterChain.doFilter(request, response);
-  }
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
+            throws ServletException, IOException {
+        final String authHeader = request.getHeader("Authorization");
+        final String jwt;
+        final String userEmail;
+        final String bId;
+        final String refreshtoken;
+        if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        jwt = authHeader.substring(7);
+        log.debug("JWT - {}", jwt);
+        userEmail = jwtService.extractUserName(jwt);
+        bId = jwtService.extractBId(jwt);
+        String empId = jwtService.extractEmpId(jwt);
+        log.debug("Username - {}", userEmail.toString());
+        log.debug("b_id - {}", bId);
+        log.debug("emp_id - {}", empId);
+        if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
+            if (jwtService.isTokenValid(jwt, userDetails)) {
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                context.setAuthentication(authToken);
+                SecurityContextHolder.setContext(context);
+                request.setAttribute("b_id", bId);
+                request.setAttribute("emp_id" , empId);
+            }
+            // refresh token logic should be implemented
+
+        }
+        filterChain.doFilter(request, response);
+    }
 }

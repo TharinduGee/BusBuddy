@@ -79,13 +79,13 @@ public class User implements UserDetails {
   )
   String mobileNo;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bId"
           ,foreignKey = @ForeignKey(name = "fk_bId")
   )
   private Business business;
 
-  @OneToOne
+  @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(
           name = "empId",
           foreignKey =  @ForeignKey(name = "fk_empId")

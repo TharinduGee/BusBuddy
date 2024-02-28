@@ -8,6 +8,7 @@ import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +22,7 @@ public class BusController {
 
     @PostMapping("/bus/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BusAddResponse> add(HttpServletRequest httpRequest, @RequestBody BusAddRequest request){
+    public ResponseEntity<BusAddResponse> add(HttpServletRequest httpRequest, @RequestBody @Valid BusAddRequest request){
         return busService.add(httpRequest,request);
     }
 
@@ -31,9 +32,10 @@ public class BusController {
         return busService.findByBusId(busId);
     }
 
+
     @PostMapping("/bus/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Bus> edit(@RequestBody BusEditRequest request) throws BusNotFoundException {
+    public ResponseEntity<Bus> edit(@RequestBody @Valid BusEditRequest request) throws BusNotFoundException {
         return busService.editBus(request);
     }
 

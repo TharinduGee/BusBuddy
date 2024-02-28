@@ -36,10 +36,6 @@ public class Bus {
     )
     private Long busId;
 
-//    @Lob
-//    @Column(name = "image", columnDefinition = "BYTEA")
-//    @Basic(fetch = FetchType.LAZY)
-//    private byte[] imageData;
 
     @Enumerated(EnumType.STRING)
     private BusType type;
