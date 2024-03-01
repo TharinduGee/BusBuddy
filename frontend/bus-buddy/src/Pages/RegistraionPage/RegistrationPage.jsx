@@ -255,11 +255,7 @@ function RegistrationPage() {
           </div>
           <div class="d-flex flex-row mt-3 mb-5">
             <div class="mt-3 label">Already have an account?</div>
-<<<<<<< HEAD
-            <a href="login">
-=======
             <a className="register-link" href="SignUp">
->>>>>>> c400b7bc24b69ccc30c51acf942ebc7dcc61a07e
               <div class="mt-3 ms-2 clickable-text mb-3 ">Sign in here</div>
             </a>
           </div>
