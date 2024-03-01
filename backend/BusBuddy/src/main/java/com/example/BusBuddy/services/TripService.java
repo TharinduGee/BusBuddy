@@ -5,17 +5,12 @@ import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
 
 import com.example.BusBuddy.dto.Trip.TripAddRequest;
 import com.example.BusBuddy.dto.Trip.TripResponse;
-import com.example.BusBuddy.models.Bus;
-import com.example.BusBuddy.models.Employee;
-import com.example.BusBuddy.models.Route;
-import com.example.BusBuddy.models.Trip;
-import com.example.BusBuddy.repositories.BusRepository;
-import com.example.BusBuddy.repositories.EmployeeRepository;
-import com.example.BusBuddy.repositories.RouteRepository;
-import com.example.BusBuddy.repositories.TripRepository;
+import com.example.BusBuddy.models.*;
+import com.example.BusBuddy.repositories.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,9 +35,10 @@ public class TripService {
     private final RouteRepository routeRepository;
     private final EmployeeService employeeService;
     private final ModelMapper modelMapper;
+    private final LedgerService ledgerService;
 
     @Transactional
-    public ResponseEntity<String> addTripsForDuration(HttpServletRequest httpServletRequest, @RequestBody TripAddForDurationRequest tripAddForDurationRequest ) {
+    public ResponseEntity<String> addTripsForDuration(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddForDurationRequest tripAddForDurationRequest ) {
         LocalDate firstDate = tripAddForDurationRequest.getFirstDate();
         LocalDate lastDate = tripAddForDurationRequest.getLastDate();
 
@@ -59,7 +54,7 @@ public class TripService {
         return ResponseEntity.status(HttpStatus.OK).body("The trips are scheduled successfully.");
     }
 
-    private void addSingleTrip(HttpServletRequest httpServletRequest, @RequestBody TripAddRequest tripAddRequest , @RequestParam LocalDate localDate){
+    private void addSingleTrip(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddRequest tripAddRequest , @RequestParam LocalDate localDate){
         Bus bus;
         Employee driver;
         Employee conductor;
@@ -107,7 +102,7 @@ public class TripService {
 
     }
 
-    public ResponseEntity<String> addTrip(HttpServletRequest httpServletRequest, @RequestBody TripAddRequest tripAddRequest , @RequestParam LocalDate date){
+    public ResponseEntity<String> addTrip(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddRequest tripAddRequest , @RequestParam LocalDate date){
         Bus bus;
         Employee driver;
         Employee conductor;
@@ -165,8 +160,16 @@ public class TripService {
     public ResponseEntity<List<TripResponse>> findTripByDriver(HttpServletRequest httpServletRequest,LocalDate date){
         Employee employee = employeeService.extractEmpId(httpServletRequest);
         List<Trip> trips = tripRepository.findByDateAndDriver(date , employee);
-        List<TripResponse> tripResponseList = trips.stream()
-                .map((element) -> modelMapper.map(element, TripResponse.class)).toList();
+        //List<TripResponse> tripResponseList = trips.stream().map((element) -> modelMapper.map(element, TripResponse.class)).toList();
+        List<TripResponse> tripResponseList = trips.stream().map(
+                trip -> TripResponse.builder()
+                        .startDestination(trip.getRoute().getStartDestination())
+                        .endDestination(trip.getRoute().getEndDestination())
+                        .startTime(trip.getStartTime())
+                        .endTime(trip.getEndTime())
+                        .status(trip.getStatus())
+                        .build())
+                .toList();
         return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
     }
 
@@ -181,7 +184,8 @@ public class TripService {
                     trip.setStatus(TripStatus.TRIP_STATUS_COMPLETED);
                     tripRepository.save(trip);
                     System.out.println("Trip is over.");
-                    // there should be logic to trigger ledger document after the trip is over.
+
+                    ledgerService.addTripLedgerEntry(trip);
                 }
             }else{
                 if(trip.getStatus() == TripStatus.TRIP_STATUS_SCHEDULED){
@@ -191,7 +195,6 @@ public class TripService {
                 }
             }
         }
-
     }
 
 }

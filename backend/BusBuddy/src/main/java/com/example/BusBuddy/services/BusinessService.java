@@ -1,11 +1,10 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.dto.BusinessEditInfoReq;
+import com.example.BusBuddy.dto.Authentication.BusinessEditInfoReq;
 import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.repositories.BusinessRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

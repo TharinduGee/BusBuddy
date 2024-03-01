@@ -1,7 +1,7 @@
 package com.example.BusBuddy.controllers;
 
 
-import com.example.BusBuddy.dto.BusinessEditInfoReq;
+import com.example.BusBuddy.dto.Authentication.BusinessEditInfoReq;
 import com.example.BusBuddy.services.BusinessService;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;

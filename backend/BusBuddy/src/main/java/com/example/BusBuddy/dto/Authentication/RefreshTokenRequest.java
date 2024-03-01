@@ -1,4 +1,4 @@
-package com.example.BusBuddy.dto;
+package com.example.BusBuddy.dto.Authentication;
 
 
 import lombok.Data;
