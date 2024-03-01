@@ -60,7 +60,7 @@ function Trip_Management() {
     },
   });
 
-  const theme_2 = createTheme({
+  const text_box_the = createTheme({
     shape: {
       borderRadius: 12,
     },
@@ -209,18 +209,6 @@ function Trip_Management() {
                 }}
               />
             </ThemeProvider>
-            <div className="d-flex  py-3">
-              <Button
-                href="/teamdirectory"
-                className="mx-2"
-                size="large"
-                variant="text"
-                startIcon={<IoIosArrowBack color="black" />}
-                style={{ borderRadius: 10, color: "black" }}
-              >
-                Back
-              </Button>
-            </div>
           </div>
           <div
             className="justify-content-center align-items-center d-flex py-4"
@@ -255,7 +243,7 @@ function Trip_Management() {
             <div className="pair-container">
               <div className="d-flex flex-column input-and-label">
                 <label class="form-label">Start Time*</label>
-                <ThemeProvider theme={theme_2}>
+                <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
                       sx={{ width: 200 }}
@@ -268,7 +256,7 @@ function Trip_Management() {
 
               <div className="d-flex flex-column input-and-label">
                 <label class="form-label">End Time*</label>
-                <ThemeProvider theme={theme_2}>
+                <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
                       sx={{ width: 200 }}
@@ -351,7 +339,7 @@ function Trip_Management() {
             >
               <div className="d-flex flex-column input-and-label mt-1 mb-3">
                 <label class="form-label">Starting Date*</label>
-                <ThemeProvider theme={theme_2}>
+                <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker sx={{ width: 200 }} />
                   </LocalizationProvider>
@@ -360,7 +348,7 @@ function Trip_Management() {
 
               <div className="d-flex flex-column input-and-label mt-1 mb-4 ">
                 <label class="form-label">Ending Date*</label>
-                <ThemeProvider theme={theme_2}>
+                <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker sx={{ width: 200 }} />
                   </LocalizationProvider>
