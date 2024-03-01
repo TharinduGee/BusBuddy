@@ -19,5 +19,6 @@ public class TripResponse {
     private String endDestination;
     private Time startTime;
     private Time endTime;
+    private String employeeName;
     private TripStatus status;
 }

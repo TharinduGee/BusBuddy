@@ -157,18 +157,34 @@ public class TripService {
         return ResponseEntity.status(HttpStatus.OK).body("Trip is successfully deleted");
     }
 
-    public ResponseEntity<List<TripResponse>> findTripByDriver(HttpServletRequest httpServletRequest,LocalDate date){
-        Employee employee = employeeService.extractEmpId(httpServletRequest);
-        List<Trip> trips = tripRepository.findByDateAndDriver(date , employee);
-        //List<TripResponse> tripResponseList = trips.stream().map((element) -> modelMapper.map(element, TripResponse.class)).toList();
+    public ResponseEntity<List<TripResponse>> findTripForDriver(HttpServletRequest httpServletRequest,LocalDate date){
+        Employee driver = employeeService.extractEmpId(httpServletRequest);
+        List<Trip> trips = tripRepository.findByDateAndDriver(date , driver);
         List<TripResponse> tripResponseList = trips.stream().map(
                 trip -> TripResponse.builder()
                         .startDestination(trip.getRoute().getStartDestination())
                         .endDestination(trip.getRoute().getEndDestination())
                         .startTime(trip.getStartTime())
                         .endTime(trip.getEndTime())
+                        .employeeName(trip.getConductor().getName())
                         .status(trip.getStatus())
                         .build())
+                .toList();
+        return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
+    }
+
+    public ResponseEntity<List<TripResponse>> findTripForConductor(HttpServletRequest httpServletRequest,LocalDate date){
+        Employee conductor = employeeService.extractEmpId(httpServletRequest);
+        List<Trip> trips = tripRepository.findByDateAndConductor(date , conductor);
+        List<TripResponse> tripResponseList = trips.stream().map(
+                        trip -> TripResponse.builder()
+                                .startDestination(trip.getRoute().getStartDestination())
+                                .endDestination(trip.getRoute().getEndDestination())
+                                .startTime(trip.getStartTime())
+                                .endTime(trip.getEndTime())
+                                .employeeName(trip.getDriver().getName())
+                                .status(trip.getStatus())
+                                .build())
                 .toList();
         return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
     }

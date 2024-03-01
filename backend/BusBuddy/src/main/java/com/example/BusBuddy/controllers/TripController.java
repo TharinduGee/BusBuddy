@@ -42,10 +42,16 @@ public class TripController {
         return tripService.remove(tripId);
     }
 
-    @GetMapping("/findByDriver")
+    @GetMapping("/findForDriver")
     @PreAuthorize("hasRole('DRIVER')")
     public ResponseEntity<List<TripResponse>> findTripByDriver(HttpServletRequest httpServletRequest, @RequestParam @NotNull LocalDate date){
-        return tripService.findTripByDriver(httpServletRequest , date);
+        return tripService.findTripForDriver(httpServletRequest , date);
+    }
+
+    @GetMapping("/findForDriver")
+    @PreAuthorize("hasRole('CONDUCTOR')")
+    public ResponseEntity<List<TripResponse>> findTripByConductor(HttpServletRequest httpServletRequest, @RequestParam @NotNull LocalDate date){
+        return tripService.findTripForConductor(httpServletRequest , date);
     }
 
 
