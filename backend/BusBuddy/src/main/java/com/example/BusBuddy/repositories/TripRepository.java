@@ -16,5 +16,6 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
     );
 
     List<Trip> findByDateAndDriver(LocalDate date , Employee driver);
+    List<Trip> findByDateAndConductor(LocalDate date , Employee conductor);
     List<Trip> findByDate(LocalDate date);
 }

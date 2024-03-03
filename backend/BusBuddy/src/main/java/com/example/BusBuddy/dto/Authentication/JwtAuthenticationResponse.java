@@ -1,4 +1,4 @@
-package com.example.BusBuddy.dto;
+package com.example.BusBuddy.dto.Authentication;
 
 import com.example.BusBuddy.models.Role;
 import lombok.AllArgsConstructor;
@@ -10,11 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpRequest {
-  String firstName;
-  String lastName;
-  String email;
-  String password;
-  String mobileNo;
+public class JwtAuthenticationResponse {
+  String token;
+  String refreshToken;
   Role role;
 }

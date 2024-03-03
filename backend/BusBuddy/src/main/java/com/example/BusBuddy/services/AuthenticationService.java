@@ -2,10 +2,10 @@ package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import com.example.BusBuddy.Exception.UserNotAssignedException;
-import com.example.BusBuddy.dto.JwtAuthenticationResponse;
-import com.example.BusBuddy.dto.RefreshTokenRequest;
-import com.example.BusBuddy.dto.SignInRequest;
-import com.example.BusBuddy.dto.SignUpRequest;
+import com.example.BusBuddy.dto.Authentication.JwtAuthenticationResponse;
+import com.example.BusBuddy.dto.Authentication.RefreshTokenRequest;
+import com.example.BusBuddy.dto.Authentication.SignInRequest;
+import com.example.BusBuddy.dto.Authentication.SignUpRequest;
 import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -36,7 +37,7 @@ public class Ledger{
             name = "timestamp",
             nullable = false
     )
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     @Enumerated(EnumType.STRING)
     private TransactionType type;
@@ -59,7 +60,6 @@ public class Ledger{
             foreignKey = @ForeignKey(name = "fk_bId")
     )
     private Business business;
-
 
 
 }
