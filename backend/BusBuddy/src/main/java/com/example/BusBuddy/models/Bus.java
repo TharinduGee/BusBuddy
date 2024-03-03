@@ -1,6 +1,7 @@
 package com.example.BusBuddy.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,10 +36,6 @@ public class Bus {
     )
     private Long busId;
 
-//    @Lob
-//    @Column(name = "image", columnDefinition = "BYTEA")
-//    @Basic(fetch = FetchType.LAZY)
-//    private byte[] imageData;
 
     @Enumerated(EnumType.STRING)
     private BusType type;
@@ -46,6 +43,7 @@ public class Bus {
     @Column(
             name = "numberPlate"
     )
+    @NotNull(message = "no null")
     private String numberPlate;
 
     @Column(
@@ -68,12 +66,16 @@ public class Bus {
 
     @OneToMany(
             mappedBy = "bus" ,
+            fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private Set<Review> reviews;
 
-    @OneToMany(mappedBy = "bus")
+    @OneToMany(
+            mappedBy = "bus",
+            fetch = FetchType.LAZY
+    )
     private Set<Trip> trips;
 
     @OneToOne(

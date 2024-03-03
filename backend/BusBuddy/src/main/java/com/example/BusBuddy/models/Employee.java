@@ -79,7 +79,7 @@ public class Employee {
     @OneToOne(mappedBy = "employee" ,cascade = CascadeType.ALL)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "bId",
             foreignKey = @ForeignKey(name = "fk_bId")

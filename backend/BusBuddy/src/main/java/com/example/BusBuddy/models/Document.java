@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -39,17 +40,17 @@ public class Document {
             name = "uploadDate",
             nullable = false
     )
-    private Date uploadDate ;
+    private LocalDate uploadDate ;
 
     @Enumerated(EnumType.STRING)
     private DocCategory category;
 
-
+    @Lob
     @Column(
             name = "url",
             nullable = false
     )
-    private String url;
+    private byte[] data;
 
     @ManyToOne
     @JoinColumn(
@@ -82,7 +83,7 @@ public class Document {
     )
     private Route route;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name ="tripId",
             foreignKey = @ForeignKey(name = "fk_tripId"),

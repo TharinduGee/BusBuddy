@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
@@ -7,12 +7,10 @@ import avatar from "./../../Assets/Owner_assests/Avatar.png";
 import { DataGrid } from "@mui/x-data-grid";
 import "./Team_Directory.css";
 import { IoIosArrowBack } from "react-icons/io";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import Popup from "./Update_popup";
-import { DialogTitle } from "@mui/material";
 
 function Team_Directory_Add_Employee() {
   const [openPopup, setOpenPopup] = useState(false);

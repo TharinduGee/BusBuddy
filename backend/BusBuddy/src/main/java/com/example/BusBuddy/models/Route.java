@@ -15,8 +15,8 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "route")
+@Entity(name = "route")
+@Table
 public class Route {
 
     @Id
@@ -55,7 +55,7 @@ public class Route {
 
     @Column(
             name = "permitExpDate",
-            nullable = true
+            nullable = false
     )
     private Date permitExpDate;
 
@@ -68,9 +68,8 @@ public class Route {
 
     @OneToMany(
             mappedBy = "route",
-            cascade = CascadeType.ALL
+            fetch = FetchType.LAZY
     )
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Trip> trips;
 
     @OneToOne(

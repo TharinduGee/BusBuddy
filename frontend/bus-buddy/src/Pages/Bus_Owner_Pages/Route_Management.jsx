@@ -1,9 +1,7 @@
-import React, { Children, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
-import add_icon from "./../../Assets/Owner_assests/add_icon.png";
-import avatar from "./../../Assets/Owner_assests/Avatar.png";
 import { DataGrid } from "@mui/x-data-grid";
 import "./Team_Directory.css";
 import "./Route_Management.css";
@@ -14,8 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Button_ from "@mui/material/Button";
 import axios from "axios";
 import dayjs from "dayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
@@ -92,6 +89,12 @@ function Route_Management() {
           },
         },
       },
+    },
+  });
+
+  const datepicker_theme = createTheme({
+    shape: {
+      borderRadius: 12,
     },
   });
 
@@ -190,53 +193,54 @@ function Route_Management() {
 
   return (
     <Sidebar>
-      <div className="d-flex flex-column align-items-start  justify-content-end">
-        <div className="d-flex align-items-start">
-          <ThemeProvider theme={theme}>
-            <TextField
-              onChange={handleSearchInputChange}
-              id="outlined-basic"
-              label="Search"
-              variant="outlined"
-              InputProps={{
-                sx: {
-                  backgroundColor: "#F4F4F4",
-                  borderRadius: 10,
-                  border: "none",
-                  width: 400,
-
-                  "@media (max-width: 400px)": {
-                    width: 250,
-                  },
-                },
-              }}
-            />
-          </ThemeProvider>
-        </div>
-        <div
-          className="justify-content-center align-items-center d-flex pt-2  "
-          style={{ height: 400, width: "100%" }}
-        >
+      <div>
+        <div className="d-flex flex-column align-items-center  justify-content-end">
           <div
-            className="justify-content-center align-items-center"
-            style={{ width: "80%", height: 325 }}
+            style={{ width: "80%" }}
+            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
           >
-            <ThemeProvider theme={table_theme}>
-              <DataGrid
-                rows={rows_}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
+            <ThemeProvider theme={theme}>
+              <TextField
+                id="outlined-basic"
+                label="Search by Email"
+                variant="outlined"
+                onChange={handleSearchInputChange}
+                InputProps={{
+                  sx: {
+                    backgroundColor: "#F4F4F4",
+                    width: 350,
+                    borderRadius: 10,
+                    borderColor: "FF760D",
                   },
                 }}
-                pageSizeOptions={[5, 10]}
-                rowHeight={40}
               />
             </ThemeProvider>
           </div>
+          <div
+            className="justify-content-center align-items-center d-flex py-4"
+            style={{ height: 400, width: "100%" }}
+          >
+            <div
+              className="justify-content-center align-items-center"
+              style={{ width: "80%", height: 325 }}
+            >
+              <ThemeProvider theme={table_theme}>
+                <DataGrid
+                  rows={rows_}
+                  columns={columns}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { page: 0, pageSize: 5 },
+                    },
+                  }}
+                  // onRowClick={handleRowClick}
+                  pageSizeOptions={[5, 10]}
+                  rowHeight={40}
+                />
+              </ThemeProvider>
+            </div>
+          </div>
         </div>
-
         <div
           className="justify-content-center align-items-center d-flex py-4"
           style={{ width: "100%" }}
@@ -279,18 +283,18 @@ function Route_Management() {
               </div>
             </div>
             <div className="choosefile-expiredate">
-              <div className="input-and-label">
+              <div className="d-flex flex-column input-and-label">
                 <label class="form-label">Permite Expire Date*</label>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={["DateField"]}>
-                    <DateField
+                <ThemeProvider theme={datepicker_theme}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      sx={{ width: 300 }}
                       value={value}
                       onChange={(newValue) => setValue(newValue)}
                     />
-                  </DemoContainer>
-                </LocalizationProvider>
+                  </LocalizationProvider>
+                </ThemeProvider>
               </div>
-
               <div
                 style={{
                   width: 340,
