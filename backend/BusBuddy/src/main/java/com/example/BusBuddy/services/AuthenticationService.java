@@ -33,7 +33,6 @@ public class AuthenticationService {
   @Transactional
   public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(SignUpRequest request) {
 
-
       var business =  new Business();
       business = businessService.save(business);
       var user = User
@@ -96,7 +95,6 @@ public class AuthenticationService {
                   .role(user.getRole()).build();
 
           return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
-
 
   }
 

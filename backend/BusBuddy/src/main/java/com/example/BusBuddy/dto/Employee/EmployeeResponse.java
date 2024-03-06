@@ -1,5 +1,6 @@
 package com.example.BusBuddy.dto.Employee;
 
+import com.example.BusBuddy.models.Document;
 import com.example.BusBuddy.models.EmployeeType;
 import com.example.BusBuddy.models.User;
 import lombok.AllArgsConstructor;

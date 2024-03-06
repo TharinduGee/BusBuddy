@@ -44,13 +44,6 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<?> handleBadCredentialsException(ConstraintViolationException ex){
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(ex.getConstraintViolations());
-//    }
-
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(UserNotAssignedException.class)

@@ -1,5 +1,6 @@
 package com.example.BusBuddy.repositories;
 
+import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Employee;
 import com.example.BusBuddy.models.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,8 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
     Trip findByTicketApiAndDateAndStartTimeBeforeAndEndTimeAfter(
             String ticketApi , LocalDate date , LocalTime start_time , LocalTime end_time
     );
+
+    List<Trip> findByBusiness(Business business);
 
     List<Trip> findByDateAndDriver(LocalDate date , Employee driver);
     List<Trip> findByDateAndConductor(LocalDate date , Employee conductor);
