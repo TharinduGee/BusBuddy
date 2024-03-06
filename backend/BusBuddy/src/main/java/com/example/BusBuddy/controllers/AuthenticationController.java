@@ -1,18 +1,12 @@
 package com.example.BusBuddy.controllers;
 
-import com.example.BusBuddy.dto.JwtAuthenticationResponse;
-import com.example.BusBuddy.dto.RefreshTokenRequest;
-import com.example.BusBuddy.dto.SignInRequest;
-import com.example.BusBuddy.dto.SignUpRequest;
+import com.example.BusBuddy.dto.Authentication.JwtAuthenticationResponse;
+import com.example.BusBuddy.dto.Authentication.SignInRequest;
+import com.example.BusBuddy.dto.Authentication.SignUpRequest;
 import com.example.BusBuddy.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

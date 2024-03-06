@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS public.ledger
         ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT ledger_type_check CHECK (type::text = ANY (ARRAY['TRANSACTION_TYPE_TICKET'::character varying, 'TRANSACTION_TYPE_UNSPECIFIED'::character varying, 'TRANSACTION_TYPE_SERVICE'::character varying]::text[]))
-);
+)
 
 
 -- Table: public.route
