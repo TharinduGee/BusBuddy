@@ -36,17 +36,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userEmail;
         final String bId;
-        final String refreshtoken;
+        final String empId;
         if (StringUtils.isEmpty(authHeader) || !StringUtils.startsWith(authHeader, "Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
         jwt = authHeader.substring(7);
-        log.debug("JWT - {}", jwt);
         userEmail = jwtService.extractUserName(jwt);
         bId = jwtService.extractBId(jwt);
-        String empId = jwtService.extractEmpId(jwt);
-        log.debug("Username - {}", userEmail.toString());
+        empId = jwtService.extractEmpId(jwt);
+        log.debug("JWT - {}", jwt);
+        log.debug("Username - {}", userEmail);
         log.debug("b_id - {}", bId);
         log.debug("emp_id - {}", empId);
         if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -58,10 +58,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
+                request.setAttribute("username" , userEmail);
                 request.setAttribute("b_id", bId);
                 request.setAttribute("emp_id" , empId);
             }
-            // refresh token logic should be implemented
 
         }
         filterChain.doFilter(request, response);

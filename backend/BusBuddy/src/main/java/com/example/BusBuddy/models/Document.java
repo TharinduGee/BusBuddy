@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -46,6 +48,7 @@ public class Document {
     private DocCategory category;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(
             name = "url",
             nullable = false

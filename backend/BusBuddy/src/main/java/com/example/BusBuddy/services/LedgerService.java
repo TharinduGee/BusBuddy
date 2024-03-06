@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Ledger.LedgerAddRequest;
 import com.example.BusBuddy.models.Ledger;
 import com.example.BusBuddy.models.TransactionType;
@@ -9,7 +9,6 @@ import com.example.BusBuddy.repositories.LedgerRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 public class LedgerService {
 
     private final BusinessService businessService;
-    private final ModelMapper modelMapper;
     private final LedgerRepository ledgerRepository;
 
     public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest , @NotNull LedgerAddRequest ledgerAddRequest){

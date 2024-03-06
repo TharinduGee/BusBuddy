@@ -1,7 +1,5 @@
 package com.example.BusBuddy.Exception;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -44,13 +42,6 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<?> handleBadCredentialsException(ConstraintViolationException ex){
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(ex.getConstraintViolations());
-//    }
-
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(UserNotAssignedException.class)
@@ -76,12 +67,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(BusNotFoundException.class)
-    public ResponseEntity<?> handleBusNotFoundException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)

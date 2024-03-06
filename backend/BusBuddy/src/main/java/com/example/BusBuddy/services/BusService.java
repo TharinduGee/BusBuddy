@@ -1,7 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Bus.*;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.repositories.BusRepository;
@@ -40,14 +39,14 @@ public class BusService {
         return ResponseEntity.ok(busAddResponse);
     }
 
-    public ResponseEntity<Bus> findByBusId(Long busId ) throws BusNotFoundException {
+    public ResponseEntity<Bus> findByBusId(Long busId ) {
         Bus bus = busRepository.findById(busId)
                 .orElseThrow(()-> new EntityNotFoundException("Bus not found"));
 
         return ResponseEntity.ok(bus);
     }
 
-    public ResponseEntity<Bus> editBus(BusEditRequest request) throws BusNotFoundException {
+    public ResponseEntity<Bus> editBus(BusEditRequest request) {
         Bus bus = busRepository.findById(request.getBusId())
                 .orElseThrow(() -> new EntityNotFoundException("Bus not found"));
         bus.setSeats(request.getSeats());

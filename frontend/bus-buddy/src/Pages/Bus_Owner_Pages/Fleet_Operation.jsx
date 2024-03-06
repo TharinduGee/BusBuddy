@@ -259,7 +259,7 @@ function Fleet_Operation() {
                 variant="contained"
                 disabled={isAddButtonDisabled}
               >
-                Add Route
+                Add Bus
               </Button>
               <Button
                 style={buttonStyle_Update}
@@ -267,7 +267,7 @@ function Fleet_Operation() {
                 variant="contained"
                 disabled={isUpdateButtonDisabled}
               >
-                Update Route
+                Update Bus
               </Button>
             </div>
           </div>

@@ -19,6 +19,11 @@ public class DocumentController {
 
     private final DocumentService documentService;
 
+    @GetMapping("/getDocument")
+    public ResponseEntity<byte[]> retrieveImage(@RequestParam Long docId) throws IOException {
+        return documentService.getDocument(docId);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> add(@RequestParam("file") MultipartFile file,
                                       HttpServletRequest httpServletRequest,

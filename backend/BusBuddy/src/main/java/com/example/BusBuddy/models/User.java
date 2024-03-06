@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "users")
-@ToString
 @Table(
         name = "users",
         uniqueConstraints = {
@@ -78,6 +77,11 @@ public class User implements UserDetails {
           unique = true
   )
   String mobileNo;
+
+  @Lob
+  @Basic(fetch = FetchType.LAZY)
+  @Column(name = "image")
+  private byte[] image;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bId"

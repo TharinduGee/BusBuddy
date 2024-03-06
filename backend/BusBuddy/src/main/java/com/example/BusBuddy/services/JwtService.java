@@ -32,14 +32,14 @@ public class JwtService {
       return extractClaim(token, Claims::getSubject);
   }
 
-    public String extractBId(String token) {
-        return extractClaim(token, Claims::getAudience);
-    }
+  public String extractBId(String token) {
+      return extractClaim(token, Claims::getAudience);
+  }
 
-    public String extractEmpId(String jwt) {
-            Claims claims = extractAllClaims(jwt);
-            return extractClaim(jwt, claims1 -> claims.get("emp_id", String.class));
-    }
+  public String extractEmpId(String jwt) {
+      Claims claims = extractAllClaims(jwt);
+      return extractClaim(jwt, claims1 -> claims.get("emp_id", String.class));
+  }
 
   public String generateToken(User userDetails) {
       return generateToken(new HashMap<>(), userDetails);
