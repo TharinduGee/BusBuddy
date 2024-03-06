@@ -7,6 +7,7 @@ import com.example.BusBuddy.dto.Employee.EmployeeResponse;
 import com.example.BusBuddy.models.Employee;
 import com.example.BusBuddy.services.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<EmployeeResponse>  addEmployee(HttpServletRequest httpRequest ,  @RequestBody EmployeeAddRequest request){
+    public ResponseEntity<EmployeeResponse>  addEmployee(HttpServletRequest httpRequest ,  @RequestBody @Valid EmployeeAddRequest request){
                 EmployeeResponse newEmployee = employeeService.save(httpRequest , request);
                 return ResponseEntity.status(HttpStatus.OK).body(newEmployee);
     }
 
     @PostMapping("/edit")
-    public  ResponseEntity<String> editEmployee(@RequestBody EmployeeEditReq employeeEditReq){
+    public  ResponseEntity<String> editEmployee(@RequestBody @Valid EmployeeEditReq employeeEditReq){
         return employeeService.editEmployee(employeeEditReq);
     }
 

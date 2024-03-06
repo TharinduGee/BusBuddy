@@ -18,10 +18,16 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeAddRequest {
+    @NotBlank(message = "This field shouldn't be empty.")
     private String name;
+    @NotNull(message = "This field shouldn't be empty.")
     private Float salary;
+    @NotBlank(message = "This field shouldn't be empty.")
     private String email;
+    @NotBlank(message = "This field shouldn't be empty.")
     private Date bDay;
+    @NotBlank(message = "This field shouldn't be empty.")
     private Date joinedDate;
+
     private EmployeeType designation;
 }
