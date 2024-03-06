@@ -1,8 +1,7 @@
 package com.example.BusBuddy.Exception;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public Map<String,String> handleInvalidArgument(MethodArgumentNotValidException ex){
+    public Map<String,String> handleInvalidArgument(@NotNull MethodArgumentNotValidException ex){
         Map<String,String> errorMap = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->{
             errorMap.put(error.getField(), error.getDefaultMessage());
@@ -33,23 +32,16 @@ public class GlobalExceptionHandler {
 
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+    public ResponseEntity<?> handleDataIntegrityViolation(@NotNull DataIntegrityViolationException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex){
+    public ResponseEntity<?> handleBadCredentialsException(@NotNull BadCredentialsException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ex.getMessage());
     }
-
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<?> handleBadCredentialsException(ConstraintViolationException ex){
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body(ex.getConstraintViolations());
-//    }
 
 
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
@@ -62,7 +54,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
-            MethodArgumentNotValidException ex) {
+            @NotNull MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -73,26 +65,20 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex){
+    public ResponseEntity<Object> handleEntityNotFoundException(@NotNull EntityNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(BusNotFoundException.class)
-    public ResponseEntity<?> handleBusNotFoundException(Exception ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity<?> handleSqlHelper(Exception ex){
+    public ResponseEntity<?> handleSqlHelper(@NotNull Exception ex){
         return  ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public void handleInternalServerError(Exception ex) {
+    public void handleInternalServerError(@NotNull Exception ex) {
         throw new InternalError(ex.getMessage());
     }
 }

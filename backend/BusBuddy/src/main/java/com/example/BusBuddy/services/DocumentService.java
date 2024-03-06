@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.EmployeeRepository;
@@ -8,6 +8,9 @@ import com.example.BusBuddy.repositories.RouteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 public class DocumentService {
+
     private final DocumentRepository documentRepository;
     private final EmployeeRepository employeeRepository;
     private final RouteRepository routeRepository;
@@ -60,6 +64,27 @@ public class DocumentService {
         documentRepository.save(doc);
 
         return  ResponseEntity.ok("Document successfully added.");
+    }
+
+
+    @Transactional
+    public ResponseEntity<byte[]> getDocument(Long docId) {
+        Document document = documentRepository.findById(docId).orElseThrow(() -> new EntityNotFoundException(
+                "Document is not found."
+        ));
+
+
+        if (document.getData() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        byte[] data = document.getData();
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentLength(data.length);
+
+        return new ResponseEntity<>(data,  HttpStatus.OK);
     }
 
     public ResponseEntity<String> edit(MultipartFile file ,

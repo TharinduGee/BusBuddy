@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.Exception.UserNotAssignedException;
 import com.example.BusBuddy.dto.Authentication.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.Authentication.RefreshTokenRequest;
@@ -32,7 +32,6 @@ public class AuthenticationService {
 
   @Transactional
   public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(SignUpRequest request) {
-
 
       var business =  new Business();
       business = businessService.save(business);
@@ -96,7 +95,6 @@ public class AuthenticationService {
                   .role(user.getRole()).build();
 
           return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
-
 
   }
 

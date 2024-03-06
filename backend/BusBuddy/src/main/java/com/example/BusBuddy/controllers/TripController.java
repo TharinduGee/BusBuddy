@@ -4,7 +4,6 @@ import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
 
 import com.example.BusBuddy.dto.Trip.TripAddRequest;
 import com.example.BusBuddy.dto.Trip.TripResponse;
-import com.example.BusBuddy.repositories.TripRepository;
 import com.example.BusBuddy.services.TripService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +21,6 @@ import java.util.List;
 public class TripController {
 
     private final TripService tripService;
-    private final TripRepository tripRepository;
 
     @PostMapping("/scheduleTripsForDuration")
     @PreAuthorize("hasRole('ADMIN')")
@@ -48,11 +46,10 @@ public class TripController {
         return tripService.findTripForDriver(httpServletRequest , date);
     }
 
-    @GetMapping("/findForDriver")
+    @GetMapping("/findForConductor")
     @PreAuthorize("hasRole('CONDUCTOR')")
     public ResponseEntity<List<TripResponse>> findTripByConductor(HttpServletRequest httpServletRequest, @RequestParam @NotNull LocalDate date){
         return tripService.findTripForConductor(httpServletRequest , date);
     }
-
 
 }

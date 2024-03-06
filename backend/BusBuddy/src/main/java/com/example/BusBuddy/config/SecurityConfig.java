@@ -54,7 +54,12 @@ public class SecurityConfig {
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     )
     .authorizeHttpRequests(authorize -> authorize
-      .requestMatchers(HttpMethod.POST, "/api/v1/signUp","/api/v1/signUpAdmin", "/api/v1/signIn","/api/v1/signUp/edit").permitAll()
+      .requestMatchers(HttpMethod.POST,
+              "/api/v1/signUp",
+              "/api/v1/signUpAdmin",
+              "/api/v1/signIn",
+              "/api/v1/signUp/edit",
+              "/api/v1/review/add").permitAll()
       .requestMatchers(HttpMethod.GET, "/api/v1/test/**").permitAll()
             .requestMatchers(
                     "/api/v1/auth/**",

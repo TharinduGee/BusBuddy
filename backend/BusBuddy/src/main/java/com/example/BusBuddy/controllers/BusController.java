@@ -1,6 +1,6 @@
 package com.example.BusBuddy.controllers;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.BusNotFoundException;
+
 import com.example.BusBuddy.dto.Bus.BusAddRequest;
 import com.example.BusBuddy.dto.Bus.BusAddResponse;
 import com.example.BusBuddy.dto.Bus.BusEditRequest;
@@ -13,6 +13,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
 
 @RestController
 @AllArgsConstructor
@@ -28,14 +30,14 @@ public class BusController {
 
     @GetMapping("/bus/findById")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Bus> findById(@RequestParam Long busId) throws BusNotFoundException {
+    public ResponseEntity<Bus> findById(@RequestParam Long busId)  {
         return busService.findByBusId(busId);
     }
 
 
     @PostMapping("/bus/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Bus> edit(@RequestBody @Valid BusEditRequest request) throws BusNotFoundException {
+    public ResponseEntity<Bus> edit(@RequestBody @Valid BusEditRequest request)  {
         return busService.editBus(request);
     }
 

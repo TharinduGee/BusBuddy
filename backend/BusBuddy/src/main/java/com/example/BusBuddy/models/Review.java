@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -37,7 +38,7 @@ public class Review {
             name = "timestamp",
             nullable = false
     )
-    private Date timestamp;
+    private LocalDateTime timestamp;
 
     @Column(
             name = "comment",
@@ -68,6 +69,5 @@ public class Review {
             foreignKey = @ForeignKey(name = "fk_employee_review")
     )
     private Employee employee;
-
 
 }
