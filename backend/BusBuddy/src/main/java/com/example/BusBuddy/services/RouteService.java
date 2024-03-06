@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Route.RouteEditRequest;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.dto.Route.RouteRequest;

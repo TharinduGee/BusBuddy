@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Review.ReviewAddRequest;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.models.Business;
@@ -10,7 +10,6 @@ import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.BusinessRepository;
 import com.example.BusBuddy.repositories.EmployeeRepository;
 import com.example.BusBuddy.repositories.ReviewRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Service
 @AllArgsConstructor

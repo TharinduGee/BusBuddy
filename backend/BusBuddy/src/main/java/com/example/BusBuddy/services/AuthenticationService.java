@@ -1,6 +1,6 @@
 package com.example.BusBuddy.services;
 
-import com.example.BusBuddy.Exception.EntityNotFoundExceptions.EntityNotFoundException;
+import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.Exception.UserNotAssignedException;
 import com.example.BusBuddy.dto.Authentication.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.Authentication.RefreshTokenRequest;
