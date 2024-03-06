@@ -1,0 +1,11 @@
+.chart-container {
+  width: 80%;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 650px) {
+  .chart-container {
+    width: 100%;
+  }
+}

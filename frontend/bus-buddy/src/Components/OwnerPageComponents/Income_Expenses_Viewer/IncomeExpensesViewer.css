@@ -1,0 +1,19 @@
+.icon-contianer-expenses-income {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+.income-expenses-container {
+  margin: 40px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.income-txt {
+  margin-left: 20px;
+  font-size: 20px;
+}
+.income-value {
+  margin-left: 20px;
+  font-size: 30px;
+}
