@@ -57,10 +57,21 @@ function LoginPage() {
           ) {
             // Display an alert for incorrect email or password
             alert("Email or password incorrect");
-          } else {
+          } 
             // Handle other 400 errors if needed
+          
+        } if (error.response.status === 404) {
+          // Check if the error is due to bad credentials
+           if (
+            error.response.data &&
+            error.response.data === "User is not found."
+          ) {
+            // Display an alert for incorrect email or password
+            alert("User is not found.");
           }
-        } else if (error.response.status === 406) {
+            // Handle other 400 errors if needed
+          
+        }else if (error.response.status === 406) {
           // Check if the error is due to user not assigned
           if (
             error.response.data &&
