@@ -1,0 +1,45 @@
+.icon-contianer-Employeecount {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+.Employeecount-container {
+  margin-top: 40px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 0;
+}
+.employee-txt {
+  margin-left: 20px;
+  font-size: 20px;
+}
+.employee-count {
+  margin-left: 20px;
+  font-size: 30px;
+}
+.employee-title {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+@media (max-width: 1255px) {
+  .employee-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 0;
+  }
+  .Employeecount-container {
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 450px) {
+  .employee-txt {
+    font-size: 15px;
+  }
+  .employee-count {
+    font-size: 20px;
+  }
+}

@@ -37,7 +37,7 @@ const Chart = ({ aspect, title, data }) => {
             fontSize={12}
             margin={10}
           />
-          <YAxis strokeWidth={0} />
+          <YAxis strokeWidth={0} fontSize={12} />
 
           <Tooltip />
           <Area
