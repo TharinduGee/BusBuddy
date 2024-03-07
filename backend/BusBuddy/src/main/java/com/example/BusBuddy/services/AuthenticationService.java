@@ -31,51 +31,56 @@ public class AuthenticationService {
   private final BusinessService businessService;
 
   @Transactional
-  public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(SignUpRequest request) {
+  public ResponseEntity<String> signUp(SignUpRequest request) {
 
-      var business =  new Business();
-      business = businessService.save(business);
-      var user = User
+      if(request.getRole() ==  Role.ROLE_ADMIN){
+          var business =  new Business();
+          business = businessService.save(business);
+          var user = User
                   .builder()
                   .firstName(request.getFirstName())
                   .lastName(request.getLastName())
                   .email(request.getEmail())
                   .password(passwordEncoder.encode(request.getPassword()))
-                  .role(Role.ROLE_ADMIN)
+                  .role(request.getRole())
                   .mobileNo(request.getMobileNo())
                   .business(business)
                   .build();
 
-      user = userService.save(user);
-      var jwt = jwtService.generateToken(user);
-      var refreshToken = jwtService.generateRefreshToken(user);
+          userService.save(user);
+      }else{
+          var user = User
+                  .builder()
+                  .firstName(request.getFirstName())
+                  .lastName(request.getLastName())
+                  .email(request.getEmail())
+                  .password(passwordEncoder.encode(request.getPassword()))
+                  .role(request.getRole())
+                  .mobileNo(request.getMobileNo())
+                  .build();
+          userService.save(user);
+      }
 
-      var jwtAuthenticationResponse =  JwtAuthenticationResponse.builder()
-              .token(jwt)
-              .refreshToken(refreshToken)
-              .role(user.getRole())
-              .build();
-
-      return ResponseEntity.status(HttpStatus.CREATED).body(jwtAuthenticationResponse);
+      return ResponseEntity.status(HttpStatus.CREATED).body("Account is created successfully.");
   }
 
 
-    public ResponseEntity<String> signUp(SignUpRequest request) {
-
-        var user = User
-                .builder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .mobileNo(request.getMobileNo())
-                .build();
-
-        user = userService.save(user);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Account is successfully created.");
-    }
+//    public ResponseEntity<String> signUp(SignUpRequest request) {
+//
+//        var user = User
+//                .builder()
+//                .firstName(request.getFirstName())
+//                .lastName(request.getLastName())
+//                .email(request.getEmail())
+//                .password(passwordEncoder.encode(request.getPassword()))
+//                .role(request.getRole())
+//                .mobileNo(request.getMobileNo())
+//                .build();
+//
+//        user = userService.save(user);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Account is successfully created.");
+//    }
 
 
   public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {

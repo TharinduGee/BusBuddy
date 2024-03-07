@@ -18,15 +18,15 @@ public class AuthenticationController {
     @Autowired
     private final AuthenticationService authenticationService;
 
-    @PostMapping("/signUpAdmin")
-    public ResponseEntity<JwtAuthenticationResponse> signUpAdmin(@RequestBody SignUpRequest request) {
-        return authenticationService.signUpAdmin(request);
-    }
-
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
+    public ResponseEntity<String> signUpAdmin(@RequestBody SignUpRequest request) {
         return authenticationService.signUp(request);
     }
+
+//    @PostMapping("/signUp")
+//    public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
+//        return authenticationService.signUp(request);
+//    }
 
     @PostMapping("/signIn")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody SignInRequest request) {
