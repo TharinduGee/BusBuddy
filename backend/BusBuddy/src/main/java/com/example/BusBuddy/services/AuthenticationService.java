@@ -46,6 +46,8 @@ public class AuthenticationService {
                   .mobileNo(request.getMobileNo())
                   .business(business)
                   .build();
+
+          userService.save(user);
       }else{
           var user = User
                   .builder()
@@ -56,6 +58,7 @@ public class AuthenticationService {
                   .role(request.getRole())
                   .mobileNo(request.getMobileNo())
                   .build();
+          userService.save(user);
       }
 
       return ResponseEntity.status(HttpStatus.CREATED).body("Account is created successfully.");
