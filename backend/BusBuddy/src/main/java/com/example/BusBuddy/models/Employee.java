@@ -48,9 +48,6 @@ public class Employee {
     @NotNull(message = "Name is mandatory")
     private String name;
 
-//    @Lob
-//    @Column(name = "image", columnDefinition = "BYTEA")
-//    private byte[] imageData;
 
     @Column(
             name = "joinedDate"
@@ -74,9 +71,9 @@ public class Employee {
     private Float salary;
 
     @Enumerated(EnumType.STRING)
-   private EmployeeType designation;
+    private EmployeeType designation;
 
-    @OneToOne(mappedBy = "employee" ,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "employee" , fetch = FetchType.LAZY)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -87,7 +84,8 @@ public class Employee {
     private Business business;
 
     @OneToOne(
-            mappedBy = "employee"
+            mappedBy = "employee",
+            fetch = FetchType.LAZY
     )
     private Document document;
 

@@ -62,7 +62,7 @@ public class Document {
     )
     private Business business;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "empId",
             foreignKey = @ForeignKey(name = "fk_empId"),
