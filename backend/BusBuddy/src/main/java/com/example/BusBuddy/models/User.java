@@ -2,6 +2,8 @@ package com.example.BusBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -94,6 +96,7 @@ public class User implements UserDetails {
           name = "empId",
           foreignKey =  @ForeignKey(name = "fk_empId")
   )
+  @OnDelete(action = OnDeleteAction.SET_NULL)
   private  Employee employee;
 
   LocalDateTime createdAt;
