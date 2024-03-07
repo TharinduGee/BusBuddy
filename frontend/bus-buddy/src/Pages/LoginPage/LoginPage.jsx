@@ -28,9 +28,14 @@ function LoginPage() {
           password: credentials.password
         }
       );
-
+  
       console.log("Response:", response.data);
-
+  
+      if (response.data.token) {
+        // Save JWT token in localStorage
+        localStorage.setItem("token", response.data.token);
+      }
+  
       if (response.data.role === "ROLE_ADMIN") {
         // Navigate to dashboard
         window.location.href = "/dashbord";
@@ -39,7 +44,7 @@ function LoginPage() {
         window.location.href = "/DriverDashboard";
       }
       else if (response.data.role === "ROLE_CONDUCTOR"){
-        window.location.href = "/ConductorDashbaord";
+        window.location.href = "/ConductorDashboard";
       }
       else if (response.data.role === "ROLE_SUPPORTER"){
         window.location.href = "/SupporterDashboard";
@@ -60,18 +65,18 @@ function LoginPage() {
           } 
             // Handle other 400 errors if needed
           
-        } if (error.response.status === 404) {
-          // Check if the error is due to bad credentials
+        } else if (error.response.status === 404) {
+          // Check if the error is due to user not found
            if (
             error.response.data &&
             error.response.data === "User is not found."
           ) {
-            // Display an alert for incorrect email or password
+            // Display an alert for user not found
             alert("User is not found.");
           }
-            // Handle other 400 errors if needed
+            // Handle other 404 errors if needed
           
-        }else if (error.response.status === 406) {
+        } else if (error.response.status === 406) {
           // Check if the error is due to user not assigned
           if (
             error.response.data &&
@@ -87,6 +92,7 @@ function LoginPage() {
       }
     }
   };
+  
 
   return (
     <div>
