@@ -7,10 +7,19 @@ import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.services.RouteService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 
 @RestController
 @AllArgsConstructor
@@ -31,17 +40,20 @@ public class RouteController {
 
     }
 
-    @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RouteResponse> add(HttpServletRequest httpServletRequest, @RequestBody @Valid  RouteRequest request){
-        return routeService.add(httpServletRequest, request);
-    }
-
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> edit(@RequestBody RouteEditRequest request){
-        return routeService.edit(request);
+    public ResponseEntity<String> edit(@RequestParam @NotBlank(message = "This field can't be empty") Long routeId ,
+                                      @RequestParam @NotBlank(message = "This field can't be empty") String startDestination,
+                                      @RequestParam @NotBlank(message = "This field can't be empty")  String endDestination,
+                                      @RequestParam double distance,
+                                      @RequestParam Integer noOfSections,
+                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @NotNull(message = "Date should be selected")
+                                      Date permitExpDate,
+                                      @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        return routeService.edit(routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
     }
+
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('ADMIN')")

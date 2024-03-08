@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,6 +29,13 @@ public class GlobalExceptionHandler {
             errorMap.put(error.getField(), error.getDefaultMessage());
         });
         return  errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<String> handleMissingServletRequestParameterException(@NotNull MissingServletRequestParameterException ex){
+        String error = "Field empty : " + ex.getParameterName() ;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)

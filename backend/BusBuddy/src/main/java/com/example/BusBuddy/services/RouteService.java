@@ -3,12 +3,17 @@ package com.example.BusBuddy.services;
 import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Route.RouteEditRequest;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
-import com.example.BusBuddy.dto.Route.RouteRequest;
 import com.example.BusBuddy.dto.Route.RouteResponse;
+import com.example.BusBuddy.models.DocCategory;
+import com.example.BusBuddy.models.Document;
 import com.example.BusBuddy.models.Route;
+import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.RouteRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +23,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +36,9 @@ import java.util.stream.Collectors;
 public class RouteService {
     private final RouteRepository routeRepository;
     private  final BusinessService businessService;
+    private final DocumentService documentService;
     private final ModelMapper modelMapper;
+    private final DocumentRepository documentRepository;
 
     public ResponseEntity<RoutePaginationResponse> findRoutes(
             HttpServletRequest httpServletRequest,
@@ -67,17 +78,6 @@ public class RouteService {
 
         return ResponseEntity.status(HttpStatus.OK).body(routePaginationResponse);
 
-//        if(startDestination != null && !startDestination.isEmpty()) {
-//            List<Route> routes = routeRepository.findByBusinessAndStartDestinationContaining(
-//                    businessService.extractBId(httpServletRequest),startDestination
-//            );
-//            return routes.stream().map((element) -> modelMapper.map(element, RouteResponse.class))
-//                    .collect(Collectors.toList());
-//        }else{
-//            List<Route> routes = routeRepository.findByBusiness(businessService.extractBId(httpServletRequest));
-//            return routes.stream().map((element) -> modelMapper.map(element, RouteResponse.class))
-//                    .collect(Collectors.toList());
-//        }
     }
 
     public ResponseEntity<RoutePaginationResponse> findAll(int pageNumber,
@@ -102,29 +102,63 @@ public class RouteService {
 
     }
 
-    public ResponseEntity<RouteResponse> add(HttpServletRequest httpServletRequest, @RequestBody RouteRequest routeRequest){
+    @Transactional
+    public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+                                             String startDestination,
+                                             String endDestination,
+                                             double distance,
+                                             Integer noOfSections,
+                                             Date permitExpDate,
+                                             MultipartFile file) throws IOException {
+
+
         Route route = Route.builder()
-                .startDestination(routeRequest.getStartDestination())
-                .endDestination(routeRequest.getEndDestination())
-                .distance(routeRequest.getDistance())
-                .noOfSections(routeRequest.getNoOfSections())
-                .permitExpDate(routeRequest.getPermitExpDate())
+                .startDestination(startDestination)
+                .endDestination(endDestination)
+                .distance(distance)
+                .noOfSections(noOfSections)
+                .permitExpDate(permitExpDate)
                 .business(businessService.extractBId(httpServletRequest))
                 .build();
 
         route = routeRepository.save(route);
-        return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(route, RouteResponse.class));
+
+        if(file != null){
+            documentService.add(file,httpServletRequest,
+                    DocCategory.DOC_CATEGORY_ROUTE_PERMIT,
+                    file.getOriginalFilename(),
+                    route.getRouteId()
+                    );
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Route added successfully");
     }
 
-    public ResponseEntity<String> edit(@RequestBody RouteEditRequest routeRequest){
-        Route editedRoute = routeRepository.findById(routeRequest.getRouteId())
+    @Transactional
+    public ResponseEntity<String> edit(
+            Long routeId,
+            String startDestination,
+            String endDestination,
+            double distance,
+            Integer noOfSections,
+            Date permitExpDate,
+            MultipartFile file) throws IOException {
+        Route editedRoute = routeRepository.findById(routeId)
                 .orElseThrow(()-> new EntityNotFoundException("Route Not found."));
-        editedRoute.setStartDestination(routeRequest.getStartDestination());
-        editedRoute.setEndDestination(routeRequest.getEndDestination());
-        editedRoute.setDistance(routeRequest.getDistance());
-        editedRoute.setNoOfSections(routeRequest.getNoOfSections());
-        editedRoute.setPermitExpDate(routeRequest.getPermitExpDate());
-        editedRoute = routeRepository.save(editedRoute);
+
+        if(!file.isEmpty()){
+            Document document = editedRoute.getDocument();
+            document.setData(file.getBytes());
+            documentRepository.save(document);
+        }
+
+        editedRoute.setStartDestination(startDestination);
+        editedRoute.setEndDestination(endDestination);
+        editedRoute.setDistance(distance);
+        editedRoute.setNoOfSections(noOfSections);
+        editedRoute.setPermitExpDate(permitExpDate);
+        routeRepository.save(editedRoute);
+
         return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
     }
 
