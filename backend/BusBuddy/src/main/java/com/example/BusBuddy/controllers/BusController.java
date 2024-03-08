@@ -19,6 +19,7 @@ import javax.persistence.EntityNotFoundException;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:3000")
 public class BusController {
     private final BusService busService;
 

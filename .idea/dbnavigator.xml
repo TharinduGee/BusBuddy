@@ -24,10 +24,19 @@
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files />
+    <open-files>
+      <object connection-id="0be7b5e2-ccaa-43b5-83fd-86f3399b94fe" object-ref="schemas/public/tables/users" />
+    </open-files>
+  </component>
+  <component name="DBNavigator.Project.DatabaseSessionManager">
+    <connection id="0be7b5e2-ccaa-43b5-83fd-86f3399b94fe" />
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="0be7b5e2-ccaa-43b5-83fd-86f3399b94fe" dataset="public.users" active-filter-id="" />
+    <filter-actions connection-id="0be7b5e2-ccaa-43b5-83fd-86f3399b94fe" dataset="public.users" active-filter-id="22c6891d-2719-4999-99af-739e090a4541">
+      <filter id="22c6891d-2719-4999-99af-739e090a4541" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="id" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
     <filter-actions connection-id="0be7b5e2-ccaa-43b5-83fd-86f3399b94fe" dataset="public.bus" active-filter-id="" />
     <filter-actions connection-id="0be7b5e2-ccaa-43b5-83fd-86f3399b94fe" dataset="public._user" active-filter-id="46ff20b6-a45b-4c68-a79a-987f1e9e1c0e">
       <filter id="46ff20b6-a45b-4c68-a79a-987f1e9e1c0e" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">

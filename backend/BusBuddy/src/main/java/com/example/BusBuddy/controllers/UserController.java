@@ -33,10 +33,10 @@ public class UserController {
         return userService.uploadImage(httpServletRequest, file);
     }
 
-//    @GetMapping("/getImage")
-//    public ResponseEntity<byte[]> retrieveImage(HttpServletRequest httpServletRequest) throws IOException {
-//        return userService.getImage(httpServletRequest);
-//    }
+    @GetMapping("/getImage")
+    public ResponseEntity<byte[]> retrieveImage(HttpServletRequest httpServletRequest) throws IOException {
+        return userService.getImage(httpServletRequest);
+    }
 
     @RequestMapping("/{id}")
     User showUserForm(@PathVariable("id") User user) {

@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/trip")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TripController {
 
     private final TripService tripService;

@@ -5,9 +5,12 @@ import com.example.BusBuddy.dto.User.UserResponse;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,7 @@ public class UserService {
         }
     }
 
+
   public ResponseEntity<String> uploadImage(HttpServletRequest httpServletRequest, MultipartFile imageFile) throws IOException {
       String username = (String) httpServletRequest.getAttribute("username");
       User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
@@ -56,24 +60,25 @@ public class UserService {
   }
 
 
-//    public ResponseEntity<byte[]> getImage(HttpServletRequest httpServletRequest) {
-//        String username = (String) httpServletRequest.getAttribute("username");
-//        User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
-//                "User is not found."
-//        ));
-//
-//
-//        if (user.getImage() == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//        byte[] imageData = user.getImage();
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.valueOf(MediaType.IMAGE_JPEG_VALUE));
-//        headers.setContentLength(imageData.length);
-//
-//        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
-//    }
+    @Transactional
+    public ResponseEntity<byte[]> getImage(HttpServletRequest httpServletRequest) {
+        String username = (String) httpServletRequest.getAttribute("username");
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
+                "User is not found."
+        ));
+
+
+        if (user.getImage() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        byte[] imageData = user.getImage();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(MediaType.IMAGE_JPEG_VALUE));
+        headers.setContentLength(imageData.length);
+
+        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+    }
 
 
   public User save(User newUser) {

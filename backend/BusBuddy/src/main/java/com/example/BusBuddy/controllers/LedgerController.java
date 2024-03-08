@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("api/v1/ledger")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class LedgerController {
 
     private final LedgerService ledgerService;
