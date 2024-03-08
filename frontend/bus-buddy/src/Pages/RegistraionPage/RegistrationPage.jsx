@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
 import "./RegistraionPage.css";
 import TextField from "@mui/material/TextField";
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 function RegistrationPage() {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -33,16 +34,24 @@ function RegistrationPage() {
 
   const handlePostRequest = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8081/api/v1/signUp",
-        user
-      );
-      window.location.href = "/userrole";
-      console.log("Response:", response.data);
+      navigate('/userrole', { state: { user: user } }); // Pass user data as state
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  // const handlePostRequest = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8081/api/v1/signUp",
+  //       user
+  //     );
+  //     window.location.href = "/userrole";
+  //     console.log("Response:", response.data);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   const [checkbox1, setCheckbox1] = useState(false);
   const [checkbox2, setCheckbox2] = useState(false);
