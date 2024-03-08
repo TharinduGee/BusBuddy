@@ -38,7 +38,7 @@ public class RouteService {
         Page<Route> routePage;
         if(startDestination != null && !startDestination.isEmpty()){
             routePage =
-                    routeRepository.findByBusinessAndStartDestinationContaining(
+                    routeRepository.findByBusinessAndStartDestinationContainingIgnoreCase(
                             businessService.extractBId(httpServletRequest) ,
                             startDestination,
                             pageable

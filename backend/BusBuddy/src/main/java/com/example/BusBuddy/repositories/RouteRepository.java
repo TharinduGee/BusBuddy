@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface RouteRepository extends JpaRepository <Route, Long> {
 
-    Page<Route> findByBusinessAndStartDestinationContaining(Business business , String startDestination, Pageable pageable );
+    Page<Route> findByBusinessAndStartDestinationContainingIgnoreCase(Business business , String startDestination, Pageable pageable );
 
     Page<Route> findByBusiness(Business business , Pageable pageable );
 

@@ -29,6 +29,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final ModelMapper modelMapper;
 
+
   public UserDetailsService userDetailsService() {
       return username -> userRepository.findByEmail(username)
               .orElseThrow(() -> new EntityNotFoundException("User not found"));
