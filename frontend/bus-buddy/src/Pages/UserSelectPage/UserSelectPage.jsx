@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./UserSelectPage.css";
@@ -7,8 +7,8 @@ import SteeringWheel from "../../Assets/SteeringWheel.png"
 import User from "../../Assets/User.png"
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 
-function UserSelectPage() {
-  const navigate = useNavigate();
+function UserSelectPage({ location }) {
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const [user, setUser] = useState({
     firstName: "",
@@ -17,26 +17,38 @@ function UserSelectPage() {
     password: "",
     mobileNo: "",
     confirm_password: "",
-    role:"",
+    role: "", // Include role in user state
   });
 
   const [selectedRole, setSelectedRole] = useState("");
+
+  useEffect(() => {
+    // Retrieve user data from props if available
+    if (location && location.state && location.state.user) {
+      setUser(location.state.user);
+    }
+  }, [location]);
+
   
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setUser({
-      ...user,
-      [e.target.name]: value,
-    });
-  };
-
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
     setUser({
       ...user,
-      role: role, 
+      role: mapRoleToApiRole(role), // Set the selected role in the user state
     });
+  };
+
+  const mapRoleToApiRole = (role) => {
+    switch (role) {
+      case "Owner":
+        return "ROLE_ADMIN";
+      case "Driver":
+        return "ROLE_DRIVER";
+      case "Conductor":
+        return "ROLE_CONDUCTOR";
+      default:
+        return "";
+    }
   };
 
   const handlePostRequest = async () => {
