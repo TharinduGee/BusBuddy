@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./UserSelectPage.css";
 import Briefcase from "../../Assets/Briefcase.png"
 import SteeringWheel from "../../Assets/SteeringWheel.png"
@@ -7,6 +8,8 @@ import User from "../../Assets/User.png"
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 
 function UserSelectPage() {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -14,9 +17,11 @@ function UserSelectPage() {
     password: "",
     mobileNo: "",
     confirm_password: "",
+    role:"",
   });
 
   const [selectedRole, setSelectedRole] = useState("");
+  
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -28,16 +33,20 @@ function UserSelectPage() {
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
+    setUser({
+      ...user,
+      role: role, 
+    });
   };
 
   const handlePostRequest = async () => {
     try {
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
-        { ...user, role: selectedRole } 
+        user // Send the updated user data including the selected role
       );
-
       console.log("Response:", response.data);
+      navigate('/login'); // Navigate to the login page after successful account creation
     } catch (error) {
       console.error("Error:", error);
     }
