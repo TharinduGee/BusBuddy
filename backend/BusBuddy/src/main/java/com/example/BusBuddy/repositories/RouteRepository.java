@@ -14,6 +14,4 @@ public interface RouteRepository extends JpaRepository <Route, Long> {
 
     Page<Route> findByBusiness(Business business , Pageable pageable );
 
-
-    //List<Route> findByBusinessAndStartDestinationContaining(Business business, String startDestination);
 }

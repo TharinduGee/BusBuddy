@@ -13,10 +13,12 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BusResponse {
-    private Long bId;
+    private Long busId;
     private Date lastServiceDate;
     private String numberPlate;
     private String regNo;
     private BusType type;
     private Integer seats;
+    private Long docId;
+    private String docName;
 }

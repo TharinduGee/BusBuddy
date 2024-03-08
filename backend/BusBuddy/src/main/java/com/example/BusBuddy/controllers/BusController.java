@@ -5,6 +5,7 @@ import com.example.BusBuddy.dto.Bus.BusAddRequest;
 import com.example.BusBuddy.dto.Bus.BusAddResponse;
 import com.example.BusBuddy.dto.Bus.BusEditRequest;
 import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
+import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,34 +19,50 @@ import javax.persistence.EntityNotFoundException;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/bus")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BusController {
     private final BusService busService;
 
-    @PostMapping("/bus/add")
+    @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BusAddResponse> add(HttpServletRequest httpRequest, @RequestBody @Valid BusAddRequest request){
         return busService.add(httpRequest,request);
     }
 
-    @GetMapping("/bus/findById")
+    @GetMapping("/findById")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Bus> findById(@RequestParam Long busId)  {
         return busService.findByBusId(busId);
     }
 
 
-    @PostMapping("/bus/edit")
+    @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Bus> edit(@RequestBody @Valid BusEditRequest request)  {
         return busService.editBus(request);
     }
 
-    @GetMapping("/bus/findAll")
+    @GetMapping("/findAll")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BusPaginationResponse> findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                          @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize) {
         return busService.findAll(pageNumber , pageSize);
+    }
+
+    @GetMapping("/findBuses")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BusPaginationResponse> findRoutes(HttpServletRequest httpServletRequest,
+                                                              @RequestParam(value = "pageNo", defaultValue = "0" , required = false)int pageNumber,
+                                                              @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize,
+                                                              @RequestParam(required = false) String numberPlate
+    ){
+        return busService.findBuses(httpServletRequest, pageNumber, pageSize, numberPlate);
+    }
+
+    @GetMapping("/count")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest) {
+        return busService.countBus(httpServletRequest);
     }
 }
