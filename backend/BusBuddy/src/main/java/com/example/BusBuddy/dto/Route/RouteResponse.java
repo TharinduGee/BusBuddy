@@ -1,5 +1,6 @@
 package com.example.BusBuddy.dto.Route;
 
+import com.example.BusBuddy.models.Document;
 import lombok.*;
 
 import java.util.Date;
@@ -15,4 +16,6 @@ public class RouteResponse {
     private double distance;
     private Integer noOfSections;
     private Date permitExpDate;
+    private Long docId;
+    private String docName;
 }

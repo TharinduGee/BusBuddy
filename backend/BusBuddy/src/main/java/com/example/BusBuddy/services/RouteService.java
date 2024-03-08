@@ -40,6 +40,7 @@ public class RouteService {
     private final ModelMapper modelMapper;
     private final DocumentRepository documentRepository;
 
+    @Transactional
     public ResponseEntity<RoutePaginationResponse> findRoutes(
             HttpServletRequest httpServletRequest,
             int pageNumber,
@@ -64,7 +65,18 @@ public class RouteService {
 
         List<Route> routes = routePage.getContent();
         List<RouteResponse> routeResponses = routes.stream()
-                .map((element) -> modelMapper.map(element, RouteResponse.class))
+                .map(route ->
+                    RouteResponse.builder()
+                            .routeId(route.getRouteId())
+                            .startDestination(route.getStartDestination())
+                            .endDestination(route.getEndDestination())
+                            .distance(route.getDistance())
+                            .noOfSections(route.getNoOfSections())
+                            .permitExpDate(route.getPermitExpDate())
+                            .docId(route.getDocument() != null ? route.getDocument().getDocId() : null)
+                            .docName(route.getDocument() != null ? route.getDocument().getDocName() : null)
+                            .build()
+                )
                 .collect(Collectors.toList());
 
         RoutePaginationResponse routePaginationResponse = RoutePaginationResponse.builder()
