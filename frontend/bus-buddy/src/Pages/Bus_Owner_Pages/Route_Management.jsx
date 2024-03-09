@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
@@ -17,6 +17,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function Route_Management() {
+  const token = localStorage.getItem("token");
+
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -99,23 +101,24 @@ function Route_Management() {
   });
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "firstName", headerName: "First name", width: 130 },
-    { field: "lastName", headerName: "Last name", width: 130 },
+    { field: "id", headerName: "Route ID", width: 130 },
+    { field: "startDestination", headerName: "Start Destination", width: 130 },
+    { field: "endDestination", headerName: "End Destination", width: 130 },
     {
-      field: "age",
-      headerName: "Age",
+      field: "distance",
+      headerName: "Distance",
       type: "number",
       width: 90,
     },
     {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || " "} ${params.row.lastName || ""}`,
+      field: "noOfSections",
+      headerName: "Sections",
+      width: 90,
+    },
+    {
+      field: "permitExpDate",
+      headerName: "Permite Expire Date",
+      width: 150,
     },
     {
       field: "actions",
@@ -127,7 +130,7 @@ function Route_Management() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row.id)}
+            onClick={() => handleEdit(params.row)}
           >
             <EditNoteSharpIcon />
           </IconButton>
@@ -144,52 +147,162 @@ function Route_Management() {
     },
   ];
 
-  const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  const [value, setValue] = useState(dayjs("2022-04-17"));
+  const [routeId, setrouteId] = useState("");
   const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [routeData, setRouteDate] = useState({
+    startDestination: "",
+    endDestination: "",
+    distance: 0,
+    noOfSections: 0,
+    permitExpDate: value,
+  });
 
+  const handleEdit = (e) => {
+    setrouteId(e.id);
+    setValue(dayjs(e.permitExpDate));
+    setRouteDate({
+      startDestination: e.startDestination,
+      endDestination: e.endDestination,
+      distance: e.distance,
+      noOfSections: e.noOfSections,
+      permitExpDate: value,
+    });
+
+    setisUpdateButtonDisabled(false);
+    setisAddButtonDisabled(true);
+    console.log(routeId);
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setRouteDate({
+      ...routeData,
+      [e.target.id]: value,
+    });
+    console.log(routeData);
+  };
+
+  const AddRoute = () => {
+    axios
+      .post(`http://localhost:8081/api/v1/route/add`, routeData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        console.log("Data successfully posted:", response.data);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+    setRouteDate({
+      startDestination: "",
+      endDestination: "",
+      distance: 0,
+      noOfSections: 0,
+      permitExpDate: dayjs("2022-04-17"),
+    });
+  };
+
+  const UpdateRoute = () => {
+    const updateData = {
+      ...routeData,
+      routeId: routeId,
+    };
+    console.log(updateData.permitExpDate);
+    axios
+      .post(`http://localhost:8081/api/v1/route/edit`, updateData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        console.log("Data successfully Edited:", response.data);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+    setRouteDate({
+      startDestination: "",
+      endDestination: "",
+      distance: 0,
+      noOfSections: 0,
+      permitExpDate: dayjs("2022-04-17"),
+    });
+  };
+
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+    page: 0,
+    pageSize: 5,
+  });
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
 
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJiX2lkIjoiNiIsImF1ZCI6IjYiLCJzdWIiOiJuZWRmc3lyeWZhIiwiaWF0IjoxNzA4MTEyNjQ0LCJleHAiOjE3MDgxMTYyNDR9.0tH3rYp92j3aLtouaOxueSj7Uc957wUQqSwEdl570GY";
-    axios
-      .get(
-        `http://localhost:8081/api/v1/nullBusinessAndEmail?email=${searchInput}`,
+    // axios
+    //   .get(
+    //     `http://localhost:8081/api/v1/route/findRoutes?pageNo=0&pageSize=5&startDestination=${searchInput}`,
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     }
+    //   )
+    //   .then((response) => {
+    //     const formattedData = response.data.content.map((routeData) => ({
+    //       id: routeData.routeId,
+    //       startDestination: routeData.startDestination,
+    //       endDestination: routeData.endDestination,
+    //       distance: routeData.distance,
+    //       noOfSections: routeData.noOfSections,
+    //       permitExpDate: routeData.permitExpDate.split("T")[0],
+    //     }));
+    //     setRows(formattedData);
+    //     console.log(response.formattedData);
+    //   })
+    //   .catch((error) => {
+    //     console.error("There was an error!", error);
+    //   });
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: true,
+      }));
+      const response = await fetch(
+        `http://localhost:8081/api/v1/route/findRoutes?pageNo=${pageState.page}&pageSize=${pageState.pageSize}&startDestination=badulla`,
         {
+          method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token}`,
           },
         }
-      )
-      .then((response) => {
-        const fetchedData = response.data;
-        const formattedData = fetchedData.map((user) => ({
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          mobileNo: user.mobileNo,
-          role: user.role,
-        }));
-        setRows(formattedData);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  };
-  const [value, setValue] = React.useState(dayjs("2022-04-17"));
+      );
+      console.log(response);
+      // const formattedData = response.data.content.map((routeData) => ({
+      //   id: routeData.routeId,
+      //   startDestination: routeData.startDestination,
+      //   endDestination: routeData.endDestination,
+      //   distance: routeData.distance,
+      //   noOfSections: routeData.noOfSections,
+      //   permitExpDate: routeData.permitExpDate.split("T")[0],
+      // }));
+
+      // setPageState((old) => ({
+      //   ...old,
+      //   isLoading: false,
+      //   data: formattedData,
+      //   total: response.data.totalElements,
+      // }));
+    };
+    fetchData();
+  }, [pageState.page, pageState.pageSize, searchInput]);
 
   return (
     <Sidebar>
@@ -202,7 +315,7 @@ function Route_Management() {
             <ThemeProvider theme={theme}>
               <TextField
                 id="outlined-basic"
-                label="Search by Email"
+                label="Search by Start Destination"
                 variant="outlined"
                 onChange={handleSearchInputChange}
                 InputProps={{
@@ -226,16 +339,31 @@ function Route_Management() {
             >
               <ThemeProvider theme={table_theme}>
                 <DataGrid
-                  rows={rows_}
+                  rows={pageState.data}
+                  rowCount={pageState.total}
+                  loading={pageState.isLoading}
+                  pagination
+                  page={pageState.page}
+                  pageSize={pageState.pageSize}
+                  paginationMode="server"
+                  onPageChange={(newPage) =>
+                    setPageState((old) => ({ ...old, pageSize: newPage }))
+                  }
+                  onPageSizeChange={(newPageSize) =>
+                    setPageState((old) => ({ ...old, pageSize: newPageSize }))
+                  }
                   columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  // onRowClick={handleRowClick}
-                  pageSizeOptions={[5, 10]}
-                  rowHeight={40}
+
+                  // rows={rows_}
+                  // columns={columns}
+                  // initialState={{
+                  //   pagination: {
+                  //     paginationModel: { page: 0, pageSize: 5 },
+                  //   },
+                  // }}
+                  // // onRowClick={handleRowClick}
+                  // pageSizeOptions={[5, 10]}
+                  // rowHeight={40}
                 />
               </ThemeProvider>
             </div>
@@ -251,16 +379,20 @@ function Route_Management() {
                 <label class="form-label">Start Destination*</label>
                 <input
                   type="text"
-                  id="Start_Destination"
+                  id="startDestination"
                   class="form-control input-field"
+                  value={routeData.startDestination}
+                  onChange={handleChange}
                 />
               </div>
               <div className="input-and-label">
                 <label class="form-label">End Destination*</label>
                 <input
                   type="text"
-                  id="End_Destination"
+                  id="endDestination"
                   class="form-control input-field"
+                  value={routeData.endDestination}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -269,16 +401,20 @@ function Route_Management() {
                 <label class="form-label">Distance*</label>
                 <input
                   type="text"
-                  id="Distance"
+                  id="distance"
                   class="form-control input-field"
+                  value={routeData.distance}
+                  onChange={handleChange}
                 />
               </div>
               <div className="input-and-label">
                 <label class="form-label">Number of Sections*</label>
                 <input
                   type="text"
-                  id="Number_of_Sections"
+                  id="noOfSections"
                   class="form-control input-field"
+                  value={routeData.noOfSections}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -290,7 +426,13 @@ function Route_Management() {
                     <DatePicker
                       sx={{ width: 300 }}
                       value={value}
-                      onChange={(newValue) => setValue(newValue)}
+                      onChange={(newValue) =>
+                        setRouteDate({
+                          ...routeData,
+                          permitExpDate: newValue,
+                        })
+                      }
+                      id="permitExpDate"
                     />
                   </LocalizationProvider>
                 </ThemeProvider>
@@ -324,6 +466,7 @@ function Route_Management() {
                 className="d-flex  update-btn"
                 variant="contained"
                 disabled={isAddButtonDisabled}
+                onClick={AddRoute}
               >
                 Add Route
               </Button>
@@ -332,6 +475,7 @@ function Route_Management() {
                 className="d-flex  update-btn"
                 variant="contained"
                 disabled={isUpdateButtonDisabled}
+                onClick={UpdateRoute}
               >
                 Update Route
               </Button>
