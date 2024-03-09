@@ -2,6 +2,7 @@ package com.example.BusBuddy.repositories;
 
 import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Employee;
+import com.example.BusBuddy.models.EmployeeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Page<Employee> findByBusiness(Business business , Pageable pageable);
     Page<Employee> findByBusinessAndNameContaining(Business business ,String name, Pageable pageable);
+
+    Long countByBusiness(Business business);
+    Long countByBusinessAndDesignation(Business business, EmployeeType type);
 }

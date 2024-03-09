@@ -1,14 +1,8 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
-import com.example.BusBuddy.dto.Employee.EmployeeAddRequest;
-import com.example.BusBuddy.dto.Employee.EmployeeEditReq;
-import com.example.BusBuddy.dto.Employee.EmployeePaginationResponse;
-import com.example.BusBuddy.dto.Employee.EmployeeResponse;
-import com.example.BusBuddy.models.Business;
-import com.example.BusBuddy.models.Employee;
-import com.example.BusBuddy.models.EmployeeType;
-import com.example.BusBuddy.models.User;
+import com.example.BusBuddy.dto.Employee.*;
+import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.EmployeeRepository;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -129,9 +123,21 @@ public class EmployeeService {
         return ResponseEntity.status(HttpStatus.OK).body("Successfully Deleted.");
     }
 
+    public ResponseEntity<EmployeeCountResponse> countEmployee(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        Long totalCount = employeeRepository.countByBusiness(business);
+        Long driverCount = employeeRepository.countByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
+        Long conductorCount = employeeRepository.countByBusinessAndDesignation(business, EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
+        EmployeeCountResponse employeeCountResponse = EmployeeCountResponse.builder().totalCount(totalCount)
+                .driverCount(driverCount).conductorCount(conductorCount).build();
+        return ResponseEntity.ok(employeeCountResponse);
+    }
+
+
     public Employee extractEmpId(HttpServletRequest httpServletRequest){
         String str = (String) httpServletRequest.getAttribute("emp_id");
         long bId = Long.parseLong(str);
         return employeeRepository.findById(bId).orElseThrow(() -> new RuntimeException("Business not found."));
     }
+
 }

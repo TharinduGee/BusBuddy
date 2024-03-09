@@ -1,7 +1,6 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
-import com.example.BusBuddy.dto.Route.RouteEditRequest;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.models.DocCategory;
@@ -11,9 +10,7 @@ import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.RouteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,12 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

@@ -61,6 +61,7 @@ public class UserService {
   }
 
 
+
     @Transactional
     public ResponseEntity<byte[]> getImage(HttpServletRequest httpServletRequest) {
         String username = (String) httpServletRequest.getAttribute("username");
@@ -79,6 +80,16 @@ public class UserService {
         headers.setContentLength(imageData.length);
 
         return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<String> getUsername(HttpServletRequest httpServletRequest) {
+        String username = (String) httpServletRequest.getAttribute("username");
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
+                "User is not found."
+        ));
+        String fullName = user.getFirstName() + " " + user.getLastName();
+        return  ResponseEntity.ok(fullName);
     }
 
 
