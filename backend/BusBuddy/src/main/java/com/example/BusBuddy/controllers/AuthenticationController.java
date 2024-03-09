@@ -4,6 +4,7 @@ import com.example.BusBuddy.dto.Authentication.JwtAuthenticationResponse;
 import com.example.BusBuddy.dto.Authentication.SignInRequest;
 import com.example.BusBuddy.dto.Authentication.SignUpRequest;
 import com.example.BusBuddy.services.AuthenticationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> signUpAdmin(@RequestBody SignUpRequest request) {
+    public ResponseEntity<String> signUpAdmin(@RequestBody @Valid SignUpRequest request) {
         return authenticationService.signUp(request);
     }
 
