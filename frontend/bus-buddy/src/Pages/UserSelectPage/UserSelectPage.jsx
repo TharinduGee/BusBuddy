@@ -17,7 +17,7 @@ function UserSelectPage() {
     email: "",
     password: "",
     mobileNo: "",
-    role: "", // Include role in user state
+    role: "",
   });
 
   useEffect(() => {
@@ -35,7 +35,7 @@ function UserSelectPage() {
     setSelectedRole(role);
     setUser({
       ...user,
-      role: mapRoleToApiRole(role), // Set the selected role in the user state
+      role: mapRoleToApiRole(role), 
     });
   };
 
@@ -54,13 +54,13 @@ function UserSelectPage() {
 
   const handlePostRequest = async () => {
     try {
-      console.log("User Data:", user);
+      
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
-        user // Send the updated user data including the selected role
+        user 
       );
       console.log("Response:", response.data);
-      navigate('/login'); // Navigate to the login page after successful account creation
+      navigate('/login'); 
     } catch (error) {
       console.error("Error:", error);
     }
