@@ -24,11 +24,6 @@ public class AuthenticationController {
         return authenticationService.signUp(request);
     }
 
-//    @PostMapping("/signUp")
-//    public ResponseEntity<String> signUp(@RequestBody SignUpRequest request) {
-//        return authenticationService.signUp(request);
-//    }
-
     @PostMapping("/signIn")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody SignInRequest request) {
         return authenticationService.signIn(request);

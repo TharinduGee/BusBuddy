@@ -1,7 +1,9 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.dto.Ledger.DailyFinanceResponse;
 import com.example.BusBuddy.dto.Ledger.LedgerAddRequest;
+import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Ledger;
 import com.example.BusBuddy.models.TransactionType;
 import com.example.BusBuddy.models.Trip;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Tuple;
 import java.time.LocalDateTime;
 
 @Service
@@ -56,5 +59,16 @@ public class LedgerService {
         return ResponseEntity.status(HttpStatus.OK).body("Ledger entry is removed.");
     }
 
+    public ResponseEntity<DailyFinanceResponse> dailyIncome(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime startOfDay = localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime endOfDay = localDateTime.withHour(23).withMinute(59).withSecond(59).withNano(0);
+        Float dailyIncome = ledgerRepository.dailyIncome(business, startOfDay , endOfDay );
+        Float dailyExpense = ledgerRepository.dailyExpense(business, startOfDay , endOfDay );
+        DailyFinanceResponse dailyFinanceResponse = DailyFinanceResponse.builder()
+                .income(dailyIncome).expense(dailyExpense).build();
+        return ResponseEntity.ok(dailyFinanceResponse);
+    }
 
 }

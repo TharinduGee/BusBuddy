@@ -136,7 +136,6 @@ public class BusService {
                 .last(busPage.isLast()).build();
 
         return ResponseEntity.ok(busPaginationResponse);
-
     }
 
     public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest){
