@@ -64,6 +64,13 @@ function Sidebar({ children }) {
       });
     }
   };
+
+
+  const handleLogOut = () =>{
+    localStorage.clear();
+    window.location.href = "/";
+  };
+  
   return (
     <div className="sidebar-container">
       <div className="menu" onClick={togglemenu}>
@@ -193,7 +200,7 @@ function Sidebar({ children }) {
         <div className="line"></div>
         <a className="logout" href="#">
           <FiLogOut className="logout-btn ms-4 py-2" />
-          <span>Log Out</span>
+          <span onClick={handleLogOut}>Log Out</span>
         </a>
         <div></div>
       </div>
