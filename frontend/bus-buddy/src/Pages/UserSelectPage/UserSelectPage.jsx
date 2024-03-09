@@ -6,31 +6,32 @@ import Briefcase from "../../Assets/Briefcase.png"
 import SteeringWheel from "../../Assets/SteeringWheel.png"
 import User from "../../Assets/User.png"
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
+import {useLocation} from 'react-router-dom';
 
-function UserSelectPage({ location }) {
-  const navigate = useNavigate(); // Initialize useNavigate
-
+function UserSelectPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     mobileNo: "",
-    confirm_password: "",
     role: "", // Include role in user state
   });
 
+  useEffect(() => {
+    if (location.state && location.state.userpre) {
+      setUser(location.state.userpre);
+    }
+  }, [location.state]);
+
+
   const [selectedRole, setSelectedRole] = useState("");
 
-  useEffect(() => {
-    // Retrieve user data from props if available
-    if (location && location.state && location.state.user) {
-      setUser(location.state.user);
-    }
-  }, [location]);
-
-  
   const handleRoleSelect = (role) => {
+
+    console.log("User Data:", user);
     setSelectedRole(role);
     setUser({
       ...user,
@@ -53,6 +54,7 @@ function UserSelectPage({ location }) {
 
   const handlePostRequest = async () => {
     try {
+      console.log("User Data:", user);
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
         user // Send the updated user data including the selected role
