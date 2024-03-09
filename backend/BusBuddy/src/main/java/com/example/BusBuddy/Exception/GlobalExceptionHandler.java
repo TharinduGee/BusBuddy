@@ -1,5 +1,6 @@
 package com.example.BusBuddy.Exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.spi.ErrorMessage;
@@ -20,6 +21,13 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<String> handleExpiredJwtException(@NotNull ExpiredJwtException ex){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
