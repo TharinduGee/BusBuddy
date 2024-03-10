@@ -138,7 +138,7 @@ function Route_Management() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -185,12 +185,24 @@ function Route_Management() {
   };
 
   const AddRoute = () => {
+    const file = null;
+    const year = routeData.permitExpDate.year();
+    const month = routeData.permitExpDate.month() + 1;
+    const day = routeData.permitExpDate.date();
+    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+
     axios
-      .post(`http://localhost:8081/api/v1/route/add`, routeData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+        file,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(function (response) {
         console.log("Data successfully posted:", response.data);
       })
@@ -214,13 +226,17 @@ function Route_Management() {
       ...routeData,
       routeId: routeId,
     };
-    console.log(updateData.permitExpDate);
+    const file = null;
     axios
-      .post(`http://localhost:8081/api/v1/route/edit`, updateData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        `http://localhost:8081/api/v1/route/edit?routeId=22&startDestination=dsad&endDestination=sadas&distance=11&noOfSections=11&permitExpDate=2022-01-01`,
+        file,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(function (response) {
         console.log("Data successfully Edited:", response.data);
       })
@@ -235,7 +251,21 @@ function Route_Management() {
       permitExpDate: dayjs("2022-04-17"),
     });
   };
-
+  const handleDelete = (id) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log("Data successfully deleted:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error deleting data:", error.message);
+      });
+  };
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -400,10 +430,13 @@ function Route_Management() {
                       sx={{ width: 300 }}
                       value={value}
                       onChange={(newValue) =>
-                        setRouteDate({
-                          ...routeData,
-                          permitExpDate: newValue,
-                        })
+                        setRouteDate(
+                          {
+                            ...routeData,
+                            permitExpDate: newValue,
+                          },
+                          console.log(routeData.permitExpDate)
+                        )
                       }
                       id="permitExpDate"
                     />
