@@ -7,6 +7,7 @@ import com.example.BusBuddy.dto.Bus.BusEditRequest;
 import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.models.Bus;
+import com.example.BusBuddy.models.BusType;
 import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -14,8 +15,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
+import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @AllArgsConstructor
@@ -26,8 +30,14 @@ public class BusController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> add(HttpServletRequest httpRequest, @RequestBody @Valid BusAddRequest request){
-        return busService.add(httpRequest,request);
+    public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+                                      @RequestParam BusType type,
+                                      @RequestParam String numberPlate,
+                                      @RequestParam(required = false) Date lastServicedDate,
+                                      @RequestParam(required = false)  int seats,
+                                      @RequestParam(required = false)  String regNo,
+                                      @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        return busService.add(httpServletRequest, type, numberPlate, lastServicedDate, seats, regNo, file);
     }
 
     @GetMapping("/findById")

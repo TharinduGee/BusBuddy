@@ -105,21 +105,52 @@ CREATE TABLE IF NOT EXISTS public.ledger
 
 -- DROP TABLE IF EXISTS public.route;
 
-CREATE TABLE IF NOT EXISTS public.route
+CREATE TABLE IF NOT EXISTS public.document
 (
-    route_id bigint NOT NULL,
-    distance double precision,
-    end_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    no_of_sections integer,
-    permit_exp_date timestamp(6) without time zone NOT NULL,
-    start_destination character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    doc_id bigint NOT NULL,
+    category character varying(255) COLLATE pg_catalog."default",
+    url oid NOT NULL,
+    doc_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    upload_date date NOT NULL,
+    bus_id bigint,
     b_id bigint,
-    CONSTRAINT route_pkey PRIMARY KEY (route_id),
+    emp_id bigint,
+    ledger_id bigint,
+    route_id bigint,
+    trip_id bigint,
+    CONSTRAINT document_pkey PRIMARY KEY (doc_id),
+    CONSTRAINT uk_19lq2be43frqvblksyjvj9npf UNIQUE (bus_id),
+    CONSTRAINT uk_34908216eg03sndwtwsduhnn8 UNIQUE (trip_id),
+    CONSTRAINT uk_7otucbqypmer3117i581ov423 UNIQUE (route_id),
+    CONSTRAINT uk_7wnjpthjualjlcs9q3ydlf5rp UNIQUE (emp_id),
+    CONSTRAINT uk_kr4c2gratnln35htg3xhcxre9 UNIQUE (ledger_id),
     CONSTRAINT fk_bid FOREIGN KEY (b_id)
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE CASCADE
-);
+        ON DELETE CASCADE,
+    CONSTRAINT fk_busid FOREIGN KEY (bus_id)
+        REFERENCES public.bus (bus_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_empid FOREIGN KEY (emp_id)
+        REFERENCES public.employee (emp_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_ledgerid FOREIGN KEY (ledger_id)
+        REFERENCES public.ledger (ledger_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_routeid FOREIGN KEY (route_id)
+        REFERENCES public.route (route_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_tripid FOREIGN KEY (trip_id)
+        REFERENCES public.trip (trip_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT document_category_check CHECK (category::text = ANY (ARRAY['DOC_CATEGORY_NIC'::character varying, 'DOC_CATEGORY_SERVICE_AGREEMENT'::character varying, 'DOC_CATEGORY_ROUTE_PERMIT'::character varying, 'DOC_CATEGORY_UNSPECIFIED'::character varying]::text[]))
+)
+
 
 
 -- Table: public.trip
