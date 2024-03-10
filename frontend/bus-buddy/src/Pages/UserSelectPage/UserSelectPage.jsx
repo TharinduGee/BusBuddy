@@ -31,7 +31,7 @@ function UserSelectPage() {
 
   const handleRoleSelect = (role) => {
 
-    console.log("User Data:", user);
+    
     setSelectedRole(role);
     setUser({
       ...user,
@@ -54,7 +54,7 @@ function UserSelectPage() {
 
   const handlePostRequest = async () => {
     try {
-      
+      console.log("userdata",user);
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
         user 
