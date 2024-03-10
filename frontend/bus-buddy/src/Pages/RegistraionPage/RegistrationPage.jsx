@@ -34,8 +34,8 @@ function RegistrationPage() {
 
   const handlePassRequest = async () => {
     try {
-      console.log("User Data:", user);
-      navigate('/userrole', { state: { userpre: user } }); // Pass user data as state
+      
+      navigate('/userrole', { state: { userpre: user } }); 
     } catch (error) {
       console.error("Error:", error);
     }
