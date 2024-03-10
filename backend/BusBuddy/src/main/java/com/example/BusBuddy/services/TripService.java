@@ -154,37 +154,41 @@ public class TripService {
         return ResponseEntity.status(HttpStatus.OK).body("Trip is successfully deleted");
     }
 
-    public ResponseEntity<List<TripResponse>> findTripForDriver(HttpServletRequest httpServletRequest,LocalDate date){
-        Employee driver = employeeService.extractEmpId(httpServletRequest);
-        List<Trip> trips = tripRepository.findByDateAndDriver(date , driver);
-        List<TripResponse> tripResponseList = trips.stream().map(
-                trip -> TripResponse.builder()
-                        .startDestination(trip.getRoute().getStartDestination())
-                        .endDestination(trip.getRoute().getEndDestination())
-                        .startTime(trip.getStartTime())
-                        .endTime(trip.getEndTime())
-                        .employeeName(trip.getConductor().getName())
-                        .status(trip.getStatus())
-                        .build())
-                .toList();
+    public ResponseEntity<List<TripResponse>> findTripForEmployee(HttpServletRequest httpServletRequest,LocalDate date){
+        Employee employee = employeeService.extractEmpId(httpServletRequest);
+        List<Trip> trips = tripRepository.findByDateAndDriver(date , employee);
+        List<TripResponse> tripResponseList ;
+        if(employee.getDesignation() == EmployeeType.EMPLOYEE_TYPE_DRIVER){
+            tripResponseList = trips.stream().map(
+                            trip -> TripResponse.builder()
+                                    .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
+                                    .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
+                                    .startTime(trip.getStartTime())
+                                    .endTime(trip.getEndTime())
+                                    .employeeName(trip.getConductor() != null ? trip.getConductor().getName() : null)
+                                    .status(trip.getStatus())
+                                    .build())
+                    .toList();
+        }
+        else if(employee.getDesignation() == EmployeeType.EMPLOYEE_TYPE_CONDUCTOR){
+            tripResponseList = trips.stream().map(
+                            trip -> TripResponse.builder()
+                                    .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
+                                    .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
+                                    .startTime(trip.getStartTime())
+                                    .endTime(trip.getEndTime())
+                                    .employeeName(trip.getDriver() != null ? trip.getDriver().getName() : null)
+                                    .status(trip.getStatus())
+                                    .build())
+                    .toList();
+        }else{
+            throw new InternalError("Employee type can't be identified.");
+        }
+
         return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
     }
 
-    public ResponseEntity<List<TripResponse>> findTripForConductor(HttpServletRequest httpServletRequest,LocalDate date){
-        Employee conductor = employeeService.extractEmpId(httpServletRequest);
-        List<Trip> trips = tripRepository.findByDateAndConductor(date , conductor);
-        List<TripResponse> tripResponseList = trips.stream().map(
-                        trip -> TripResponse.builder()
-                                .startDestination(trip.getRoute().getStartDestination())
-                                .endDestination(trip.getRoute().getEndDestination())
-                                .startTime(trip.getStartTime())
-                                .endTime(trip.getEndTime())
-                                .employeeName(trip.getDriver().getName())
-                                .status(trip.getStatus())
-                                .build())
-                .toList();
-        return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
-    }
+
 
     @Scheduled(fixedRate = 300000)// check every 5 minutes
     public void checkTrips(){
