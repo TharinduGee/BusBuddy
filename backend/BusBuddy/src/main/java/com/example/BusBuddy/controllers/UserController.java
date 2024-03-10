@@ -38,6 +38,11 @@ public class UserController {
         return userService.getImage(httpServletRequest);
     }
 
+    @GetMapping("/getUsername")
+    public ResponseEntity<String> getUsername(HttpServletRequest httpServletRequest) throws IOException {
+        return userService.getUsername(httpServletRequest);
+    }
+
     @RequestMapping("/{id}")
     User showUserForm(@PathVariable("id") User user) {
         return user;

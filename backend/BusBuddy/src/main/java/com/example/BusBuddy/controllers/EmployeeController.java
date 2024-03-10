@@ -1,9 +1,6 @@
 package com.example.BusBuddy.controllers;
 
-import com.example.BusBuddy.dto.Employee.EmployeeAddRequest;
-import com.example.BusBuddy.dto.Employee.EmployeeEditReq;
-import com.example.BusBuddy.dto.Employee.EmployeePaginationResponse;
-import com.example.BusBuddy.dto.Employee.EmployeeResponse;
+import com.example.BusBuddy.dto.Employee.*;
 import com.example.BusBuddy.models.Employee;
 import com.example.BusBuddy.services.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,6 +53,12 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> removeEmployee(@RequestParam Long empId){
         return employeeService.removeEmployee(empId);
+    }
+
+    @GetMapping("/countEmployee")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<EmployeeCountResponse> countEmployee(HttpServletRequest httpServletRequest){
+        return employeeService.countEmployee(httpServletRequest);
     }
 
 }

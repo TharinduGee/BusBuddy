@@ -32,26 +32,14 @@ function RegistrationPage() {
     confirm_password: false,
   });
 
-  const handlePostRequest = async () => {
+  const handlePassRequest = async () => {
     try {
-      navigate('/userrole', { state: { user: user } }); // Pass user data as state
+      
+      navigate('/userrole', { state: { userpre: user } }); 
     } catch (error) {
       console.error("Error:", error);
     }
   };
-
-  // const handlePostRequest = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:8081/api/v1/signUp",
-  //       user
-  //     );
-  //     window.location.href = "/userrole";
-  //     console.log("Response:", response.data);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   const [checkbox1, setCheckbox1] = useState(false);
   const [checkbox2, setCheckbox2] = useState(false);
@@ -255,7 +243,7 @@ function RegistrationPage() {
             <button
               className="btn me-md-2 next-btn"
               type="button"
-              onClick={handlePostRequest}
+              onClick={handlePassRequest}
               disabled={isButtonDisabled}
               style={buttonStyle}
             >

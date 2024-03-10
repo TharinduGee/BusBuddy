@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./UserSelectPage.css";
@@ -6,47 +6,61 @@ import Briefcase from "../../Assets/Briefcase.png"
 import SteeringWheel from "../../Assets/SteeringWheel.png"
 import User from "../../Assets/User.png"
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
+import {useLocation} from 'react-router-dom';
 
 function UserSelectPage() {
+  const location = useLocation();
   const navigate = useNavigate();
-
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     mobileNo: "",
-    confirm_password: "",
-    role:"",
+    role: "",
   });
 
-  const [selectedRole, setSelectedRole] = useState("");
-  
+  useEffect(() => {
+    if (location.state && location.state.userpre) {
+      setUser(location.state.userpre);
+    }
+  }, [location.state]);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setUser({
-      ...user,
-      [e.target.name]: value,
-    });
-  };
+
+  const [selectedRole, setSelectedRole] = useState("");
 
   const handleRoleSelect = (role) => {
+
+    console.log("User Data:", user);
     setSelectedRole(role);
     setUser({
       ...user,
-      role: role, 
+      role: mapRoleToApiRole(role), 
     });
+  };
+
+  const mapRoleToApiRole = (role) => {
+    switch (role) {
+      case "Owner":
+        return "ROLE_SYSTEM_ADMIN";
+      case "Driver":
+        return "ROLE_DRIVER";
+      case "Conductor":
+        return "ROLE_CONDUCTOR";
+      default:
+        return "";
+    }
   };
 
   const handlePostRequest = async () => {
     try {
+      
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
-        user // Send the updated user data including the selected role
+        user 
       );
       console.log("Response:", response.data);
-      navigate('/login'); // Navigate to the login page after successful account creation
+      navigate('/login'); 
     } catch (error) {
       console.error("Error:", error);
     }
