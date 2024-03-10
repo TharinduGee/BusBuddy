@@ -205,6 +205,9 @@ function Route_Management() {
       permitExpDate: dayjs("2022-04-17"),
     });
   };
+  const handleSearchInputChange = async (event) => {
+    setSearchInput(event.target.value);
+  };
 
   const UpdateRoute = () => {
     const updateData = {
@@ -237,37 +240,12 @@ function Route_Management() {
     isLoading: false,
     data: [],
     total: 0,
+  });
+
+  const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
     pageSize: 5,
   });
-  const handleSearchInputChange = (event) => {
-    setSearchInput(event.target.value);
-
-    // axios
-    //   .get(
-    //     `http://localhost:8081/api/v1/route/findRoutes?pageNo=0&pageSize=5&startDestination=${searchInput}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   )
-    //   .then((response) => {
-    //     const formattedData = response.data.content.map((routeData) => ({
-    //       id: routeData.routeId,
-    //       startDestination: routeData.startDestination,
-    //       endDestination: routeData.endDestination,
-    //       distance: routeData.distance,
-    //       noOfSections: routeData.noOfSections,
-    //       permitExpDate: routeData.permitExpDate.split("T")[0],
-    //     }));
-    //     setRows(formattedData);
-    //     console.log(response.formattedData);
-    //   })
-    //   .catch((error) => {
-    //     console.error("There was an error!", error);
-    //   });
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -275,34 +253,44 @@ function Route_Management() {
         ...old,
         isLoading: true,
       }));
-      const response = await fetch(
-        `http://localhost:8081/api/v1/route/findRoutes?pageNo=${pageState.page}&pageSize=${pageState.pageSize}&startDestination=badulla`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `${token}`,
-          },
-        }
-      );
-      console.log(response);
-      // const formattedData = response.data.content.map((routeData) => ({
-      //   id: routeData.routeId,
-      //   startDestination: routeData.startDestination,
-      //   endDestination: routeData.endDestination,
-      //   distance: routeData.distance,
-      //   noOfSections: routeData.noOfSections,
-      //   permitExpDate: routeData.permitExpDate.split("T")[0],
-      // }));
 
-      // setPageState((old) => ({
-      //   ...old,
-      //   isLoading: false,
-      //   data: formattedData,
-      //   total: response.data.totalElements,
-      // }));
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/v1/route/findRoutes?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&startDestination=${searchInput}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const formattedData = response.data.content.map((routeData) => ({
+          id: routeData.routeId,
+          startDestination: routeData.startDestination,
+          endDestination: routeData.endDestination,
+          distance: routeData.distance,
+          noOfSections: routeData.noOfSections,
+          permitExpDate: routeData.permitExpDate.split("T")[0],
+        }));
+        console.log(formattedData);
+
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: formattedData,
+          total: response.data.totalElements,
+        }));
+      } catch (error) {
+        console.error("There was an error!", error);
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+        }));
+      }
     };
+
     fetchData();
-  }, [pageState.page, pageState.pageSize, searchInput]);
+  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
 
   return (
     <Sidebar>
@@ -340,30 +328,15 @@ function Route_Management() {
               <ThemeProvider theme={table_theme}>
                 <DataGrid
                   rows={pageState.data}
-                  rowCount={pageState.total}
-                  loading={pageState.isLoading}
-                  pagination
-                  page={pageState.page}
-                  pageSize={pageState.pageSize}
-                  paginationMode="server"
-                  onPageChange={(newPage) =>
-                    setPageState((old) => ({ ...old, pageSize: newPage }))
-                  }
-                  onPageSizeChange={(newPageSize) =>
-                    setPageState((old) => ({ ...old, pageSize: newPageSize }))
-                  }
+                  page={pageState.page - 1}
                   columns={columns}
-
-                  // rows={rows_}
-                  // columns={columns}
-                  // initialState={{
-                  //   pagination: {
-                  //     paginationModel: { page: 0, pageSize: 5 },
-                  //   },
-                  // }}
-                  // // onRowClick={handleRowClick}
-                  // pageSizeOptions={[5, 10]}
-                  // rowHeight={40}
+                  loading={pageState.isLoading}
+                  rowCount={pageState.total}
+                  paginationModel={paginationModel}
+                  paginationMode="server"
+                  onPaginationModelChange={setPaginationModel}
+                  pageSizeOptions={[5, 10]}
+                  rowHeight={40}
                 />
               </ThemeProvider>
             </div>
