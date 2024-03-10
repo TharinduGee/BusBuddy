@@ -146,17 +146,29 @@ function Route_Management() {
       ),
     },
   ];
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+    const fileInput = e.target;
+    const selectedFile = fileInput.files[0];
 
-  const [value, setValue] = useState(dayjs("2022-04-17"));
+    if (selectedFile) {
+      console.log("File name:", selectedFile.name);
+      console.log("File size (in bytes):", selectedFile.size);
+      console.log("File type:", selectedFile.type);
+    } else {
+      console.log("No file selected.");
+    }
+  };
+
+  const [value, setValue] = useState(null);
   const [routeId, setrouteId] = useState("");
-  const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [routeData, setRouteDate] = useState({
     startDestination: "",
     endDestination: "",
-    distance: 0,
-    noOfSections: 0,
-    permitExpDate: value,
+    distance: null,
+    noOfSections: null,
   });
 
   const handleEdit = (e) => {
@@ -176,16 +188,15 @@ function Route_Management() {
   };
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    const value_ = e.target.value;
     setRouteDate({
       ...routeData,
-      [e.target.id]: value,
+      [e.target.id]: value_,
     });
     console.log(routeData);
   };
 
   const AddRoute = () => {
-    const file = null;
     const year = routeData.permitExpDate.year();
     const month = routeData.permitExpDate.month() + 1;
     const day = routeData.permitExpDate.date();
@@ -205,16 +216,19 @@ function Route_Management() {
       )
       .then(function (response) {
         console.log("Data successfully posted:", response.data);
+        console.log(file);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+    setFile(null);
+    setValue(null);
+    setrouteId(null);
     setRouteDate({
       startDestination: "",
       endDestination: "",
-      distance: 0,
-      noOfSections: 0,
-      permitExpDate: dayjs("2022-04-17"),
+      distance: "",
+      noOfSections: "",
     });
   };
   const handleSearchInputChange = async (event) => {
@@ -226,10 +240,16 @@ function Route_Management() {
       ...routeData,
       routeId: routeId,
     };
-    const file = null;
+    const year = routeData.permitExpDate.year();
+    const month = routeData.permitExpDate.month() + 1;
+    const day = routeData.permitExpDate.date();
+    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+
     axios
       .post(
-        `http://localhost:8081/api/v1/route/edit?routeId=22&startDestination=dsad&endDestination=sadas&distance=11&noOfSections=11&permitExpDate=2022-01-01`,
+        `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
         file,
         {
           headers: {
@@ -239,16 +259,21 @@ function Route_Management() {
       )
       .then(function (response) {
         console.log("Data successfully Edited:", response.data);
+        console.log(file);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+    setFile(null);
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
+    setValue(null);
     setRouteDate({
       startDestination: "",
       endDestination: "",
-      distance: 0,
-      noOfSections: 0,
-      permitExpDate: dayjs("2022-04-17"),
+      distance: "",
+      noOfSections: "",
+      permitExpDate: value,
     });
   };
   const handleDelete = (id) => {
@@ -321,6 +346,21 @@ function Route_Management() {
 
     fetchData();
   }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+
+  const clear = () => {
+    setFile(null);
+    setValue(null);
+    setRouteDate({
+      startDestination: "",
+      endDestination: "",
+      distance: "",
+      noOfSections: "",
+      permitExpDate: "",
+    });
+
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
+  };
 
   return (
     <Sidebar>
@@ -455,14 +495,8 @@ function Route_Management() {
                   type="file"
                   class="form-control input-field-choosefile "
                   id="inputGroupFile02"
+                  onChange={handleFileChange}
                 />
-                <Button_
-                  style={{ height: 35 }}
-                  class="input-group-text"
-                  for="inputGroupFile02"
-                >
-                  Upload
-                </Button_>
               </div>
             </div>
 
@@ -475,6 +509,20 @@ function Route_Management() {
                 onClick={AddRoute}
               >
                 Add Route
+              </Button>
+              <Button
+                style={{
+                  borderRadius: 10,
+                  margin: 30,
+                  backgroundColor: "#ff760d",
+                  color: "white",
+                }}
+                className="d-flex  update-btn"
+                variant="contained"
+                onClick={clear}
+                disabled={false}
+              >
+                Clear
               </Button>
               <Button
                 style={buttonStyle_Update}
