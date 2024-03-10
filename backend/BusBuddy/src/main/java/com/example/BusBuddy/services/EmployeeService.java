@@ -19,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,18 +87,26 @@ public class EmployeeService {
     }
 
     @Transactional
-    public EmployeeResponse save(HttpServletRequest httpRequest ,EmployeeAddRequest request){
-        Business business = businessService.extractBId(httpRequest);
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(()->new EntityNotFoundException("User Not found."));
+    public String add(HttpServletRequest httpServletRequest,
+                                String name,
+                                Float salary,
+                                Date joinedDate,
+                                Date bDay,
+                                EmployeeType designation,
+                                String email,
+                                MultipartFile file){
+        Business business = businessService.extractBId(httpServletRequest);
+        User user = userRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException("User Not found."));
         if(user.getEmployee() != null){
             throw new EntityNotFoundException("User is enrolled to a another business.");
         }
         Employee employee = Employee.builder()
                 .designation(EmployeeType.valueOf("EMPLOYEE_TYPE_" + user.getRole().toString().substring(5)))
-                .salary(request.getSalary())
-                .bDay(request.getBDay())
-                .name(request.getName())
-                .joinedDate(request.getJoinedDate())
+                .salary(salary)
+                .bDay(bDay)
+                .name(name)
+                .joinedDate(joinedDate)
+                .designation(designation)
                 .business(business)
                 .build();
 
@@ -106,7 +116,7 @@ public class EmployeeService {
         user.setBusiness(business);
         userRepository.save(user);
 
-        return modelMapper.map(employee, EmployeeResponse.class);
+        return "User enrolled to the business as a employee.";
     }
 
     public ResponseEntity<String> editEmployee(EmployeeEditReq request){

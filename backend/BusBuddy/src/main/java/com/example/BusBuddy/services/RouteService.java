@@ -168,7 +168,7 @@ public class RouteService {
         return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
     }
 
-    public ResponseEntity<String> remove(@RequestParam long routeId){
+    public ResponseEntity<String> remove(long routeId){
         routeRepository.deleteById(routeId);
         return ResponseEntity.ok("Successfully Deleted");
     }

@@ -36,12 +36,14 @@ public class EmployeeController {
         return employeeService.findEmployees(httpServletRequest,name, pageNumber, pageSize);
     }
 
-    @PostMapping("/add")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EmployeeResponse>  addEmployee(HttpServletRequest httpRequest ,  @RequestBody @Valid EmployeeAddRequest request){
-                EmployeeResponse newEmployee = employeeService.save(httpRequest , request);
-                return ResponseEntity.status(HttpStatus.OK).body(newEmployee);
-    }
+//    @PostMapping("/add")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<EmployeeResponse>  add(HttpServletRequest httpRequest ,
+//                                                 @RequestBody @Valid EmployeeAddRequest request){
+//
+//        EmployeeResponse newEmployee = employeeService.add(httpRequest , request);
+//                return ResponseEntity.status(HttpStatus.OK).body(newEmployee);
+//    }
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")

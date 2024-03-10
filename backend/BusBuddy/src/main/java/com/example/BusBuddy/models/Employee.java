@@ -83,8 +83,7 @@ public class Employee {
     private Business business;
 
     @OneToOne(
-            mappedBy = "employee",
-            fetch = FetchType.LAZY
+            mappedBy = "employee"
     )
     private Document document;
 
