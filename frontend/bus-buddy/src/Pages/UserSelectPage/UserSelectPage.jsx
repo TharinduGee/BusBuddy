@@ -70,7 +70,7 @@ function UserSelectPage() {
     <div>
       <div className="d-flex justify-content-center">
         <div className="user_container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
-          <div className="justify-content-start">Back</div>
+          <button className="back-button" onClick={() => navigate('/signup')}>Back</button>
           <div className="userrole-text-main">Select User Role</div>
           
           <div className="row d-flex justify-content-around">
