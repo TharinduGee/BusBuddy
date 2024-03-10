@@ -43,8 +43,7 @@ public class DocumentService {
                 .business(businessService.extractBId(httpServletRequest))
                 .uploadDate(LocalDate.now())
                 .build();
-        if(category == DocCategory.DOC_CATEGORY_NIC ||
-                category == DocCategory.DOC_CATEGORY_SERVICE_AGREEMENT){
+        if(category == DocCategory.DOC_CATEGORY_SERVICE_AGREEMENT){
             Employee employee = employeeRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Employee is not found."));
             doc.setCategory(category);

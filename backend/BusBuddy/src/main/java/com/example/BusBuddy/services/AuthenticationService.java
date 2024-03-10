@@ -12,6 +12,7 @@ import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,7 +32,7 @@ public class AuthenticationService {
   private final BusinessService businessService;
 
   @Transactional
-  public ResponseEntity<String> signUp(SignUpRequest request) {
+  public ResponseEntity<String> signUp(@NotNull SignUpRequest request) {
 
       if(request.getRole() ==  Role.ROLE_ADMIN){
           var business =  new Business();
@@ -64,26 +65,7 @@ public class AuthenticationService {
       return ResponseEntity.status(HttpStatus.CREATED).body("Account is created successfully.");
   }
 
-
-//    public ResponseEntity<String> signUp(SignUpRequest request) {
-//
-//        var user = User
-//                .builder()
-//                .firstName(request.getFirstName())
-//                .lastName(request.getLastName())
-//                .email(request.getEmail())
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .role(request.getRole())
-//                .mobileNo(request.getMobileNo())
-//                .build();
-//
-//        user = userService.save(user);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Account is successfully created.");
-//    }
-
-
-  public ResponseEntity<JwtAuthenticationResponse> signIn(SignInRequest request) {
+  public ResponseEntity<JwtAuthenticationResponse> signIn(@NotNull SignInRequest request) {
         var user = userRepository.findByEmail(request.getEmail())
               .orElseThrow(() -> new EntityNotFoundException("User is not found."));
           authenticationManager.authenticate(
@@ -103,7 +85,8 @@ public class AuthenticationService {
 
   }
 
-  public JwtAuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest){
+  @Transactional
+  public JwtAuthenticationResponse refreshToken(@NotNull RefreshTokenRequest refreshTokenRequest){
       String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
       User user = userRepository.findByEmail(userEmail).orElseThrow();
       if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user )){

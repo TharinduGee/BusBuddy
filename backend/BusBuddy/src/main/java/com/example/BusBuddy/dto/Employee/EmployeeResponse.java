@@ -15,11 +15,13 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeResponse {
-    private String empId;
+    private Long empId;
     private String name;
     private Float salary;
     private Date bDay;
     private Integer age;
     private Date joinedDate;
     private EmployeeType designation;
+    private Long docId;
+    private String docName;
 }

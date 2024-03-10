@@ -21,18 +21,18 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping("/findAll")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<EmployeePaginationResponse>  findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                                @RequestParam(value = "pageSize", defaultValue = "6" , required = false)int pageSize){
         return employeeService.findAll(pageNumber, pageSize);
     }
 
-    @GetMapping("/findByBusiness")
+    @GetMapping("/findEmployees")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EmployeePaginationResponse>  findEmployeesByBusiness(HttpServletRequest httpServletRequest,
+    public ResponseEntity<EmployeePaginationResponse>  findEmployees(HttpServletRequest httpServletRequest,
             @RequestParam(value = "name" , required = false) String name,
-                                                                               @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
-                                                               @RequestParam(value = "pageSize", defaultValue = "6" , required = false)int pageSize){
+                                                                     @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                               @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize){
         return employeeService.findEmployees(httpServletRequest,name, pageNumber, pageSize);
     }
 

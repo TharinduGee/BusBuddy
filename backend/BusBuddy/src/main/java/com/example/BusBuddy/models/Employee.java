@@ -45,7 +45,6 @@ public class Employee {
             name = "name",
             nullable = false
     )
-    @NotNull(message = "Name is mandatory")
     private String name;
 
 
@@ -55,8 +54,7 @@ public class Employee {
     private Date joinedDate;
 
     @Column(
-            name = "bDay",
-            nullable = true
+            name = "bDay"
     )
     private Date bDay;
 
@@ -66,14 +64,15 @@ public class Employee {
     private Integer age;
 
     @Column(
-            name = "salary"
+            name = "salary",
+            nullable = false
     )
     private Float salary;
 
     @Enumerated(EnumType.STRING)
     private EmployeeType designation;
 
-    @OneToOne(mappedBy = "employee" , fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "employee")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

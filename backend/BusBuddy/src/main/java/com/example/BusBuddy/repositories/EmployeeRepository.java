@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     Page<Employee> findByBusiness(Business business , Pageable pageable);
-    Page<Employee> findByBusinessAndNameContaining(Business business ,String name, Pageable pageable);
 
     Long countByBusiness(Business business);
     Long countByBusinessAndDesignation(Business business, EmployeeType type);
+    Page<Employee> findByBusinessAndNameContainingIgnoreCase(Business business , String firstName , Pageable pageable);
 }

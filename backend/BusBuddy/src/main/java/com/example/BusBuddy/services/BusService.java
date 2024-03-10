@@ -12,6 +12,7 @@ import com.example.BusBuddy.repositories.BusinessRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,20 +31,19 @@ public class BusService {
     private final BusinessService businessService;
     private final ModelMapper modelMapper;
 
-    public ResponseEntity<BusAddResponse> add(HttpServletRequest httpRequest, BusAddRequest request){
 
-        Bus newBus = Bus.builder().regNo(request.getRegNo())
-                .type(request.getType()).seats(request.getSeats())
+    public ResponseEntity<String> add(HttpServletRequest httpRequest, @NotNull BusAddRequest request){
+        Bus newBus = Bus.builder()
+                .type(request.getType())
+                .seats(request.getSeats())
+                .regNo(request.getRegNo())
+                .numberPlate(request.getNumberPlate())
+                .lastServiceDate(request.getLastServicedDate())
                 .business(businessService.extractBId(httpRequest))
                 .build();
         Bus bus = busRepository.save(newBus);
-        BusAddResponse busAddResponse = BusAddResponse.builder()
-                .seats(newBus.getSeats())
-                .numberPlate(newBus.getNumberPlate())
-                .regNo(newBus.getRegNo())
-                .bId(newBus.getBusId())
-                .build();
-        return ResponseEntity.ok(busAddResponse);
+
+        return ResponseEntity.ok("Bus added successfully.");
     }
 
     public ResponseEntity<Bus> findByBusId(Long busId ) {
@@ -53,7 +53,7 @@ public class BusService {
         return ResponseEntity.ok(bus);
     }
 
-    public ResponseEntity<Bus> editBus(BusEditRequest request) {
+    public ResponseEntity<Bus> editBus(@NotNull BusEditRequest request) {
         Bus bus = busRepository.findById(request.getBusId())
                 .orElseThrow(() -> new EntityNotFoundException("Bus not found"));
         bus.setSeats(request.getSeats());

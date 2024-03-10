@@ -6,18 +6,24 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class BusAddRequest {
-    BusType type;
+    @NotNull(message = "Type : null")
+    private BusType type;
 
-    @NotBlank(message = "This field can't be null")
-    String numberPlate;
+    @NotBlank(message = "NumberPlate : null")
+    private String numberPlate;
 
-    Integer seats;
+    private Date lastServicedDate;
 
-    @NotBlank(message = "This field can't be null")
-    String regNo;
+    private Integer seats;
+
+    private String regNo;
 }

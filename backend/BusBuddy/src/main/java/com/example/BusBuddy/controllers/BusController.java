@@ -26,7 +26,7 @@ public class BusController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BusAddResponse> add(HttpServletRequest httpRequest, @RequestBody @Valid BusAddRequest request){
+    public ResponseEntity<String> add(HttpServletRequest httpRequest, @RequestBody @Valid BusAddRequest request){
         return busService.add(httpRequest,request);
     }
 

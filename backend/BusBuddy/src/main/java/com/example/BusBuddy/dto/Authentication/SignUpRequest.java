@@ -21,6 +21,7 @@ public class SignUpRequest {
   @NotNull(message = "Email : null")
   String email;
   @NotNull(message = "Password : null")
+  // should add regex pattern for the password
   String password;
   @NotNull(message = "MobileNo : null")
   String mobileNo;

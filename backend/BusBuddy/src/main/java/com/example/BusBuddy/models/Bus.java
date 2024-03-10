@@ -41,9 +41,9 @@ public class Bus {
     private BusType type;
 
     @Column(
-            name = "numberPlate"
+            name = "numberPlate",
+            nullable = false
     )
-    @NotNull(message = "no null")
     private String numberPlate;
 
     @Column(

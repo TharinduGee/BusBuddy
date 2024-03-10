@@ -15,7 +15,6 @@ public class RealTimeServices {
     private final TripRepository tripRepository;
     private final BusinessService businessService;
 
-
     public Double getIncome(HttpServletRequest httpServletRequest){
         double income  = 0.0;
         List<Trip> trips =  tripRepository.findByBusiness(businessService.extractBId(httpServletRequest));

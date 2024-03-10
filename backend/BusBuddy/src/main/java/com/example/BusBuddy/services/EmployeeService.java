@@ -1,6 +1,8 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
+import com.example.BusBuddy.dto.Bus.BusResponse;
 import com.example.BusBuddy.dto.Employee.*;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.EmployeeRepository;
@@ -8,6 +10,7 @@ import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -57,7 +60,7 @@ public class EmployeeService {
         Page<Employee> employeePage;
 
         if(name != null && !name.isEmpty()){
-            employeePage = employeeRepository.findByBusinessAndNameContaining(
+            employeePage = employeeRepository.findByBusinessAndNameContainingIgnoreCase(
                     businessService.extractBId(httpServletRequest),
                     name , pageable);
         }else{
@@ -133,8 +136,61 @@ public class EmployeeService {
         return ResponseEntity.ok(employeeCountResponse);
     }
 
+    @Transactional
+    public ResponseEntity<EmployeePaginationResponse> findEmployee(
+            HttpServletRequest httpServletRequest,
+            int pageNumber,
+            int pageSize,
+            String name){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Employee> employeePage;
+        if(name != null && !name.isEmpty()){
+            employeePage =
+                    employeeRepository.findByBusinessAndNameContainingIgnoreCase(
+                            businessService.extractBId(httpServletRequest) ,
+                            name,
+                            pageable
+                    );
+        }else{
+            employeePage =
+                    employeeRepository.findByBusiness(
+                            businessService.extractBId(httpServletRequest),
+                            pageable
+                    );
+        }
 
-    public Employee extractEmpId(HttpServletRequest httpServletRequest){
+        List<Employee> employees = employeePage.getContent();
+        List<EmployeeResponse> busResponses = employees.stream()
+                .map(employee ->
+                        EmployeeResponse.builder()
+                                .empId(employee.getEmpId())
+                                .age(employee.getAge())
+                                .bDay(employee.getBDay())
+                                .salary(employee.getSalary())
+                                .designation(employee.getDesignation())
+                                .joinedDate(employee.getJoinedDate())
+                                .docId(employee.getDocument() != null ? employee.getDocument().getDocId() : null)
+                                .docName(employee.getDocument() != null ? employee.getDocument().getDocName() : null)
+                                .build()
+                )
+                .toList();
+
+        EmployeePaginationResponse employeePaginationResponse = EmployeePaginationResponse.builder()
+
+                .content(busResponses)
+                .pageSize(employeePage.getSize())
+                .pageNo(employeePage.getNumber())
+                .totalElements(employeePage.getTotalElements())
+                .totalPages(employeePage.getTotalPages())
+                .last(employeePage.isLast())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(employeePaginationResponse);
+
+    }
+
+
+    public Employee extractEmpId(@NotNull HttpServletRequest httpServletRequest){
         String str = (String) httpServletRequest.getAttribute("emp_id");
         long bId = Long.parseLong(str);
         return employeeRepository.findById(bId).orElseThrow(() -> new RuntimeException("Business not found."));

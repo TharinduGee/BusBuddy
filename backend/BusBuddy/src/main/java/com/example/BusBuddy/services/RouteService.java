@@ -118,7 +118,6 @@ public class RouteService {
                                              Date permitExpDate,
                                              MultipartFile file) throws IOException {
 
-
         Route route = Route.builder()
                 .startDestination(startDestination)
                 .endDestination(endDestination)
