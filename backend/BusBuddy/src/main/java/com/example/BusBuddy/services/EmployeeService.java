@@ -119,7 +119,7 @@ public class EmployeeService {
         return "User enrolled to the business as a employee.";
     }
 
-    public ResponseEntity<String> editEmployee(EmployeeEditReq request){
+    public ResponseEntity<String> editEmployee(@NotNull EmployeeEditReq request){
         Employee info = employeeRepository.findById(request.getEmpId())
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found with id : " + request.getEmpId()
                 ));
