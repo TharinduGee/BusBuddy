@@ -56,7 +56,9 @@ public class RouteController {
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> edit(@RequestParam Long routeId ,
+    public ResponseEntity<String> edit(
+            HttpServletRequest httpServletRequest,
+            @RequestParam Long routeId ,
                                       @RequestParam String startDestination,
                                       @RequestParam  String endDestination,
                                       @RequestParam(required = false) double distance,
@@ -65,7 +67,7 @@ public class RouteController {
                                       Date permitExpDate,
                                       @RequestParam(value = "file",required = false) MultipartFile file
     ) throws IOException {
-        return routeService.edit(routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
+        return routeService.edit(httpServletRequest, routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
     }
 
     @DeleteMapping("/remove")

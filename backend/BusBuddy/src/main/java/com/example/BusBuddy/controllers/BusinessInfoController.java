@@ -21,7 +21,8 @@ public class BusinessInfoController {
 
 
     @PostMapping("/editBusinessInfo")
-    public ResponseEntity<String> editBusinessInfo(HttpServletRequest httpServletRequest , @RequestBody BusinessEditInfoReq businessEditInfoReq){
+    public ResponseEntity<String> editBusinessInfo(HttpServletRequest httpServletRequest ,
+                                                   @RequestBody BusinessEditInfoReq businessEditInfoReq){
             return businessService.editInfo(httpServletRequest, businessEditInfoReq);
     }
 

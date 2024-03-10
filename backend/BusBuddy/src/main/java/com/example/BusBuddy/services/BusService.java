@@ -4,9 +4,7 @@ import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Bus.*;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.dto.Route.RouteResponse;
-import com.example.BusBuddy.models.Bus;
-import com.example.BusBuddy.models.Business;
-import com.example.BusBuddy.models.Route;
+import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.BusinessRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,19 +30,36 @@ import java.util.stream.Collectors;
 public class BusService {
     private final BusRepository busRepository;
     private final BusinessService businessService;
+    private final DocumentService documentService;
     private final ModelMapper modelMapper;
 
 
-    public ResponseEntity<String> add(HttpServletRequest httpRequest, @NotNull BusAddRequest request){
-        Bus newBus = Bus.builder()
-                .type(request.getType())
-                .seats(request.getSeats())
-                .regNo(request.getRegNo())
-                .numberPlate(request.getNumberPlate())
-                .lastServiceDate(request.getLastServicedDate())
-                .business(businessService.extractBId(httpRequest))
+    public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+                                      BusType type,
+                                      String numberPlate,
+                                      Date lastServicedDate,
+                                      int seats,
+                                      String regNo,
+                                      MultipartFile file
+                                      ) throws IOException {
+        Bus bus = Bus.builder()
+                .type(type)
+                .seats(seats)
+                .regNo(regNo)
+                .numberPlate(numberPlate)
+                .lastServiceDate(lastServicedDate)
+                .business(businessService.extractBId(httpServletRequest))
                 .build();
-        Bus bus = busRepository.save(newBus);
+
+        busRepository.save(bus);
+
+        if(file != null){
+            documentService.add(file,httpServletRequest,
+                    DocCategory.DOC_CATEGORY_BUS_DOC,
+                    file.getOriginalFilename(),
+                    bus.getBusId()
+            );
+        }
 
         return ResponseEntity.ok("Bus added successfully.");
     }
