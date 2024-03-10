@@ -42,7 +42,7 @@ function UserSelectPage() {
   const mapRoleToApiRole = (role) => {
     switch (role) {
       case "Owner":
-        return "ROLE_SYSTEM_ADMIN";
+        return "ROLE_ADMIN";
       case "Driver":
         return "ROLE_DRIVER";
       case "Conductor":
