@@ -19,14 +19,13 @@ public class BusinessInfoController {
 
     private final BusinessService businessService;
 
-
     @PostMapping("/editBusinessInfo")
     public ResponseEntity<String> editBusinessInfo(HttpServletRequest httpServletRequest ,
                                                    @RequestBody BusinessEditInfoReq businessEditInfoReq){
             return businessService.editInfo(httpServletRequest, businessEditInfoReq);
     }
 
-    @PostMapping("/getInfo")
+    @GetMapping("/getInfo")
     public ResponseEntity<BusinessInfo> getInfo(HttpServletRequest httpServletRequest){
         return  ResponseEntity.ok(businessService.getInfo(httpServletRequest));
     }

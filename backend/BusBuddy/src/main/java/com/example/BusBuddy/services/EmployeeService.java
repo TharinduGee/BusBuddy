@@ -1,10 +1,9 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
-import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
-import com.example.BusBuddy.dto.Bus.BusResponse;
 import com.example.BusBuddy.dto.Employee.*;
 import com.example.BusBuddy.models.*;
+import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.EmployeeRepository;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,6 +32,8 @@ public class EmployeeService {
     private final BusinessService businessService;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final DocumentRepository documentRepository;
+    private final DocumentService documentService;
 
     public ResponseEntity<EmployeePaginationResponse> findAll(int  pageNumber , int pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -88,11 +89,9 @@ public class EmployeeService {
 
     @Transactional
     public String add(HttpServletRequest httpServletRequest,
-                                String name,
                                 Float salary,
                                 Date joinedDate,
                                 Date bDay,
-                                EmployeeType designation,
                                 String email,
                                 MultipartFile file){
         Business business = businessService.extractBId(httpServletRequest);
@@ -104,9 +103,8 @@ public class EmployeeService {
                 .designation(EmployeeType.valueOf("EMPLOYEE_TYPE_" + user.getRole().toString().substring(5)))
                 .salary(salary)
                 .bDay(bDay)
-                .name(name)
+                .name(user.getFirstName()+" "+user.getLastName())
                 .joinedDate(joinedDate)
-                .designation(designation)
                 .business(business)
                 .build();
 
@@ -119,16 +117,35 @@ public class EmployeeService {
         return "User enrolled to the business as a employee.";
     }
 
-    public ResponseEntity<String> editEmployee(@NotNull EmployeeEditReq request){
-        Employee info = employeeRepository.findById(request.getEmpId())
-                .orElseThrow(() -> new EntityNotFoundException("Employee not found with id : " + request.getEmpId()
-                ));
-        info.setSalary(request.getSalary());
-        info.setSalary(request.getSalary());
+    @Transactional
+    public ResponseEntity<String> edit(
+            HttpServletRequest httpServletRequest,
+            Long empId,
+            Float salary,
+            Date joinedDate,
+            Date bDay,
+            MultipartFile file) throws IOException {
+        Employee editedEmployee = employeeRepository.findById(empId)
+                .orElseThrow(()-> new EntityNotFoundException("Employee Not found."));
 
-        employeeRepository.save(info);
+        if(file != null && editedEmployee.getDocument() != null){
+            Document document = editedEmployee.getDocument();
+            document.setData(file.getBytes());
+            documentRepository.save(document);
+        }else if(file != null){
+            documentService.add(file,httpServletRequest,
+                    DocCategory.DOC_CATEGORY_SERVICE_AGREEMENT,
+                    file.getOriginalFilename(),
+                    editedEmployee.getEmpId()
+            );
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body("Edited successfully");
+        editedEmployee.setSalary(salary);
+        editedEmployee.setJoinedDate(joinedDate);
+        editedEmployee.setBDay(bDay);
+        employeeRepository.save(editedEmployee);
+
+        return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
     }
 
     public ResponseEntity<String> removeEmployee(Long empId){

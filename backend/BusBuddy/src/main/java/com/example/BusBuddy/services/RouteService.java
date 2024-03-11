@@ -134,7 +134,7 @@ public class RouteService {
                     DocCategory.DOC_CATEGORY_ROUTE_PERMIT,
                     file.getOriginalFilename(),
                     route.getRouteId()
-                    );
+            );
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("Route added successfully");

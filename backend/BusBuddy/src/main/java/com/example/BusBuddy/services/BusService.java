@@ -7,6 +7,7 @@ import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.BusinessRepository;
+import com.example.BusBuddy.repositories.DocumentRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,17 +32,17 @@ public class BusService {
     private final BusRepository busRepository;
     private final BusinessService businessService;
     private final DocumentService documentService;
+    private final DocumentRepository documentRepository;
     private final ModelMapper modelMapper;
 
-
+    @Transactional
     public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
                                       BusType type,
                                       String numberPlate,
                                       Date lastServicedDate,
                                       int seats,
                                       String regNo,
-                                      MultipartFile file
-                                      ) throws IOException {
+                                      MultipartFile file) throws IOException {
         Bus bus = Bus.builder()
                 .type(type)
                 .seats(seats)
@@ -64,6 +65,46 @@ public class BusService {
         return ResponseEntity.ok("Bus added successfully.");
     }
 
+    public ResponseEntity<Bus> edit(
+            HttpServletRequest httpServletRequest,
+            Long busId,
+            BusType type,
+            String numberPlate,
+            Date lastServicedDate,
+            int seats,
+            String regNo,
+            MultipartFile file) throws IOException {
+        Bus editedBus = busRepository.findById(busId)
+                .orElseThrow(()-> new EntityNotFoundException("Route Not found."));
+
+        if(file != null && editedBus.getDocument() != null){
+            Document document = editedBus.getDocument();
+            document.setData(file.getBytes());
+            documentRepository.save(document);
+        }else if(file != null){
+            documentService.add(file,httpServletRequest,
+                    DocCategory.DOC_CATEGORY_ROUTE_PERMIT,
+                    file.getOriginalFilename(),
+                    editedBus.getBusId()
+            );
+        }
+
+        editedBus.setType(type);
+        editedBus.setSeats(seats);
+        editedBus.setRegNo(regNo);
+        editedBus.setNumberPlate(numberPlate);
+        editedBus.setLastServiceDate(lastServicedDate);
+        busRepository.save(editedBus);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(editedBus);
+    }
+
+    public ResponseEntity<String> remove(Long busId){
+        busRepository.deleteById(busId);
+        return ResponseEntity.ok("Successfully Deleted");
+    }
+
+
     public ResponseEntity<Bus> findByBusId(Long busId ) {
         Bus bus = busRepository.findById(busId)
                 .orElseThrow(()-> new EntityNotFoundException("Bus not found"));
@@ -71,18 +112,6 @@ public class BusService {
         return ResponseEntity.ok(bus);
     }
 
-    public ResponseEntity<Bus> editBus(@NotNull BusEditRequest request) {
-        Bus bus = busRepository.findById(request.getBusId())
-                .orElseThrow(() -> new EntityNotFoundException("Bus not found"));
-        bus.setSeats(request.getSeats());
-        bus.setNumberPlate(request.getNumberPlate());
-        bus.setRegNo(request.getRegNo());
-        bus.setType(request.getType());
-
-        Bus editedBus = busRepository.save(bus);
-
-        return ResponseEntity.ok(bus);
-    }
 
     @Transactional
     public ResponseEntity<BusPaginationResponse> findBuses(

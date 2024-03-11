@@ -1,13 +1,20 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
+import com.example.BusBuddy.dto.Route.RouteResponse;
+import com.example.BusBuddy.dto.User.UserPaginationResponse;
 import com.example.BusBuddy.dto.User.UserResponse;
+import com.example.BusBuddy.models.Route;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,16 +42,50 @@ public class UserService {
               .orElseThrow(() -> new EntityNotFoundException("User not found"));
   }
 
-    public List<UserResponse> getUsersWithNullBusinessAndEmail(String email) {
-        if (email != null && !email.isEmpty()) {
-            List<User> users= userRepository.findByBusinessIsNullAndEmailContaining(email);
-            return users.stream().map((element) -> modelMapper.map(element, UserResponse.class))
-                    .collect(Collectors.toList());
-        } else {
-            List<User> users= userRepository.findByBusinessIsNull();
-            return users.stream().map((element) -> modelMapper.map(element, UserResponse.class))
-                    .collect(Collectors.toList());
+    @Transactional
+    public ResponseEntity<UserPaginationResponse> findUnEnrolledUsers(
+            int pageNumber,
+            int pageSize,
+            String email){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<User> userPage;
+        if(email != null && !email.isEmpty()){
+            userPage =
+                    userRepository.findByBusinessIsNullAndEmailContainingIgnoreCase(
+                            email,
+                            pageable
+                    );
+        }else{
+            userPage =
+                    userRepository.findByBusinessIsNull(
+                            pageable
+                    );
         }
+
+        List<User> users = userPage.getContent();
+        List<UserResponse> userResponses = users.stream()
+                .map(user ->
+                        UserResponse.builder()
+                                .role(user.getRole())
+                                .firstName(user.getFirstName())
+                                .lastName(user.getLastName())
+                                .email(user.getEmail())
+                                .mobileNo(user.getMobileNo())
+                                .build()
+                )
+                .collect(Collectors.toList());
+
+        UserPaginationResponse userPaginationResponse = UserPaginationResponse.builder()
+                .content(userResponses)
+                .pageSize(userPage.getSize())
+                .pageNo(userPage.getNumber())
+                .totalElements(userPage.getTotalElements())
+                .totalPages(userPage.getTotalPages())
+                .last(userPage.isLast())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(userPaginationResponse);
+
     }
 
 

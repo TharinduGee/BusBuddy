@@ -2,6 +2,7 @@ package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Employee.*;
 import com.example.BusBuddy.models.Employee;
+import com.example.BusBuddy.models.EmployeeType;
 import com.example.BusBuddy.services.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -11,6 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Date;
 
 @RestController
 @AllArgsConstructor
@@ -36,19 +41,26 @@ public class EmployeeController {
         return employeeService.findEmployees(httpServletRequest,name, pageNumber, pageSize);
     }
 
-//    @PostMapping("/add")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<EmployeeResponse>  add(HttpServletRequest httpRequest ,
-//                                                 @RequestBody @Valid EmployeeAddRequest request){
-//
-//        EmployeeResponse newEmployee = employeeService.add(httpRequest , request);
-//                return ResponseEntity.status(HttpStatus.OK).body(newEmployee);
-//    }
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public  ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+                                       @RequestParam Float salary,
+                                       @RequestParam(required = false) Date joinedDate,
+                                       @RequestParam(required = false) Date bDay,
+                                       @RequestParam String email,
+                                       @RequestParam(value = "file", required = false) MultipartFile file){
+        return ResponseEntity.ok(employeeService.add(httpServletRequest, salary, joinedDate, bDay, email, file));
+    }
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public  ResponseEntity<String> editEmployee(@RequestBody @Valid EmployeeEditReq employeeEditReq){
-        return employeeService.editEmployee(employeeEditReq);
+    public  ResponseEntity<String> edit(HttpServletRequest httpServletRequest,
+                                        @RequestParam Long empId,
+                                        @RequestParam Float salary,
+                                        @RequestParam(required = false) Date joinedDate,
+                                        @RequestParam(required = false) Date bDay,
+                                        @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        return employeeService.edit(httpServletRequest, empId, salary, joinedDate, bDay, file);
     }
 
     @DeleteMapping("/remove")

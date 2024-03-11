@@ -2,10 +2,7 @@ package com.example.BusBuddy.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 import java.security.DomainLoadStoreParameter;
@@ -70,6 +67,10 @@ public class Employee {
     private Float salary;
 
     @Enumerated(EnumType.STRING)
+    @Column(
+            name = "designation",
+            nullable = false
+    )
     private EmployeeType designation;
 
     @OneToOne(mappedBy = "employee")

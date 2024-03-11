@@ -1,23 +1,18 @@
 package com.example.BusBuddy.controllers;
 
 
-import com.example.BusBuddy.dto.Bus.BusAddRequest;
-import com.example.BusBuddy.dto.Bus.BusAddResponse;
-import com.example.BusBuddy.dto.Bus.BusEditRequest;
+
 import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
-import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.models.BusType;
 import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -49,8 +44,22 @@ public class BusController {
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Bus> edit(@RequestBody @Valid BusEditRequest request)  {
-        return busService.editBus(request);
+    public ResponseEntity<String> edit(HttpServletRequest httpServletRequest,
+                                      @RequestParam Long busId,
+                                      @RequestParam BusType type,
+                                      @RequestParam String numberPlate,
+                                      @RequestParam(required = false) Date lastServicedDate,
+                                      @RequestParam(required = false)  int seats,
+                                      @RequestParam(required = false)  String regNo,
+                                      @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        busService.edit(httpServletRequest,busId, type, numberPlate, lastServicedDate, seats, regNo, file);
+        return ResponseEntity.ok("Bus edited successsfully.");
+    }
+
+    @DeleteMapping("/remove")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> remove(@RequestParam Long busId) {
+        return busService.remove(busId);
     }
 
     @GetMapping("/findAll")
