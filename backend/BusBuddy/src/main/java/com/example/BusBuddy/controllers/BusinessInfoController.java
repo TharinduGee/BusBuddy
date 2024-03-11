@@ -26,7 +26,7 @@ public class BusinessInfoController {
             return businessService.editInfo(httpServletRequest, businessEditInfoReq);
     }
 
-    @PostMapping("/getInfo")
+    @GetMapping("/getInfo")
     public ResponseEntity<BusinessInfo> getInfo(HttpServletRequest httpServletRequest){
         return  ResponseEntity.ok(businessService.getInfo(httpServletRequest));
     }
