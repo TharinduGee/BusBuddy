@@ -148,17 +148,18 @@ function Route_Management() {
   ];
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    const fileInput = e.target;
-    const selectedFile = fileInput.files[0];
+    setFile("D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf");
+    console.log(file);
+    // const fileInput = e.target;
+    // const selectedFile = fileInput.files[0];
 
-    if (selectedFile) {
-      console.log("File name:", selectedFile.name);
-      console.log("File size (in bytes):", selectedFile.size);
-      console.log("File type:", selectedFile.type);
-    } else {
-      console.log("No file selected.");
-    }
+    // if (selectedFile) {
+    //   console.log("File name:", selectedFile.name);
+    //   console.log("File size (in bytes):", selectedFile.size);
+    //   console.log("File type:", selectedFile.type);
+    // } else {
+    //   console.log("No file selected.");
+    // }
   };
 
   const [value, setValue] = useState(null);
@@ -174,6 +175,7 @@ function Route_Management() {
   const handleEdit = (e) => {
     setrouteId(e.id);
     setValue(dayjs(e.permitExpDate));
+    console.log(value);
     setRouteDate({
       startDestination: e.startDestination,
       endDestination: e.endDestination,
@@ -203,20 +205,28 @@ function Route_Management() {
     const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
       day
     ).padStart(2, "0")}`;
+    const form = new FormData();
+    form.append("file", "C:\\Users\\pabas\\Downloads\\conductor.png");
 
+    const passdata = {
+      file: "D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf",
+    };
     axios
       .post(
         `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
-        file,
+        form,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data; boundary=---011000010111000001101001",
           },
+          data: "[form]",
         }
       )
       .then(function (response) {
         console.log("Data successfully posted:", response.data);
-        console.log(file);
+        console.log(passdata);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
@@ -467,6 +477,7 @@ function Route_Management() {
                 <ThemeProvider theme={datepicker_theme}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      slotProps={{ field: { clearable: true } }}
                       sx={{ width: 300 }}
                       value={value}
                       onChange={(newValue) =>
