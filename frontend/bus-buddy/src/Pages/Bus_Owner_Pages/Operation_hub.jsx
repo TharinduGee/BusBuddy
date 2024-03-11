@@ -24,22 +24,23 @@ function Operation_hub() {
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   useEffect(() => {
-    // Fetch actual data if applicable, otherwise use exampleData
-    // Example:
+
     if (token) {
-      axios.get("http://localhost:8081/api/v1/business/getInfo", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(response => {
-        if (response && response.data) {
-          setFormData(response.data);
-          setButtonDisabled(true); // Disable button initially after fetching new data
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        // Handle error, if any
-      });
+      axios
+        .get("http://localhost:8081/api/v1/business/getInfo", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          if (response && response.data) {
+            setFormData(response.data);
+            setData(response.data);
+            setButtonDisabled(true); 
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+
+        });
     }
   }, [token]);
 
@@ -50,12 +51,8 @@ function Operation_hub() {
       formData.email !== Data.email ||
       formData.address !== Data.address;
 
-    setButtonDisabled(!isFormChanged); // Disable the button if there are no changes
+    setButtonDisabled(!isFormChanged);
   }, [formData, Data]);
-
-  useEffect(() => {
-    setButtonDisabled(true); // Initially set the button to be disabled
-  }, []);
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
@@ -66,18 +63,18 @@ function Operation_hub() {
   };
 
   const handleUpdate = () => {
-    axios.post("http://localhost:8081/api/v1/business/editBusinessInfo", formData, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .then(response => {
-      console.log("Update Successful");
-      setData(formData); // Update the Data state with edited information
-      setButtonDisabled(true); // Disable button after successful update
-    })
-    .catch(error => {
-      console.error("Update Failed:", error);
-      // Handle error, if any
-    });
+    axios
+      .post("http://localhost:8081/api/v1/business/editBusinessInfo", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("Update Successful");
+        setData(formData); 
+        setButtonDisabled(true); 
+      })
+      .catch((error) => {
+        console.error("Update Failed:", error);
+      });
   };
 
   return (
