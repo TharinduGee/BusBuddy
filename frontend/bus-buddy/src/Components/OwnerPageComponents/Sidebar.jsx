@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import logo from "../../Assets/bus.png";
 import "./Sidebar.css";
 import dashbordIcon from "../../Assets/Navbar/dashbord.png";
@@ -19,7 +20,9 @@ function Sidebar({ children }) {
   const [mainClass, setmainClass] = useState("main-content");
   const spans = document.querySelectorAll("span");
   const [activeLink, setActiveLink] = useState("");
+  const [username , setUsername] = useState("");
   const location = useLocation();
+  const token = localStorage.getItem("token");
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
 
@@ -70,6 +73,31 @@ function Sidebar({ children }) {
     localStorage.clear();
     window.location.href = "/";
   };
+
+  useEffect(() =>{
+    const getUsername = async () =>{
+      await axios
+      .get(
+        `http://localhost:8081/api/v1/user/getUsername`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        setUsername(response.data);
+        console.log("Data successfully fetched:", response.data);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+    };
+
+  },[token]);
+
+  
+  
   
   return (
     <div className="sidebar-container">
@@ -93,7 +121,7 @@ function Sidebar({ children }) {
 
           <div className="user-info">
             <div className="name-email">
-              <span className="name">Chathurya Prasad</span>
+              <span className="name" >{username}</span>
               <span className="email">ID: CP001238905</span>
             </div>
           </div>

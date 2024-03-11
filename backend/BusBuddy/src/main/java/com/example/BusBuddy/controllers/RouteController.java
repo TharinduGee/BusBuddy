@@ -32,28 +32,43 @@ public class RouteController {
     @GetMapping("/findRoutes")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<RoutePaginationResponse> findRoutes(HttpServletRequest httpServletRequest,
-                                                              @RequestParam(value = "pageNo", defaultValue = "0" , required = false)int pageNumber,
-                                                              @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize,
+                                                              @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                              @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize,
                                                               @RequestParam(required = false) String startDestination
                                                               ){
         return routeService.findRoutes(httpServletRequest, pageNumber, pageSize, startDestination);
 
     }
 
-    @PostMapping("/edit")
+    @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> edit(@RequestParam @NotBlank(message = "This field can't be empty") Long routeId ,
-                                      @RequestParam @NotBlank(message = "This field can't be empty") String startDestination,
-                                      @RequestParam @NotBlank(message = "This field can't be empty")  String endDestination,
-                                      @RequestParam double distance,
-                                      @RequestParam Integer noOfSections,
-                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @NotNull(message = "Date should be selected")
-                                      Date permitExpDate,
-                                      @RequestParam("file") MultipartFile file
+    public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+                                       @RequestParam  String startDestination,
+                                       @RequestParam  String endDestination,
+                                       @RequestParam(required = false) double distance,
+                                       @RequestParam(required = false) Integer noOfSections,
+                                       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                       Date permitExpDate,
+                                       @RequestParam(value = "file", required = false) MultipartFile file
     ) throws IOException {
-        return routeService.edit(routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
+        return routeService.add(httpServletRequest, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
     }
 
+    @PostMapping("/edit")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> edit(
+            HttpServletRequest httpServletRequest,
+            @RequestParam Long routeId ,
+                                      @RequestParam String startDestination,
+                                      @RequestParam  String endDestination,
+                                      @RequestParam(required = false) double distance,
+                                      @RequestParam(required = false) Integer noOfSections,
+                                      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                      Date permitExpDate,
+                                      @RequestParam(value = "file",required = false) MultipartFile file
+    ) throws IOException {
+        return routeService.edit(httpServletRequest, routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
+    }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('ADMIN')")

@@ -19,10 +19,6 @@ function Operation_hub() {
             />
             <div className="d-flex flex-column mx-4">
               <label>NCG</label>
-              <div>
-                <label className="me-2">ID :</label>
-                <label>5628463cd</label>
-              </div>
             </div>
           </div>
           <div className="d-flex flex-wrap  justify-content-between two-fields">
@@ -31,6 +27,14 @@ function Operation_hub() {
               <input
                 type="text"
                 id="BusinessName"
+                class="form-control input-field"
+              />
+            </div>
+            <div className="input-and-label">
+              <label class="form-label">Registraion ID*</label>
+              <input
+                type="text"
+                id="Registration_ID"
                 class="form-control input-field"
               />
             </div>
@@ -45,29 +49,6 @@ function Operation_hub() {
               type="text"
               id="Address"
               class="form-control addres-text-field"
-            />
-          </div>
-          <div className="d-flex flex-wrap  justify-content-between two-fields">
-            <div className="input-and-label">
-              <label class="form-label">City*</label>
-              <input type="text" id="City" class="form-control input-field" />
-            </div>
-            <div className="input-and-label">
-              <label class="form-label">State/Province*</label>
-              <input
-                type="text"
-                id="State_Province"
-                class="form-control input-field"
-              />
-            </div>
-          </div>
-
-          <div className="input-and-label">
-            <label class="form-label ">Zip Code*</label>
-            <input
-              type="text"
-              id="Zip_Codess"
-              class="form-control input-field"
             />
           </div>
           <div className="d-flex justify-content-center">

@@ -134,7 +134,7 @@ public class RouteService {
                     DocCategory.DOC_CATEGORY_ROUTE_PERMIT,
                     file.getOriginalFilename(),
                     route.getRouteId()
-                    );
+            );
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("Route added successfully");
@@ -142,6 +142,7 @@ public class RouteService {
 
     @Transactional
     public ResponseEntity<String> edit(
+            HttpServletRequest httpServletRequest,
             Long routeId,
             String startDestination,
             String endDestination,
@@ -152,10 +153,16 @@ public class RouteService {
         Route editedRoute = routeRepository.findById(routeId)
                 .orElseThrow(()-> new EntityNotFoundException("Route Not found."));
 
-        if(!file.isEmpty()){
+        if(file != null && editedRoute.getDocument() != null){
             Document document = editedRoute.getDocument();
             document.setData(file.getBytes());
             documentRepository.save(document);
+        }else if(file != null){
+            documentService.add(file,httpServletRequest,
+                    DocCategory.DOC_CATEGORY_ROUTE_PERMIT,
+                    file.getOriginalFilename(),
+                    editedRoute.getRouteId()
+            );
         }
 
         editedRoute.setStartDestination(startDestination);
@@ -168,7 +175,7 @@ public class RouteService {
         return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
     }
 
-    public ResponseEntity<String> remove(@RequestParam long routeId){
+    public ResponseEntity<String> remove(long routeId){
         routeRepository.deleteById(routeId);
         return ResponseEntity.ok("Successfully Deleted");
     }

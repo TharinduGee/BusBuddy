@@ -1,5 +1,6 @@
 package com.example.BusBuddy.controllers;
 
+import com.example.BusBuddy.dto.User.UserPaginationResponse;
 import com.example.BusBuddy.dto.User.UserResponse;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.services.UserService;
@@ -22,9 +23,11 @@ public class UserController {
     private final UserService userService;
 
 
-    @GetMapping("/nullBusinessAndEmail")
-    public List<UserResponse>  getUsersWithNullBusinessAndEmail(@RequestParam(required = false) String email) {
-        return userService.getUsersWithNullBusinessAndEmail(email);
+    @GetMapping("/findUnEnrolledUsers")
+    public ResponseEntity<UserPaginationResponse>  findUnEnrolledUsers(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                                          @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize,
+                                                                          @RequestParam(required = false) String email) {
+        return userService.findUnEnrolledUsers(pageNumber , pageSize, email);
     }
 
     @PostMapping("/uploadImage")

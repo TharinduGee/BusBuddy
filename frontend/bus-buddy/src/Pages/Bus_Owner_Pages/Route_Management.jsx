@@ -138,7 +138,7 @@ function Route_Management() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -146,22 +146,36 @@ function Route_Management() {
       ),
     },
   ];
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile("D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf");
+    console.log(file);
+    // const fileInput = e.target;
+    // const selectedFile = fileInput.files[0];
 
-  const [value, setValue] = useState(dayjs("2022-04-17"));
+    // if (selectedFile) {
+    //   console.log("File name:", selectedFile.name);
+    //   console.log("File size (in bytes):", selectedFile.size);
+    //   console.log("File type:", selectedFile.type);
+    // } else {
+    //   console.log("No file selected.");
+    // }
+  };
+
+  const [value, setValue] = useState(null);
   const [routeId, setrouteId] = useState("");
-  const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [routeData, setRouteDate] = useState({
     startDestination: "",
     endDestination: "",
-    distance: 0,
-    noOfSections: 0,
-    permitExpDate: value,
+    distance: null,
+    noOfSections: null,
   });
 
   const handleEdit = (e) => {
     setrouteId(e.id);
     setValue(dayjs(e.permitExpDate));
+    console.log(value);
     setRouteDate({
       startDestination: e.startDestination,
       endDestination: e.endDestination,
@@ -176,33 +190,55 @@ function Route_Management() {
   };
 
   const handleChange = (e) => {
-    const value = e.target.value;
+    const value_ = e.target.value;
     setRouteDate({
       ...routeData,
-      [e.target.id]: value,
+      [e.target.id]: value_,
     });
     console.log(routeData);
   };
 
   const AddRoute = () => {
+    const year = routeData.permitExpDate.year();
+    const month = routeData.permitExpDate.month() + 1;
+    const day = routeData.permitExpDate.date();
+    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+    const form = new FormData();
+    form.append("file", "C:\\Users\\pabas\\Downloads\\conductor.png");
+
+    const passdata = {
+      file: "D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf",
+    };
     axios
-      .post(`http://localhost:8081/api/v1/route/add`, routeData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data; boundary=---011000010111000001101001",
+          },
+          data: "[form]",
+        }
+      )
       .then(function (response) {
         console.log("Data successfully posted:", response.data);
+        console.log(passdata);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+    setFile(null);
+    setValue(null);
+    setrouteId(null);
     setRouteDate({
       startDestination: "",
       endDestination: "",
-      distance: 0,
-      noOfSections: 0,
-      permitExpDate: dayjs("2022-04-17"),
+      distance: "",
+      noOfSections: "",
     });
   };
   const handleSearchInputChange = async (event) => {
@@ -214,28 +250,57 @@ function Route_Management() {
       ...routeData,
       routeId: routeId,
     };
-    console.log(updateData.permitExpDate);
+    const year = routeData.permitExpDate.year();
+    const month = routeData.permitExpDate.month() + 1;
+    const day = routeData.permitExpDate.date();
+    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+
     axios
-      .post(`http://localhost:8081/api/v1/route/edit`, updateData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post(
+        `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+        file,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(function (response) {
         console.log("Data successfully Edited:", response.data);
+        console.log(file);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+    setFile(null);
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
+    setValue(null);
     setRouteDate({
       startDestination: "",
       endDestination: "",
-      distance: 0,
-      noOfSections: 0,
-      permitExpDate: dayjs("2022-04-17"),
+      distance: "",
+      noOfSections: "",
+      permitExpDate: value,
     });
   };
-
+  const handleDelete = (id) => {
+    console.log(id);
+    axios
+      .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        console.log("Data successfully deleted:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error deleting data:", error.message);
+      });
+  };
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
@@ -291,6 +356,21 @@ function Route_Management() {
 
     fetchData();
   }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+
+  const clear = () => {
+    setFile(null);
+    setValue(null);
+    setRouteDate({
+      startDestination: "",
+      endDestination: "",
+      distance: "",
+      noOfSections: "",
+      permitExpDate: "",
+    });
+
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
+  };
 
   return (
     <Sidebar>
@@ -397,13 +477,17 @@ function Route_Management() {
                 <ThemeProvider theme={datepicker_theme}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      slotProps={{ field: { clearable: true } }}
                       sx={{ width: 300 }}
                       value={value}
                       onChange={(newValue) =>
-                        setRouteDate({
-                          ...routeData,
-                          permitExpDate: newValue,
-                        })
+                        setRouteDate(
+                          {
+                            ...routeData,
+                            permitExpDate: newValue,
+                          },
+                          console.log(routeData.permitExpDate)
+                        )
                       }
                       id="permitExpDate"
                     />
@@ -422,14 +506,8 @@ function Route_Management() {
                   type="file"
                   class="form-control input-field-choosefile "
                   id="inputGroupFile02"
+                  onChange={handleFileChange}
                 />
-                <Button_
-                  style={{ height: 35 }}
-                  class="input-group-text"
-                  for="inputGroupFile02"
-                >
-                  Upload
-                </Button_>
               </div>
             </div>
 
@@ -442,6 +520,20 @@ function Route_Management() {
                 onClick={AddRoute}
               >
                 Add Route
+              </Button>
+              <Button
+                style={{
+                  borderRadius: 10,
+                  margin: 30,
+                  backgroundColor: "#ff760d",
+                  color: "white",
+                }}
+                className="d-flex  update-btn"
+                variant="contained"
+                onClick={clear}
+                disabled={false}
+              >
+                Clear
               </Button>
               <Button
                 style={buttonStyle_Update}

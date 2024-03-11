@@ -22,10 +22,6 @@ public class EmployeeAddRequest {
     private String name;
     @NotBlank(message = "This field shouldn't be empty.")
     private Float salary;
-    @NotBlank(message = "This field shouldn't be empty.")
-    private String email;
-
-    private Date bDay;
 
     private Date joinedDate;
 
