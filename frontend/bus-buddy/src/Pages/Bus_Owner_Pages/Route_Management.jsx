@@ -148,7 +148,7 @@ function Route_Management() {
   ];
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
-    setFile("D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf");
+    setFile(e.target.files[0]);
     console.log(file);
     // const fileInput = e.target;
     // const selectedFile = fileInput.files[0];
@@ -206,11 +206,9 @@ function Route_Management() {
       day
     ).padStart(2, "0")}`;
     const form = new FormData();
-    form.append("file", "C:\\Users\\pabas\\Downloads\\conductor.png");
+    form.append("file", file);
 
-    const passdata = {
-      file: "D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf",
-    };
+  
     axios
       .post(
         `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
@@ -226,7 +224,7 @@ function Route_Management() {
       )
       .then(function (response) {
         console.log("Data successfully posted:", response.data);
-        console.log(passdata);
+       
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
