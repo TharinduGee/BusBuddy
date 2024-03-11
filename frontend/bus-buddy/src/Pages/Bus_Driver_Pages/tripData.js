@@ -1,34 +1,37 @@
 const tripData = [
   {
-    "place": "Colombo",
+    "startplace": "Colombo",
+    "endplace":"Galle",
+    "startTime": "7.00 am",
+    "endTime": "9.00 am",
     "conductor": "Saman",
-    "startTime": "9.00 am",
-    "delayTime": "5 min"
+    "status": "TRIP_STATUS_SCHEDULED"
   },
   {
-    "place": "Kandy",
-    "conductor": "Nuwan",
-    "startTime": "10.15 am",
-    "delayTime": "8 min"
+    "startplace": "Colombo1",
+    "endplace":"Galle",
+    "startTime": "7.00 am",
+    "endTime": "9.00 am",
+    "conductor": "Saman",
+    "status": "TRIP_STATUS_SCHEDULED"
   },
   {
-    "place": "Jaffna",
-    "conductor": "Priya",
-    "startTime": "11.30 am",
-    "delayTime": "3 min"
+    "startplace": "Colombo2",
+    "endplace":"Galle",
+    "startTime": "7.00 am",
+    "endTime": "9.00 am",
+    "conductor": "Saman",
+    "status": "TRIP_STATUS_SCHEDULED"
   },
   {
-    "place": "Matara",
-    "conductor": "Dilani",
-    "startTime": "12.45 pm",
-    "delayTime": "12 min"
+    "startplace": "Colombo3",
+    "endplace":"Galle",
+    "startTime": "7.00 am",
+    "endTime": "9.00 am",
+    "conductor": "Saman",
+    "status": "TRIP_STATUS_SCHEDULED"
   },
-  {
-    "place": "Anuradhapura",
-    "conductor": "Ravi",
-    "startTime": "1.30 pm",
-    "delayTime": "7 min"
-  }
+  
 ];
 
 export default tripData;

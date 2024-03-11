@@ -1,15 +1,42 @@
 .trip-information-container {
-  border: 1px solid #c5b3b3; /* Add border */
+  border: 1px solid #c5b3b3;
   padding: 10px;
-  width: 250px; /* Add padding */
-  margin-bottom: 10px; /* Add margin */
+  width: 300px;
+  margin-bottom: 10px;
   background-color: #e1dbdb; 
-  border-radius: 10px ;
-  border-bottom-width: 1vmax;
-  border-bottom-color: rgb(236, 130, 55);/* Add background color */
+  border-radius: 10px;
+  border-top-width: 20px ;
+  border-top-color: rgb(236, 130, 55);
+  
 }
 
-.trip-text{
+.trip-text {
   font-size: 18px;
-  text-decoration: solid;
+  font-weight: bold; /* Adjust font weight if needed */
+  margin-bottom: 10px; /* Add margin bottom for spacing */
+}
+
+.trip-details {
+  display: flex;
+  flex-direction: column; /* Adjust flex direction to column */
+}
+
+.trip-detail {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; /* Add margin bottom for spacing */
+}
+
+.trip-detail img {
+  width: 20px; /* Adjust image size if needed */
+  height: 20px; /* Adjust image size if needed */
+  margin-right: 5px; /* Add margin right for spacing */
+}
+
+.trip-detail-label {
+  margin-right: 5px; /* Add margin right for spacing */
+}
+
+.trip-detail-value {
+  font-weight: bold; /* Adjust font weight if needed */
 }
