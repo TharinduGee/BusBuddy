@@ -1,22 +1,21 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
-import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
+import com.example.BusBuddy.dto.Trip.*;
 
-import com.example.BusBuddy.dto.Trip.TripAddRequest;
-import com.example.BusBuddy.dto.Trip.TripResponse;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,6 +23,8 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import static io.debezium.relational.mapping.ColumnMappers.build;
 
 @Service
 @RequiredArgsConstructor
@@ -156,13 +157,13 @@ public class TripService {
         return ResponseEntity.status(HttpStatus.OK).body("Trip is successfully deleted");
     }
 
-    public ResponseEntity<List<TripResponse>> findTripForEmployee(HttpServletRequest httpServletRequest,LocalDate date){
+    public ResponseEntity<List<TripResponseForEmployee>> findTripForEmployee(HttpServletRequest httpServletRequest, LocalDate date){
         Employee employee = employeeService.extractEmpId(httpServletRequest);
         List<Trip> trips = tripRepository.findByDateAndDriver(date , employee);
-        List<TripResponse> tripResponseList ;
+        List<TripResponseForEmployee> tripResponseList ;
         if(employee.getDesignation() == EmployeeType.EMPLOYEE_TYPE_DRIVER){
             tripResponseList = trips.stream().map(
-                            trip -> TripResponse.builder()
+                            trip -> TripResponseForEmployee.builder()
                                     .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
                                     .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
                                     .startTime(trip.getStartTime())
@@ -174,7 +175,7 @@ public class TripService {
         }
         else if(employee.getDesignation() == EmployeeType.EMPLOYEE_TYPE_CONDUCTOR){
             tripResponseList = trips.stream().map(
-                            trip -> TripResponse.builder()
+                            trip -> TripResponseForEmployee.builder()
                                     .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
                                     .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
                                     .startTime(trip.getStartTime())
@@ -190,8 +191,50 @@ public class TripService {
         return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
     }
 
+    public ResponseEntity<TripPaginationResponse> findTrips(HttpServletRequest httpServletRequest ,
+                                                            int pageNumber,
+            int pageSize
+            , LocalDate startDate
+            , LocalDate endDate
+    ){
+        Pageable pageable = PageRequest.of(pageNumber,pageSize);
+        Page<Trip> tripPage;
 
+        tripPage = tripRepository.findByBusinessAndDateBetween(
+                businessService.extractBId(httpServletRequest),
+                startDate,endDate,pageable
+        );
+       List<Trip> trips = tripPage.getContent();
 
+       List<TripResponse> tripResponseList = trips.stream().map(
+               trip -> TripResponse.builder()
+                       .tripId(trip.getTripId())
+                       .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
+                       .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
+                       .busId(trip.getBus() != null ? trip.getBus().getBusId() : null)
+                       .driverId(trip.getDriver() != null ? trip.getDriver().getEmpId() : null)
+                       .conductorId(trip.getConductor() != null ? trip.getConductor().getEmpId() : null)
+                       .status(trip.getStatus())
+                       .startTime(trip.getStartTime())
+                       .endTime(trip.getEndTime())
+                       .income(trip.getIncome())
+                       .expense(trip.getExpense())
+                       .routeId(trip.getRoute() != null ? trip.getRoute().getRouteId() : null)
+                       .date(trip.getDate())
+                       .build()
+       ).toList();
+
+       TripPaginationResponse tripPaginationResponse = TripPaginationResponse.builder()
+               .content(tripResponseList)
+                .pageSize(tripPage.getSize())
+                .pageNo(tripPage.getNumber())
+                .totalElements(tripPage.getTotalElements())
+                .totalPages(tripPage.getTotalPages())
+                .last(tripPage.isLast())
+               .build();
+
+        return  ResponseEntity.status(HttpStatus.OK).body(tripPaginationResponse);
+    }
 
 
     @Scheduled(fixedRate = 300000)// check every 5 minutes
