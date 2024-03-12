@@ -4424,6 +4424,11 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
+"date-fns@^2.25.0 || ^3.2.0", date-fns@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.npmjs.org/date-fns/-/date-fns-3.4.0.tgz"
+  integrity sha512-Akz4R8J9MXBsOgF1QeWeCsbv6pntT5KCPjU0Q9prBxVmWJYPLhwAIsNg3b0QAdr0ttiozYLD3L/af7Ra0jqYXw==
+
 dayjs@^1.10.7, dayjs@^1.11.10:
   version "1.11.10"
   resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.10.tgz"

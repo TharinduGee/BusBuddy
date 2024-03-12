@@ -16,8 +16,18 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import Checkbox from "@mui/material/Checkbox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Swal from "sweetalert2";
+import { format } from "date-fns";
+import dayjs from "dayjs";
 
 function Trip_Management() {
+  const buttonStyle = {
+    borderRadius: 10,
+    margin: 30,
+    backgroundColor: "#ff760d",
+    color: "white",
+  };
+
   const token = localStorage.getItem("token");
   const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
@@ -118,22 +128,47 @@ function Trip_Management() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "firstName", headerName: "First name", width: 130 },
-    { field: "lastName", headerName: "Last name", width: 130 },
+    { field: "date", headerName: "Date", width: 130 },
+    { field: "startTime", headerName: "Start Time", width: 130 },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
+      field: "endTime",
+      headerName: "End Time",
       width: 90,
     },
     {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || " "} ${params.row.lastName || ""}`,
+      field: "income",
+      headerName: "Income",
+      width: 90,
+    },
+    {
+      field: "expense",
+      headerName: "Expenses",
+      width: 90,
+    },
+    {
+      field: "busId",
+      headerName: "Bus ID",
+      width: 90,
+    },
+    {
+      field: "routeId",
+      headerName: "Route ID",
+      width: 90,
+    },
+    {
+      field: "driverId",
+      headerName: "Driver ID",
+      width: 90,
+    },
+    {
+      field: "condocterId",
+      headerName: "Conductor ID",
+      width: 130,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 90,
     },
     {
       field: "actions",
@@ -163,60 +198,111 @@ function Trip_Management() {
   ];
 
   const [tripData, setTripData] = useState({
-    startTime: "2024-03-11T20:04:46.327Z",
-    endTime: "2024-03-11T20:04:46.327Z",
-
-    busId: 0,
-    routeId: 0,
-    driverId: 0,
-    condocterId: 0,
+    startTime: null,
+    endTime: null,
+    busId: null,
+    routeId: null,
+    driverId: null,
+    condocterId: null,
+    income: null,
+    expense: null,
+    date: null,
   });
-  const AddTrip = () => {
-    if (
-      tripData.startTime === null ||
-      tripData.endTime === "" ||
-      tripData.busId === "" ||
-      tripData.driverId === "" ||
-      tripData.condocterId === null
-    ) {
-      alert("Please fill all the fields");
-    } else {
-      // const year = routeData.permitExpDate.year();
-      // const month = routeData.permitExpDate.month() + 1;
-      // const day = routeData.permitExpDate.date();
-      // const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-      //   day
-      // ).padStart(2, "0")}`;
 
-      axios
-        .post(`http://localhost:8081/api/v1/trip/add?date=2022-02-02`, {
+  const [durationDates, setDurationDates] = useState({
+    firstDate: null,
+    lastDate: null,
+  });
+
+  const handleChange = (e) => {
+    const value_ = e.target.value;
+    setTripData({
+      ...tripData,
+      [e.target.id]: value_,
+    });
+
+    console.log(tripData);
+  };
+
+  const clear = () => {
+    setTripData({
+      startTime: null,
+      endTime: null,
+      busId: null,
+      routeId: null,
+      driverId: null,
+      condocterId: null,
+      income: "",
+      expense: "",
+      date: null,
+    });
+  };
+
+  const AddTripForTheDate = () => {
+    // if (
+    //   tripData.startTime === null ||
+    //   tripData.endTime === "" ||
+    //   tripData.busId === "" ||
+    //   tripData.driverId === "" ||
+    //   tripData.condocterId === null ||
+    //   tripData.income === "" ||
+    //   tripData.expense === "" ||
+    //   tripData.date === ""
+    // ) {
+    //   alert("Please fill all the fields");
+    // } else {
+    const year = tripData.date.year();
+    const month = tripData.date.month() + 1;
+    const day = tripData.date.date();
+    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      day
+    ).padStart(2, "0")}`;
+
+    const jsStartTime = tripData.startTime.toDate();
+    const formattedStartTime = format(jsStartTime, "HH:mm:ss");
+
+    const jsEndTime = tripData.endTime.toDate();
+    const formattedEndTime = format(jsEndTime, "HH:mm:ss");
+    const passingData = {
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
+      income: tripData.income,
+      busId: tripData.busId,
+      routeId: tripData.routeId,
+      driverId: tripData.driverId,
+      condocterId: tripData.condocterId,
+      expense: tripData.expense,
+    };
+    axios
+      .post(
+        `http://localhost:8081/api/v1/trip/add?date=${formattedDate}`,
+        passingData,
+        {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type":
-              "multipart/form-data; boundary=---011000010111000001101001",
           },
-          data: "[form]",
-        })
-        .then(function (response) {
-          console.log("Data successfully posted:", response.data);
-        })
-        .catch(function (error) {
-          console.error("Error posting data:", error);
-        });
-      // clear();
-      // setRefresh(!refresh);
-    }
+        }
+      )
+      .then(function (response) {
+        console.log("Data successfully posted:", response.data);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+    clear();
+    // setRefresh(!refresh);
+    // }
   };
 
   const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
+    { value: "Chocolate", label: "Chocolate" },
+    { value: "Strawberry", label: "Strawberry" },
+    { value: "Vanilla", label: "Vanilla" },
   ];
 
   const [checked, setChecked] = useState(false);
 
-  const handleChange = (event) => {
+  const handleChangecheck = (event) => {
     setChecked(event.target.checked);
   };
 
@@ -280,9 +366,17 @@ function Trip_Management() {
                 <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
+                      value={tripData.startTime}
                       sx={{ width: 200 }}
-                      // value={value}
-                      // onChange={(newValue) => setValue(newValue)}
+                      onChange={async (newValue) =>
+                        await setTripData(
+                          {
+                            ...tripData,
+                            startTime: newValue,
+                          },
+                          console.log(tripData)
+                        )
+                      }
                     />
                   </LocalizationProvider>
                 </ThemeProvider>
@@ -294,8 +388,16 @@ function Trip_Management() {
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <TimePicker
                       sx={{ width: 200 }}
-                      // value={value}
-                      // onChange={(newValue) => setValue(newValue)}
+                      value={tripData.endTime}
+                      onChange={async (newValue) =>
+                        await setTripData(
+                          {
+                            ...tripData,
+                            endTime: newValue,
+                          },
+                          console.log(tripData)
+                        )
+                      }
                     />
                   </LocalizationProvider>
                 </ThemeProvider>
@@ -306,8 +408,10 @@ function Trip_Management() {
                 <label class="form-label">Income*</label>
                 <input
                   type="text"
-                  id="Income"
+                  id="income"
                   class="form-control input-field-trip"
+                  value={tripData.income}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -315,8 +419,10 @@ function Trip_Management() {
                 <label class="form-label">Expense*</label>
                 <input
                   type="text"
-                  id="Expense"
+                  id="expense"
                   class="form-control input-field-trip"
+                  value={tripData.expense}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -324,18 +430,50 @@ function Trip_Management() {
               <div className="input-and-label">
                 <label class="form-label">Bus*</label>
                 <Select
+                  id="busId"
                   className="input-field-trip"
                   options={options}
                   isClearable={true}
+                  onChange={async (newValue) => {
+                    if (newValue !== null) {
+                      await setTripData({
+                        ...tripData,
+                        busId: newValue.value,
+                      });
+                      console.log(tripData);
+                    } else {
+                      await setTripData({
+                        ...tripData,
+                        busId: newValue,
+                      });
+                      console.log(tripData);
+                    }
+                  }}
                 />
               </div>
 
               <div className="input-and-label">
                 <label class="form-label">Route*</label>
                 <Select
+                  id="routeId"
                   className="input-field-trip"
                   options={options}
                   isClearable={true}
+                  onChange={async (newValue) => {
+                    if (newValue !== null) {
+                      await setTripData({
+                        ...tripData,
+                        routeId: newValue.value,
+                      });
+                      console.log(tripData);
+                    } else {
+                      await setTripData({
+                        ...tripData,
+                        routeId: newValue,
+                      });
+                      console.log(tripData);
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -343,54 +481,147 @@ function Trip_Management() {
               <div className="input-and-label">
                 <label class="form-label">Driver*</label>
                 <Select
+                  id="driverId"
                   className="input-field-trip"
                   options={options}
                   isClearable={true}
+                  onChange={async (newValue) => {
+                    if (newValue !== null) {
+                      await setTripData({
+                        ...tripData,
+                        driverId: newValue.value,
+                      });
+                      console.log(tripData);
+                    } else {
+                      await setTripData({
+                        ...tripData,
+                        driverId: newValue,
+                      });
+                      console.log(tripData);
+                    }
+                  }}
                 />
               </div>
 
               <div className="input-and-label ">
                 <label class="form-label">Conductor*</label>
                 <Select
+                  id="condocterId"
                   className="input-field-trip"
                   options={options}
                   isClearable={true}
+                  onChange={async (newValue) => {
+                    if (newValue !== null) {
+                      await setTripData({
+                        ...tripData,
+                        condocterId: newValue.value,
+                      });
+                      console.log(tripData);
+                    } else {
+                      await setTripData({
+                        ...tripData,
+                        condocterId: newValue,
+                      });
+                      console.log(tripData);
+                    }
+                  }}
                 />
               </div>
             </div>
-            <div className="schedule-tick">
-              <Checkbox checked={checked} onChange={handleChange} />
-              <label class="form-label">
-                Schedule Trip for a Time Duration
-              </label>
+            <div className="d-flex align-items-center justify-content-center">
+              <div
+                className={
+                  checked == true
+                    ? "hidden-schedule"
+                    : "d-flex flex-column align-items-start input-and-label mt-4 "
+                }
+              >
+                <label class="form-label">Date*</label>
+                <ThemeProvider theme={text_box_the}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      sx={{ width: 200 }}
+                      slotProps={{ field: { clearable: true } }}
+                      value={tripData.date}
+                      onChange={async (newValue) =>
+                        await setTripData(
+                          {
+                            ...tripData,
+                            date: newValue,
+                          },
+                          console.log(tripData)
+                        )
+                      }
+                    />
+                  </LocalizationProvider>
+                </ThemeProvider>
+              </div>
             </div>
+
             <div
               className={
                 checked == true
-                  ? "pair-container"
+                  ? "pair-container mt-4"
                   : "pair-container  hidden-schedule"
               }
             >
-              <div className="d-flex flex-column input-and-label mt-1 mb-3">
+              <div className="d-flex flex-column input-and-label mt-1 ">
                 <label class="form-label">Starting Date*</label>
                 <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker sx={{ width: 200 }} />
+                    <DatePicker
+                      sx={{ width: 200 }}
+                      slotProps={{ field: { clearable: true } }}
+                      value={durationDates.firstDate}
+                      onChange={async (newValue) =>
+                        await setDurationDates(
+                          {
+                            ...durationDates,
+                            firstDate: newValue,
+                          },
+                          console.log(durationDates)
+                        )
+                      }
+                    />
                   </LocalizationProvider>
                 </ThemeProvider>
               </div>
 
-              <div className="d-flex flex-column input-and-label mt-1 mb-4 ">
+              <div className="d-flex flex-column input-and-label mt-1  ">
                 <label class="form-label">Ending Date*</label>
                 <ThemeProvider theme={text_box_the}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker sx={{ width: 200 }} />
+                    <DatePicker
+                      sx={{ width: 200 }}
+                      slotProps={{ field: { clearable: true } }}
+                      value={durationDates.lastDate}
+                      onChange={async (newValue) =>
+                        await setDurationDates(
+                          {
+                            ...durationDates,
+                            lastDate: newValue,
+                          },
+                          console.log(durationDates)
+                        )
+                      }
+                    />
                   </LocalizationProvider>
                 </ThemeProvider>
               </div>
             </div>
-            <div className="d-flex justify-content-center my-4">
-              <Button className="add-trip-btn " variant="contained">
+            <div className="schedule-tick">
+              <Checkbox checked={checked} onChange={handleChangecheck} />
+              <label class="form-label">
+                Schedule Trip for a Time Duration
+              </label>
+            </div>
+            <div className="d-flex justify-content-center ">
+              <Button
+                style={buttonStyle}
+                className="d-flex  update-btn"
+                variant="contained"
+                onClick={AddTripForTheDate}
+              >
                 ADD TRIP
               </Button>
             </div>
