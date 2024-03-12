@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -42,6 +43,11 @@ public class BusController {
         return busService.findByBusId(busId);
     }
 
+    @GetMapping("/getBusIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+        return busService.getBusIds(httpServletRequest);
+    }
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")

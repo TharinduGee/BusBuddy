@@ -188,29 +188,17 @@ public class BusService {
         return ResponseEntity.ok(busPaginationResponse);
     }
 
-//    public ResponseEntity<List<Long>> findAllByBusiness(int pageNumber, int pageSize){
-//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-//        List<Bus> = busRepository.findByBusiness(bus);
-//
-//        List<BusResponse> busResponses = buses.stream()
-//                .map(bus ->
-//                        BusResponse.builder()
-//                                .busId(bus.getBusId())
-//                                .lastServiceDate(bus.getLastServiceDate())
-//                                .numberPlate(bus.getNumberPlate())
-//                                .regNo(bus.getRegNo())
-//                                .type(bus.getType())
-//                                .seats(bus.getSeats())
-//                                .docId(bus.getDocument() != null ? bus.getDocument().getDocId() : null)
-//                                .docName(bus.getDocument() != null ? bus.getDocument().getDocName() : null)
-//                                .build()
-//                )
-//                .toList();
-//
-//
-//
-//        return ResponseEntity.ok(busPaginationResponse);
-//    }
+    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Bus> buses= busRepository.findByBusiness(business);
+
+        List<Long> busIdList = buses.stream()
+                .map(Bus::getBusId
+                )
+                .toList();
+
+        return ResponseEntity.ok(busIdList);
+    }
 
     public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);

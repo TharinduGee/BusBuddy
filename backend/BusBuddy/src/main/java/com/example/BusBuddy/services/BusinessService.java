@@ -25,7 +25,7 @@ public class BusinessService {
 
     public ResponseEntity<String> editInfo(HttpServletRequest httpServletRequest , @NotNull BusinessEditInfoReq request){
         Business business = extractBId(httpServletRequest);
-        business.setBName(request.getBName());
+        business.setBName(request.getBusinessName());
         business.setRegistrationNo(request.getRegistrationNo());
         business.setEmail(request.getEmail());
         business.setAddress(request.getAddress());
