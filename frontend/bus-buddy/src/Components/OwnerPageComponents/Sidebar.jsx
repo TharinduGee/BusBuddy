@@ -78,12 +78,7 @@ function Sidebar({ children }) {
 
 
   useEffect(() =>{
-<<<<<<< HEAD
     axios
-=======
-
-      axios
->>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
       .get(
         `http://localhost:8081/api/v1/user/getUsername`,
         {
@@ -99,53 +94,9 @@ function Sidebar({ children }) {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
-<<<<<<< HEAD
     
 
   },[token]);
-=======
-
-  },[token]);
-
-  function arrayBufferToBase64(buffer) {
-    var binary = '';
-    var bytes = new Uint8Array(buffer);
-    for (let i = 0; i < bytes.byteLength; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  }
-
-  async function fetchImageData(url) {
-    try {
-      const response = await axios.get(url, {
-        responseType: 'arraybuffer' ,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response.data; 
-    } catch (error) {
-      console.error("Error fetching image data:", error);
-      return null; 
-    }
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      var data = await fetchImageData('http://localhost:8081/api/v1/user/getImage');
-      if (data) {
-        var base64Image = arrayBufferToBase64(data);
-        console.log(base64Image)
-        setImageData(`data:image/png;base64,${base64Image}`); 
-      }
-    };
-  
-    fetchData();
-  }, []);
-
-  
->>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
   
   
   return (
