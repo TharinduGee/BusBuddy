@@ -1,0 +1,45 @@
+.icon-contianer-trip {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+.trip-container {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 20px;
+  margin-bottom: 0;
+  width: fit-content;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.trip-txt {
+  margin-left: 20px;
+  font-size: 20px;
+}
+.trip-value {
+  margin-left: 20px;
+  font-size: 16px;
+}
+
+@media (max-width: 450px) {
+  .icon-contianer-trip {
+    flex-direction: column;
+  }
+  .divider-class {
+    display: none;
+  }
+  .items-trip {
+    padding-top: 20px;
+  }
+
+  .trip-container {
+    margin-bottom: 0;
+  }
+
+  .trip-txt {
+    font-size: 15px;
+  }
+  .trip-value {
+    font-size: 20px;
+  }
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import SidebarDriver from "../../Components/DriverPageComponents/SidebarDriver";
+import Trip from "../../Components/DriverPageComponents/TripDesign";
 
 function driverBusManagement() {
   return (
