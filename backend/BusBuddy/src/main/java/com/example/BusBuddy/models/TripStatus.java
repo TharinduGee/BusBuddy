@@ -1,4 +1,4 @@
-package com.example.BusBuddy.services;
+package com.example.BusBuddy.models;
 
 public enum TripStatus {
     TRIP_STATUS_ONGOING,

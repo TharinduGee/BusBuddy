@@ -2,6 +2,7 @@ package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.dto.Ticket.TicketRequest;
 import com.example.BusBuddy.models.Trip;
+import com.example.BusBuddy.models.TripStatus;
 import com.example.BusBuddy.repositories.TripRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

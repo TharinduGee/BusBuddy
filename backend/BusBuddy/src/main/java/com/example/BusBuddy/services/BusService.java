@@ -13,12 +13,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -43,6 +45,7 @@ public class BusService {
                                       int seats,
                                       String regNo,
                                       MultipartFile file) throws IOException {
+
         Bus bus = Bus.builder()
                 .type(type)
                 .seats(seats)
@@ -65,7 +68,7 @@ public class BusService {
         return ResponseEntity.ok("Bus added successfully.");
     }
 
-    public ResponseEntity<Bus> edit(
+    public ResponseEntity<Bus> editBus(
             HttpServletRequest httpServletRequest,
             Long busId,
             BusType type,
@@ -130,7 +133,7 @@ public class BusService {
                     );
         }else{
             busPage =
-                    busRepository.findByBusiness(
+                    busRepository.findByBusinessOrderByBusIdAsc(
                             businessService.extractBId(httpServletRequest),
                             pageable
                     );
@@ -183,6 +186,13 @@ public class BusService {
                 .last(busPage.isLast()).build();
 
         return ResponseEntity.ok(busPaginationResponse);
+    }
+
+    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Long> busIdList = busRepository.findByBusiness(business);
+
+        return ResponseEntity.ok(busIdList);
     }
 
     public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest){

@@ -4424,6 +4424,11 @@ data-urls@^2.0.0:
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
 
+"date-fns@^2.25.0 || ^3.2.0", date-fns@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.npmjs.org/date-fns/-/date-fns-3.4.0.tgz"
+  integrity sha512-Akz4R8J9MXBsOgF1QeWeCsbv6pntT5KCPjU0Q9prBxVmWJYPLhwAIsNg3b0QAdr0ttiozYLD3L/af7Ra0jqYXw==
+
 dayjs@^1.10.7, dayjs@^1.11.10:
   version "1.11.10"
   resolved "https://registry.npmjs.org/dayjs/-/dayjs-1.11.10.tgz"
@@ -10211,6 +10216,11 @@ svgo@^2.7.0:
     csso "^4.2.0"
     picocolors "^1.0.0"
     stable "^0.1.8"
+
+sweetalert2@^11.10.6:
+  version "11.10.6"
+  resolved "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.10.6.tgz"
+  integrity sha512-CINZPLZXZRSZqSOE7H7j1F7X8e8O1kLOiXPmtJn1DYxvXsKBr3d16d90+IcwTTs7dJww20h8r8QIxIwsLGX+6A==
 
 symbol-tree@^3.2.4:
   version "3.2.4"

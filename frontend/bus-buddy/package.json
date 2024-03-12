@@ -18,6 +18,7 @@
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
     "chart.js": "^4.4.1",
+    "date-fns": "^3.4.0",
     "dayjs": "^1.11.10",
     "install": "^0.13.0",
     "package-name": "^0.1.0",
@@ -31,6 +32,7 @@
     "react-select": "^5.8.0",
     "recharts": "^2.12.2",
     "styled-components": "^6.1.8",
+    "sweetalert2": "^11.10.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

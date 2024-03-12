@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
@@ -10,9 +11,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 function Fleet_Operation() {
-  const [rows_, setRows] = useState([]);
+  const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
   const table_theme = createTheme({
     components: {
@@ -126,7 +129,7 @@ function Fleet_Operation() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row.id)}
+            onClick={() => handleEdit(params.row)}
           >
             <EditNoteSharpIcon />
           </IconButton>
@@ -134,7 +137,7 @@ function Fleet_Operation() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -143,7 +146,275 @@ function Fleet_Operation() {
     },
   ];
 
-  const handleSearchInputChange = (event) => {};
+  const [value, setValue] = useState(null);
+  const [value_date, setValue_date] = useState(null);
+
+  const [refresh, setRefresh] = useState(true);
+  const [busData, setBusDate] = useState({
+    type: value,
+    numberPlate: null,
+    lastServiceDate: null,
+    Seats: null,
+    regNo: null,
+  });
+
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+  });
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+
+  const [busId, setBusId] = useState("");
+  const handleEdit = (e) => {
+    setValue(e.bustype);
+    const updatedId = e.id;
+    setBusId(updatedId);
+    setValue_date(dayjs(e.lastservicedate));
+    setBusDate({
+      type: e.bustype,
+      numberPlate: e.numberplate,
+      lastServiceDate: dayjs(e.lastservicedate),
+      Seats: e.numberofseats,
+      regNo: e.regno,
+    });
+
+    setisUpdateButtonDisabled(false);
+    setisAddButtonDisabled(true);
+    console.log(busId);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: true,
+      }));
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/v1/bus/findBuses?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&numberPlate=${searchInput}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const formattedData = response.data.content.map((busData) => ({
+          id: busData.busId,
+          bustype: busData.type,
+          numberplate: busData.numberPlate,
+          numberofseats: busData.seats,
+          regno: busData.regNo,
+          lastservicedate: busData.lastServiceDate.split("T")[0],
+        }));
+        console.log(formattedData);
+
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: formattedData,
+          total: response.data.totalElements,
+        }));
+      } catch (error) {
+        console.error("There was an error!", error);
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+        }));
+      }
+    };
+
+    fetchData();
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/bus/remove?busId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error deleting data:", error.message);
+          });
+        setRefresh(!refresh);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
+  };
+
+  const clear = () => {
+    console.log("clear");
+    setFile(null);
+    setValue("Normal");
+    setValue_date(null);
+    setBusDate({
+      type: "",
+      numberPlate: "",
+      lastServiceDate: "",
+      Seats: "",
+      regNo: "",
+    });
+
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
+  };
+
+  const AddBus = () => {
+    if (
+      busData.type === null ||
+      busData.numberPlate === "" ||
+      busData.lastServiceDate === "" ||
+      busData.lastServiceDate === null ||
+      busData.seats === "" ||
+      busData.regNo === ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
+      });
+    } else {
+      console.log(busData.lastServiceDate);
+      const year = busData.lastServiceDate.year();
+      const month = busData.lastServiceDate.month() + 1;
+      const day = busData.lastServiceDate.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const form = new FormData();
+      form.append("file", file);
+      console.log(file);
+
+      axios
+        .post(
+          `http://localhost:8081/api/v1/bus/add?type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
+          form,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type":
+                "multipart/form-data; boundary=---011000010111000001101001",
+            },
+            data: "[form]",
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully posted:", response.data);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      clear();
+      setRefresh(!refresh);
+      Swal.fire({
+        title: "Good job!",
+        text: "Bus Added Successfully!",
+        icon: "success",
+      });
+    }
+  };
+
+  const UpdateRoute = () => {
+    if (
+      busData.type === null ||
+      busData.numberPlate === "" ||
+      busData.lastServiceDate === "" ||
+      busData.lastServiceDate === null ||
+      busData.seats === "" ||
+      busData.regNo === ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
+      });
+    } else {
+      const updateData = {
+        ...busData,
+        busId: busId,
+      };
+      console.log("dasda", busData.lastServiceDate);
+      const year = busData.lastServiceDate.year();
+      const month = busData.lastServiceDate.month() + 1;
+      const day = busData.lastServiceDate.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const form = new FormData();
+      form.append("file", file);
+
+      axios
+        .post(
+          `http://localhost:8081/api/v1/bus/edit?busId=${updateData.busId}&type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
+          form,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type":
+                "multipart/form-data; boundary=---011000010111000001101001",
+            },
+            data: "[form]",
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully Edited:", response.data);
+          console.log(file);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      setRefresh(!refresh);
+      clear();
+      Swal.fire({
+        title: "Good job!",
+        text: "Bus Information Updated Successfully!",
+        icon: "success",
+      });
+    }
+  };
+
+  const handleChange = (e) => {
+    const value_ = e.target.value;
+    setBusDate({
+      ...busData,
+      [e.target.id]: value_,
+    });
+
+    console.log(busData);
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
 
   return (
     <Sidebar>
@@ -180,14 +451,14 @@ function Fleet_Operation() {
             >
               <ThemeProvider theme={table_theme}>
                 <DataGrid
-                  rows={rows_}
+                  rows={pageState.data}
+                  page={pageState.page - 1}
                   columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  // onRowClick={handleRowClick}
+                  loading={pageState.isLoading}
+                  rowCount={pageState.total}
+                  paginationModel={paginationModel}
+                  paginationMode="server"
+                  onPaginationModelChange={setPaginationModel}
                   pageSizeOptions={[5, 10]}
                   rowHeight={40}
                 />
@@ -205,8 +476,10 @@ function Fleet_Operation() {
                 <label class="form-label">Number Plate*</label>
                 <input
                   type="text"
-                  id="numberplate"
+                  id="numberPlate"
                   class="form-control input-field-trip"
+                  value={busData.numberPlate}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -214,8 +487,10 @@ function Fleet_Operation() {
                 <label class="form-label">Registration No*</label>
                 <input
                   type="text"
-                  id="registration_no"
+                  id="regNo"
                   class="form-control input-field-trip"
+                  value={busData.regNo}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -224,32 +499,84 @@ function Fleet_Operation() {
                 <label class="form-label">Number of Seats*</label>
                 <input
                   type="text"
-                  id="numberofseats"
+                  id="Seats"
                   class="form-control input-field-trip"
+                  value={busData.Seats}
+                  onChange={handleChange}
+                  onKeyPress={(event) => {
+                    const char = String.fromCharCode(event.charCode);
+                    if (!/^\d|\.$|^[-]/.test(char)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
 
               <div className="input-and-label">
                 <label class="form-label">Bus Type*</label>
-                <select class="form-select input-field-trip">
-                  <option value="NORMAL">Normal</option>
-                  <option value="SEMI_LUXURY">Semi-Luxury</option>
-                  <option value="LUXURY">Luxury</option>
+                <select
+                  id="type"
+                  class="form-select input-field-trip"
+                  value={value}
+                  onChange={async (event) => {
+                    const newValue = event.target.value;
+                    setValue(event.target.value);
+                    await setBusDate(
+                      {
+                        ...busData,
+                        type: newValue,
+                      },
+                      console.log("onehcange date", value)
+                    );
+                  }}
+                >
+                  <option value="NORMAL">NORMAL</option>
+                  <option value="SEMI_LUXURY">SEMI_LUXURY</option>
+                  <option value="LUXURY">LUXURY</option>
                 </select>
               </div>
             </div>
-            <div className="pair-container">
+            <div className="pair-container align-items-end">
               <div className="d-flex flex-column input-and-label">
                 <label class="form-label">Service Date*</label>
                 <ThemeProvider theme={datepicker_theme}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
                       sx={{ width: 300 }}
-                      // value={value}
-                      // onChange={(newValue) => setValue(newValue)}
+                      slotProps={{ field: { clearable: true } }}
+                      value={value_date}
+                      onChange={(newValue) =>
+                        setBusDate(
+                          {
+                            ...busData,
+                            lastServiceDate: newValue,
+                          },
+                          console.log(
+                            "onehcange date",
+                            busData.lastServiceDate
+                          ),
+                          setValue_date(newValue)
+                        )
+                      }
+                      id="lastServiceDate"
                     />
                   </LocalizationProvider>
                 </ThemeProvider>
+              </div>
+              <div
+                style={{
+                  width: 340,
+                  margin: 30,
+                  marginBottom: 1,
+                }}
+                class="input-group "
+              >
+                <input
+                  type="file"
+                  class="form-control input-field-choosefile "
+                  id="inputGroupFile02"
+                  onChange={handleFileChange}
+                />
               </div>
             </div>
             <div className="d-flex flex-wrap mt-4 justify-content-between two-fields">
@@ -258,14 +585,30 @@ function Fleet_Operation() {
                 className="d-flex  update-btn"
                 variant="contained"
                 disabled={isAddButtonDisabled}
+                onClick={AddBus}
               >
                 Add Bus
+              </Button>
+              <Button
+                style={{
+                  borderRadius: 10,
+                  width: 200,
+                  margin: 20,
+                  backgroundColor: "#ff760d",
+                  color: "white",
+                }}
+                className="d-flex  update-btn"
+                variant="contained"
+                onClick={clear}
+              >
+                Clear
               </Button>
               <Button
                 style={buttonStyle_Update}
                 className="d-flex  update-btn"
                 variant="contained"
                 disabled={isUpdateButtonDisabled}
+                onClick={UpdateRoute}
               >
                 Update Bus
               </Button>

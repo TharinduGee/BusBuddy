@@ -65,9 +65,8 @@ CREATE TABLE IF NOT EXISTS public.employee
     emp_id bigint NOT NULL,
     salary real,
     age integer,
-    b_day timestamp(6) without time zone NOT NULL,
+    b_day timestamp(6) without time zone,
     designation character varying(255) COLLATE pg_catalog."default",
-    image bytea,
     joined_date timestamp(6) without time zone,
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     b_id bigint,
@@ -76,8 +75,8 @@ CREATE TABLE IF NOT EXISTS public.employee
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT employee_designation_check CHECK (designation::text = ANY (ARRAY['EMPLOYEE_TYPE_DRIVER'::character varying, 'EMPLOYEE_TYPE_CONDUCTOR'::character varying]::text[]))
-);
+    CONSTRAINT employee_designation_check CHECK (designation::text = ANY (ARRAY['EMPLOYEE_TYPE_DRIVER'::character varying::text, 'EMPLOYEE_TYPE_CONDUCTOR'::character varying::text]))
+)
 
 -- Table: public.ledger
 

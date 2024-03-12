@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BusinessEditInfoReq {
     @NotNull(message = "Name : null")
-    private String bName;
+    private String businessName;
     @NotNull(message = "Registration no : null")
     private String registrationNo;
     @NotNull(message = "Email : null")

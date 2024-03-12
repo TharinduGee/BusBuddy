@@ -9,12 +9,12 @@ import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Button_ from "@mui/material/Button";
 import axios from "axios";
 import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Swal from "sweetalert2";
 
 function Route_Management() {
   const token = localStorage.getItem("token");
@@ -146,8 +146,10 @@ function Route_Management() {
       ),
     },
   ];
+
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
+<<<<<<< HEAD
     setFile("D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf");
     console.log(file);
     // const fileInput = e.target;
@@ -160,8 +162,11 @@ function Route_Management() {
     // } else {
     //   console.log("No file selected.");
     // }
+=======
+    setFile(e.target.files[0]);
+>>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
   };
-
+  const [refresh, setRefresh] = useState(true);
   const [value, setValue] = useState(null);
   const [routeId, setrouteId] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -170,18 +175,20 @@ function Route_Management() {
     endDestination: "",
     distance: null,
     noOfSections: null,
+    permitExpDate: value,
   });
 
   const handleEdit = (e) => {
-    setrouteId(e.id);
-    setValue(dayjs(e.permitExpDate));
-    console.log(value);
+    const updatedId = e.id;
+    setrouteId(updatedId);
+    const updatedValue = dayjs(e.permitExpDate);
+    setValue(updatedValue);
     setRouteDate({
       startDestination: e.startDestination,
       endDestination: e.endDestination,
       distance: e.distance,
       noOfSections: e.noOfSections,
-      permitExpDate: value,
+      permitExpDate: updatedValue,
     });
 
     setisUpdateButtonDisabled(false);
@@ -195,9 +202,11 @@ function Route_Management() {
       ...routeData,
       [e.target.id]: value_,
     });
+
     console.log(routeData);
   };
 
+<<<<<<< HEAD
   const AddRoute = () => {
     const year = routeData.permitExpDate.year();
     const month = routeData.permitExpDate.month() + 1;
@@ -231,83 +240,177 @@ function Route_Management() {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+=======
+  const clear = () => {
+>>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
     setFile(null);
     setValue(null);
-    setrouteId(null);
     setRouteDate({
       startDestination: "",
       endDestination: "",
       distance: "",
       noOfSections: "",
+      permitExpDate: "",
     });
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
   };
+
+  const AddRoute = () => {
+    if (
+      routeData.distance === null ||
+      routeData.startDestination === "" ||
+      routeData.endDestination === "" ||
+      routeData.noOfSections === "" ||
+      routeData.permitExpDate === null ||
+      routeData.permitExpDate === ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
+      });
+    } else {
+      const year = routeData.permitExpDate.year();
+      const month = routeData.permitExpDate.month() + 1;
+      const day = routeData.permitExpDate.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const form = new FormData();
+      form.append("file", file);
+
+      axios
+        .post(
+          `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+          form,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type":
+                "multipart/form-data; boundary=---011000010111000001101001",
+            },
+            data: "[form]",
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully posted:", response.data);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      clear();
+      setRefresh(!refresh);
+      Swal.fire({
+        title: "Good job!",
+        text: "Route Added Successfully!",
+        icon: "success",
+      });
+    }
+  };
+
   const handleSearchInputChange = async (event) => {
     setSearchInput(event.target.value);
   };
 
   const UpdateRoute = () => {
-    const updateData = {
-      ...routeData,
-      routeId: routeId,
-    };
-    const year = routeData.permitExpDate.year();
-    const month = routeData.permitExpDate.month() + 1;
-    const day = routeData.permitExpDate.date();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-
-    axios
-      .post(
-        `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
-        file,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then(function (response) {
-        console.log("Data successfully Edited:", response.data);
-        console.log(file);
-      })
-      .catch(function (error) {
-        console.error("Error posting data:", error);
+    if (
+      routeData.distance === null ||
+      routeData.startDestination === "" ||
+      routeData.endDestination === "" ||
+      routeData.noOfSections === "" ||
+      routeData.permitExpDate === null ||
+      routeData.permitExpDate === ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
       });
-    setFile(null);
-    setisUpdateButtonDisabled(true);
-    setisAddButtonDisabled(false);
-    setValue(null);
-    setRouteDate({
-      startDestination: "",
-      endDestination: "",
-      distance: "",
-      noOfSections: "",
-      permitExpDate: value,
+    } else {
+      const updateData = {
+        ...routeData,
+        routeId: routeId,
+      };
+
+      const year = routeData.permitExpDate.year();
+      const month = routeData.permitExpDate.month() + 1;
+      const day = routeData.permitExpDate.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const form = new FormData();
+      form.append("file", file);
+      axios
+        .post(
+          `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+          form,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type":
+                "multipart/form-data; boundary=---011000010111000001101001",
+            },
+            data: "[form]",
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully Edited:", response.data);
+          console.log(file);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      setRefresh(!refresh);
+      clear();
+      Swal.fire({
+        title: "Good job!",
+        text: "Route Information Updated Successfully!",
+        icon: "success",
+      });
+    }
+  };
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error deleting data:", error.message);
+          });
+        setRefresh(!refresh);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
     });
   };
-  const handleDelete = (id) => {
-    console.log(id);
-    axios
-      .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log("Data successfully deleted:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error deleting data:", error.message);
-      });
-  };
+
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
     total: 0,
   });
 
-  const [paginationModel, setPaginationModel] = React.useState({
+  const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
   });
@@ -355,22 +458,7 @@ function Route_Management() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
-
-  const clear = () => {
-    setFile(null);
-    setValue(null);
-    setRouteDate({
-      startDestination: "",
-      endDestination: "",
-      distance: "",
-      noOfSections: "",
-      permitExpDate: "",
-    });
-
-    setisUpdateButtonDisabled(true);
-    setisAddButtonDisabled(false);
-  };
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
 
   return (
     <Sidebar>
@@ -458,6 +546,12 @@ function Route_Management() {
                   class="form-control input-field"
                   value={routeData.distance}
                   onChange={handleChange}
+                  onKeyPress={(event) => {
+                    const char = String.fromCharCode(event.charCode);
+                    if (!/^\d|\.$|^[-]/.test(char)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
               <div className="input-and-label">
@@ -468,6 +562,12 @@ function Route_Management() {
                   class="form-control input-field"
                   value={routeData.noOfSections}
                   onChange={handleChange}
+                  onKeyPress={(event) => {
+                    const char = String.fromCharCode(event.charCode);
+                    if (!/^\d|\.$|^[-]/.test(char)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -480,13 +580,13 @@ function Route_Management() {
                       slotProps={{ field: { clearable: true } }}
                       sx={{ width: 300 }}
                       value={value}
-                      onChange={(newValue) =>
-                        setRouteDate(
+                      onChange={async (newValue) =>
+                        await setRouteDate(
                           {
                             ...routeData,
                             permitExpDate: newValue,
                           },
-                          console.log(routeData.permitExpDate)
+                          setValue(newValue)
                         )
                       }
                       id="permitExpDate"

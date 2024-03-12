@@ -3,9 +3,7 @@ package com.example.BusBuddy.services;
 import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.dto.Route.RouteResponse;
-import com.example.BusBuddy.models.DocCategory;
-import com.example.BusBuddy.models.Document;
-import com.example.BusBuddy.models.Route;
+import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.RouteRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,7 +50,7 @@ public class RouteService {
                     );
         }else{
             routePage =
-                    routeRepository.findByBusiness(
+                    routeRepository.findByBusinessOrderByRouteId(
                             businessService.extractBId(httpServletRequest),
                             pageable
                     );
@@ -138,6 +136,13 @@ public class RouteService {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body("Route added successfully");
+    }
+
+    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Long> routeIds = routeRepository.findByBusiness(business);
+
+        return ResponseEntity.ok(routeIds);
     }
 
     @Transactional

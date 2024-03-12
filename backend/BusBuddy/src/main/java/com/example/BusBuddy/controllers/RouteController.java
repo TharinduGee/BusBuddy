@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -68,6 +69,12 @@ public class RouteController {
                                       @RequestParam(value = "file",required = false) MultipartFile file
     ) throws IOException {
         return routeService.edit(httpServletRequest, routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
+    }
+
+    @GetMapping("/geRouteIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
+        return routeService.getRouteIds(httpServletRequest);
     }
 
     @DeleteMapping("/remove")
