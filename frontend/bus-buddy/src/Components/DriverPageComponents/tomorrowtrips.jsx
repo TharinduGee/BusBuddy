@@ -16,11 +16,7 @@ function TomorrowTrip() {
     const fetchTripData = async () => {
       try {
         const token = localStorage.getItem('token'); // Get JWT token from local storage
-<<<<<<< HEAD:frontend/bus-buddy/src/Components/DriverPageComponents/tomorrowtrips.jsx
-        //const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbXBfaWQiOiIxIiwiYXVkIjoiMyIsInN1YiI6InBhYmFzYXJhQGdtYWlsLmNvbSIsImlhdCI6MTcxMDE1NDQ3NCwiZXhwIjoxNzEwMTk0MDc0fQ.HUgUMThkkBza5tmJxLEjkXnR9kusGcO5FqulrTK4bVU';
-=======
         
->>>>>>> d4964be41ceb321ff53453a233a7d5f917748552:frontend/bus-buddy/src/Pages/Bus_Driver_Pages/todaytrip.jsx
         const response = await fetch(`http://localhost:8081/api/v1/trip/findForEmployee?date=${selectedDate}`, {
           method: 'GET',
           headers: {
