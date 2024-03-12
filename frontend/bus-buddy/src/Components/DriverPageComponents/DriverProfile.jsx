@@ -1,4 +1,5 @@
 import React from "react";
+import avatar from "../../Assets/Owner_assests/Avatar.png"
 import './DriverProfile.css'
 
 function profile () {
