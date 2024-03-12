@@ -13,12 +13,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
+import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -43,6 +45,7 @@ public class BusService {
                                       int seats,
                                       String regNo,
                                       MultipartFile file) throws IOException {
+
         Bus bus = Bus.builder()
                 .type(type)
                 .seats(seats)
@@ -65,7 +68,7 @@ public class BusService {
         return ResponseEntity.ok("Bus added successfully.");
     }
 
-    public ResponseEntity<Bus> edit(
+    public ResponseEntity<Bus> editBus(
             HttpServletRequest httpServletRequest,
             Long busId,
             BusType type,
@@ -184,6 +187,30 @@ public class BusService {
 
         return ResponseEntity.ok(busPaginationResponse);
     }
+
+//    public ResponseEntity<List<Long>> findAllByBusiness(int pageNumber, int pageSize){
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+//        List<Bus> = busRepository.findByBusiness(bus);
+//
+//        List<BusResponse> busResponses = buses.stream()
+//                .map(bus ->
+//                        BusResponse.builder()
+//                                .busId(bus.getBusId())
+//                                .lastServiceDate(bus.getLastServiceDate())
+//                                .numberPlate(bus.getNumberPlate())
+//                                .regNo(bus.getRegNo())
+//                                .type(bus.getType())
+//                                .seats(bus.getSeats())
+//                                .docId(bus.getDocument() != null ? bus.getDocument().getDocId() : null)
+//                                .docName(bus.getDocument() != null ? bus.getDocument().getDocName() : null)
+//                                .build()
+//                )
+//                .toList();
+//
+//
+//
+//        return ResponseEntity.ok(busPaginationResponse);
+//    }
 
     public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);

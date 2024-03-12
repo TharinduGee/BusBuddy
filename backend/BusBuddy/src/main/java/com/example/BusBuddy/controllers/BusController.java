@@ -8,6 +8,7 @@ import com.example.BusBuddy.models.BusType;
 import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +29,8 @@ public class BusController {
     public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
                                       @RequestParam BusType type,
                                       @RequestParam String numberPlate,
-                                      @RequestParam(required = false) Date lastServicedDate,
-                                      @RequestParam(required = false)  int seats,
+                                      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date lastServicedDate,
+                                      @RequestParam(required = false)  Integer seats,
                                       @RequestParam(required = false)  String regNo,
                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         return busService.add(httpServletRequest, type, numberPlate, lastServicedDate, seats, regNo, file);
@@ -44,7 +45,7 @@ public class BusController {
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> edit(HttpServletRequest httpServletRequest,
+    public ResponseEntity<String> editBus(HttpServletRequest httpServletRequest,
                                       @RequestParam Long busId,
                                       @RequestParam BusType type,
                                       @RequestParam String numberPlate,
@@ -52,7 +53,7 @@ public class BusController {
                                       @RequestParam(required = false)  int seats,
                                       @RequestParam(required = false)  String regNo,
                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        busService.edit(httpServletRequest,busId, type, numberPlate, lastServicedDate, seats, regNo, file);
+        busService.editBus(httpServletRequest,busId, type, numberPlate, lastServicedDate, seats, regNo, file);
         return ResponseEntity.ok("Bus edited successsfully.");
     }
 

@@ -1,20 +1,13 @@
 package com.example.BusBuddy.models;
 
-import ch.qos.logback.classic.net.SMTPAppender;
-import com.example.BusBuddy.services.TripStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
-import java.io.StringBufferInputStream;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor

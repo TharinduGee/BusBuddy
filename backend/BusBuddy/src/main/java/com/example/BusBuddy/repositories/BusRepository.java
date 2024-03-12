@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 
 public interface BusRepository extends JpaRepository <Bus, Long>{
     long countByBusiness(Business business);
@@ -14,4 +16,6 @@ public interface BusRepository extends JpaRepository <Bus, Long>{
     Page<Bus>  findByBusinessAndNumberPlateContainingIgnoreCase(Business business, String numberPlate, Pageable pageable);
 
     Page<Bus>  findByBusiness(Business business,  Pageable pageable);
+
+    List<Bus> findByBusiness(Business business);
 }

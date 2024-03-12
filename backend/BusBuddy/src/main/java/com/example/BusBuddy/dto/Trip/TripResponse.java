@@ -1,14 +1,12 @@
 package com.example.BusBuddy.dto.Trip;
 
-import com.example.BusBuddy.models.Route;
-import com.example.BusBuddy.services.TripStatus;
+import com.example.BusBuddy.models.TripStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Time;
-import java.time.LocalTime;
 
 @Data
 @Builder

@@ -75,8 +75,8 @@ function Sidebar({ children }) {
   };
 
   useEffect(() =>{
-    const getUsername = async () =>{
-      await axios
+
+      axios
       .get(
         `http://localhost:8081/api/v1/user/getUsername`,
         {
@@ -92,7 +92,6 @@ function Sidebar({ children }) {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
-    };
 
   },[token]);
 

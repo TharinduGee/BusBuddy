@@ -13,8 +13,8 @@ function DriverDashboard() {
     // Function to fetch trip data based on the selected date
     const fetchTripData = async () => {
       try {
-       // const token = localStorage.getItem('token'); // Get JWT token from local storage
-       const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbXBfaWQiOiIxIiwiYXVkIjoiMyIsInN1YiI6InBhYmFzYXJhQGdtYWlsLmNvbSIsImlhdCI6MTcxMDE1NDQ3NCwiZXhwIjoxNzEwMTk0MDc0fQ.HUgUMThkkBza5tmJxLEjkXnR9kusGcO5FqulrTK4bVU'
+        const token = localStorage.getItem('token'); // Get JWT token from local storage
+      
         const response = await fetch(`http://localhost:8081/api/v1/trip/findForEmployee?date=${selectedDate}`, {
           method: 'GET',
           headers: {
