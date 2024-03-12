@@ -138,17 +138,17 @@ public class RouteService {
         return ResponseEntity.status(HttpStatus.OK).body("Route added successfully");
     }
 
-    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
-        Business business = businessService.extractBId(httpServletRequest);
-        List<Route> routes = routeRepository.findByBusiness(business);
-
-        List<Long> routeIdList = routes.stream()
-                .map(Route::getRouteId
-                )
-                .toList();
-
-        return ResponseEntity.ok(routeIdList);
-    }
+//    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
+//        Business business = businessService.extractBId(httpServletRequest);
+//        List<Route> routes = routeRepository.findByBusiness(business);
+//
+//        List<Long> routeIdList = routes.stream()
+//                .map(Route::getRouteId
+//                )
+//                .toList();
+//
+//        return ResponseEntity.ok(routeIdList);
+//    }
 
     @Transactional
     public ResponseEntity<String> edit(

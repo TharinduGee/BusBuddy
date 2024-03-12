@@ -17,5 +17,5 @@ public interface BusRepository extends JpaRepository <Bus, Long>{
 
     Page<Bus>  findByBusiness(Business business,  Pageable pageable);
 
-    List<Bus> findByBusiness(Business business);
+//    List<Bus> findByBusiness(Business business);
 }

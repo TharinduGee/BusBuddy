@@ -43,11 +43,11 @@ public class BusController {
         return busService.findByBusId(busId);
     }
 
-    @GetMapping("/getBusIds")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
-        return busService.getBusIds(httpServletRequest);
-    }
+//    @GetMapping("/getBusIds")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+//        return busService.getBusIds(httpServletRequest);
+//    }
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
