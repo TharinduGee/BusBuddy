@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState, useEffect} from "react";
 import SidebarDriver from "../../Components/DriverPageComponents/SidebarDriver";
 import TomorrowTrip from "../../Components/DriverPageComponents/tomorrowtrips";
 import TodayTrip from "../../Components/DriverPageComponents/todaytrips";
@@ -6,11 +6,8 @@ import './DriverDashboard.css';
 import SearchTrip from "../../Components/DriverPageComponents/searchtrip";
 
 
-function DriverDashboard() {
+function DriverDashboard() {cl
   // State variables to manage trip data and selected date
-<<<<<<< HEAD
-  
-=======
   const [tripData, setTripData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
 
@@ -42,7 +39,6 @@ function DriverDashboard() {
     fetchTripData(); // Fetch trip data when component mounts or selected date changes
   }, [selectedDate]);
 
->>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
   return (
     <div>
       <SidebarDriver>
