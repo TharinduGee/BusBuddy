@@ -3,7 +3,8 @@ package com.example.BusBuddy.controllers;
 import com.example.BusBuddy.dto.Trip.TripAddForDurationRequest;
 
 import com.example.BusBuddy.dto.Trip.TripAddRequest;
-import com.example.BusBuddy.dto.Trip.TripResponse;
+import com.example.BusBuddy.dto.Trip.TripPaginationResponse;
+import com.example.BusBuddy.dto.Trip.TripResponseForEmployee;
 import com.example.BusBuddy.services.TripService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
@@ -43,8 +44,19 @@ public class TripController {
 
     @GetMapping("/findForEmployee")
     @PreAuthorize("hasAnyRole('DRIVER', 'CONDUCTOR')")
-    public ResponseEntity<List<TripResponse>> findTripByEmployee(HttpServletRequest httpServletRequest, @RequestParam @NotNull LocalDate date){
+    public ResponseEntity<List<TripResponseForEmployee>> findTripByEmployee(HttpServletRequest httpServletRequest, @RequestParam @NotNull LocalDate date){
         return tripService.findTripForEmployee(httpServletRequest , date);
+    }
+
+    @GetMapping("/findTrips")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<TripPaginationResponse> findTrips(HttpServletRequest httpServletRequest,
+                                                            @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                            @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize,
+                                                            @RequestParam LocalDate startDate,
+                                                            @RequestParam LocalDate endDate
+    ){
+        return tripService.findTrips(httpServletRequest, pageNumber, pageSize, startDate, endDate);
     }
 
 }

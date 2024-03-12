@@ -71,11 +71,11 @@ public class RouteController {
         return routeService.edit(httpServletRequest, routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
     }
 
-//    @GetMapping("/geRouteIds")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
-//        return routeService.getRouteIds(httpServletRequest);
-//    }
+    @GetMapping("/geRouteIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
+        return routeService.getRouteIds(httpServletRequest);
+    }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('ADMIN')")

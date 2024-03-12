@@ -133,7 +133,7 @@ public class BusService {
                     );
         }else{
             busPage =
-                    busRepository.findByBusiness(
+                    busRepository.findByBusinessOrderByBusIdAsc(
                             businessService.extractBId(httpServletRequest),
                             pageable
                     );
@@ -188,17 +188,12 @@ public class BusService {
         return ResponseEntity.ok(busPaginationResponse);
     }
 
-//    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
-//        Business business = businessService.extractBId(httpServletRequest);
-//        List<Bus> buses= busRepository.findByBusiness(business);
-//
-//        List<Long> busIdList = buses.stream()
-//                .map(Bus::getBusId
-//                )
-//                .toList();
-//
-//        return ResponseEntity.ok(busIdList);
-//    }
+    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Long> busIdList = busRepository.findByBusiness(business);
+
+        return ResponseEntity.ok(busIdList);
+    }
 
     public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);

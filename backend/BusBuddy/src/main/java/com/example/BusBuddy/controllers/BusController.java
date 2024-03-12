@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.util.Date;
@@ -22,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/v1/bus")
 @CrossOrigin(origins = "http://localhost:3000")
+@ApiIgnore
 public class BusController {
     private final BusService busService;
 
@@ -43,11 +45,11 @@ public class BusController {
         return busService.findByBusId(busId);
     }
 
-//    @GetMapping("/getBusIds")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
-//        return busService.getBusIds(httpServletRequest);
-//    }
+    @GetMapping("/getBusIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+        return busService.getBusIds(httpServletRequest);
+    }
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")

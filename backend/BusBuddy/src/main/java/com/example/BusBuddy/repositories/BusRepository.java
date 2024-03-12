@@ -15,7 +15,8 @@ public interface BusRepository extends JpaRepository <Bus, Long>{
 
     Page<Bus>  findByBusinessAndNumberPlateContainingIgnoreCase(Business business, String numberPlate, Pageable pageable);
 
-    Page<Bus>  findByBusiness(Business business,  Pageable pageable);
+    Page<Bus>  findByBusinessOrderByBusIdAsc(Business business,  Pageable pageable);
 
-//    List<Bus> findByBusiness(Business business);
+    @Query("SELECT b.id FROM bus b WHERE b.business = ?1")
+    List<Long> findByBusiness(Business business);
 }

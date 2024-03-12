@@ -12,7 +12,7 @@ import java.sql.Time;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TripResponse {
+public class TripResponseForEmployee {
     private String startDestination;
     private String endDestination;
     private Time startTime;
