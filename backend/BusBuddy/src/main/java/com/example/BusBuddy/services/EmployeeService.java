@@ -223,4 +223,27 @@ public class EmployeeService {
         return employeeRepository.findById(bId).orElseThrow(() -> new RuntimeException("Business not found."));
     }
 
+    public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Employee> employees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
+
+        List<Long> driverIdList = employees.stream()
+                .map(Employee::getEmpId
+                )
+                .toList();
+
+        return ResponseEntity.ok(driverIdList);
+    }
+
+    public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Employee> employees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
+
+        List<Long> conductorIdList = employees.stream()
+                .map(Employee::getEmpId
+                )
+                .toList();
+
+        return ResponseEntity.ok(conductorIdList);
+    }
 }

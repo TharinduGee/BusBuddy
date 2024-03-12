@@ -8,10 +8,10 @@ import Button from "@mui/material/Button";
 function Operation_hub() {
   const token = localStorage.getItem("token");
   const [Data, setData] = useState({
-    businessName: "Acme Corporation",
-    registrationNo: "123456789",
-    email: "info@acme.com",
-    address: "123 Main St, Anytown, CA 12345",
+    businessName: "",
+    registrationNo: "",
+    email: "",
+    address: "",
   });
 
   const [formData, setFormData] = useState({

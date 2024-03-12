@@ -23,6 +23,7 @@ function Sidebar({ children }) {
   const [username , setUsername] = useState("");
   const location = useLocation();
   const token = localStorage.getItem("token");
+  const [imageData , setImageData] = useState(null);
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
 
@@ -74,6 +75,8 @@ function Sidebar({ children }) {
     window.location.href = "/";
   };
 
+
+
   useEffect(() =>{
 
       axios
@@ -94,6 +97,39 @@ function Sidebar({ children }) {
       });
 
   },[token]);
+
+  function arrayBufferToBase64(buffer) {
+    const binary = '';
+    const bytes = new Uint8Array(buffer);
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+
+  async function fetchImageData(url) {
+    try {
+      const response = await axios.get(url, {
+        responseType: 'arraybuffer' // Specify response type as arraybuffer
+      });
+      return response.data; // This will be a Uint8Array containing the image data
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+      return null; // Handle errors by returning null or a placeholder image
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchImageData('http://localhost:8081/api/v1/user/getImage');
+      if (data) {
+        const base64Image = arrayBufferToBase64(data);
+        setImageData(`data:image/png;base64,${base64Image}`); // Replace 'png' with the actual image format
+      }
+    };
+  
+    fetchData();
+  }, []);
 
   
   
