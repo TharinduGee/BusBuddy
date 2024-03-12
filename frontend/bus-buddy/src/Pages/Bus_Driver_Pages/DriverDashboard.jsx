@@ -6,7 +6,7 @@ import './DriverDashboard.css';
 import SearchTrip from "../../Components/DriverPageComponents/searchtrip";
 
 
-function DriverDashboard() {cl
+function DriverDashboard() {
   // State variables to manage trip data and selected date
   const [tripData, setTripData] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
