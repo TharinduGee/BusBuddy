@@ -225,25 +225,15 @@ public class EmployeeService {
 
     public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
-        List<Employee> employees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
+        List<Long> driverIds = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
 
-        List<Long> driverIdList = employees.stream()
-                .map(Employee::getEmpId
-                )
-                .toList();
-
-        return ResponseEntity.ok(driverIdList);
+        return ResponseEntity.ok(driverIds);
     }
 
     public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
-        List<Employee> employees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
+        List<Long> conductorIds = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
 
-        List<Long> conductorIdList = employees.stream()
-                .map(Employee::getEmpId
-                )
-                .toList();
-
-        return ResponseEntity.ok(conductorIdList);
+        return ResponseEntity.ok(conductorIds);
     }
 }
