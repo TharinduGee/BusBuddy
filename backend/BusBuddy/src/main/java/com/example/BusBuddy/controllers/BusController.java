@@ -49,7 +49,7 @@ public class BusController {
                                       @RequestParam Long busId,
                                       @RequestParam BusType type,
                                       @RequestParam String numberPlate,
-                                      @RequestParam(required = false) Date lastServicedDate,
+                                      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date lastServicedDate,
                                       @RequestParam(required = false)  int seats,
                                       @RequestParam(required = false)  String regNo,
                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
