@@ -1,11 +1,82 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import avatar from "./../../Assets/Owner_assests/Avatar.png";
-import TextField from "@mui/material/TextField";
+import axios from "axios";
 import "./Operation_hub.css";
 import Button from "@mui/material/Button";
 
 function Operation_hub() {
+  const token = localStorage.getItem("token");
+  const [Data, setData] = useState({
+    businessName: "Acme Corporation",
+    registrationNo: "123456789",
+    email: "info@acme.com",
+    address: "123 Main St, Anytown, CA 12345",
+  });
+
+  const [formData, setFormData] = useState({
+    businessName: "",
+    registrationNo: "",
+    email: "",
+    address: "",
+  });
+
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+
+  useEffect(() => {
+
+    if (token) {
+      axios
+        .get("http://localhost:8081/api/v1/business/getInfo", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((response) => {
+          if (response && response.data) {
+            setFormData(response.data);
+            setData(response.data);
+            setButtonDisabled(true); 
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+
+        });
+    }
+  }, [token]);
+
+  useEffect(() => {
+    const isFormChanged =
+      formData.businessName !== Data.businessName ||
+      formData.registrationNo !== Data.registrationNo ||
+      formData.email !== Data.email ||
+      formData.address !== Data.address;
+
+    setButtonDisabled(!isFormChanged);
+  }, [formData, Data]);
+
+  const handleInputChange = (event) => {
+    const { id, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const handleUpdate = () => {
+    axios
+      .post("http://localhost:8081/api/v1/business/editBusinessInfo", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log("Update Successful");
+        setData(formData); 
+        setButtonDisabled(true); 
+      })
+      .catch((error) => {
+        console.error("Update Failed:", error);
+      });
+  };
+
   return (
     <Sidebar>
       <div className="d-flex flex-column align-items-center justify-content-center">
@@ -23,32 +94,44 @@ function Operation_hub() {
           </div>
           <div className="d-flex flex-wrap  justify-content-between two-fields">
             <div className="input-and-label">
-              <label class="form-label">Business Name*</label>
+              <label className="form-label">Business Name*</label>
               <input
                 type="text"
-                id="BusinessName"
-                class="form-control input-field"
+                id="businessName"
+                className="form-control input-field"
+                value={formData.businessName || Data.businessName}
+                onChange={handleInputChange}
               />
             </div>
             <div className="input-and-label">
-              <label class="form-label">Registraion ID*</label>
+              <label className="form-label">Registration ID*</label>
               <input
                 type="text"
-                id="Registration_ID"
-                class="form-control input-field"
+                id="registrationNo"
+                className="form-control input-field"
+                value={formData.registrationNo || Data.registrationNo}
+                onChange={handleInputChange}
               />
             </div>
             <div className="input-and-label">
-              <label class="form-label">Email*</label>
-              <input type="text" id="Email" class="form-control input-field" />
+              <label className="form-label">Email*</label>
+              <input
+                type="text"
+                id="email"
+                className="form-control input-field"
+                value={formData.email || Data.email}
+                onChange={handleInputChange}
+              />
             </div>
           </div>
           <div className="input-and-label">
-            <label class="form-label ">Address*</label>
+            <label className="form-label">Address*</label>
             <input
               type="text"
-              id="Address"
-              class="form-control addres-text-field"
+              id="address"
+              className="form-control address-text-field"
+              value={formData.address || Data.address}
+              onChange={handleInputChange}
             />
           </div>
           <div className="d-flex justify-content-center">
@@ -57,10 +140,12 @@ function Operation_hub() {
                 borderRadius: 10,
                 margin: 30,
                 width: "100%",
-                backgroundColor: " #ff760d",
+                backgroundColor: buttonDisabled ? "gray" : "#ff760d",
               }}
               className="d-flex  update-btn"
               variant="contained"
+              onClick={handleUpdate}
+              disabled={buttonDisabled}
             >
               Update Information
             </Button>
