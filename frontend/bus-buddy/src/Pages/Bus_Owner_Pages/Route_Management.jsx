@@ -149,22 +149,7 @@ function Route_Management() {
 
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
-<<<<<<< HEAD
-    setFile("D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf");
-    console.log(file);
-    // const fileInput = e.target;
-    // const selectedFile = fileInput.files[0];
-
-    // if (selectedFile) {
-    //   console.log("File name:", selectedFile.name);
-    //   console.log("File size (in bytes):", selectedFile.size);
-    //   console.log("File type:", selectedFile.type);
-    // } else {
-    //   console.log("No file selected.");
-    // }
-=======
     setFile(e.target.files[0]);
->>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
   };
   const [refresh, setRefresh] = useState(true);
   const [value, setValue] = useState(null);
@@ -206,43 +191,7 @@ function Route_Management() {
     console.log(routeData);
   };
 
-<<<<<<< HEAD
-  const AddRoute = () => {
-    const year = routeData.permitExpDate.year();
-    const month = routeData.permitExpDate.month() + 1;
-    const day = routeData.permitExpDate.date();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-    const form = new FormData();
-    form.append("file", "C:\\Users\\pabas\\Downloads\\conductor.png");
-
-    const passdata = {
-      file: "D:\\Academics\\Certificate\\Ceritificate_SLITT_Stage_2.pdf",
-    };
-    axios
-      .post(
-        `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type":
-              "multipart/form-data; boundary=---011000010111000001101001",
-          },
-          data: "[form]",
-        }
-      )
-      .then(function (response) {
-        console.log("Data successfully posted:", response.data);
-        console.log(passdata);
-      })
-      .catch(function (error) {
-        console.error("Error posting data:", error);
-      });
-=======
   const clear = () => {
->>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
     setFile(null);
     setValue(null);
     setRouteDate({
