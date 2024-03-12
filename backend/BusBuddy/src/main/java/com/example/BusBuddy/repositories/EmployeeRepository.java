@@ -17,4 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Long countByBusiness(Business business);
     Long countByBusinessAndDesignation(Business business, EmployeeType type);
     Page<Employee> findByBusinessAndNameContainingIgnoreCase(Business business , String firstName , Pageable pageable);
+
+    List<Employee> findByBusinessAndDesignation(Business business , EmployeeType designation);
 }

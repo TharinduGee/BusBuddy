@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -73,6 +74,18 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EmployeeCountResponse> countEmployee(HttpServletRequest httpServletRequest){
         return employeeService.countEmployee(httpServletRequest);
+    }
+
+    @GetMapping("/getDriverIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
+        return employeeService.getDriverIds(httpServletRequest);
+    }
+
+    @GetMapping("/getConductorIds")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
+        return employeeService.getConductorIds(httpServletRequest);
     }
 
 }
