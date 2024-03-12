@@ -146,22 +146,12 @@ function Route_Management() {
       ),
     },
   ];
+
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
-    console.log(file);
-    // const fileInput = e.target;
-    // const selectedFile = fileInput.files[0];
-
-    // if (selectedFile) {
-    //   console.log("File name:", selectedFile.name);
-    //   console.log("File size (in bytes):", selectedFile.size);
-    //   console.log("File type:", selectedFile.type);
-    // } else {
-    //   console.log("No file selected.");
-    // }
   };
-
+  const [refresh, setRefresh] = useState(true);
   const [value, setValue] = useState(null);
   const [routeId, setrouteId] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -170,18 +160,20 @@ function Route_Management() {
     endDestination: "",
     distance: null,
     noOfSections: null,
+    permitExpDate: value,
   });
 
   const handleEdit = (e) => {
-    setrouteId(e.id);
-    setValue(dayjs(e.permitExpDate));
-    console.log(value);
+    const updatedId = e.id;
+    setrouteId(updatedId);
+    const updatedValue = dayjs(e.permitExpDate);
+    setValue(updatedValue);
     setRouteDate({
       startDestination: e.startDestination,
       endDestination: e.endDestination,
       distance: e.distance,
       noOfSections: e.noOfSections,
-      permitExpDate: value,
+      permitExpDate: updatedValue,
     });
 
     setisUpdateButtonDisabled(false);
@@ -195,50 +187,69 @@ function Route_Management() {
       ...routeData,
       [e.target.id]: value_,
     });
+
     console.log(routeData);
   };
 
-  const AddRoute = () => {
-    const year = routeData.permitExpDate.year();
-    const month = routeData.permitExpDate.month() + 1;
-    const day = routeData.permitExpDate.date();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-    const form = new FormData();
-    form.append("file", file);
-
-  
-    axios
-      .post(
-        `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type":
-              "multipart/form-data; boundary=---011000010111000001101001",
-          },
-          data: "[form]",
-        }
-      )
-      .then(function (response) {
-        console.log("Data successfully posted:", response.data);
-       
-      })
-      .catch(function (error) {
-        console.error("Error posting data:", error);
-      });
+  const clear = () => {
     setFile(null);
     setValue(null);
-    setrouteId(null);
     setRouteDate({
       startDestination: "",
       endDestination: "",
       distance: "",
       noOfSections: "",
+      permitExpDate: null,
     });
+
+    console.log("after clear", routeData.permitExpDate);
+    setisUpdateButtonDisabled(true);
+    setisAddButtonDisabled(false);
   };
+
+  const AddRoute = () => {
+    if (
+      routeData.distance === null ||
+      routeData.startDestination === "" ||
+      routeData.endDestination === "" ||
+      routeData.noOfSections === "" ||
+      routeData.permitExpDate === null
+    ) {
+      alert("Please fill all the fields");
+    } else {
+      const year = routeData.permitExpDate.year();
+      const month = routeData.permitExpDate.month() + 1;
+      const day = routeData.permitExpDate.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const form = new FormData();
+      form.append("file", file);
+
+      axios
+        .post(
+          `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+          form,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type":
+                "multipart/form-data; boundary=---011000010111000001101001",
+            },
+            data: "[form]",
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully posted:", response.data);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      clear();
+      setRefresh(!refresh);
+    }
+  };
+
   const handleSearchInputChange = async (event) => {
     setSearchInput(event.target.value);
   };
@@ -254,15 +265,19 @@ function Route_Management() {
     const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
       day
     ).padStart(2, "0")}`;
-
+    const form = new FormData();
+    form.append("file", file);
     axios
       .post(
         `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
-        file,
+        form,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data; boundary=---011000010111000001101001",
           },
+          data: "[form]",
         }
       )
       .then(function (response) {
@@ -272,18 +287,10 @@ function Route_Management() {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
-    setFile(null);
-    setisUpdateButtonDisabled(true);
-    setisAddButtonDisabled(false);
-    setValue(null);
-    setRouteDate({
-      startDestination: "",
-      endDestination: "",
-      distance: "",
-      noOfSections: "",
-      permitExpDate: value,
-    });
+    setRefresh(!refresh);
+    clear();
   };
+
   const handleDelete = (id) => {
     console.log(id);
     axios
@@ -298,14 +305,16 @@ function Route_Management() {
       .catch((error) => {
         console.error("Error deleting data:", error.message);
       });
+    setRefresh(!refresh);
   };
+
   const [pageState, setPageState] = useState({
     isLoading: false,
     data: [],
     total: 0,
   });
 
-  const [paginationModel, setPaginationModel] = React.useState({
+  const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
   });
@@ -353,22 +362,7 @@ function Route_Management() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
-
-  const clear = () => {
-    setFile(null);
-    setValue(null);
-    setRouteDate({
-      startDestination: "",
-      endDestination: "",
-      distance: "",
-      noOfSections: "",
-      permitExpDate: "",
-    });
-
-    setisUpdateButtonDisabled(true);
-    setisAddButtonDisabled(false);
-  };
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
 
   return (
     <Sidebar>
@@ -456,6 +450,12 @@ function Route_Management() {
                   class="form-control input-field"
                   value={routeData.distance}
                   onChange={handleChange}
+                  onKeyPress={(event) => {
+                    const char = String.fromCharCode(event.charCode);
+                    if (!/^\d|\.$|^[-]/.test(char)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
               <div className="input-and-label">
@@ -466,6 +466,12 @@ function Route_Management() {
                   class="form-control input-field"
                   value={routeData.noOfSections}
                   onChange={handleChange}
+                  onKeyPress={(event) => {
+                    const char = String.fromCharCode(event.charCode);
+                    if (!/^\d|\.$|^[-]/.test(char)) {
+                      event.preventDefault();
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -478,13 +484,13 @@ function Route_Management() {
                       slotProps={{ field: { clearable: true } }}
                       sx={{ width: 300 }}
                       value={value}
-                      onChange={(newValue) =>
+                      onChange={async (newValue) =>
                         setRouteDate(
                           {
                             ...routeData,
                             permitExpDate: newValue,
                           },
-                          console.log(routeData.permitExpDate)
+                          console.log("onehcange date", routeData.permitExpDate)
                         )
                       }
                       id="permitExpDate"

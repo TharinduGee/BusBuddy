@@ -18,6 +18,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 function Trip_Management() {
+  const token = localStorage.getItem("token");
   const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const table_theme = createTheme({
@@ -160,17 +161,51 @@ function Trip_Management() {
       ),
     },
   ];
-  const [selectedemail, setselectedemail] = useState("");
-  const [selectedmobile, setselectedmobile] = useState("");
-  const [selectedfullname, setselectedfullname] = useState("");
-  const [selectedID, setselectedID] = useState("");
-  const [selectedRole, setselectedRole] = useState("");
-  const handleRowClick = (params) => {
-    setselectedID(params.row.id);
-    setselectedemail(params.row.email);
-    setselectedmobile(params.row.mobileNo);
-    setselectedfullname(params.row.firstName + " " + params.row.lastName);
-    setselectedRole(params.row.role);
+
+  const [tripData, setTripData] = useState({
+    startTime: "2024-03-11T20:04:46.327Z",
+    endTime: "2024-03-11T20:04:46.327Z",
+
+    busId: 0,
+    routeId: 0,
+    driverId: 0,
+    condocterId: 0,
+  });
+  const AddTrip = () => {
+    if (
+      tripData.startTime === null ||
+      tripData.endTime === "" ||
+      tripData.busId === "" ||
+      tripData.driverId === "" ||
+      tripData.condocterId === null
+    ) {
+      alert("Please fill all the fields");
+    } else {
+      // const year = routeData.permitExpDate.year();
+      // const month = routeData.permitExpDate.month() + 1;
+      // const day = routeData.permitExpDate.date();
+      // const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+      //   day
+      // ).padStart(2, "0")}`;
+
+      axios
+        .post(`http://localhost:8081/api/v1/trip/add?date=2022-02-02`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data; boundary=---011000010111000001101001",
+          },
+          data: "[form]",
+        })
+        .then(function (response) {
+          console.log("Data successfully posted:", response.data);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      // clear();
+      // setRefresh(!refresh);
+    }
   };
 
   const options = [
@@ -227,7 +262,6 @@ function Trip_Management() {
                       paginationModel: { page: 0, pageSize: 5 },
                     },
                   }}
-                  onRowClick={handleRowClick}
                   pageSizeOptions={[5, 10]}
                   rowHeight={40}
                 />
