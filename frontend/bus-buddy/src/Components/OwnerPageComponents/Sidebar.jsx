@@ -78,8 +78,12 @@ function Sidebar({ children }) {
 
 
   useEffect(() =>{
+<<<<<<< HEAD
+    axios
+=======
 
       axios
+>>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
       .get(
         `http://localhost:8081/api/v1/user/getUsername`,
         {
@@ -95,6 +99,11 @@ function Sidebar({ children }) {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+<<<<<<< HEAD
+    
+
+  },[token]);
+=======
 
   },[token]);
 
@@ -136,6 +145,7 @@ function Sidebar({ children }) {
   }, []);
 
   
+>>>>>>> d4964be41ceb321ff53453a233a7d5f917748552
   
   
   return (

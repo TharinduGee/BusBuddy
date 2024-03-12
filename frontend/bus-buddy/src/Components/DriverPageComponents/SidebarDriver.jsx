@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Driver from "../../Assets/Driver.png";
 import logo from "../../Assets/bus.png";
 import "./SidebarDriver.css";
@@ -15,7 +16,9 @@ function Sidebar({ children }) {
   const [mainClass, setmainClass] = useState("main-content");
   const spans = document.querySelectorAll("span");
   const [activeLink, setActiveLink] = useState("");
+  const [username , setUsername] = useState("");
   const location = useLocation();
+  const token = localStorage.getItem("token");
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
 
@@ -60,6 +63,33 @@ function Sidebar({ children }) {
       });
     }
   };
+
+  const handleLogOut = () =>{
+    localStorage.clear();
+    window.location.href = "/";
+  };
+
+  useEffect(() =>{
+    axios
+      .get(
+        `http://localhost:8081/api/v1/user/getUsername`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        setUsername(response.data);
+        console.log("Data successfully fetched:", response.data);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+
+  },[token]);
+
+  
   return (
     <div className="sidebar-container-driver">
       <div className="menu" onClick={togglemenu}>
@@ -82,7 +112,7 @@ function Sidebar({ children }) {
 
           <div className="user-info">
             <div className="name-email">
-              <span className="name">Lasitha Harshana</span>
+              <span className="name">{username}</span>
               <span className="email">ID: LH001238905</span>
             </div>
           </div>
@@ -126,7 +156,7 @@ function Sidebar({ children }) {
         <div className="line"></div>
         <a className="logout" href="#">
           <FiLogOut className="logout-btn ms-4 py-2" />
-          <span>Log Out</span>
+          <span onClick={handleLogOut}>Log Out</span>
         </a>
         <div></div>
       </div>
