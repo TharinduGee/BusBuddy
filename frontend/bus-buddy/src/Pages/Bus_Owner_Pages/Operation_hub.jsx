@@ -24,7 +24,6 @@ function Operation_hub() {
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
   useEffect(() => {
-
     if (token) {
       axios
         .get("http://localhost:8081/api/v1/business/getInfo", {
@@ -34,12 +33,11 @@ function Operation_hub() {
           if (response && response.data) {
             setFormData(response.data);
             setData(response.data);
-            setButtonDisabled(true); 
+            setButtonDisabled(true);
           }
         })
         .catch((error) => {
           console.error(error);
-
         });
     }
   }, [token]);
@@ -64,13 +62,17 @@ function Operation_hub() {
 
   const handleUpdate = () => {
     axios
-      .post("http://localhost:8081/api/v1/business/editBusinessInfo", formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(
+        "http://localhost:8081/api/v1/business/editBusinessInfo",
+        formData,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         console.log("Update Successful");
-        setData(formData); 
-        setButtonDisabled(true); 
+        setData(formData);
+        setButtonDisabled(true);
       })
       .catch((error) => {
         console.error("Update Failed:", error);

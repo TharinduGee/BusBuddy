@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Swal from "sweetalert2";
 
 function Route_Management() {
   const token = localStorage.getItem("token");
@@ -199,10 +200,8 @@ function Route_Management() {
       endDestination: "",
       distance: "",
       noOfSections: "",
-      permitExpDate: null,
+      permitExpDate: "",
     });
-
-    console.log("after clear", routeData.permitExpDate);
     setisUpdateButtonDisabled(true);
     setisAddButtonDisabled(false);
   };
@@ -213,9 +212,14 @@ function Route_Management() {
       routeData.startDestination === "" ||
       routeData.endDestination === "" ||
       routeData.noOfSections === "" ||
-      routeData.permitExpDate === null
+      routeData.permitExpDate === null ||
+      routeData.permitExpDate === ""
     ) {
-      alert("Please fill all the fields");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
+      });
     } else {
       const year = routeData.permitExpDate.year();
       const month = routeData.permitExpDate.month() + 1;
@@ -247,6 +251,11 @@ function Route_Management() {
         });
       clear();
       setRefresh(!refresh);
+      Swal.fire({
+        title: "Good job!",
+        text: "Route Added Successfully!",
+        icon: "success",
+      });
     }
   };
 
@@ -255,57 +264,94 @@ function Route_Management() {
   };
 
   const UpdateRoute = () => {
-    const updateData = {
-      ...routeData,
-      routeId: routeId,
-    };
-    const year = routeData.permitExpDate.year();
-    const month = routeData.permitExpDate.month() + 1;
-    const day = routeData.permitExpDate.date();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
-    const form = new FormData();
-    form.append("file", file);
-    axios
-      .post(
-        `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type":
-              "multipart/form-data; boundary=---011000010111000001101001",
-          },
-          data: "[form]",
-        }
-      )
-      .then(function (response) {
-        console.log("Data successfully Edited:", response.data);
-        console.log(file);
-      })
-      .catch(function (error) {
-        console.error("Error posting data:", error);
+    if (
+      routeData.distance === null ||
+      routeData.startDestination === "" ||
+      routeData.endDestination === "" ||
+      routeData.noOfSections === "" ||
+      routeData.permitExpDate === null ||
+      routeData.permitExpDate === ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
       });
-    setRefresh(!refresh);
-    clear();
+    } else {
+      const updateData = {
+        ...routeData,
+        routeId: routeId,
+      };
+
+      const year = routeData.permitExpDate.year();
+      const month = routeData.permitExpDate.month() + 1;
+      const day = routeData.permitExpDate.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+      const form = new FormData();
+      form.append("file", file);
+      axios
+        .post(
+          `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+          form,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type":
+                "multipart/form-data; boundary=---011000010111000001101001",
+            },
+            data: "[form]",
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully Edited:", response.data);
+          console.log(file);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      setRefresh(!refresh);
+      clear();
+      Swal.fire({
+        title: "Good job!",
+        text: "Route Information Updated Successfully!",
+        icon: "success",
+      });
+    }
   };
 
   const handleDelete = (id) => {
-    console.log(id);
-    axios
-      .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log("Data successfully deleted:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error deleting data:", error.message);
-      });
-    setRefresh(!refresh);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error deleting data:", error.message);
+          });
+        setRefresh(!refresh);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   const [pageState, setPageState] = useState({
@@ -485,12 +531,12 @@ function Route_Management() {
                       sx={{ width: 300 }}
                       value={value}
                       onChange={async (newValue) =>
-                        setRouteDate(
+                        await setRouteDate(
                           {
                             ...routeData,
                             permitExpDate: newValue,
                           },
-                          console.log("onehcange date", routeData.permitExpDate)
+                          setValue(newValue)
                         )
                       }
                       id="permitExpDate"
