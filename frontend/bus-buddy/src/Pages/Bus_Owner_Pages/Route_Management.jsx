@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
@@ -153,6 +153,7 @@ function Route_Management() {
   };
   const [refresh, setRefresh] = useState(true);
   const [value, setValue] = useState(null);
+  const inputRef = useRef(null);
   const [routeId, setrouteId] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [routeData, setRouteDate] = useState({
@@ -192,6 +193,9 @@ function Route_Management() {
   };
 
   const clear = () => {
+    if (inputRef.current.value) {
+      inputRef.current.value = null;
+    }
     setFile(null);
     setValue(null);
     setRouteDate({
@@ -204,6 +208,10 @@ function Route_Management() {
     setisUpdateButtonDisabled(true);
     setisAddButtonDisabled(false);
   };
+  useEffect(() => {
+    console.log(file);
+    console.log(routeData.permitExpDate);
+  }, [file, routeData.permitExpDate]);
 
   const AddRoute = () => {
     if (
@@ -339,16 +347,16 @@ function Route_Management() {
           })
           .then((response) => {
             console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
           })
           .catch((error) => {
             console.error("Error deleting data:", error.message);
           });
         setRefresh(!refresh);
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
       }
     });
   };
@@ -555,6 +563,7 @@ function Route_Management() {
                 class="form-control input-field-choosefile "
                 id="inputGroupFile02"
                 onChange={handleFileChange}
+                ref={inputRef}
               />
             </div>
           </div>

@@ -43,11 +43,9 @@ function LoginPage() {
         window.location.href = "/SupporterDashboard";
       }
     } catch (error) {
-      // Handle errors
       console.error("Error:", error);
       if (error.response) {
         if (error.response.status === 400) {
-          // Check if the error is due to bad credentials
           if (
             error.response.data &&
             error.response.data === "Bad credentials"
@@ -89,7 +87,7 @@ function LoginPage() {
       <div className="d-flex justify-content-center">
         <div className="container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
           <div className="sign-up-text-main">
-            Sign in to your Busbudy Account
+            Sign in to your BusBuddy Account
           </div>
 
           <TextField

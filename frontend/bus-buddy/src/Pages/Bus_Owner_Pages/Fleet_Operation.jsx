@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -13,7 +13,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
-
 function Fleet_Operation() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
@@ -148,7 +147,7 @@ function Fleet_Operation() {
 
   const [value, setValue] = useState(null);
   const [value_date, setValue_date] = useState(null);
-
+  const inputRef = useRef(null);
   const [refresh, setRefresh] = useState(true);
   const [busData, setBusDate] = useState({
     type: value,
@@ -161,6 +160,7 @@ function Fleet_Operation() {
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
+    console.log(file);
   };
 
   const [pageState, setPageState] = useState({
@@ -234,9 +234,15 @@ function Fleet_Operation() {
         }));
       }
     };
+    console.log(file);
+    console.log(busData.lastServiceDate);
 
     fetchData();
   }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+
+  useEffect(() => {
+    console.log(file);
+  }, [file, busId, busData.lastServiceDate, busData.type]);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -257,21 +263,24 @@ function Fleet_Operation() {
           })
           .then((response) => {
             console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
           })
           .catch((error) => {
             console.error("Error deleting data:", error.message);
           });
         setRefresh(!refresh);
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
       }
     });
   };
 
   const clear = () => {
+    if (inputRef.current.value) {
+      inputRef.current.value = null;
+    }
     console.log("clear");
     setFile(null);
     setValue("Normal");
@@ -329,21 +338,21 @@ function Fleet_Operation() {
         )
         .then(function (response) {
           console.log("Data successfully posted:", response.data);
+          Swal.fire({
+            title: "Good job!",
+            text: "Bus Added Successfully!",
+            icon: "success",
+          });
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
         });
       clear();
       setRefresh(!refresh);
-      Swal.fire({
-        title: "Good job!",
-        text: "Bus Added Successfully!",
-        icon: "success",
-      });
     }
   };
 
-  const UpdateRoute = () => {
+  const UpdateBusData = () => {
     if (
       busData.type === null ||
       busData.numberPlate === "" ||
@@ -386,19 +395,24 @@ function Fleet_Operation() {
           }
         )
         .then(function (response) {
+          Swal.fire({
+            title: "Good job!",
+            text: "Bus Information Updated Successfully!",
+            icon: "success",
+          });
           console.log("Data successfully Edited:", response.data);
           console.log(file);
         })
         .catch(function (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong",
+          });
           console.error("Error posting data:", error);
         });
       setRefresh(!refresh);
       clear();
-      Swal.fire({
-        title: "Good job!",
-        text: "Bus Information Updated Successfully!",
-        icon: "success",
-      });
     }
   };
 
@@ -517,16 +531,13 @@ function Fleet_Operation() {
                 id="type"
                 class="form-select input-field-trip"
                 value={value}
-                onChange={async (event) => {
-                  const newValue = event.target.value;
-                  setValue(event.target.value);
-                  await setBusDate(
-                    {
-                      ...busData,
-                      type: newValue,
-                    },
-                    console.log("onehcange date", value)
-                  );
+                onChange={(newValue) => {
+                  setBusDate((prevState) => ({
+                    ...prevState,
+                    type: newValue.target.value,
+                  }));
+                  setValue_date(newValue.target.value);
+                  console.log("one change date", busData.type);
                 }}
               >
                 <option value="NORMAL">NORMAL</option>
@@ -544,16 +555,15 @@ function Fleet_Operation() {
                     sx={{ width: 300 }}
                     slotProps={{ field: { clearable: true } }}
                     value={value_date}
-                    onChange={(newValue) =>
-                      setBusDate(
-                        {
-                          ...busData,
-                          lastServiceDate: newValue,
-                        },
-                        console.log("onehcange date", busData.lastServiceDate),
-                        setValue_date(newValue)
-                      )
-                    }
+                    onChange={(newValue) => {
+                      setBusDate((prevState) => ({
+                        ...prevState,
+                        lastServiceDate: newValue,
+                      }));
+
+                      setValue_date(newValue);
+                      console.log("one change date", busData.lastServiceDate);
+                    }}
                     id="lastServiceDate"
                   />
                 </LocalizationProvider>
@@ -572,6 +582,7 @@ function Fleet_Operation() {
                 class="form-control input-field-choosefile "
                 id="inputGroupFile02"
                 onChange={handleFileChange}
+                ref={inputRef}
               />
             </div>
           </div>
@@ -604,7 +615,7 @@ function Fleet_Operation() {
               className="d-flex  update-btn"
               variant="contained"
               disabled={isUpdateButtonDisabled}
-              onClick={UpdateRoute}
+              onClick={UpdateBusData}
             >
               Update Bus
             </Button>
