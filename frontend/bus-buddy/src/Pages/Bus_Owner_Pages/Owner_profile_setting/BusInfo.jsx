@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
-import avatar from "./../../Assets/Owner_assests/Avatar.png";
-import axios from "axios";
-import "./Operation_hub.css";
-import Button from "@mui/material/Button";
 
-function Operation_hub() {
+import React, { useEffect, useState } from "react";
+import avatar from "../../../Assets/Owner_assests/Avatar.png";
+import axios from "axios";
+import "./BusInfo.css";
+import Button from "@mui/material/Button";
+import SidebarOwner from "./SidebarOwner";
+
+function BusInfo() {
   const token = localStorage.getItem("token");
   const [username, setUsername] = useState("");
   const [Data, setData] = useState({
@@ -79,8 +80,9 @@ function Operation_hub() {
   };
 
   return (
-    <div className="d-flex flex-column align-items-center justify-content-center">
-      <h1 className="d-flex pb-3">Operation hub</h1>
+    <SidebarOwner>
+        <div className="d-flex flex-column align-items-center justify-content-center">
+      <h1 className="d-flex pb-3">Bus Business Information</h1>
       <div className="op-main-container">
         <div className="d-flex flex-row align-items-center">
           <img
@@ -152,7 +154,9 @@ function Operation_hub() {
         </div>
       </div>
     </div>
+    </SidebarOwner>
+    
   );
 }
 
-export default Operation_hub;
+export default BusInfo;

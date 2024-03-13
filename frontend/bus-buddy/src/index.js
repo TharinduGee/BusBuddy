@@ -23,7 +23,7 @@ import DriverFinancial from "./Pages/Bus_Driver_Pages/DriverFinancial";
 import AddEmployee from "./Pages/Bus_Owner_Pages/Team_Directory_Add_Employee";
 import Membership from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Membership";
 import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactInfo";
-import Notifications from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Notifications";
+import BusInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/BusInfo";
 import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -57,7 +57,7 @@ root.render(
         <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
         <Route path="/membership" element={<Membership />} />
         <Route path="/contactInfo" element={<ContactInfo />} />
-        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/Bus_Info" element={<BusInfo Info />} />
         <Route path="/passwordSecurity" element={<PasswordSecurity />} />
       </Routes>
     </BrowserRouter>
