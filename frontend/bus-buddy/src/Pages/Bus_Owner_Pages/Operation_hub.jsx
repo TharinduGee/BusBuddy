@@ -80,81 +80,79 @@ function Operation_hub() {
   };
 
   return (
-    <Sidebar>
-      <div className="d-flex flex-column align-items-center justify-content-center">
-        <h1 className="d-flex pb-3">Operation hub</h1>
-        <div className="op-main-container">
-          <div className="d-flex flex-row align-items-center">
-            <img
-              className="op-prof-pic  input-and-label "
-              src={avatar}
-              alt="Add Icon"
-            />
-            <div className="d-flex flex-column mx-4">
-              <label>NCG</label>
-            </div>
+    <div className="d-flex flex-column align-items-center justify-content-center">
+      <h1 className="d-flex pb-3">Operation hub</h1>
+      <div className="op-main-container">
+        <div className="d-flex flex-row align-items-center">
+          <img
+            className="op-prof-pic  input-and-label "
+            src={avatar}
+            alt="Add Icon"
+          />
+          <div className="d-flex flex-column mx-4">
+            <label>NCG</label>
           </div>
-          <div className="d-flex flex-wrap  justify-content-between two-fields">
-            <div className="input-and-label">
-              <label className="form-label">Business Name*</label>
-              <input
-                type="text"
-                id="businessName"
-                className="form-control input-field"
-                value={formData.businessName || Data.businessName}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="input-and-label">
-              <label className="form-label">Registration ID*</label>
-              <input
-                type="text"
-                id="registrationNo"
-                className="form-control input-field"
-                value={formData.registrationNo || Data.registrationNo}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="input-and-label">
-              <label className="form-label">Email*</label>
-              <input
-                type="text"
-                id="email"
-                className="form-control input-field"
-                value={formData.email || Data.email}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
+        </div>
+        <div className="d-flex flex-wrap  justify-content-between two-fields">
           <div className="input-and-label">
-            <label className="form-label">Address*</label>
+            <label className="form-label">Business Name*</label>
             <input
               type="text"
-              id="address"
-              className="form-control address-text-field"
-              value={formData.address || Data.address}
+              id="businessName"
+              className="form-control input-field"
+              value={formData.businessName || Data.businessName}
               onChange={handleInputChange}
             />
           </div>
-          <div className="d-flex justify-content-center">
-            <Button
-              style={{
-                borderRadius: 10,
-                margin: 30,
-                width: "100%",
-                backgroundColor: buttonDisabled ? "gray" : "#ff760d",
-              }}
-              className="d-flex  update-btn"
-              variant="contained"
-              onClick={handleUpdate}
-              disabled={buttonDisabled}
-            >
-              Update Information
-            </Button>
+          <div className="input-and-label">
+            <label className="form-label">Registration ID*</label>
+            <input
+              type="text"
+              id="registrationNo"
+              className="form-control input-field"
+              value={formData.registrationNo || Data.registrationNo}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="input-and-label">
+            <label className="form-label">Email*</label>
+            <input
+              type="text"
+              id="email"
+              className="form-control input-field"
+              value={formData.email || Data.email}
+              onChange={handleInputChange}
+            />
           </div>
         </div>
+        <div className="input-and-label">
+          <label className="form-label">Address*</label>
+          <input
+            type="text"
+            id="address"
+            className="form-control address-text-field"
+            value={formData.address || Data.address}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="d-flex justify-content-center">
+          <Button
+            style={{
+              borderRadius: 10,
+              margin: 30,
+              width: "100%",
+              backgroundColor: buttonDisabled ? "gray" : "#ff760d",
+            }}
+            className="d-flex  update-btn"
+            variant="contained"
+            onClick={handleUpdate}
+            disabled={buttonDisabled}
+          >
+            Update Information
+          </Button>
+        </div>
       </div>
-    </Sidebar>
+    </div>
   );
 }
 

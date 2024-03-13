@@ -13,17 +13,18 @@ import routemanagement from "../../Assets/Navbar/Route_Manage.png";
 import tripManagement from "../../Assets/Navbar/Trip_management.png";
 import { IoIosMenu, IoIosClose } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
+import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-function Sidebar({ children }) {
+function Sidebar() {
   const [sidebarClass, setSidebarClass] = useState("sidebar");
   const [mainClass, setmainClass] = useState("main-content");
   const spans = document.querySelectorAll("span");
   const [activeLink, setActiveLink] = useState("");
-  const [username , setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const location = useLocation();
   const token = localStorage.getItem("token");
-  const [imageData , setImageData] = useState(null);
+  const [imageData, setImageData] = useState(null);
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
 
@@ -69,25 +70,18 @@ function Sidebar({ children }) {
     }
   };
 
-
-  const handleLogOut = () =>{
+  const handleLogOut = () => {
     localStorage.clear();
     window.location.href = "/";
   };
 
-
-
-  useEffect(() =>{
-
-      axios
-      .get(
-        `http://localhost:8081/api/v1/user/getUsername`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8081/api/v1/user/getUsername`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(function (response) {
         setUsername(response.data);
         console.log("Data successfully fetched:", response.data);
@@ -95,11 +89,10 @@ function Sidebar({ children }) {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
-
-  },[token]);
+  }, [token]);
 
   function arrayBufferToBase64(buffer) {
-    const binary = '';
+    const binary = "";
     const bytes = new Uint8Array(buffer);
     for (let i = 0; i < bytes.byteLength; i++) {
       binary += String.fromCharCode(bytes[i]);
@@ -110,7 +103,7 @@ function Sidebar({ children }) {
   async function fetchImageData(url) {
     try {
       const response = await axios.get(url, {
-        responseType: 'arraybuffer' // Specify response type as arraybuffer
+        responseType: "arraybuffer", // Specify response type as arraybuffer
       });
       return response.data; // This will be a Uint8Array containing the image data
     } catch (error) {
@@ -121,19 +114,18 @@ function Sidebar({ children }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchImageData('http://localhost:8081/api/v1/user/getImage');
+      const data = await fetchImageData(
+        "http://localhost:8081/api/v1/user/getImage"
+      );
       if (data) {
         const base64Image = arrayBufferToBase64(data);
         setImageData(`data:image/png;base64,${base64Image}`); // Replace 'png' with the actual image format
       }
     };
-  
+
     fetchData();
   }, []);
 
-  
-  
-  
   return (
     <div className="sidebar-container">
       <div className="menu" onClick={togglemenu}>
@@ -156,7 +148,7 @@ function Sidebar({ children }) {
 
           <div className="user-info">
             <div className="name-email">
-              <span className="name" >{username}</span>
+              <span className="name">{username}</span>
               <span className="email">ID: CP001238905</span>
             </div>
           </div>
@@ -166,8 +158,8 @@ function Sidebar({ children }) {
           <ul className="px-3">
             <li>
               <a
-                href="/dashbord"
-                className={activeLink === "/dashbord" ? "active-link" : ""}
+                href="/dashboard"
+                className={activeLink === "/dashboard" ? "active-link" : ""}
               >
                 <img src={dashbordIcon} className="sidebaricon" />
                 <span>Dashboard</span>
@@ -267,7 +259,9 @@ function Sidebar({ children }) {
         </a>
         <div></div>
       </div>
-      <div className={mainClass}>{children}</div>
+      <div className={mainClass}>
+        <Outlet />
+      </div>
     </div>
   );
 }

@@ -114,79 +114,77 @@ function File_Library() {
   const handleSearchInputChange = (event) => {};
 
   return (
-    <Sidebar>
-      <div>
-        <div className="d-flex flex-column align-items-center  justify-content-end">
+    <div>
+      <div className="d-flex flex-column align-items-center  justify-content-end">
+        <div
+          style={{ width: "80%" }}
+          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+        >
+          <ThemeProvider theme={theme}>
+            <TextField
+              id="outlined-basic"
+              label="Search by Document Name"
+              variant="outlined"
+              onChange={handleSearchInputChange}
+              InputProps={{
+                sx: {
+                  backgroundColor: "#F4F4F4",
+                  width: 350,
+                  borderRadius: 10,
+                  borderColor: "FF760D",
+                },
+              }}
+            />
+          </ThemeProvider>
+        </div>
+        <div
+          className="justify-content-center align-items-center d-flex py-4"
+          style={{ height: 400, width: "100%" }}
+        >
           <div
-            style={{ width: "80%" }}
-            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+            className="justify-content-center align-items-center"
+            style={{ width: "80%", height: 325 }}
           >
-            <ThemeProvider theme={theme}>
-              <TextField
-                id="outlined-basic"
-                label="Search by Document Name"
-                variant="outlined"
-                onChange={handleSearchInputChange}
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#F4F4F4",
-                    width: 350,
-                    borderRadius: 10,
-                    borderColor: "FF760D",
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={rows_}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
                   },
                 }}
+                // onRowClick={handleRowClick}
+                pageSizeOptions={[5, 10]}
+                rowHeight={40}
               />
             </ThemeProvider>
           </div>
-          <div
-            className="justify-content-center align-items-center d-flex py-4"
-            style={{ height: 400, width: "100%" }}
-          >
-            <div
-              className="justify-content-center align-items-center"
-              style={{ width: "80%", height: 325 }}
-            >
-              <ThemeProvider theme={table_theme}>
-                <DataGrid
-                  rows={rows_}
-                  columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  // onRowClick={handleRowClick}
-                  pageSizeOptions={[5, 10]}
-                  rowHeight={40}
-                />
-              </ThemeProvider>
-            </div>
-          </div>
+        </div>
 
-          <div className="d-flex flex-wrap justify-content-center  align-items-start">
-            <div className="d-flex flex-column justify-content-center p-4 mx-4">
-              <div className="input-and-label">
-                <label class="form-label">Document Name*</label>
-                <input
-                  type="text"
-                  id="Document_name"
-                  class="form-control input-field-trip mb-4"
-                />
-              </div>
-              <div className="input-and-label">
-                <label class="form-label">Document Catogory*</label>
-                <select class="form-select input-field-trip mb-4">
-                  <option value="NORMAL">Cat1</option>
-                  <option value="SEMI_LUXURY">cat2</option>
-                  <option value="LUXURY">cat3</option>
-                </select>
-              </div>
+        <div className="d-flex flex-wrap justify-content-center  align-items-start">
+          <div className="d-flex flex-column justify-content-center p-4 mx-4">
+            <div className="input-and-label">
+              <label class="form-label">Document Name*</label>
+              <input
+                type="text"
+                id="Document_name"
+                class="form-control input-field-trip mb-4"
+              />
             </div>
-            <Uploader />
+            <div className="input-and-label">
+              <label class="form-label">Document Catogory*</label>
+              <select class="form-select input-field-trip mb-4">
+                <option value="NORMAL">Cat1</option>
+                <option value="SEMI_LUXURY">cat2</option>
+                <option value="LUXURY">cat3</option>
+              </select>
+            </div>
           </div>
+          <Uploader />
         </div>
       </div>
-    </Sidebar>
+    </div>
   );
 }
 

@@ -417,206 +417,201 @@ function Fleet_Operation() {
   };
 
   return (
-    <Sidebar>
-      <div>
-        <div className="d-flex flex-column align-items-center  justify-content-end">
-          <div
-            style={{ width: "80%" }}
-            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
-          >
-            <ThemeProvider theme={theme}>
-              <TextField
-                id="outlined-basic"
-                label="Search by Bus ID"
-                variant="outlined"
-                onChange={handleSearchInputChange}
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#F4F4F4",
-                    width: 350,
-                    borderRadius: 10,
-                    borderColor: "FF760D",
-                  },
-                }}
-              />
-            </ThemeProvider>
-          </div>
-          <div
-            className="justify-content-center align-items-center d-flex py-4"
-            style={{ height: 400, width: "100%" }}
-          >
-            <div
-              className="justify-content-center align-items-center"
-              style={{ width: "80%", height: 325 }}
-            >
-              <ThemeProvider theme={table_theme}>
-                <DataGrid
-                  rows={pageState.data}
-                  page={pageState.page - 1}
-                  columns={columns}
-                  loading={pageState.isLoading}
-                  rowCount={pageState.total}
-                  paginationModel={paginationModel}
-                  paginationMode="server"
-                  onPaginationModelChange={setPaginationModel}
-                  pageSizeOptions={[5, 10]}
-                  rowHeight={40}
-                />
-              </ThemeProvider>
-            </div>
-          </div>
+    <div>
+      <div className="d-flex flex-column align-items-center  justify-content-end">
+        <div
+          style={{ width: "80%" }}
+          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+        >
+          <ThemeProvider theme={theme}>
+            <TextField
+              id="outlined-basic"
+              label="Search by Bus ID"
+              variant="outlined"
+              onChange={handleSearchInputChange}
+              InputProps={{
+                sx: {
+                  backgroundColor: "#F4F4F4",
+                  width: 350,
+                  borderRadius: 10,
+                  borderColor: "FF760D",
+                },
+              }}
+            />
+          </ThemeProvider>
         </div>
         <div
           className="justify-content-center align-items-center d-flex py-4"
-          style={{ width: "100%" }}
+          style={{ height: 400, width: "100%" }}
         >
-          <div className="trip-main-container">
-            <div className="pair-container">
-              <div className="input-and-label">
-                <label class="form-label">Number Plate*</label>
-                <input
-                  type="text"
-                  id="numberPlate"
-                  class="form-control input-field-trip"
-                  value={busData.numberPlate}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="input-and-label">
-                <label class="form-label">Registration No*</label>
-                <input
-                  type="text"
-                  id="regNo"
-                  class="form-control input-field-trip"
-                  value={busData.regNo}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="pair-container">
-              <div className="input-and-label">
-                <label class="form-label">Number of Seats*</label>
-                <input
-                  type="text"
-                  id="Seats"
-                  class="form-control input-field-trip"
-                  value={busData.Seats}
-                  onChange={handleChange}
-                  onKeyPress={(event) => {
-                    const char = String.fromCharCode(event.charCode);
-                    if (!/^\d|\.$|^[-]/.test(char)) {
-                      event.preventDefault();
-                    }
-                  }}
-                />
-              </div>
-
-              <div className="input-and-label">
-                <label class="form-label">Bus Type*</label>
-                <select
-                  id="type"
-                  class="form-select input-field-trip"
-                  value={value}
-                  onChange={async (event) => {
-                    const newValue = event.target.value;
-                    setValue(event.target.value);
-                    await setBusDate(
-                      {
-                        ...busData,
-                        type: newValue,
-                      },
-                      console.log("onehcange date", value)
-                    );
-                  }}
-                >
-                  <option value="NORMAL">NORMAL</option>
-                  <option value="SEMI_LUXURY">SEMI_LUXURY</option>
-                  <option value="LUXURY">LUXURY</option>
-                </select>
-              </div>
-            </div>
-            <div className="pair-container align-items-end">
-              <div className="d-flex flex-column input-and-label">
-                <label class="form-label">Service Date*</label>
-                <ThemeProvider theme={datepicker_theme}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={{ width: 300 }}
-                      slotProps={{ field: { clearable: true } }}
-                      value={value_date}
-                      onChange={(newValue) =>
-                        setBusDate(
-                          {
-                            ...busData,
-                            lastServiceDate: newValue,
-                          },
-                          console.log(
-                            "onehcange date",
-                            busData.lastServiceDate
-                          ),
-                          setValue_date(newValue)
-                        )
-                      }
-                      id="lastServiceDate"
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-              <div
-                style={{
-                  width: 340,
-                  margin: 30,
-                  marginBottom: 1,
-                }}
-                class="input-group "
-              >
-                <input
-                  type="file"
-                  class="form-control input-field-choosefile "
-                  id="inputGroupFile02"
-                  onChange={handleFileChange}
-                />
-              </div>
-            </div>
-            <div className="d-flex flex-wrap mt-4 justify-content-between two-fields">
-              <Button
-                style={buttonStyle_Add}
-                className="d-flex  update-btn"
-                variant="contained"
-                disabled={isAddButtonDisabled}
-                onClick={AddBus}
-              >
-                Add Bus
-              </Button>
-              <Button
-                style={{
-                  borderRadius: 10,
-                  width: 200,
-                  margin: 20,
-                  backgroundColor: "#ff760d",
-                  color: "white",
-                }}
-                className="d-flex  update-btn"
-                variant="contained"
-                onClick={clear}
-              >
-                Clear
-              </Button>
-              <Button
-                style={buttonStyle_Update}
-                className="d-flex  update-btn"
-                variant="contained"
-                disabled={isUpdateButtonDisabled}
-                onClick={UpdateRoute}
-              >
-                Update Bus
-              </Button>
-            </div>
+          <div
+            className="justify-content-center align-items-center"
+            style={{ width: "80%", height: 325 }}
+          >
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={pageState.data}
+                page={pageState.page - 1}
+                columns={columns}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[5, 10]}
+                rowHeight={40}
+              />
+            </ThemeProvider>
           </div>
         </div>
       </div>
-    </Sidebar>
+      <div
+        className="justify-content-center align-items-center d-flex py-4"
+        style={{ width: "100%" }}
+      >
+        <div className="trip-main-container">
+          <div className="pair-container">
+            <div className="input-and-label">
+              <label class="form-label">Number Plate*</label>
+              <input
+                type="text"
+                id="numberPlate"
+                class="form-control input-field-trip"
+                value={busData.numberPlate}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="input-and-label">
+              <label class="form-label">Registration No*</label>
+              <input
+                type="text"
+                id="regNo"
+                class="form-control input-field-trip"
+                value={busData.regNo}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="pair-container">
+            <div className="input-and-label">
+              <label class="form-label">Number of Seats*</label>
+              <input
+                type="text"
+                id="Seats"
+                class="form-control input-field-trip"
+                value={busData.Seats}
+                onChange={handleChange}
+                onKeyPress={(event) => {
+                  const char = String.fromCharCode(event.charCode);
+                  if (!/^\d|\.$|^[-]/.test(char)) {
+                    event.preventDefault();
+                  }
+                }}
+              />
+            </div>
+
+            <div className="input-and-label">
+              <label class="form-label">Bus Type*</label>
+              <select
+                id="type"
+                class="form-select input-field-trip"
+                value={value}
+                onChange={async (event) => {
+                  const newValue = event.target.value;
+                  setValue(event.target.value);
+                  await setBusDate(
+                    {
+                      ...busData,
+                      type: newValue,
+                    },
+                    console.log("onehcange date", value)
+                  );
+                }}
+              >
+                <option value="NORMAL">NORMAL</option>
+                <option value="SEMI_LUXURY">SEMI_LUXURY</option>
+                <option value="LUXURY">LUXURY</option>
+              </select>
+            </div>
+          </div>
+          <div className="pair-container align-items-end">
+            <div className="d-flex flex-column input-and-label">
+              <label class="form-label">Service Date*</label>
+              <ThemeProvider theme={datepicker_theme}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    sx={{ width: 300 }}
+                    slotProps={{ field: { clearable: true } }}
+                    value={value_date}
+                    onChange={(newValue) =>
+                      setBusDate(
+                        {
+                          ...busData,
+                          lastServiceDate: newValue,
+                        },
+                        console.log("onehcange date", busData.lastServiceDate),
+                        setValue_date(newValue)
+                      )
+                    }
+                    id="lastServiceDate"
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+            <div
+              style={{
+                width: 340,
+                margin: 30,
+                marginBottom: 1,
+              }}
+              class="input-group "
+            >
+              <input
+                type="file"
+                class="form-control input-field-choosefile "
+                id="inputGroupFile02"
+                onChange={handleFileChange}
+              />
+            </div>
+          </div>
+          <div className="d-flex flex-wrap mt-4 justify-content-between two-fields">
+            <Button
+              style={buttonStyle_Add}
+              className="d-flex  update-btn"
+              variant="contained"
+              disabled={isAddButtonDisabled}
+              onClick={AddBus}
+            >
+              Add Bus
+            </Button>
+            <Button
+              style={{
+                borderRadius: 10,
+                width: 200,
+                margin: 20,
+                backgroundColor: "#ff760d",
+                color: "white",
+              }}
+              className="d-flex  update-btn"
+              variant="contained"
+              onClick={clear}
+            >
+              Clear
+            </Button>
+            <Button
+              style={buttonStyle_Update}
+              className="d-flex  update-btn"
+              variant="contained"
+              disabled={isUpdateButtonDisabled}
+              onClick={UpdateRoute}
+            >
+              Update Bus
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

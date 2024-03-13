@@ -17,23 +17,21 @@ function Dashboard() {
   ];
 
   return (
-    <Sidebar>
-      <div className="d-flex flex-column justify-content-center align-items-center">
-        <h1>Dashboad</h1>
-        <div className="d-flex flex-wrap justify-content-center align-items-center">
-          <div className="d-flex justify-content-center align-items-center  m-3">
-            <EmployeeCountCard />
-          </div>
-          <div className="m-3">
-            <IncomeExpensesViewer />
-          </div>
+    <div className="d-flex flex-column justify-content-center align-items-center">
+      <h1>Dashboad</h1>
+      <div className="d-flex flex-wrap justify-content-center align-items-center">
+        <div className="d-flex justify-content-center align-items-center  m-3">
+          <EmployeeCountCard />
         </div>
-
-        <div className="chart-container">
-          <Chart title="Income" aspect={3 / 1} data={data} />
+        <div className="m-3">
+          <IncomeExpensesViewer />
         </div>
       </div>
-    </Sidebar>
+
+      <div className="chart-container">
+        <Chart title="Income" aspect={3 / 1} data={data} />
+      </div>
+    </div>
   );
 }
 
