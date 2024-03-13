@@ -7,14 +7,8 @@ import Button from "@mui/material/Button";
 
 function Operation_hub() {
   const token = localStorage.getItem("token");
+  const [username, setUsername] = useState("");
   const [Data, setData] = useState({
-    businessName: "",
-    registrationNo: "",
-    email: "",
-    address: "",
-  });
-
-  const [formData, setFormData] = useState({
     businessName: "",
     registrationNo: "",
     email: "",
@@ -31,9 +25,7 @@ function Operation_hub() {
         })
         .then((response) => {
           if (response && response.data) {
-            setFormData(response.data);
             setData(response.data);
-            setButtonDisabled(true);
           }
         })
         .catch((error) => {
@@ -43,35 +35,42 @@ function Operation_hub() {
   }, [token]);
 
   useEffect(() => {
-    const isFormChanged =
-      formData.businessName !== Data.businessName ||
-      formData.registrationNo !== Data.registrationNo ||
-      formData.email !== Data.email ||
-      formData.address !== Data.address;
-
-    setButtonDisabled(!isFormChanged);
-  }, [formData, Data]);
+    if (username === "") {
+      axios
+        .get(`http://localhost:8081/api/v1/user/getUsername`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(function (response) {
+          setUsername(response.data);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+    }
+  }, [username, token]);
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
-    setFormData((prevData) => ({
+    setData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
+    setButtonDisabled(false); // Enable the button when input changes
   };
 
   const handleUpdate = () => {
     axios
       .post(
         "http://localhost:8081/api/v1/business/editBusinessInfo",
-        formData,
+        Data,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       )
       .then((response) => {
         console.log("Update Successful");
-        setData(formData);
         setButtonDisabled(true);
       })
       .catch((error) => {
@@ -90,7 +89,7 @@ function Operation_hub() {
             alt="Add Icon"
           />
           <div className="d-flex flex-column mx-4">
-            <label>NCG</label>
+            <label>{username}</label>
           </div>
         </div>
         <div className="d-flex flex-wrap  justify-content-between two-fields">
@@ -100,7 +99,7 @@ function Operation_hub() {
               type="text"
               id="businessName"
               className="form-control input-field"
-              value={formData.businessName || Data.businessName}
+              value={Data.businessName}
               onChange={handleInputChange}
             />
           </div>
@@ -110,7 +109,7 @@ function Operation_hub() {
               type="text"
               id="registrationNo"
               className="form-control input-field"
-              value={formData.registrationNo || Data.registrationNo}
+              value={Data.registrationNo}
               onChange={handleInputChange}
             />
           </div>
@@ -120,7 +119,7 @@ function Operation_hub() {
               type="text"
               id="email"
               className="form-control input-field"
-              value={formData.email || Data.email}
+              value={Data.email}
               onChange={handleInputChange}
             />
           </div>
@@ -131,7 +130,7 @@ function Operation_hub() {
             type="text"
             id="address"
             className="form-control address-text-field"
-            value={formData.address || Data.address}
+            value={Data.address}
             onChange={handleInputChange}
           />
         </div>
