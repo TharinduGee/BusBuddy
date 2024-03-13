@@ -314,17 +314,17 @@ function Route_Management() {
         .then(function (response) {
           console.log("Data successfully Edited:", response.data);
           console.log(file);
+          Swal.fire({
+            title: "Good job!",
+            text: "Route Information Updated Successfully!",
+            icon: "success",
+          });
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
         });
       setRefresh(!refresh);
       clear();
-      Swal.fire({
-        title: "Good job!",
-        text: "Route Information Updated Successfully!",
-        icon: "success",
-      });
     }
   };
 
