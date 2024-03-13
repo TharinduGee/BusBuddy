@@ -410,194 +410,192 @@ function Route_Management() {
   }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
 
   return (
-    <Sidebar>
-      <div>
-        <div className="d-flex flex-column align-items-center  justify-content-end">
-          <div
-            style={{ width: "80%" }}
-            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
-          >
-            <ThemeProvider theme={theme}>
-              <TextField
-                id="outlined-basic"
-                label="Search by Start Destination"
-                variant="outlined"
-                onChange={handleSearchInputChange}
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#F4F4F4",
-                    width: 350,
-                    borderRadius: 10,
-                    borderColor: "FF760D",
-                  },
-                }}
-              />
-            </ThemeProvider>
-          </div>
-          <div
-            className="justify-content-center align-items-center d-flex py-4"
-            style={{ height: 400, width: "100%" }}
-          >
-            <div
-              className="justify-content-center align-items-center"
-              style={{ width: "80%", height: 325 }}
-            >
-              <ThemeProvider theme={table_theme}>
-                <DataGrid
-                  rows={pageState.data}
-                  page={pageState.page - 1}
-                  columns={columns}
-                  loading={pageState.isLoading}
-                  rowCount={pageState.total}
-                  paginationModel={paginationModel}
-                  paginationMode="server"
-                  onPaginationModelChange={setPaginationModel}
-                  pageSizeOptions={[5, 10]}
-                  rowHeight={40}
-                />
-              </ThemeProvider>
-            </div>
-          </div>
+    <div>
+      <div className="d-flex flex-column align-items-center  justify-content-end">
+        <div
+          style={{ width: "80%" }}
+          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+        >
+          <ThemeProvider theme={theme}>
+            <TextField
+              id="outlined-basic"
+              label="Search by Start Destination"
+              variant="outlined"
+              onChange={handleSearchInputChange}
+              InputProps={{
+                sx: {
+                  backgroundColor: "#F4F4F4",
+                  width: 350,
+                  borderRadius: 10,
+                  borderColor: "FF760D",
+                },
+              }}
+            />
+          </ThemeProvider>
         </div>
         <div
           className="justify-content-center align-items-center d-flex py-4"
-          style={{ width: "100%" }}
+          style={{ height: 400, width: "100%" }}
         >
-          <div className="op-main-container">
-            <div className="d-flex flex-wrap  justify-content-between two-fields">
-              <div className="input-and-label">
-                <label class="form-label">Start Destination*</label>
-                <input
-                  type="text"
-                  id="startDestination"
-                  class="form-control input-field"
-                  value={routeData.startDestination}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="input-and-label">
-                <label class="form-label">End Destination*</label>
-                <input
-                  type="text"
-                  id="endDestination"
-                  class="form-control input-field"
-                  value={routeData.endDestination}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="d-flex flex-wrap  justify-content-between two-fields">
-              <div className="input-and-label">
-                <label class="form-label">Distance*</label>
-                <input
-                  type="text"
-                  id="distance"
-                  class="form-control input-field"
-                  value={routeData.distance}
-                  onChange={handleChange}
-                  onKeyPress={(event) => {
-                    const char = String.fromCharCode(event.charCode);
-                    if (!/^\d|\.$|^[-]/.test(char)) {
-                      event.preventDefault();
-                    }
-                  }}
-                />
-              </div>
-              <div className="input-and-label">
-                <label class="form-label">Number of Sections*</label>
-                <input
-                  type="text"
-                  id="noOfSections"
-                  class="form-control input-field"
-                  value={routeData.noOfSections}
-                  onChange={handleChange}
-                  onKeyPress={(event) => {
-                    const char = String.fromCharCode(event.charCode);
-                    if (!/^\d|\.$|^[-]/.test(char)) {
-                      event.preventDefault();
-                    }
-                  }}
-                />
-              </div>
-            </div>
-            <div className="choosefile-expiredate">
-              <div className="d-flex flex-column input-and-label">
-                <label class="form-label">Permite Expire Date*</label>
-                <ThemeProvider theme={datepicker_theme}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      slotProps={{ field: { clearable: true } }}
-                      sx={{ width: 300 }}
-                      value={value}
-                      onChange={async (newValue) =>
-                        await setRouteDate(
-                          {
-                            ...routeData,
-                            permitExpDate: newValue,
-                          },
-                          setValue(newValue)
-                        )
-                      }
-                      id="permitExpDate"
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-              <div
-                style={{
-                  width: 340,
-                  margin: 30,
-                  marginBottom: 1,
-                }}
-                class="input-group "
-              >
-                <input
-                  type="file"
-                  class="form-control input-field-choosefile "
-                  id="inputGroupFile02"
-                  onChange={handleFileChange}
-                />
-              </div>
-            </div>
-
-            <div className="d-flex flex-wrap justify-content-between two-fields">
-              <Button
-                style={buttonStyle_Add}
-                className="d-flex  update-btn"
-                variant="contained"
-                disabled={isAddButtonDisabled}
-                onClick={AddRoute}
-              >
-                Add Route
-              </Button>
-              <Button
-                style={{
-                  borderRadius: 10,
-                  margin: 30,
-                  backgroundColor: "#ff760d",
-                  color: "white",
-                }}
-                className="d-flex  update-btn"
-                variant="contained"
-                onClick={clear}
-                disabled={false}
-              >
-                Clear
-              </Button>
-              <Button
-                style={buttonStyle_Update}
-                className="d-flex  update-btn"
-                variant="contained"
-                disabled={isUpdateButtonDisabled}
-                onClick={UpdateRoute}
-              >
-                Update Route
-              </Button>
-            </div>
+          <div
+            className="justify-content-center align-items-center"
+            style={{ width: "80%", height: 325 }}
+          >
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={pageState.data}
+                page={pageState.page - 1}
+                columns={columns}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[5, 10]}
+                rowHeight={40}
+              />
+            </ThemeProvider>
           </div>
         </div>
       </div>
-    </Sidebar>
+      <div
+        className="justify-content-center align-items-center d-flex py-4"
+        style={{ width: "100%" }}
+      >
+        <div className="op-main-container">
+          <div className="d-flex flex-wrap  justify-content-between two-fields">
+            <div className="input-and-label">
+              <label class="form-label">Start Destination*</label>
+              <input
+                type="text"
+                id="startDestination"
+                class="form-control input-field"
+                value={routeData.startDestination}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="input-and-label">
+              <label class="form-label">End Destination*</label>
+              <input
+                type="text"
+                id="endDestination"
+                class="form-control input-field"
+                value={routeData.endDestination}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="d-flex flex-wrap  justify-content-between two-fields">
+            <div className="input-and-label">
+              <label class="form-label">Distance*</label>
+              <input
+                type="text"
+                id="distance"
+                class="form-control input-field"
+                value={routeData.distance}
+                onChange={handleChange}
+                onKeyPress={(event) => {
+                  const char = String.fromCharCode(event.charCode);
+                  if (!/^\d|\.$|^[-]/.test(char)) {
+                    event.preventDefault();
+                  }
+                }}
+              />
+            </div>
+            <div className="input-and-label">
+              <label class="form-label">Number of Sections*</label>
+              <input
+                type="text"
+                id="noOfSections"
+                class="form-control input-field"
+                value={routeData.noOfSections}
+                onChange={handleChange}
+                onKeyPress={(event) => {
+                  const char = String.fromCharCode(event.charCode);
+                  if (!/^\d|\.$|^[-]/.test(char)) {
+                    event.preventDefault();
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <div className="choosefile-expiredate">
+            <div className="d-flex flex-column input-and-label">
+              <label class="form-label">Permite Expire Date*</label>
+              <ThemeProvider theme={datepicker_theme}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    slotProps={{ field: { clearable: true } }}
+                    sx={{ width: 300 }}
+                    value={value}
+                    onChange={async (newValue) =>
+                      await setRouteDate(
+                        {
+                          ...routeData,
+                          permitExpDate: newValue,
+                        },
+                        setValue(newValue)
+                      )
+                    }
+                    id="permitExpDate"
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+            <div
+              style={{
+                width: 340,
+                margin: 30,
+                marginBottom: 1,
+              }}
+              class="input-group "
+            >
+              <input
+                type="file"
+                class="form-control input-field-choosefile "
+                id="inputGroupFile02"
+                onChange={handleFileChange}
+              />
+            </div>
+          </div>
+
+          <div className="d-flex flex-wrap justify-content-between two-fields">
+            <Button
+              style={buttonStyle_Add}
+              className="d-flex  update-btn"
+              variant="contained"
+              disabled={isAddButtonDisabled}
+              onClick={AddRoute}
+            >
+              Add Route
+            </Button>
+            <Button
+              style={{
+                borderRadius: 10,
+                margin: 30,
+                backgroundColor: "#ff760d",
+                color: "white",
+              }}
+              className="d-flex  update-btn"
+              variant="contained"
+              onClick={clear}
+              disabled={false}
+            >
+              Clear
+            </Button>
+            <Button
+              style={buttonStyle_Update}
+              className="d-flex  update-btn"
+              variant="contained"
+              disabled={isUpdateButtonDisabled}
+              onClick={UpdateRoute}
+            >
+              Update Route
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

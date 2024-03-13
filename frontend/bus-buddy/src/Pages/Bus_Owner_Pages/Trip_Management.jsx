@@ -307,328 +307,324 @@ function Trip_Management() {
   };
 
   return (
-    <Sidebar>
-      <div>
-        <div className="d-flex flex-column align-items-center  justify-content-end">
-          <div
-            style={{ width: "80%" }}
-            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
-          >
-            <ThemeProvider theme={theme}>
-              <TextField
-                id="outlined-basic"
-                label="Search by Email"
-                variant="outlined"
-                onChange={handleSearchInputChange}
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#F4F4F4",
-                    width: 350,
-                    borderRadius: 10,
-                    borderColor: "FF760D",
-                  },
-                }}
-              />
-            </ThemeProvider>
-          </div>
-          <div
-            className="justify-content-center align-items-center d-flex py-4"
-            style={{ height: 400, width: "100%" }}
-          >
-            <div
-              className="justify-content-center align-items-center"
-              style={{ width: "80%", height: 325 }}
-            >
-              <ThemeProvider theme={table_theme}>
-                <DataGrid
-                  rows={rows_}
-                  columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  pageSizeOptions={[5, 10]}
-                  rowHeight={40}
-                />
-              </ThemeProvider>
-            </div>
-          </div>
+    <div>
+      <div className="d-flex flex-column align-items-center  justify-content-end">
+        <div
+          style={{ width: "80%" }}
+          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+        >
+          <ThemeProvider theme={theme}>
+            <TextField
+              id="outlined-basic"
+              label="Search by Email"
+              variant="outlined"
+              onChange={handleSearchInputChange}
+              InputProps={{
+                sx: {
+                  backgroundColor: "#F4F4F4",
+                  width: 350,
+                  borderRadius: 10,
+                  borderColor: "FF760D",
+                },
+              }}
+            />
+          </ThemeProvider>
         </div>
         <div
           className="justify-content-center align-items-center d-flex py-4"
-          style={{ width: "100%" }}
+          style={{ height: 400, width: "100%" }}
         >
-          <div className="trip-main-container">
-            <div className="pair-container">
-              <div className="d-flex flex-column input-and-label">
-                <label class="form-label">Start Time*</label>
-                <ThemeProvider theme={text_box_the}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      value={tripData.startTime}
-                      sx={{ width: 200 }}
-                      onChange={async (newValue) =>
-                        await setTripData(
-                          {
-                            ...tripData,
-                            startTime: newValue,
-                          },
-                          console.log(tripData)
-                        )
-                      }
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-
-              <div className="d-flex flex-column input-and-label">
-                <label class="form-label">End Time*</label>
-                <ThemeProvider theme={text_box_the}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <TimePicker
-                      sx={{ width: 200 }}
-                      value={tripData.endTime}
-                      onChange={async (newValue) =>
-                        await setTripData(
-                          {
-                            ...tripData,
-                            endTime: newValue,
-                          },
-                          console.log(tripData)
-                        )
-                      }
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-            </div>
-            <div className="pair-container">
-              <div className="input-and-label">
-                <label class="form-label">Income*</label>
-                <input
-                  type="text"
-                  id="income"
-                  class="form-control input-field-trip"
-                  value={tripData.income}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="input-and-label">
-                <label class="form-label">Expense*</label>
-                <input
-                  type="text"
-                  id="expense"
-                  class="form-control input-field-trip"
-                  value={tripData.expense}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="pair-container">
-              <div className="input-and-label">
-                <label class="form-label">Bus*</label>
-                <Select
-                  id="busId"
-                  className="input-field-trip"
-                  options={options}
-                  isClearable={true}
-                  onChange={async (newValue) => {
-                    if (newValue !== null) {
-                      await setTripData({
-                        ...tripData,
-                        busId: newValue.value,
-                      });
-                      console.log(tripData);
-                    } else {
-                      await setTripData({
-                        ...tripData,
-                        busId: newValue,
-                      });
-                      console.log(tripData);
-                    }
-                  }}
-                />
-              </div>
-
-              <div className="input-and-label">
-                <label class="form-label">Route*</label>
-                <Select
-                  id="routeId"
-                  className="input-field-trip"
-                  options={options}
-                  isClearable={true}
-                  onChange={async (newValue) => {
-                    if (newValue !== null) {
-                      await setTripData({
-                        ...tripData,
-                        routeId: newValue.value,
-                      });
-                      console.log(tripData);
-                    } else {
-                      await setTripData({
-                        ...tripData,
-                        routeId: newValue,
-                      });
-                      console.log(tripData);
-                    }
-                  }}
-                />
-              </div>
-            </div>
-            <div className="pair-container ">
-              <div className="input-and-label">
-                <label class="form-label">Driver*</label>
-                <Select
-                  id="driverId"
-                  className="input-field-trip"
-                  options={options}
-                  isClearable={true}
-                  onChange={async (newValue) => {
-                    if (newValue !== null) {
-                      await setTripData({
-                        ...tripData,
-                        driverId: newValue.value,
-                      });
-                      console.log(tripData);
-                    } else {
-                      await setTripData({
-                        ...tripData,
-                        driverId: newValue,
-                      });
-                      console.log(tripData);
-                    }
-                  }}
-                />
-              </div>
-
-              <div className="input-and-label ">
-                <label class="form-label">Conductor*</label>
-                <Select
-                  id="condocterId"
-                  className="input-field-trip"
-                  options={options}
-                  isClearable={true}
-                  onChange={async (newValue) => {
-                    if (newValue !== null) {
-                      await setTripData({
-                        ...tripData,
-                        condocterId: newValue.value,
-                      });
-                      console.log(tripData);
-                    } else {
-                      await setTripData({
-                        ...tripData,
-                        condocterId: newValue,
-                      });
-                      console.log(tripData);
-                    }
-                  }}
-                />
-              </div>
-            </div>
-            <div className="d-flex align-items-center justify-content-center">
-              <div
-                className={
-                  checked == true
-                    ? "hidden-schedule"
-                    : "d-flex flex-column align-items-start input-and-label mt-4 "
-                }
-              >
-                <label class="form-label">Date*</label>
-                <ThemeProvider theme={text_box_the}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={{ width: 200 }}
-                      slotProps={{ field: { clearable: true } }}
-                      value={tripData.date}
-                      onChange={async (newValue) =>
-                        await setTripData(
-                          {
-                            ...tripData,
-                            date: newValue,
-                          },
-                          console.log(tripData)
-                        )
-                      }
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-            </div>
-
-            <div
-              className={
-                checked == true
-                  ? "pair-container mt-4"
-                  : "pair-container  hidden-schedule"
-              }
-            >
-              <div className="d-flex flex-column input-and-label mt-1 ">
-                <label class="form-label">Starting Date*</label>
-                <ThemeProvider theme={text_box_the}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={{ width: 200 }}
-                      slotProps={{ field: { clearable: true } }}
-                      value={durationDates.firstDate}
-                      onChange={async (newValue) =>
-                        await setDurationDates(
-                          {
-                            ...durationDates,
-                            firstDate: newValue,
-                          },
-                          console.log(durationDates)
-                        )
-                      }
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-
-              <div className="d-flex flex-column input-and-label mt-1  ">
-                <label class="form-label">Ending Date*</label>
-                <ThemeProvider theme={text_box_the}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      sx={{ width: 200 }}
-                      slotProps={{ field: { clearable: true } }}
-                      value={durationDates.lastDate}
-                      onChange={async (newValue) =>
-                        await setDurationDates(
-                          {
-                            ...durationDates,
-                            lastDate: newValue,
-                          },
-                          console.log(durationDates)
-                        )
-                      }
-                    />
-                  </LocalizationProvider>
-                </ThemeProvider>
-              </div>
-            </div>
-            <div className="schedule-tick">
-              <Checkbox checked={checked} onChange={handleChangecheck} />
-              <label class="form-label">
-                Schedule Trip for a Time Duration
-              </label>
-            </div>
-            <div className="d-flex justify-content-center ">
-              <Button
-                style={buttonStyle}
-                className="d-flex  update-btn"
-                variant="contained"
-                onClick={AddTripForTheDate}
-              >
-                ADD TRIP
-              </Button>
-            </div>
+          <div
+            className="justify-content-center align-items-center"
+            style={{ width: "80%", height: 325 }}
+          >
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={rows_}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+                rowHeight={40}
+              />
+            </ThemeProvider>
           </div>
         </div>
       </div>
-    </Sidebar>
+      <div
+        className="justify-content-center align-items-center d-flex py-4"
+        style={{ width: "100%" }}
+      >
+        <div className="trip-main-container">
+          <div className="pair-container">
+            <div className="d-flex flex-column input-and-label">
+              <label class="form-label">Start Time*</label>
+              <ThemeProvider theme={text_box_the}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    value={tripData.startTime}
+                    sx={{ width: 200 }}
+                    onChange={async (newValue) =>
+                      await setTripData(
+                        {
+                          ...tripData,
+                          startTime: newValue,
+                        },
+                        console.log(tripData)
+                      )
+                    }
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+
+            <div className="d-flex flex-column input-and-label">
+              <label class="form-label">End Time*</label>
+              <ThemeProvider theme={text_box_the}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    sx={{ width: 200 }}
+                    value={tripData.endTime}
+                    onChange={async (newValue) =>
+                      await setTripData(
+                        {
+                          ...tripData,
+                          endTime: newValue,
+                        },
+                        console.log(tripData)
+                      )
+                    }
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+          </div>
+          <div className="pair-container">
+            <div className="input-and-label">
+              <label class="form-label">Income*</label>
+              <input
+                type="text"
+                id="income"
+                class="form-control input-field-trip"
+                value={tripData.income}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="input-and-label">
+              <label class="form-label">Expense*</label>
+              <input
+                type="text"
+                id="expense"
+                class="form-control input-field-trip"
+                value={tripData.expense}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="pair-container">
+            <div className="input-and-label">
+              <label class="form-label">Bus*</label>
+              <Select
+                id="busId"
+                className="input-field-trip"
+                options={options}
+                isClearable={true}
+                onChange={async (newValue) => {
+                  if (newValue !== null) {
+                    await setTripData({
+                      ...tripData,
+                      busId: newValue.value,
+                    });
+                    console.log(tripData);
+                  } else {
+                    await setTripData({
+                      ...tripData,
+                      busId: newValue,
+                    });
+                    console.log(tripData);
+                  }
+                }}
+              />
+            </div>
+
+            <div className="input-and-label">
+              <label class="form-label">Route*</label>
+              <Select
+                id="routeId"
+                className="input-field-trip"
+                options={options}
+                isClearable={true}
+                onChange={async (newValue) => {
+                  if (newValue !== null) {
+                    await setTripData({
+                      ...tripData,
+                      routeId: newValue.value,
+                    });
+                    console.log(tripData);
+                  } else {
+                    await setTripData({
+                      ...tripData,
+                      routeId: newValue,
+                    });
+                    console.log(tripData);
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <div className="pair-container ">
+            <div className="input-and-label">
+              <label class="form-label">Driver*</label>
+              <Select
+                id="driverId"
+                className="input-field-trip"
+                options={options}
+                isClearable={true}
+                onChange={async (newValue) => {
+                  if (newValue !== null) {
+                    await setTripData({
+                      ...tripData,
+                      driverId: newValue.value,
+                    });
+                    console.log(tripData);
+                  } else {
+                    await setTripData({
+                      ...tripData,
+                      driverId: newValue,
+                    });
+                    console.log(tripData);
+                  }
+                }}
+              />
+            </div>
+
+            <div className="input-and-label ">
+              <label class="form-label">Conductor*</label>
+              <Select
+                id="condocterId"
+                className="input-field-trip"
+                options={options}
+                isClearable={true}
+                onChange={async (newValue) => {
+                  if (newValue !== null) {
+                    await setTripData({
+                      ...tripData,
+                      condocterId: newValue.value,
+                    });
+                    console.log(tripData);
+                  } else {
+                    await setTripData({
+                      ...tripData,
+                      condocterId: newValue,
+                    });
+                    console.log(tripData);
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <div className="d-flex align-items-center justify-content-center">
+            <div
+              className={
+                checked == true
+                  ? "hidden-schedule"
+                  : "d-flex flex-column align-items-start input-and-label mt-4 "
+              }
+            >
+              <label class="form-label">Date*</label>
+              <ThemeProvider theme={text_box_the}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    sx={{ width: 200 }}
+                    slotProps={{ field: { clearable: true } }}
+                    value={tripData.date}
+                    onChange={async (newValue) =>
+                      await setTripData(
+                        {
+                          ...tripData,
+                          date: newValue,
+                        },
+                        console.log(tripData)
+                      )
+                    }
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+          </div>
+
+          <div
+            className={
+              checked == true
+                ? "pair-container mt-4"
+                : "pair-container  hidden-schedule"
+            }
+          >
+            <div className="d-flex flex-column input-and-label mt-1 ">
+              <label class="form-label">Starting Date*</label>
+              <ThemeProvider theme={text_box_the}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    sx={{ width: 200 }}
+                    slotProps={{ field: { clearable: true } }}
+                    value={durationDates.firstDate}
+                    onChange={async (newValue) =>
+                      await setDurationDates(
+                        {
+                          ...durationDates,
+                          firstDate: newValue,
+                        },
+                        console.log(durationDates)
+                      )
+                    }
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+
+            <div className="d-flex flex-column input-and-label mt-1  ">
+              <label class="form-label">Ending Date*</label>
+              <ThemeProvider theme={text_box_the}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    sx={{ width: 200 }}
+                    slotProps={{ field: { clearable: true } }}
+                    value={durationDates.lastDate}
+                    onChange={async (newValue) =>
+                      await setDurationDates(
+                        {
+                          ...durationDates,
+                          lastDate: newValue,
+                        },
+                        console.log(durationDates)
+                      )
+                    }
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
+            </div>
+          </div>
+          <div className="schedule-tick">
+            <Checkbox checked={checked} onChange={handleChangecheck} />
+            <label class="form-label">Schedule Trip for a Time Duration</label>
+          </div>
+          <div className="d-flex justify-content-center ">
+            <Button
+              style={buttonStyle}
+              className="d-flex  update-btn"
+              variant="contained"
+              onClick={AddTripForTheDate}
+            >
+              ADD TRIP
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

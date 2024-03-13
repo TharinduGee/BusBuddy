@@ -26,7 +26,6 @@ import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactIn
 import Notifications from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Notifications";
 import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
 
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
@@ -38,30 +37,28 @@ root.render(
         <Route path="/user" element={<WelcomeUser />} />
         <Route path="/userrole" element={<UserSelectPage />} />
         <Route path="/Sidebar" element={<Sidebar />} />
+
+        <Route element={<Sidebar />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="finacialcenter" element={<Finacial_Center />} />
+          <Route path="operationhub" element={<Operation_hub />} />
+          <Route path="teamdirectory" element={<Team_Directory />} />
+          <Route path="fleetoperation" element={<FleetOperation />} />
+          <Route path="filelibrary" element={<Filelibrary />} />
+          <Route path="taxinsights" element={<TaxInsight />} />
+          <Route path="routemanagement" element={<RouteManagement />} />
+          <Route path="tripmanagement" element={<TripManagement />} />
+          <Route path="teamdirectory/addemployee" element={<AddEmployee />} />
+        </Route>
         <Route path="/SidebarDriver" element={<SidebarDriver />} />
-        <Route path="/dashbord" element={<Dashboard />} />
-        <Route path="/finacialcenter" element={<Finacial_Center />} />
-        <Route path="/operationhub" element={<Operation_hub />} />
-        <Route path="/teamdirectory" element={<Team_Directory />} />
-        <Route path="/fleetoperation" element={<FleetOperation />} />
-        <Route path="/filelibrary" element={<Filelibrary />} />
-        <Route path="/taxinsights" element={<TaxInsight />} />
-        <Route path="/routemanagement" element={<RouteManagement />} />
-        <Route path="/tripmanagement" element={<TripManagement />} />
-        <Route path="/DriverDashboard" element={<DriverDashboard/>} />
-        <Route path="/DriverBusManagement" element={<DriverBusManagement/>}/>
-        <Route path="/DriverFinancial" element={<DriverFinancial/>}/>
+        <Route path="/DriverDashboard" element={<DriverDashboard />} />
+        <Route path="/DriverBusManagement" element={<DriverBusManagement />} />
+        <Route path="/DriverFinancial" element={<DriverFinancial />} />
         <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
-        
         <Route path="/membership" element={<Membership />} />
         <Route path="/contactInfo" element={<ContactInfo />} />
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/passwordSecurity" element={<PasswordSecurity />} />
-
-
-      
-
-        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import TripInformation from "./TripDesign"; 
-import '../../Pages/Bus_Driver_Pages/DriverDashboard.css';
+import TripInformation from "../../Components/DriverPageComponents/Trip"; 
+import './DriverDashboard.css';
 
-function TodayTrip() {
+function TomorrowTrip() {
   // State variables to manage trip data and selected date
   const [tripData, setTripData] = useState([]);
   const [selectedDate] = useState(() => {
     const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate()); // Set the date to tomorrow
+    tomorrow.setDate(tomorrow.getDate() + 1); // Set the date to tomorrow
     return tomorrow.toISOString().split('T')[0]; // Default to tomorrow's date
   });
 
@@ -40,9 +40,10 @@ function TodayTrip() {
 
   return (
     <div className="d-flex flex-column justify-content-start">
+      <h5>Tomorrow Trips</h5>
       
       <div className="get-trip"> {/* Add right margin for spacing */}
-      <h5 className="trip-date-text">Today Trips</h5>
+        
         <div>
           {tripData.map((data, index) => (
             <TripInformation
@@ -61,4 +62,4 @@ function TodayTrip() {
   );
 }
 
-export default TodayTrip;
+export default TomorrowTrip;

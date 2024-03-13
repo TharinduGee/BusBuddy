@@ -140,139 +140,137 @@ function Team_Directory_Add_Employee() {
 
   return (
     <div>
-      <Sidebar>
-        <div className="d-flex flex-column align-items-center  justify-content-end">
+      <div className="d-flex flex-column align-items-center  justify-content-end">
+        <div
+          style={{ width: "80%" }}
+          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+        >
+          <ThemeProvider theme={theme}>
+            <TextField
+              id="outlined-basic"
+              label="Search by Email"
+              variant="outlined"
+              onChange={handleSearchInputChange}
+              InputProps={{
+                sx: {
+                  backgroundColor: "#F4F4F4",
+                  width: 350,
+                  borderRadius: 10,
+                  borderColor: "FF760D",
+                },
+              }}
+            />
+          </ThemeProvider>
+          <div className="d-flex  py-3">
+            <Button
+              href="/teamdirectory"
+              className="mx-2"
+              size="large"
+              variant="text"
+              startIcon={<IoIosArrowBack color="black" />}
+              style={{ borderRadius: 10, color: "black" }}
+            >
+              Back
+            </Button>
+          </div>
+        </div>
+        <div
+          className="justify-content-center align-items-center d-flex py-4"
+          style={{ height: 400, width: "100%" }}
+        >
           <div
-            style={{ width: "80%" }}
-            class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+            className="justify-content-center align-items-center"
+            style={{ width: "80%", height: 325 }}
           >
-            <ThemeProvider theme={theme}>
-              <TextField
-                id="outlined-basic"
-                label="Search by Email"
-                variant="outlined"
-                onChange={handleSearchInputChange}
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#F4F4F4",
-                    width: 350,
-                    borderRadius: 10,
-                    borderColor: "FF760D",
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={rows_}
+                columns={columns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
                   },
                 }}
+                onRowClick={handleRowClick}
+                pageSizeOptions={[5, 10]}
+                rowHeight={40}
               />
             </ThemeProvider>
-            <div className="d-flex  py-3">
-              <Button
-                href="/teamdirectory"
-                className="mx-2"
-                size="large"
-                variant="text"
-                startIcon={<IoIosArrowBack color="black" />}
-                style={{ borderRadius: 10, color: "black" }}
-              >
-                Back
-              </Button>
-            </div>
           </div>
-          <div
-            className="justify-content-center align-items-center d-flex py-4"
-            style={{ height: 400, width: "100%" }}
-          >
-            <div
-              className="justify-content-center align-items-center"
-              style={{ width: "80%", height: 325 }}
+        </div>
+        <div className="d-flex flex-wrap justify-content-center align-items-center">
+          <div>
+            <img className="photo-view" src={avatar} alt="profile Icon" />
+          </div>
+
+          <div className="d-flex flex-column">
+            <lable className="profession">{selectedRole.split("_")[1]}</lable>
+            <lable class="name-avatar">{selectedfullname}</lable>
+            <div className="normal-details">
+              <lable>ID :</lable>
+              <lable> {selectedID}</lable>
+            </div>
+            <lable className="normal-details">{selectedemail}</lable>
+            <lable className="normal-details"> {selectedmobile}</lable>
+
+            <Button_
+              className="mx-4 my-2"
+              onClick={() => setOpenPopup(true)}
+              style={{
+                color: "#FF760D",
+                width: "200px",
+                borderColor: "#FF760D",
+              }}
+              variant="outlined"
+              startIcon={<AddCircleSharpIcon />}
             >
-              <ThemeProvider theme={table_theme}>
-                <DataGrid
-                  rows={rows_}
-                  columns={columns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: { page: 0, pageSize: 5 },
-                    },
-                  }}
-                  onRowClick={handleRowClick}
-                  pageSizeOptions={[5, 10]}
-                  rowHeight={40}
-                />
-              </ThemeProvider>
-            </div>
+              ADD
+            </Button_>
           </div>
-          <div className="d-flex flex-wrap justify-content-center align-items-center">
-            <div>
-              <img className="photo-view" src={avatar} alt="profile Icon" />
+        </div>
+      </div>
+      <Popup
+        title="Add Employee"
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+      >
+        <div className="d-flex flex-wrap justify-content-center align-items-center">
+          <div>
+            <img className="photo-view" src={avatar} alt="Add Icon" />
+          </div>
+
+          <div className="d-flex flex-column align-items-center">
+            <lable className="profession">{selectedRole.split("_")[1]}</lable>
+            <lable class="name-avatar">{selectedfullname}</lable>
+            <div className="normal-details">
+              <lable>ID :</lable>
+              <lable> {selectedID}</lable>
             </div>
 
-            <div className="d-flex flex-column">
-              <lable className="profession">{selectedRole.split("_")[1]}</lable>
-              <lable class="name-avatar">{selectedfullname}</lable>
-              <div className="normal-details">
-                <lable>ID :</lable>
-                <lable> {selectedID}</lable>
-              </div>
-              <lable className="normal-details">{selectedemail}</lable>
-              <lable className="normal-details"> {selectedmobile}</lable>
-
+            <TextField
+              id="outlined-basic"
+              label="Enter the salary"
+              variant="outlined"
+              InputProps={{
+                sx: {
+                  backgroundColor: "#F4F4F4",
+                  width: 350,
+                  borderRadius: 2,
+                },
+              }}
+            />
+            <div className="d-flex my-4 justify-content-center">
               <Button_
-                className="mx-4 my-2"
-                onClick={() => setOpenPopup(true)}
-                style={{
-                  color: "#FF760D",
-                  width: "200px",
-                  borderColor: "#FF760D",
-                }}
+                onClick={() => setOpenPopup(false)}
+                style={{ width: 200 }}
                 variant="outlined"
-                startIcon={<AddCircleSharpIcon />}
               >
                 ADD
               </Button_>
             </div>
           </div>
         </div>
-        <Popup
-          title="Add Employee"
-          openPopup={openPopup}
-          setOpenPopup={setOpenPopup}
-        >
-          <div className="d-flex flex-wrap justify-content-center align-items-center">
-            <div>
-              <img className="photo-view" src={avatar} alt="Add Icon" />
-            </div>
-
-            <div className="d-flex flex-column align-items-center">
-              <lable className="profession">{selectedRole.split("_")[1]}</lable>
-              <lable class="name-avatar">{selectedfullname}</lable>
-              <div className="normal-details">
-                <lable>ID :</lable>
-                <lable> {selectedID}</lable>
-              </div>
-
-              <TextField
-                id="outlined-basic"
-                label="Enter the salary"
-                variant="outlined"
-                InputProps={{
-                  sx: {
-                    backgroundColor: "#F4F4F4",
-                    width: 350,
-                    borderRadius: 2,
-                  },
-                }}
-              />
-              <div className="d-flex my-4 justify-content-center">
-                <Button_
-                  onClick={() => setOpenPopup(false)}
-                  style={{ width: 200 }}
-                  variant="outlined"
-                >
-                  ADD
-                </Button_>
-              </div>
-            </div>
-          </div>
-        </Popup>
-      </Sidebar>
+      </Popup>
     </div>
   );
 }

@@ -130,7 +130,7 @@ function Team_Directory() {
     { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
   ];
   return (
-    <Sidebar>
+    <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
         <div
           style={{ width: "80%" }}
@@ -257,7 +257,7 @@ function Team_Directory() {
           </div>
         </div>
       </Popup>
-    </Sidebar>
+    </div>
   );
 }
 

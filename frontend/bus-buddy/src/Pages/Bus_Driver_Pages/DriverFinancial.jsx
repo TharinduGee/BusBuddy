@@ -1,13 +1,21 @@
 import React from 'react';
 import SidebarDriver from "../../Components/DriverPageComponents/SidebarDriver";
-import Profile from '../../Components/DriverPageComponents/DriverProfile';
+import BarChart from '../../Components/DriverPageComponents/SalaryChart';
+
 function DriverFinancial() {
 
+  const data = [50, 80, 60, 20, 65];
  
   return (
     <div>
     <SidebarDriver>
-      <Profile/>
+      <div>
+        <h1>Salary detailed reports</h1>
+      </div>
+      <div className="container">
+        <h2 className="text-center">Average Monthly Salary</h2>
+      </div>
+      <BarChart data={data} />
     </SidebarDriver>
     </div>
   );

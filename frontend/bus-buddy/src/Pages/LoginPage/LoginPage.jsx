@@ -12,7 +12,8 @@ function LoginPage() {
   });
 
   const handleChange = (e) => {
-    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setCredentials({
       ...credentials,
       [e.target.name]: value,
@@ -21,35 +22,26 @@ function LoginPage() {
 
   const handlePostRequest = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:8081/api/v1/signIn",
-        {
-          email: credentials.email,
-          password: credentials.password
-        }
-      );
-  
+      const response = await axios.post("http://localhost:8081/api/v1/signIn", {
+        email: credentials.email,
+        password: credentials.password,
+      });
+
       console.log("Response:", response.data);
-  
+
       if (response.data.token) {
-        // Save JWT token in localStorage
         localStorage.setItem("token", response.data.token);
       }
-  
+
       if (response.data.role === "ROLE_ADMIN") {
-        // Navigate to dashboard
-        window.location.href = "/dashbord";
-      }
-      else if (response.data.role === "ROLE_DRIVER"){
+        window.location.href = "/dashboard";
+      } else if (response.data.role === "ROLE_DRIVER") {
         window.location.href = "/DriverDashboard";
-      }
-      else if (response.data.role === "ROLE_CONDUCTOR"){
+      } else if (response.data.role === "ROLE_CONDUCTOR") {
         window.location.href = "/ConductorDashboard";
-      }
-      else if (response.data.role === "ROLE_SUPPORTER"){
+      } else if (response.data.role === "ROLE_SUPPORTER") {
         window.location.href = "/SupporterDashboard";
       }
-      
     } catch (error) {
       // Handle errors
       console.error("Error:", error);
@@ -62,25 +54,24 @@ function LoginPage() {
           ) {
             // Display an alert for incorrect email or password
             alert("Email or password incorrect");
-          } 
-            // Handle other 400 errors if needed
-          
+          }
+          // Handle other 400 errors if needed
         } else if (error.response.status === 404) {
           // Check if the error is due to user not found
-           if (
+          if (
             error.response.data &&
             error.response.data === "User is not found."
           ) {
             // Display an alert for user not found
             alert("User is not found.");
           }
-            // Handle other 404 errors if needed
-          
+          // Handle other 404 errors if needed
         } else if (error.response.status === 406) {
           // Check if the error is due to user not assigned
           if (
             error.response.data &&
-            error.response.data.message === "User not assigned for this operation."
+            error.response.data.message ===
+              "User not assigned for this operation."
           ) {
             // Display an alert for business owner to assign the user
             alert("Bus Business owner need to assign you");
@@ -92,13 +83,14 @@ function LoginPage() {
       }
     }
   };
-  
 
   return (
     <div>
       <div className="d-flex justify-content-center">
         <div className="container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
-          <div className="sign-up-text-main">Sign in to your Busbudy Account</div>
+          <div className="sign-up-text-main">
+            Sign in to your Busbudy Account
+          </div>
 
           <TextField
             value={credentials.email}
