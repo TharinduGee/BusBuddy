@@ -118,19 +118,19 @@ function Sidebar() {
     }
   }
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     var data = await fetchImageData(
-  //       "http://localhost:8081/api/v1/user/getImage"
-  //     );
-  //     if (data) {
-  //       var base64Image = arrayBufferToBase64(data);
-  //       setImageData(`data:image/png;base64,${base64Image}`);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchData = async () => {
+      var data = await fetchImageData(
+        "http://localhost:8081/api/v1/user/getImage"
+      );
+      if (data) {
+        var base64Image = arrayBufferToBase64(data);
+        setImageData(`data:image/png;base64,${base64Image}`);
+      }
+    };
 
-  //   fetchData();
-  // }, []);
+    fetchData();
+  }, []);
 
   return (
     <div className="sidebar-container">

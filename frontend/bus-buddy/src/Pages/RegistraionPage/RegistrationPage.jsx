@@ -3,6 +3,7 @@ import "./RegistraionPage.css";
 import TextField from "@mui/material/TextField";
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function RegistrationPage() {
   const navigate = useNavigate();
@@ -34,8 +35,28 @@ function RegistrationPage() {
 
   const handlePassRequest = async () => {
     try {
-      
-      navigate('/userrole', { state: { userpre: user } }); 
+      if (
+        user.firstName === "" ||
+        user.lastName === "" ||
+        user.email === "" ||
+        user.password === "" ||
+        user.mobileNo === "" ||
+        user.confirm_password === ""
+      ) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "All the fields should be filled! ",
+        });
+      } else if (user.confirm_password != user.password) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Passwords do not match",
+        });
+      } else {
+        navigate("/userrole", { state: { userpre: user } });
+      }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -62,7 +83,9 @@ function RegistrationPage() {
       <div className="d-flex justify-content-center">
         <div className="container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
           <div className="justify-content-start">
-            <button className="back-button" onClick={() => navigate('/')}>Back</button>
+            <button className="back-button" onClick={() => navigate("/")}>
+              Back
+            </button>
           </div>
           <div className="sign-up-text-main">Sign up to Busbuddy</div>
           <div>
@@ -185,7 +208,7 @@ function RegistrationPage() {
           </div>
           <div class="label mt-1">* Use at least one special characters</div>
 
-          <TextField 
+          <TextField
             value={user.confirm_password}
             onChange={handleChange}
             margin="normal"
