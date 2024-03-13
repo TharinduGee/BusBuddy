@@ -64,7 +64,7 @@ public class DocumentService {
             doc.setCategory(DocCategory.DOC_CATEGORY_UNSPECIFIED);
         }
         else{
-            throw new InternalError();
+            throw new InternalError("Document category isn't handled.");
         }
 
         documentRepository.save(doc);

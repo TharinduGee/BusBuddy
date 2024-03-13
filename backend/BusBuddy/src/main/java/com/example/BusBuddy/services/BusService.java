@@ -86,7 +86,7 @@ public class BusService {
             documentRepository.save(document);
         }else if(file != null){
             documentService.add(file,httpServletRequest,
-                    DocCategory.DOC_CATEGORY_ROUTE_PERMIT,
+                    DocCategory.DOC_CATEGORY_BUS_DOC,
                     file.getOriginalFilename(),
                     editedBus.getBusId()
             );

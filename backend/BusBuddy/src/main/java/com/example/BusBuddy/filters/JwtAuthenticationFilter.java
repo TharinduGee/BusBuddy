@@ -44,12 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUserName(jwt);
-        bId = jwtService.extractBId(jwt);
-        empId = jwtService.extractEmpId(jwt);
-        log.debug("JWT - {}", jwt);
-        log.debug("Username - {}", userEmail);
-        log.debug("b_id - {}", bId);
-        log.debug("emp_id - {}", empId);
         if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
@@ -59,6 +53,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 context.setAuthentication(authToken);
                 SecurityContextHolder.setContext(context);
+
+                bId = jwtService.extractBId(jwt);
+                empId = jwtService.extractEmpId(jwt);
+                log.debug("JWT - {}", jwt);
+                log.debug("Username - {}", userEmail);
+                log.debug("b_id - {}", bId);
+                log.debug("emp_id - {}", empId);
                 request.setAttribute("username" , userEmail);
                 request.setAttribute("b_id", bId);
                 request.setAttribute("emp_id" , empId);
