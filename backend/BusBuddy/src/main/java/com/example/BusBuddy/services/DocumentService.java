@@ -2,6 +2,7 @@ package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.models.*;
+import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.EmployeeRepository;
 import com.example.BusBuddy.repositories.RouteRepository;
@@ -25,6 +26,7 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private final EmployeeRepository employeeRepository;
     private final RouteRepository routeRepository;
+    private final BusRepository busRepository;
     private final BusinessService businessService;
 
     @Transactional
@@ -53,6 +55,11 @@ public class DocumentService {
                     .orElseThrow(() -> new EntityNotFoundException("Route is not found."));
             doc.setCategory(category);
             doc.setRoute(route);
+        }else if(category == DocCategory.DOC_CATEGORY_BUS_DOC) {
+            Bus bus = busRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Bus is not found."));
+            doc.setCategory(DocCategory.DOC_CATEGORY_BUS_DOC);
+            doc.setBus(bus);
         }else if(category == DocCategory.DOC_CATEGORY_UNSPECIFIED) {
             doc.setCategory(DocCategory.DOC_CATEGORY_UNSPECIFIED);
         }

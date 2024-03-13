@@ -37,23 +37,51 @@ CREATE TABLE IF NOT EXISTS public.business
 
 -- DROP TABLE IF EXISTS public.bus;
 
-CREATE TABLE IF NOT EXISTS public.bus
+CREATE TABLE IF NOT EXISTS public.document
 (
-    bus_id bigint NOT NULL,
-    image bytea,
-    last_service_date timestamp(6) without time zone,
-    number_plate character varying(255) COLLATE pg_catalog."default" NOT NULL,
-    reg_no character varying(255) COLLATE pg_catalog."default",
-    seats integer,
-    type character varying(255) COLLATE pg_catalog."default",
+    doc_id bigint NOT NULL,
+    category character varying(255) COLLATE pg_catalog."default",
+    url oid NOT NULL,
+    doc_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    upload_date date NOT NULL,
+    bus_id bigint,
     b_id bigint,
-    CONSTRAINT bus_pkey PRIMARY KEY (bus_id),
+    emp_id bigint,
+    ledger_id bigint,
+    route_id bigint,
+    trip_id bigint,
+    CONSTRAINT document_pkey PRIMARY KEY (doc_id),
+    CONSTRAINT uk_19lq2be43frqvblksyjvj9npf UNIQUE (bus_id),
+    CONSTRAINT uk_34908216eg03sndwtwsduhnn8 UNIQUE (trip_id),
+    CONSTRAINT uk_7otucbqypmer3117i581ov423 UNIQUE (route_id),
+    CONSTRAINT uk_7wnjpthjualjlcs9q3ydlf5rp UNIQUE (emp_id),
+    CONSTRAINT uk_kr4c2gratnln35htg3xhcxre9 UNIQUE (ledger_id),
     CONSTRAINT fk_bid FOREIGN KEY (b_id)
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT bus_type_check CHECK (type::text = ANY (ARRAY['LUXURY'::character varying, 'SEMI_LUXURY'::character varying, 'NORMAL'::character varying]::text[]))
-);
+    CONSTRAINT fk_busid FOREIGN KEY (bus_id)
+        REFERENCES public.bus (bus_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_empid FOREIGN KEY (emp_id)
+        REFERENCES public.employee (emp_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_ledgerid FOREIGN KEY (ledger_id)
+        REFERENCES public.ledger (ledger_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_routeid FOREIGN KEY (route_id)
+        REFERENCES public.route (route_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT fk_tripid FOREIGN KEY (trip_id)
+        REFERENCES public.trip (trip_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT document_category_check CHECK (category::text = ANY (ARRAY['DOC_CATEGORY_NIC'::character varying::text, 'DOC_CATEGORY_SERVICE_AGREEMENT'::character varying::text, 'DOC_CATEGORY_ROUTE_PERMIT'::character varying::text, 'DOC_CATEGORY_UNSPECIFIED'::character varying::text,'DOC_CATEGORY_BUS_DOC'::character varying::text]))
+)
 
 
 -- Table: public.employee
@@ -65,9 +93,8 @@ CREATE TABLE IF NOT EXISTS public.employee
     emp_id bigint NOT NULL,
     salary real,
     age integer,
-    b_day timestamp(6) without time zone NOT NULL,
+    b_day timestamp(6) without time zone,
     designation character varying(255) COLLATE pg_catalog."default",
-    image bytea,
     joined_date timestamp(6) without time zone,
     name character varying(255) COLLATE pg_catalog."default" NOT NULL,
     b_id bigint,
@@ -76,8 +103,8 @@ CREATE TABLE IF NOT EXISTS public.employee
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT employee_designation_check CHECK (designation::text = ANY (ARRAY['EMPLOYEE_TYPE_DRIVER'::character varying, 'EMPLOYEE_TYPE_CONDUCTOR'::character varying]::text[]))
-);
+    CONSTRAINT employee_designation_check CHECK (designation::text = ANY (ARRAY['EMPLOYEE_TYPE_DRIVER'::character varying::text, 'EMPLOYEE_TYPE_CONDUCTOR'::character varying::text]))
+)
 
 -- Table: public.ledger
 
