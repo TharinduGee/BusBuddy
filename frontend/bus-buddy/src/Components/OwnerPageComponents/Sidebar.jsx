@@ -76,20 +76,23 @@ function Sidebar() {
   };
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8081/api/v1/user/getUsername`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(function (response) {
-        setUsername(response.data);
-        console.log("Data successfully fetched:", response.data);
-      })
-      .catch(function (error) {
-        console.error("Error posting data:", error);
-      });
-  }, [token]);
+    console.log(username);
+    if (username == "") {
+      axios
+        .get(`http://localhost:8081/api/v1/user/getUsername`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(function (response) {
+          setUsername(response.data);
+          console.log("Data successfully fetched:", username);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+    }
+  }, [username, token]);
 
   function arrayBufferToBase64(buffer) {
     var binary = "";
@@ -115,19 +118,19 @@ function Sidebar() {
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      var data = await fetchImageData(
-        "http://localhost:8081/api/v1/user/getImage"
-      );
-      if (data) {
-        var base64Image = arrayBufferToBase64(data);
-        setImageData(`data:image/png;base64,${base64Image}`);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     var data = await fetchImageData(
+  //       "http://localhost:8081/api/v1/user/getImage"
+  //     );
+  //     if (data) {
+  //       var base64Image = arrayBufferToBase64(data);
+  //       setImageData(`data:image/png;base64,${base64Image}`);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="sidebar-container">
