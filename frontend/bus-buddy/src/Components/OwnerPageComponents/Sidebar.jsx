@@ -92,8 +92,8 @@ function Sidebar() {
   }, [token]);
 
   function arrayBufferToBase64(buffer) {
-    const binary = "";
-    const bytes = new Uint8Array(buffer);
+    var binary = "";
+    var bytes = new Uint8Array(buffer);
     for (let i = 0; i < bytes.byteLength; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
@@ -103,23 +103,26 @@ function Sidebar() {
   async function fetchImageData(url) {
     try {
       const response = await axios.get(url, {
-        responseType: "arraybuffer", // Specify response type as arraybuffer
+        responseType: "arraybuffer",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      return response.data; // This will be a Uint8Array containing the image data
+      return response.data;
     } catch (error) {
       console.error("Error fetching image data:", error);
-      return null; // Handle errors by returning null or a placeholder image
+      return null;
     }
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchImageData(
+      var data = await fetchImageData(
         "http://localhost:8081/api/v1/user/getImage"
       );
       if (data) {
-        const base64Image = arrayBufferToBase64(data);
-        setImageData(`data:image/png;base64,${base64Image}`); // Replace 'png' with the actual image format
+        var base64Image = arrayBufferToBase64(data);
+        setImageData(`data:image/png;base64,${base64Image}`);
       }
     };
 
@@ -144,7 +147,7 @@ function Sidebar() {
           </div>
         </div>
         <div className="user ms-3">
-          <img name="ellipsis-vertical-outline" src={logo} />
+          <img name="ellipsis-vertical-outline" src={imageData} />
 
           <div className="user-info">
             <div className="name-email">
