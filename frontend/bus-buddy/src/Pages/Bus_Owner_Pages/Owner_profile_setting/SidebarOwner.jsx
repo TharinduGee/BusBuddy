@@ -4,6 +4,7 @@ import "./SidebarOwner.css";
 import { IoIosMenu, IoIosClose } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 function SidebarOwner({ children }) {
   const [sidebarOwnerClass, setSidebarOwnerClass] = useState("sidebarOwner");
@@ -11,6 +12,8 @@ function SidebarOwner({ children }) {
   const spans = document.querySelectorAll("span");
   const [activeOwnerLink, setActiveOwnerLink] = useState("");
   const location = useLocation();
+  const token = localStorage.getItem("token");
+  const [username, setUsername] = useState("");
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
 
@@ -55,6 +58,24 @@ function SidebarOwner({ children }) {
       });
     }
   };
+
+  useEffect(() => {
+    if (username === "") {
+      axios
+        .get(`http://localhost:8081/api/v1/user/getUsername`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then(function (response) {
+          setUsername(response.data);
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+    }
+  }, [username, token]);
+
   return (
     <div className="sidebarOwner-container">
       <div className="menu" onClick={togglemenu}>
@@ -77,7 +98,7 @@ function SidebarOwner({ children }) {
 
           <div className="user-info">
             <div className="name-email">
-              <span className="name">Chathurya Prasad</span>
+              <span className="name">{username}</span>
               <span className="email">ID: CP001238905</span>
             </div>
           </div>
@@ -88,6 +109,17 @@ function SidebarOwner({ children }) {
         <div className="line"></div>
         <nav className="navigation">
           <ul className="px-3">
+          <li>
+              <a
+                href="/Bus_Info"
+                className={
+                  activeOwnerLink === "/Bus_Info" ? "activeOwner-link" : "notactiveOwner-link"
+                }
+              >
+                {activeOwnerLink === "/Bus_Info" ? <span>|  Bus Info</span> : <span>Bus Info</span>}
+                
+              </a>
+            </li>
             <li>
               <a
                 href="/membership"
@@ -114,17 +146,6 @@ function SidebarOwner({ children }) {
               >
                 {activeOwnerLink === "/passwordSecurity" ? <span>|  Password & Security</span> : <span>Password & Security</span>}
               
-              </a>
-            </li>
-            <li>
-              <a
-                href="/notifications"
-                className={
-                  activeOwnerLink === "/notifications" ? "activeOwner-link" : "notactiveOwner-link"
-                }
-              >
-                {activeOwnerLink === "/notifications" ? <span>|  Notifications</span> : <span>Notifications</span>}
-                
               </a>
             </li>
           </ul>
