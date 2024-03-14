@@ -1,0 +1,37 @@
+.profession {
+  font-size: 40px;
+  font-weight: bolder;
+  padding-bottom: 5px;
+  margin-left: 35px;
+  margin-top: 10px;
+}
+.plus-icon {
+  width: 30px;
+}
+.add-btn {
+  margin-left: 40px;
+  margin-top: 10px;
+}
+.name-avatar {
+  font-size: 30px;
+  font-weight: 500;
+  padding-bottom: 30px;
+  margin-left: 35px;
+}
+
+.normal-details {
+  font-size: 18px;
+  color: #383737;
+  padding-bottom: 10px;
+  margin-left: 35px;
+}
+
+.photo-view {
+  height: 300px;
+  width: auto;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+.swal2-container {
+  z-index: 99999999;
+}

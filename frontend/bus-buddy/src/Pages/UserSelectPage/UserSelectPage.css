@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+.userrole-text-main {
+    text-transform: capitalize;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+@media (min-width: 660px) {
+    .user_container_width {
+        width: 592px;
+    }
+}
+
+.role-form {
+    margin-top: 182;
+    margin-bottom: 1044;
+}
+.user-container {
+    display: flex;
+    height: 158px;
+    width: 134px;
+    align-items: center;
+    background: white;
+    border: 1px solid black;
+    border-radius: 20px;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.icon-style {
+    width: 82px;
+    height: 62px;
+}
+
+.create-btn {
+    display: flex;
+    color: white;
+    height: 40px;
+    width: 300px;
+    padding: 8px 18px;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border-color: transparent;
+    background: #ff7a00;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 600;
+    background-color: #ff7a00;
+    display: flex;
+    
+}
+
+.create-btn:hover {
+    background-color: #e06c00;
+    border-color: #e06c00;
+}
+
+.role-text{
+    text-transform: capitalize;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.sizebox{
+    height: 182px;
+}
+.sizebox2{
+    height: 1044px;
+}
+
+.selected {
+    background-color: #ff7a00;
+    
+}
+
+.selected .role-text {
+    color: white;
+}

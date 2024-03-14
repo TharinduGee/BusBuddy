@@ -1,0 +1,44 @@
+.icon-contianer-expenses-income {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+.income-expenses-container {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 20px;
+  margin-bottom: 0;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+.income-txt {
+  margin-left: 20px;
+  font-size: 20px;
+}
+.income-value {
+  margin-left: 20px;
+  font-size: 30px;
+}
+
+@media (max-width: 450px) {
+  .icon-contianer-expenses-income {
+    flex-direction: column;
+  }
+  .divider-class {
+    display: none;
+  }
+  .items-income-expenses {
+    padding-top: 20px;
+  }
+
+  .income-expenses-container {
+    margin-bottom: 0;
+  }
+
+  .income-txt {
+    font-size: 15px;
+  }
+  .income-value {
+    font-size: 20px;
+  }
+}

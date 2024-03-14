@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.4fdf7d0e.css","mappings":"AAAA,KACE,iBACF,CAEA,QAIE,kBAAmB,CADnB,aAAc,CADd,WAAY,CADZ,YAIF","sources":["App.css"],"sourcesContent":[".App {\r\n  text-align: center;\r\n}\r\n\r\n.navbar {\r\n  width: 1512px;\r\n  height: 78px;\r\n  flex-shrink: 0;\r\n  background: #efa818;\r\n}\r\n"],"names":[],"sourceRoot":""}

@@ -1,0 +1,151 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+.sign-up-text-main {
+  text-transform: capitalize;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.label {
+  color: #000;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.back-button{
+  border: transparent;
+  background: transparent;
+}
+
+.next-btn {
+  display: flex;
+  color: white;
+  height: 40px;
+  width: 300px;
+  padding: 8px 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border-color: transparent;
+  background: #ff7a00;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  background-color: #ff7a00;
+  display: flex;
+  
+}
+
+.next-btn:hover {
+  background-color: #e06c00;
+  border-color: #e06c00;
+}
+.clickable-text {
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.form-check-input{
+  height: 20px;
+  width: 20px;
+}
+
+.register-link {
+  color: blue;
+  text-decoration: none;
+}
+
+@media (min-width: 688px) {
+  .container_width {
+    width: 592px;
+  }
+}
+
+
+
+.sign-up-text-main {
+  text-transform: capitalize;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.label {
+  color: #000;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+/* .container_width {
+  width: 513px;
+  height: 750px;
+  margin: 217px auto 0;
+} */
+
+.next-btn {
+  display: flex;
+  color: white;
+  height: 40px;
+  width: 300px;
+  padding: 8px 18px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border-color: transparent;
+  background: #ff7a00;
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  background-color: #ff7a00;
+  display: flex;
+  
+}
+
+.next-btn:hover {
+  background-color: #e06c00;
+  border-color: #e06c00;
+}
+.clickable-text {
+  font-family: Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.form-check-input{
+  height: 20px;
+  width: 20px;
+}
+
+.register-link {
+  color: blue;
+  text-decoration: none;
+}
+
+@media (min-width: 688px) {
+  .container_width {
+    width: 592px;
+  }
+}
