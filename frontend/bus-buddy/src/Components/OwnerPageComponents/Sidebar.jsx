@@ -171,26 +171,7 @@ function Sidebar() {
                 <span>Dashboard</span>
               </a>
             </li>
-            <li>
-              <a
-                href="/operationhub"
-                className={activeLink === "/operationhub" ? "active-link" : ""}
-              >
-                <img src={OperationHub} className="sidebaricon" />
-                <span>Operations Hub</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="/finacialcenter"
-                className={
-                  activeLink === "/finacialcenter" ? "active-link" : ""
-                }
-              >
-                <img src={FinacialCenter} className="sidebaricon" />
-                <span>Financial Center</span>
-              </a>
-            </li>
+
             <li>
               <a
                 href="/teamdirectory"
@@ -216,24 +197,7 @@ function Sidebar() {
                 <span>Fleet Operations</span>
               </a>
             </li>
-            <li>
-              <a
-                href="/filelibrary"
-                className={activeLink === "/filelibrary" ? "active-link" : ""}
-              >
-                <img src={FileLibrary} className="sidebaricon2" />
-                <span>File Library</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="/taxinsights"
-                className={activeLink === "/taxinsights" ? "active-link" : ""}
-              >
-                <img src={Tax_Insight} className="sidebaricon2" />
-                <span>Tax Insights</span>
-              </a>
-            </li>
+
             <li>
               <a
                 href="/routemanagement"
@@ -254,6 +218,35 @@ function Sidebar() {
               >
                 <img src={tripManagement} className="sidebaricon2" />
                 <span>Trip Management</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/finacialcenter"
+                className={
+                  activeLink === "/finacialcenter" ? "active-link" : ""
+                }
+              >
+                <img src={FinacialCenter} className="sidebaricon" />
+                <span>Financial Center</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/filelibrary"
+                className={activeLink === "/filelibrary" ? "active-link" : ""}
+              >
+                <img src={FileLibrary} className="sidebaricon2" />
+                <span>File Library</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/taxinsights"
+                className={activeLink === "/taxinsights" ? "active-link" : ""}
+              >
+                <img src={Tax_Insight} className="sidebaricon2" />
+                <span>Tax Insights</span>
               </a>
             </li>
           </ul>
