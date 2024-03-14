@@ -218,7 +218,7 @@ function Team_Directory() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -283,6 +283,39 @@ function Team_Directory() {
     file,
     refresh,
   ]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/employee/remove?empId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "User removed from your business.",
+              icon: "success",
+            });
+          })
+          .catch((error) => {
+            console.error("Error deleting data:", error.message);
+          });
+        setRefresh(!refresh);
+      }
+    });
+  };
 
   return (
     <div>

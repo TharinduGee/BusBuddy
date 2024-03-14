@@ -243,7 +243,7 @@ function Fleet_Operation() {
   useEffect(() => {
     console.log(file);
     console.log(busData);
-  }, [file, busId, busData.lastServiceDate, busData.type]);
+  }, [file, busId, busData]);
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -284,10 +284,11 @@ function Fleet_Operation() {
     }
     console.log("clear");
     setFile(null);
-    setValue("Normal");
+    setValue("NORMAL");
+
     setValue_date(null);
     setBusDate({
-      type: "",
+      type: "NORMAL",
       numberPlate: "",
       lastServiceDate: "",
       Seats: "",
@@ -537,7 +538,7 @@ function Fleet_Operation() {
                     ...prevState,
                     type: newValue.target.value,
                   }));
-                  setValue_date(newValue.target.value);
+                  setValue(newValue.target.value);
                   console.log("one change date", busData.type);
                 }}
               >

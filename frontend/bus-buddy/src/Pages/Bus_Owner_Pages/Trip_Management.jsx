@@ -415,7 +415,7 @@ function Trip_Management() {
         busId: tripData.busId,
         routeId: tripData.routeId,
         driverId: tripData.driverId,
-        condocterId: tripData.condocterId,
+        condoctorId: tripData.condocterId,
         expense: tripData.expense,
       };
       axios
@@ -449,7 +449,7 @@ function Trip_Management() {
       tripData.startTime === null ||
       tripData.endTime === null ||
       tripData.busId === "" ||
-      // tripData.driverId === "" ||
+      tripData.driverId === "" ||
       // tripData.condocterId === null ||
       tripData.income === "" ||
       tripData.expense === "" ||
