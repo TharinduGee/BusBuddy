@@ -63,8 +63,6 @@ function Trip_Management() {
   const [driverIDoptions, setdriverIDoptions] = useState([]);
   const [ConductorIDoptions, setConductorIDoptions] = useState([]);
   const token = localStorage.getItem("token");
-  const [rows_, setRows] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -127,36 +125,6 @@ function Trip_Management() {
       },
     },
   });
-
-  const handleSearchInputChange = (event) => {
-    setSearchInput(event.target.value);
-
-    axios
-      .get(
-        `http://localhost:8081/api/v1/nullBusinessAndEmail?email=${searchInput}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        const fetchedData = response.data;
-        const formattedData = fetchedData.map((user) => ({
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          mobileNo: user.mobileNo,
-          role: user.role,
-        }));
-        setRows(formattedData);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
-  };
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -413,10 +381,10 @@ function Trip_Management() {
   const AddTripForTheDate = () => {
     if (
       tripData.startTime === null ||
-      tripData.endTime === "" ||
+      tripData.endTime === null ||
       tripData.busId === "" ||
-      // tripData.driverId === "" ||
-      // tripData.condocterId === null ||
+      tripData.driverId === "" ||
+      tripData.condocterId === "" ||
       tripData.income === "" ||
       tripData.expense === "" ||
       tripData.date === "" ||
@@ -479,7 +447,7 @@ function Trip_Management() {
   const AddTripForADuration = () => {
     if (
       tripData.startTime === null ||
-      tripData.endTime === "" ||
+      tripData.endTime === null ||
       tripData.busId === "" ||
       // tripData.driverId === "" ||
       // tripData.condocterId === null ||

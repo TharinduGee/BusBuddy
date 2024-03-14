@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
@@ -11,11 +11,12 @@ import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import Popup from "./Update_popup";
+import Swal from "sweetalert2";
 
 function Team_Directory_Add_Employee() {
   const [openPopup, setOpenPopup] = useState(false);
-  const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
+  const [salary, setSalary] = useState(null);
 
   const table_theme = createTheme({
     components: {
@@ -73,37 +74,14 @@ function Team_Directory_Add_Employee() {
       },
     },
   });
+  const token = localStorage.getItem("token");
 
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
-
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJiX2lkIjoiNiIsImF1ZCI6IjYiLCJzdWIiOiJuZWRmc3lyeWZhIiwiaWF0IjoxNzA4MTEyNjQ0LCJleHAiOjE3MDgxMTYyNDR9.0tH3rYp92j3aLtouaOxueSj7Uc957wUQqSwEdl570GY";
-    axios
-      .get(
-        `http://localhost:8081/api/v1/nullBusinessAndEmail?email=${searchInput}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        const fetchedData = response.data;
-        const formattedData = fetchedData.map((user) => ({
-          id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          mobileNo: user.mobileNo,
-          role: user.role,
-        }));
-        setRows(formattedData);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error!", error);
-      });
+  };
+  const handleSalaryChange = (event) => {
+    setSalary(event.target.value);
+    console.log(salary);
   };
 
   const columns = [
@@ -114,16 +92,27 @@ function Team_Directory_Add_Employee() {
     { field: "email", headerName: "Email", width: 300 },
     { field: "mobileNo", headerName: "Mobile No", width: 130 },
     { field: "role", headerName: "Role", width: 160 },
-    // {
-    //   field: "fullName",
-    //   headerName: "Full name",
-    //   description: "This column has a value getter and is not sortable.",
-    //   sortable: false,
-    //   width: 160,
-    //   valueGetter: (params) =>
-    //     `${params.row.firstName || " "} ${params.row.lastName || ""}`,
-    // },
+    {
+      field: "fullName",
+      headerName: "Full name",
+      description: "This column has a value getter and is not sortable.",
+      sortable: false,
+      width: 160,
+      valueGetter: (params) =>
+        `${params.row.firstName || " "} ${params.row.lastName || ""}`,
+    },
   ];
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+  });
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const [selectedemail, setselectedemail] = useState("");
   const [selectedmobile, setselectedmobile] = useState("");
@@ -136,6 +125,125 @@ function Team_Directory_Add_Employee() {
     setselectedmobile(params.row.mobileNo);
     setselectedfullname(params.row.firstName + " " + params.row.lastName);
     setselectedRole(params.row.role);
+  };
+  const inputRef = useRef(null);
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+  const clear = () => {
+    setSalary(null);
+    if (inputRef.current.value) {
+      inputRef.current.value = null;
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: true,
+      }));
+
+      axios
+        .get(
+          `http://localhost:8081/api/v1/user/findUnEnrolledUsers?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&email=${searchInput}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          const fetchedData = response.data.content;
+          const formattedData = fetchedData.map((user, index) => ({
+            id: index + 1,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            mobileNo: user.mobileNo,
+            role: user.role.split("_")[2],
+          }));
+
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: formattedData,
+            total: response.data.totalElements,
+          }));
+          console.log(fetchedData);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+          }));
+        });
+    };
+
+    fetchData();
+  }, [
+    searchInput,
+    paginationModel.page,
+    paginationModel.pageSize,
+    salary,
+    file,
+  ]);
+  const getCurrentDate = () => {
+    const date = new Date();
+    setCurrentDate(date);
+  };
+  const AddEmployee = () => {
+    getCurrentDate();
+
+    const form = new FormData();
+    form.append("file", file);
+
+    axios
+      .post(
+        `http://localhost:8081/api/v1/employee/add?salary=${salary}&email=${selectedemail}`,
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data; boundary=---011000010111000001101001",
+          },
+          data: "[form]",
+        }
+      )
+      .then(function (response) {
+        Swal.fire({
+          title: "Good job!",
+          text: "Employee Added Successfully!",
+          icon: "success",
+        });
+        setOpenPopup(!openPopup);
+        console.log("Data successfully posted:", response.data);
+      })
+      .catch(function (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+        console.error("Error posting data:", error);
+      });
+    clear();
+  };
+  const handlepopADD = () => {
+    console.log(salary);
+    if (salary !== null) {
+      console.log("in");
+      AddEmployee();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Enter the Salary First",
+      });
+    }
   };
 
   return (
@@ -184,27 +292,35 @@ function Team_Directory_Add_Employee() {
           >
             <ThemeProvider theme={table_theme}>
               <DataGrid
-                rows={rows_}
+                rows={pageState.data}
+                page={pageState.page - 1}
                 columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
-                onRowClick={handleRowClick}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={[5, 10]}
                 rowHeight={40}
+                onRowClick={handleRowClick}
               />
             </ThemeProvider>
           </div>
         </div>
-        <div className="d-flex flex-wrap justify-content-center align-items-center">
+
+        <div
+          className={
+            selectedID !== ""
+              ? "d-flex flex-wrap justify-content-center align-items-center"
+              : "hidden-schedule"
+          }
+        >
           <div>
             <img className="photo-view" src={avatar} alt="profile Icon" />
           </div>
 
           <div className="d-flex flex-column">
-            <lable className="profession">{selectedRole.split("_")[1]}</lable>
+            <lable className="profession">{selectedRole}</lable>
             <lable class="name-avatar">{selectedfullname}</lable>
             <div className="normal-details">
               <lable>ID :</lable>
@@ -240,7 +356,7 @@ function Team_Directory_Add_Employee() {
           </div>
 
           <div className="d-flex flex-column align-items-center">
-            <lable className="profession">{selectedRole.split("_")[1]}</lable>
+            <lable className="profession">{selectedRole}</lable>
             <lable class="name-avatar">{selectedfullname}</lable>
             <div className="normal-details">
               <lable>ID :</lable>
@@ -251,6 +367,13 @@ function Team_Directory_Add_Employee() {
               id="outlined-basic"
               label="Enter the salary"
               variant="outlined"
+              onChange={handleSalaryChange}
+              onKeyPress={(event) => {
+                const char = String.fromCharCode(event.charCode);
+                if (!/^\d|\.$|^[-]/.test(char)) {
+                  event.preventDefault();
+                }
+              }}
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
@@ -259,9 +382,18 @@ function Team_Directory_Add_Employee() {
                 },
               }}
             />
+            <input
+              type="file"
+              class="form-control input-field-choosefile mt-4"
+              id="inputGroupFile02"
+              style={{ width: 350 }}
+              onChange={handleFileChange}
+              ref={inputRef}
+            />
+
             <div className="d-flex my-4 justify-content-center">
               <Button_
-                onClick={() => setOpenPopup(false)}
+                onClick={handlepopADD}
                 style={{ width: 200 }}
                 variant="outlined"
               >

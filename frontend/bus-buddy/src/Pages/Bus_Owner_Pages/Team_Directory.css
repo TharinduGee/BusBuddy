@@ -1,5 +1,5 @@
 .profession {
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bolder;
   padding-bottom: 5px;
   margin-left: 35px;
@@ -31,4 +31,7 @@
   width: auto;
   margin-left: 40px;
   margin-right: 40px;
+}
+.swal2-container {
+  z-index: 99999999;
 }

@@ -251,18 +251,23 @@ function Route_Management() {
           }
         )
         .then(function (response) {
+          Swal.fire({
+            title: "Good job!",
+            text: "Route Added Successfully!",
+            icon: "success",
+          });
           console.log("Data successfully posted:", response.data);
         })
         .catch(function (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
           console.error("Error posting data:", error);
         });
       clear();
       setRefresh(!refresh);
-      Swal.fire({
-        title: "Good job!",
-        text: "Route Added Successfully!",
-        icon: "success",
-      });
     }
   };
 
