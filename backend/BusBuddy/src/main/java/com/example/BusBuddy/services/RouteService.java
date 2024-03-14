@@ -161,6 +161,7 @@ public class RouteService {
         if(file != null && editedRoute.getDocument() != null){
             Document document = editedRoute.getDocument();
             document.setData(file.getBytes());
+            document.setDocName(file.getOriginalFilename());
             documentRepository.save(document);
         }else if(file != null){
             documentService.add(file,httpServletRequest,

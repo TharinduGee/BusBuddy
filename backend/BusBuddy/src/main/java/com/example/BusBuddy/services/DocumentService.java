@@ -79,7 +79,6 @@ public class DocumentService {
                 "Document is not found."
         ));
 
-
         if (document.getData() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -114,6 +113,12 @@ public class DocumentService {
                     .orElseThrow(() -> new EntityNotFoundException("Route is not found."));
             doc.setCategory(category);
             doc.setRoute(route);
+        }
+        else if(category == DocCategory.DOC_CATEGORY_BUS_DOC) {
+                Bus bus = busRepository.findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Bus is not found."));
+                doc.setCategory(DocCategory.DOC_CATEGORY_BUS_DOC);
+                doc.setBus(bus);
         }else if(category == DocCategory.DOC_CATEGORY_UNSPECIFIED) {
             doc.setCategory(DocCategory.DOC_CATEGORY_UNSPECIFIED);
         }

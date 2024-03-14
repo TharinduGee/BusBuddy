@@ -83,6 +83,7 @@ public class BusService {
         if(file != null && editedBus.getDocument() != null){
             Document document = editedBus.getDocument();
             document.setData(file.getBytes());
+            document.setDocName(file.getOriginalFilename());
             documentRepository.save(document);
         }else if(file != null){
             documentService.add(file,httpServletRequest,

@@ -71,8 +71,8 @@ public class TripService {
         }else{
             driver = null;
         }
-        if(tripAddRequest.getCondocterId() != null){
-            conductor = employeeRepository.findById(tripAddRequest.getCondocterId())
+        if(tripAddRequest.getConductorId() != null){
+            conductor = employeeRepository.findById(tripAddRequest.getConductorId())
                     .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
         }else{
             conductor = null;
@@ -88,13 +88,14 @@ public class TripService {
                 .date(localDate)
                 .startTime(tripAddRequest.getStartTime())
                 .endTime(tripAddRequest.getEndTime())
-                .income(0)
-                .expense(0)
+                .income(tripAddRequest.getIncome())
+                .expense(tripAddRequest.getExpense())
                 .status(TripStatus.TRIP_STATUS_SCHEDULED)
                 .bus(bus)
                 .conductor(conductor)
                 .driver(driver)
                 .route(route)
+                .ticketApi(tripAddRequest.getTicketApiToken())
                 .business(businessService.extractBId(httpServletRequest))
                 .build();
 
@@ -119,8 +120,8 @@ public class TripService {
         }else{
             driver = null;
         }
-        if(tripAddRequest.getCondocterId() != null){
-            conductor = employeeRepository.findById(tripAddRequest.getCondocterId())
+        if(tripAddRequest.getConductorId() != null){
+            conductor = employeeRepository.findById(tripAddRequest.getConductorId())
                     .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
         }else{
             conductor = null;
@@ -137,12 +138,13 @@ public class TripService {
                     .startTime(tripAddRequest.getStartTime())
                     .endTime(tripAddRequest.getEndTime())
                     .bus(bus)
-                .income(0)
-                .expense(0)
+                .income(tripAddRequest.getIncome())
+                .expense(tripAddRequest.getExpense())
                 .status(TripStatus.TRIP_STATUS_SCHEDULED)
                     .conductor(conductor)
                     .driver(driver)
                     .route(route)
+                .ticketApi(tripAddRequest.getTicketApiToken())
                     .business(businessService.extractBId(httpServletRequest))
                     .build();
 

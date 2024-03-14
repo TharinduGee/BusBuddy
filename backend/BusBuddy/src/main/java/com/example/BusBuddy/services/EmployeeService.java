@@ -131,6 +131,7 @@ public class EmployeeService {
         if(file != null && editedEmployee.getDocument() != null){
             Document document = editedEmployee.getDocument();
             document.setData(file.getBytes());
+            document.setDocName(file.getOriginalFilename());
             documentRepository.save(document);
         }else if(file != null){
             documentService.add(file,httpServletRequest,

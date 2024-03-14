@@ -19,7 +19,8 @@ public class TripAddRequest {
     private Long busId;
     private Long routeId;
     private Long driverId;
-    private Long condocterId;
+    private Long conductorId;
+    private String ticketApiToken;
 }
 
 
