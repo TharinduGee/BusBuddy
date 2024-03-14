@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Trip_Management.css";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -27,7 +27,41 @@ function Trip_Management() {
     backgroundColor: "#ff760d",
     color: "white",
   };
+  const [tripData, setTripData] = useState({
+    startTime: null,
+    endTime: null,
+    busId: null,
+    routeId: null,
+    driverId: null,
+    condocterId: null,
+    income: null,
+    expense: null,
+    date: null,
+  });
 
+  const [durationDates, setDurationDates] = useState({
+    firstDate: null,
+    lastDate: null,
+  });
+  const [searchDates, setsearchDates] = useState({
+    firstDate: null,
+    lastDate: null,
+  });
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+  });
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+  const [refresh, setRefresh] = useState(true);
+  const [busIDoptions, setbusIDoptions] = useState([]);
+  const [routeIDoptions, setrouteIDoptions] = useState([]);
+  const [driverIDoptions, setdriverIDoptions] = useState([]);
+  const [ConductorIDoptions, setConductorIDoptions] = useState([]);
   const token = localStorage.getItem("token");
   const [rows_, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState("");
@@ -97,8 +131,6 @@ function Trip_Management() {
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
 
-    const token =
-      "eyJhbGciOiJIUzI1NiJ9.eyJiX2lkIjoiNiIsImF1ZCI6IjYiLCJzdWIiOiJuZWRmc3lyeWZhIiwiaWF0IjoxNzA4MTEyNjQ0LCJleHAiOjE3MDgxMTYyNDR9.0tH3rYp92j3aLtouaOxueSj7Uc957wUQqSwEdl570GY";
     axios
       .get(
         `http://localhost:8081/api/v1/nullBusinessAndEmail?email=${searchInput}`,
@@ -168,7 +200,7 @@ function Trip_Management() {
     {
       field: "status",
       headerName: "Status",
-      width: 90,
+      width: 200,
     },
     {
       field: "actions",
@@ -180,15 +212,7 @@ function Trip_Management() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row.id)}
-          >
-            <EditNoteSharpIcon />
-          </IconButton>
-          <IconButton
-            style={{ color: "grey" }}
-            className="mx-2"
-            aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -196,23 +220,6 @@ function Trip_Management() {
       ),
     },
   ];
-
-  const [tripData, setTripData] = useState({
-    startTime: null,
-    endTime: null,
-    busId: null,
-    routeId: null,
-    driverId: null,
-    condocterId: null,
-    income: null,
-    expense: null,
-    date: null,
-  });
-
-  const [durationDates, setDurationDates] = useState({
-    firstDate: null,
-    lastDate: null,
-  });
 
   const handleChange = (e) => {
     const value_ = e.target.value;
@@ -236,69 +243,321 @@ function Trip_Management() {
       expense: "",
       date: null,
     });
+    setDurationDates({
+      firstDate: null,
+      lastDate: null,
+    });
   };
 
-  const AddTripForTheDate = () => {
-    // if (
-    //   tripData.startTime === null ||
-    //   tripData.endTime === "" ||
-    //   tripData.busId === "" ||
-    //   tripData.driverId === "" ||
-    //   tripData.condocterId === null ||
-    //   tripData.income === "" ||
-    //   tripData.expense === "" ||
-    //   tripData.date === ""
-    // ) {
-    //   alert("Please fill all the fields");
-    // } else {
-    const year = tripData.date.year();
-    const month = tripData.date.month() + 1;
-    const day = tripData.date.date();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-      day
-    ).padStart(2, "0")}`;
+  useEffect(() => {
+    console.log("sdsad", searchDates.lastDate);
+    if (searchDates.firstDate !== null && searchDates.lastDate !== null) {
+      console.log("inside", searchDates.lastDate);
+      const fyear = searchDates.firstDate.year();
+      const fmonth = searchDates.firstDate.month() + 1;
+      const fday = searchDates.firstDate.date();
+      const firstformattedDate = `${fyear}-${String(fmonth).padStart(
+        2,
+        "0"
+      )}-${String(fday).padStart(2, "0")}`;
 
-    const jsStartTime = tripData.startTime.toDate();
-    const formattedStartTime = format(jsStartTime, "HH:mm:ss");
+      const lyear = searchDates.lastDate.year();
+      const lmonth = searchDates.lastDate.month() + 1;
+      const lday = searchDates.lastDate.date();
+      const lastformattedDate = `${lyear}-${String(lmonth).padStart(
+        2,
+        "0"
+      )}-${String(lday).padStart(2, "0")}`;
 
-    const jsEndTime = tripData.endTime.toDate();
-    const formattedEndTime = format(jsEndTime, "HH:mm:ss");
-    const passingData = {
-      startTime: formattedStartTime,
-      endTime: formattedEndTime,
-      income: tripData.income,
-      busId: tripData.busId,
-      routeId: tripData.routeId,
-      driverId: tripData.driverId,
-      condocterId: tripData.condocterId,
-      expense: tripData.expense,
-    };
-    axios
-      .post(
-        `http://localhost:8081/api/v1/trip/add?date=${formattedDate}`,
-        passingData,
-        {
+      const fetchData = async () => {
+        setPageState((old) => ({
+          ...old,
+          isLoading: true,
+        }));
+
+        try {
+          const response = await axios.get(
+            `http://localhost:8081/api/v1/trip/findTrips?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&startDate=${firstformattedDate}&endDate=${lastformattedDate}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          const formattedData = response.data.content.map((tripdata) => ({
+            id: tripdata.tripId,
+            date: tripdata.date,
+            startDestination: tripdata.startDestination,
+            endDestination: tripdata.endDestination,
+            startTime: tripdata.startTime,
+            endTime: tripdata.endTime,
+            income: tripdata.income,
+            expense: tripdata.expense,
+            driverId: tripdata.driverId,
+            conductorId: tripdata.conductorId,
+            busId: tripdata.busId,
+            routeId: tripdata.routeId,
+            status: tripdata.status,
+          }));
+          console.log(formattedData);
+
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: formattedData,
+            total: response.data.totalElements,
+          }));
+        } catch (error) {
+          console.error("There was an error!", error);
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+          }));
+        }
+      };
+
+      fetchData();
+    }
+  }, [searchDates, paginationModel.page, paginationModel.pageSize, refresh]);
+
+  useEffect(() => {
+    try {
+      axios
+        .get(`http://localhost:8081/api/v1/bus/getBusIds`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      )
-      .then(function (response) {
-        console.log("Data successfully posted:", response.data);
-      })
-      .catch(function (error) {
-        console.error("Error posting data:", error);
+        })
+        .then((response) => {
+          const busIDs = response.data;
+
+          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          setbusIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+    try {
+      axios
+        .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const busIDs = response.data;
+
+          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          setrouteIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+    try {
+      axios
+        .get(`http://localhost:8081/api/v1/employee/getDriverIds`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const busIDs = response.data;
+
+          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          setdriverIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+    try {
+      axios
+        .get(`http://localhost:8081/api/v1/employee/getConductorIds`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const busIDs = response.data;
+
+          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          setConductorIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+    console.log(durationDates);
+  }, [durationDates, tripData]);
+
+  const AddTrip = () => {
+    if (checked) {
+      AddTripForADuration();
+      console.log("duration");
+    } else {
+      AddTripForTheDate();
+      console.log("notduration");
+    }
+  };
+  const AddTripForTheDate = () => {
+    if (
+      tripData.startTime === null ||
+      tripData.endTime === "" ||
+      tripData.busId === "" ||
+      // tripData.driverId === "" ||
+      // tripData.condocterId === null ||
+      tripData.income === "" ||
+      tripData.expense === "" ||
+      tripData.date === "" ||
+      tripData.date === null
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
       });
-    clear();
-    // setRefresh(!refresh);
-    // }
+    } else {
+      const year = tripData.date.year();
+      const month = tripData.date.month() + 1;
+      const day = tripData.date.date();
+      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
+        day
+      ).padStart(2, "0")}`;
+
+      const jsStartTime = tripData.startTime.toDate();
+      const formattedStartTime = format(jsStartTime, "HH:mm:ss");
+
+      const jsEndTime = tripData.endTime.toDate();
+      const formattedEndTime = format(jsEndTime, "HH:mm:ss");
+      const passingData = {
+        startTime: formattedStartTime,
+        endTime: formattedEndTime,
+        income: tripData.income,
+        busId: tripData.busId,
+        routeId: tripData.routeId,
+        driverId: tripData.driverId,
+        condocterId: tripData.condocterId,
+        expense: tripData.expense,
+      };
+      axios
+        .post(
+          `http://localhost:8081/api/v1/trip/add?date=${formattedDate}`,
+          passingData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully posted:", response.data);
+          Swal.fire({
+            title: "Good job!",
+            text: "Trip Data Inserted Successfully!",
+            icon: "success",
+          });
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      clear();
+    }
+    setRefresh(!refresh);
   };
 
-  const options = [
-    { value: "Chocolate", label: "Chocolate" },
-    { value: "Strawberry", label: "Strawberry" },
-    { value: "Vanilla", label: "Vanilla" },
-  ];
+  const AddTripForADuration = () => {
+    if (
+      tripData.startTime === null ||
+      tripData.endTime === "" ||
+      tripData.busId === "" ||
+      // tripData.driverId === "" ||
+      // tripData.condocterId === null ||
+      tripData.income === "" ||
+      tripData.expense === "" ||
+      durationDates.firstDate === "" ||
+      durationDates.lastDate === "" ||
+      durationDates.lastDate === null ||
+      durationDates.firstDate === null
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All the fields should be filled!",
+      });
+    } else {
+      const fyear = durationDates.firstDate.year();
+      const fmonth = durationDates.firstDate.month() + 1;
+      const fday = durationDates.firstDate.date();
+      const firstformattedDate = `${fyear}-${String(fmonth).padStart(
+        2,
+        "0"
+      )}-${String(fday).padStart(2, "0")}`;
+
+      const lyear = durationDates.lastDate.year();
+      const lmonth = durationDates.lastDate.month() + 1;
+      const lday = durationDates.lastDate.date();
+      const lastformattedDate = `${lyear}-${String(lmonth).padStart(
+        2,
+        "0"
+      )}-${String(lday).padStart(2, "0")}`;
+
+      const jsStartTime = tripData.startTime.toDate();
+      const formattedStartTime = format(jsStartTime, "HH:mm:ss");
+
+      const jsEndTime = tripData.endTime.toDate();
+      const formattedEndTime = format(jsEndTime, "HH:mm:ss");
+      const passingData = {
+        firstDate: firstformattedDate,
+        tripAddRequest: {
+          startTime: formattedStartTime,
+          endTime: formattedEndTime,
+          income: tripData.income,
+          busId: tripData.busId,
+          routeId: tripData.routeId,
+          driverId: tripData.driverId,
+          condocterId: tripData.condocterId,
+          expense: tripData.expense,
+        },
+        lastDate: lastformattedDate,
+      };
+
+      console.log(passingData);
+      axios
+        .post(
+          `http://localhost:8081/api/v1/trip/scheduleTripsForDuration`,
+          passingData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log("Data successfully posted:", response.data);
+          Swal.fire({
+            title: "Good job!",
+            text: "Trip Data Inserted Successfully!",
+            icon: "success",
+          });
+        })
+        .catch(function (error) {
+          console.error("Error posting data:", error);
+        });
+      clear();
+      setRefresh(!refresh);
+    }
+  };
 
   const [checked, setChecked] = useState(false);
 
@@ -306,29 +565,89 @@ function Trip_Management() {
     setChecked(event.target.checked);
   };
 
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/trip/remove?tripId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your file has been deleted.",
+              icon: "success",
+            });
+          })
+          .catch((error) => {
+            console.error("Error deleting data:", error.message);
+          });
+        setRefresh(!refresh);
+      }
+    });
+  };
+
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
         <div
           style={{ width: "80%" }}
-          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+          class="d-flex flex-wrap align-items-center  justify-content-start"
         >
-          <ThemeProvider theme={theme}>
-            <TextField
-              id="outlined-basic"
-              label="Search by Email"
-              variant="outlined"
-              onChange={handleSearchInputChange}
-              InputProps={{
-                sx: {
-                  backgroundColor: "#F4F4F4",
-                  width: 350,
-                  borderRadius: 10,
-                  borderColor: "FF760D",
-                },
-              }}
-            />
-          </ThemeProvider>
+          <div className="d-flex flex-column input-and-label mt-3 ">
+            <label class="form-label">Starting Date*</label>
+            <ThemeProvider theme={text_box_the}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  sx={{ width: 200 }}
+                  slotProps={{ field: { clearable: true } }}
+                  value={searchDates.firstDate}
+                  onChange={async (newValue) =>
+                    await setsearchDates(
+                      {
+                        ...searchDates,
+                        firstDate: newValue,
+                      },
+                      console.log(searchDates)
+                    )
+                  }
+                />
+              </LocalizationProvider>
+            </ThemeProvider>
+          </div>
+
+          <div className="d-flex flex-column input-and-label mt-3  ">
+            <label class="form-label">Ending Date*</label>
+            <ThemeProvider theme={text_box_the}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  sx={{ width: 200 }}
+                  slotProps={{ field: { clearable: true } }}
+                  value={searchDates.lastDate}
+                  onChange={async (newValue) =>
+                    await setsearchDates(
+                      {
+                        ...searchDates,
+                        lastDate: newValue,
+                      },
+                      console.log(searchDates)
+                    )
+                  }
+                />
+              </LocalizationProvider>
+            </ThemeProvider>
+          </div>
         </div>
         <div
           className="justify-content-center align-items-center d-flex py-4"
@@ -340,13 +659,14 @@ function Trip_Management() {
           >
             <ThemeProvider theme={table_theme}>
               <DataGrid
-                rows={rows_}
+                rows={pageState.data}
+                page={pageState.page - 1}
                 columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={[5, 10]}
                 rowHeight={40}
               />
@@ -411,6 +731,12 @@ function Trip_Management() {
                 class="form-control input-field-trip"
                 value={tripData.income}
                 onChange={handleChange}
+                onKeyPress={(event) => {
+                  const char = String.fromCharCode(event.charCode);
+                  if (!/^\d|\.$|^[-]/.test(char)) {
+                    event.preventDefault();
+                  }
+                }}
               />
             </div>
 
@@ -422,6 +748,12 @@ function Trip_Management() {
                 class="form-control input-field-trip"
                 value={tripData.expense}
                 onChange={handleChange}
+                onKeyPress={(event) => {
+                  const char = String.fromCharCode(event.charCode);
+                  if (!/^\d|\.$|^[-]/.test(char)) {
+                    event.preventDefault();
+                  }
+                }}
               />
             </div>
           </div>
@@ -431,7 +763,7 @@ function Trip_Management() {
               <Select
                 id="busId"
                 className="input-field-trip"
-                options={options}
+                options={busIDoptions}
                 isClearable={true}
                 onChange={async (newValue) => {
                   if (newValue !== null) {
@@ -456,7 +788,7 @@ function Trip_Management() {
               <Select
                 id="routeId"
                 className="input-field-trip"
-                options={options}
+                options={routeIDoptions}
                 isClearable={true}
                 onChange={async (newValue) => {
                   if (newValue !== null) {
@@ -482,7 +814,7 @@ function Trip_Management() {
               <Select
                 id="driverId"
                 className="input-field-trip"
-                options={options}
+                options={driverIDoptions}
                 isClearable={true}
                 onChange={async (newValue) => {
                   if (newValue !== null) {
@@ -507,7 +839,7 @@ function Trip_Management() {
               <Select
                 id="condocterId"
                 className="input-field-trip"
-                options={options}
+                options={ConductorIDoptions}
                 isClearable={true}
                 onChange={async (newValue) => {
                   if (newValue !== null) {
@@ -617,7 +949,7 @@ function Trip_Management() {
               style={buttonStyle}
               className="d-flex  update-btn"
               variant="contained"
-              onClick={AddTripForTheDate}
+              onClick={AddTrip}
             >
               ADD TRIP
             </Button>
