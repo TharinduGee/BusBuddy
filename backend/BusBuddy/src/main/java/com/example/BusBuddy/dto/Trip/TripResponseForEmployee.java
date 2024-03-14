@@ -15,6 +15,7 @@ import java.sql.Time;
 public class TripResponseForEmployee {
     private String startDestination;
     private String endDestination;
+    private String numberPlate;
     private Time startTime;
     private Time endTime;
     private String employeeName;
