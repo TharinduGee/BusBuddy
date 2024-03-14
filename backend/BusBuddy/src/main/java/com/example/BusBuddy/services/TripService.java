@@ -73,7 +73,7 @@ public class TripService {
         }
         if(tripAddRequest.getConductorId() != null){
             conductor = employeeRepository.findById(tripAddRequest.getConductorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Conductor is not found"));
         }else{
             conductor = null;
         }
@@ -122,7 +122,7 @@ public class TripService {
         }
         if(tripAddRequest.getConductorId() != null){
             conductor = employeeRepository.findById(tripAddRequest.getConductorId())
-                    .orElseThrow(() -> new EntityNotFoundException("Driver is not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Conductor is not found"));
         }else{
             conductor = null;
         }
@@ -193,6 +193,7 @@ public class TripService {
         return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
     }
 
+    @Transactional
     public ResponseEntity<TripPaginationResponse> findTrips(HttpServletRequest httpServletRequest ,
                                                             int pageNumber,
             int pageSize

@@ -1,5 +1,6 @@
 package com.example.BusBuddy.dto.Trip;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,9 @@ import java.sql.Time;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TripAddRequest {
+    @NotNull(message = "Start tIme is required.")
     private Time startTime;
+    @NotNull(message = "End time is required.")
     private Time endTime;
     private Float income;
     private Float Expense;

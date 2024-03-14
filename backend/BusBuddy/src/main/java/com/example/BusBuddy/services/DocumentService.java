@@ -1,6 +1,11 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.dto.Document.DocumentPaginationResponse;
+import com.example.BusBuddy.dto.Document.DocumentRequest;
+import com.example.BusBuddy.dto.Document.DocumentResponse;
+import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
+import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.DocumentRepository;
@@ -9,6 +14,10 @@ import com.example.BusBuddy.repositories.RouteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +39,41 @@ public class DocumentService {
     private final RouteRepository routeRepository;
     private final BusRepository busRepository;
     private final BusinessService businessService;
+    private final ModelMapper modelMapper;
+
+    public DocumentPaginationResponse findDocumentByType(HttpServletRequest httpServletRequest,
+                                                         DocCategory docCategory ,
+                                                         String docName,
+                                                         int pageNo,
+                                                         int pageSize
+
+    ){
+        Pageable pageable = PageRequest.of(pageNo,pageSize);
+        Page<Document> documentPage = documentRepository.findByBusinessAndCategoryAndDocNameContainingIgnoreCase(
+                businessService.extractBId(httpServletRequest),
+                docCategory, Optional.ofNullable(docName),
+                pageable
+                );
+
+        List<Document> documentList = documentPage.getContent();
+        List<DocumentResponse> routeResponses = documentList.stream().map(
+                document -> DocumentResponse.builder()
+                        .docId(document.getDocId())
+                        .docName(document.getDocName())
+                        .uploadDate(document.getUploadDate())
+                        //.RefId(document.getRoute() != null ? document.getRoute().getRouteId() : document.getEmployee() != null ? document.getEmployee().getEmpId() : document.getBus() != null ? document.getBus().getBusId() : null)
+                        .build()
+        ).toList();
+
+        return DocumentPaginationResponse.builder()
+                .content(routeResponses)
+                .totalPages(documentPage.getTotalPages())
+                .totalElements(documentPage.getTotalElements())
+                .last(documentPage.isLast())
+                .pageNo(documentPage.getNumber())
+                .pageSize(documentPage.getSize())
+                .build();
+    }
 
     @Transactional
     public ResponseEntity<String> add(MultipartFile file ,
@@ -102,6 +148,7 @@ public class DocumentService {
             docName = file.getOriginalFilename();
         }
         doc.setDocName(docName);
+        doc.setUploadDate(LocalDate.now());
         if(category == DocCategory.DOC_CATEGORY_NIC ||
                 category == DocCategory.DOC_CATEGORY_SERVICE_AGREEMENT){
             Employee employee = employeeRepository.findById(id)

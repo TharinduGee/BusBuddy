@@ -9,6 +9,7 @@ import com.example.BusBuddy.services.TripService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -53,8 +54,8 @@ public class TripController {
     public ResponseEntity<TripPaginationResponse> findTrips(HttpServletRequest httpServletRequest,
                                                             @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                             @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize,
-                                                            @RequestParam LocalDate startDate,
-                                                            @RequestParam LocalDate endDate
+                                                            @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                                            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ){
         return tripService.findTrips(httpServletRequest, pageNumber, pageSize, startDate, endDate);
     }

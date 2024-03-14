@@ -1,5 +1,6 @@
 package com.example.BusBuddy.controllers;
 
+import com.example.BusBuddy.dto.Document.DocumentPaginationResponse;
 import com.example.BusBuddy.dto.Document.DocumentRequest;
 import com.example.BusBuddy.models.DocCategory;
 import com.example.BusBuddy.services.DocumentService;
@@ -22,8 +23,18 @@ public class DocumentController {
     private final DocumentService documentService;
 
     @GetMapping("/getDocument")
-    public ResponseEntity<byte[]> retrieveImage(@RequestParam Long docId) throws IOException {
+    public ResponseEntity<byte[]> getDocument(@RequestParam Long docId) throws IOException {
         return documentService.getDocument(docId);
+    }
+
+    @GetMapping("/findDocumentByType")
+    public ResponseEntity<DocumentPaginationResponse> findDocumentByType(HttpServletRequest httpServletRequest,
+                                                                         @RequestParam DocCategory docCategory,
+                                                                         @RequestParam(required = false) String docName,
+                                                                         @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                                         @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize
+    ) throws IOException {
+        return ResponseEntity.ok(documentService.findDocumentByType(httpServletRequest,docCategory,docName,pageNumber,pageSize));
     }
 
     @PostMapping("/add")

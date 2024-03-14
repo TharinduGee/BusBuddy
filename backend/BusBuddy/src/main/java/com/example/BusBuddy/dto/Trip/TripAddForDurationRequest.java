@@ -14,8 +14,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TripAddForDurationRequest {
-    @NotNull(message = "FirstDate should be specified.")
+    @NotNull(message = "First Date should be specified.")
     private LocalDate firstDate;
+    @NotNull(message = "Last Date should be specified.")
     private LocalDate LastDate;
     private TripAddRequest tripAddRequest;
 }
