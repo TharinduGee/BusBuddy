@@ -15,6 +15,6 @@ public class DocumentResponse {
     private Long docId;
     private String docName;
     private LocalDate uploadDate;
-    private
+    private byte[] data;
     private Long RefId;
 }

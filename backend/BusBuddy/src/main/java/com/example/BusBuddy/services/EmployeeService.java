@@ -149,7 +149,12 @@ public class EmployeeService {
         return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
     }
 
+    @Transactional
     public ResponseEntity<String> removeEmployee(Long empId){
+        Employee employee = employeeRepository.findById(empId).orElseThrow(()-> new EntityNotFoundException("Employee not found."));
+        User user = employee.getUser();
+        user.setBusiness(null);
+        userRepository.save(user);
         employeeRepository.deleteById(empId);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully Deleted.");
     }

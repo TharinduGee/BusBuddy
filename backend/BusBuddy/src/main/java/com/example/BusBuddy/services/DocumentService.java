@@ -41,6 +41,7 @@ public class DocumentService {
     private final BusinessService businessService;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public DocumentPaginationResponse findDocumentByType(HttpServletRequest httpServletRequest,
                                                          DocCategory docCategory ,
                                                          String docName,
@@ -60,8 +61,9 @@ public class DocumentService {
                 document -> DocumentResponse.builder()
                         .docId(document.getDocId())
                         .docName(document.getDocName())
+                        .data(document.getData())
                         .uploadDate(document.getUploadDate())
-                        //.RefId(document.getRoute() != null ? document.getRoute().getRouteId() : document.getEmployee() != null ? document.getEmployee().getEmpId() : document.getBus() != null ? document.getBus().getBusId() : null)
+                        .RefId(document.getRoute() != null ? document.getRoute().getRouteId() : document.getEmployee() != null ? document.getEmployee().getEmpId() : document.getBus() != null ? document.getBus().getBusId() : null)
                         .build()
         ).toList();
 
