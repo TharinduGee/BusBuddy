@@ -150,7 +150,7 @@ function Fleet_Operation() {
   const inputRef = useRef(null);
   const [refresh, setRefresh] = useState(true);
   const [busData, setBusDate] = useState({
-    type: value,
+    type: "NORMAL",
     numberPlate: null,
     lastServiceDate: null,
     Seats: null,
@@ -242,6 +242,7 @@ function Fleet_Operation() {
 
   useEffect(() => {
     console.log(file);
+    console.log(busData);
   }, [file, busId, busData.lastServiceDate, busData.type]);
 
   const handleDelete = (id) => {

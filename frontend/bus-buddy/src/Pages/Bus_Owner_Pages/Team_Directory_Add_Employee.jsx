@@ -162,7 +162,7 @@ function Team_Directory_Add_Employee() {
             lastName: user.lastName,
             email: user.email,
             mobileNo: user.mobileNo,
-            role: user.role.split("_")[2],
+            role: user.role.split("_")[1],
           }));
 
           setPageState((old) => ({
