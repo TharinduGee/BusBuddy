@@ -1,4 +1,4 @@
-import React, { Children, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
@@ -12,9 +12,112 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Popup from "./Update_popup";
 import Button_ from "@mui/material/Button";
+import Swal from "sweetalert2";
+import axios from "axios";
+import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 
 function Team_Directory() {
+  const token = localStorage.getItem("token");
+  const [searchInput, setSearchInput] = useState("");
+  const inputRef = useRef(null);
+  const [salary, setSalary] = useState(null);
+
   const [openPopup, setOpenPopup] = useState(false);
+  const clear = () => {
+    setSalary(null);
+    if (inputRef.current.value) {
+      inputRef.current.value = null;
+    }
+  };
+  const [file, setFile] = useState(null);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
+  const handleSalaryChange = (event) => {
+    setSalary(event.target.value);
+    console.log(salary);
+  };
+
+  const [pageState, setPageState] = useState({
+    isLoading: false,
+    data: [],
+    total: 0,
+  });
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
+  const [refresh, setRefresh] = useState(true);
+  const [selectedfullname, setselectedfullname] = useState("");
+  const [selectedID, setselectedID] = useState("");
+  const [selectedRole, setselectedRole] = useState("");
+  const [selectedSalary, setselectedSalary] = useState("");
+  const handleRowClick = (params) => {
+    setselectedID(params.row.id);
+
+    setselectedfullname(params.row.Name);
+    setselectedRole(params.row.designation);
+    setselectedSalary(params.row.salary);
+  };
+
+  const handlepopUpdate = () => {
+    console.log(salary);
+    if (salary !== null) {
+      console.log("in");
+      UpdateEmployee();
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Enter the Salary First",
+      });
+    }
+  };
+
+  const UpdateEmployee = () => {
+    const form = new FormData();
+    form.append("file", file);
+
+    axios
+      .post(
+        `http://localhost:8081/api/v1/employee/edit?empId=${selectedID}&salary=${salary}`,
+
+        form,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type":
+              "multipart/form-data; boundary=---011000010111000001101001",
+          },
+          data: "[form]",
+        }
+      )
+      .then(function (response) {
+        setOpenPopup(!openPopup);
+        console.log("Data successfully posted:", response.data);
+        Swal.fire({
+          title: "Good job!",
+          text: "Employee Detailed Updated Successfully!",
+          icon: "success",
+        });
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+    clear();
+    setRefresh(!refresh);
+  };
+
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -73,22 +176,28 @@ function Team_Directory() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "firstName", headerName: "First name", width: 130 },
-    { field: "lastName", headerName: "Last name", width: 130 },
+    { field: "Name", headerName: "Full Name", width: 130 },
+    { field: "salary", headerName: "Salary", width: 130 },
     {
       field: "age",
       headerName: "Age",
       type: "number",
       width: 90,
     },
+    { field: "joinedDate", headerName: "Joined Date", width: 130 },
+    { field: "designation", headerName: "Designation", width: 130 },
+    { field: "docId", headerName: "Doc ID", width: 130 },
     {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || " "} ${params.row.lastName || ""}`,
+      field: "docName",
+      headerName: "Doc Name",
+      type: "number",
+      width: 90,
+    },
+    {
+      field: "bday",
+      headerName: "Birthday",
+      type: "number",
+      width: 90,
     },
     {
       field: "actions",
@@ -118,17 +227,63 @@ function Team_Directory() {
     },
   ];
 
-  const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: true,
+      }));
+
+      axios
+        .get(
+          `http://localhost:8081/api/v1/employee/findEmployees?name=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          const fetchedData = response.data.content;
+          const formattedData = fetchedData.map((user) => ({
+            id: user.empId,
+            Name: user.name,
+            salary: user.salary,
+            age: user.age,
+            joinedDate: user.joinedDate,
+            designation: user.designation.split("_")[2],
+            docId: user.docId,
+            docName: user.docName,
+            bday: user.bday,
+          }));
+
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+            data: formattedData,
+            total: response.data.totalElements,
+          }));
+          console.log("formateed", formattedData);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+          setPageState((old) => ({
+            ...old,
+            isLoading: false,
+          }));
+        });
+    };
+    console.log(file);
+    fetchData();
+  }, [
+    searchInput,
+    paginationModel.page,
+    paginationModel.pageSize,
+    salary,
+    file,
+    refresh,
+  ]);
+
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
@@ -141,6 +296,7 @@ function Team_Directory() {
               id="outlined-basic"
               label="Search"
               variant="outlined"
+              onChange={handleSearchInputChange}
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
@@ -177,42 +333,48 @@ function Team_Directory() {
           >
             <ThemeProvider theme={table_theme}>
               <DataGrid
-                rows={rows}
+                rows={pageState.data}
+                page={pageState.page - 1}
                 columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
                 pageSizeOptions={[5, 10]}
                 rowHeight={40}
+                onRowClick={handleRowClick}
               />
             </ThemeProvider>
           </div>
         </div>
-        <div className="d-flex flex-wrap justify-content-center align-items-center">
+        <div
+          className={
+            selectedID !== ""
+              ? "d-flex flex-wrap justify-content-center align-items-center"
+              : "hidden-schedule"
+          }
+        >
           <div>
-            <img className="photo-view" src={avatar} alt="Add Icon" />
+            <img className="photo-view" src={avatar} alt="profile Icon" />
           </div>
 
           <div className="d-flex flex-column">
-            <lable className="profession">Driver</lable>
-            <lable class="name-avatar">Kamal Fernando </lable>
+            <lable className="profession">{selectedRole}</lable>
+            <lable class="name-avatar">{selectedfullname}</lable>
             <div className="normal-details">
               <lable>ID :</lable>
-              <lable> PV13289290</lable>
+              <lable> {selectedID}</lable>
             </div>
-            <lable className="normal-details"> Kamalfernando@gmail.com</lable>
-            <lable className="normal-details"> +94726465466</lable>
             <div className="normal-details">
               <lable>Salary :</lable>
-              <lable> 45000/=</lable>
+              <lable> {selectedSalary}</lable>
             </div>
           </div>
         </div>
       </div>
       <Popup
-        title="Update Employee Salary"
+        title="Update Employee"
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
@@ -221,22 +383,29 @@ function Team_Directory() {
             <img className="photo-view" src={avatar} alt="Add Icon" />
           </div>
 
-          <div className="d-flex flex-column">
-            <lable className="profession">Driver</lable>
-            <lable class="name-avatar">Kamal Fernando </lable>
+          <div className="d-flex flex-column align-items-center">
+            <lable className="profession">{selectedRole}</lable>
+            <lable class="name-avatar">{selectedfullname}</lable>
             <div className="normal-details">
               <lable>ID :</lable>
-              <lable> PV13289290</lable>
+              <lable> {selectedID}</lable>
+            </div>
+            <div className="normal-details">
+              <lable>Salary :</lable>
+              <lable> {selectedSalary}</lable>
             </div>
 
-            <div className="normal-details mb-3">
-              <lable>Current Salary :</lable>
-              <lable> 45000/=</lable>
-            </div>
             <TextField
               id="outlined-basic"
-              label="Enter the new salary"
+              label="Enter the salary"
               variant="outlined"
+              onChange={handleSalaryChange}
+              onKeyPress={(event) => {
+                const char = String.fromCharCode(event.charCode);
+                if (!/^\d|\.$|^[-]/.test(char)) {
+                  event.preventDefault();
+                }
+              }}
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
@@ -245,9 +414,18 @@ function Team_Directory() {
                 },
               }}
             />
+            <input
+              type="file"
+              class="form-control input-field-choosefile mt-4"
+              id="inputGroupFile02"
+              style={{ width: 350 }}
+              onChange={handleFileChange}
+              ref={inputRef}
+            />
+
             <div className="d-flex my-4 justify-content-center">
               <Button_
-                onClick={() => setOpenPopup(false)}
+                onClick={handlepopUpdate}
                 style={{ width: 200 }}
                 variant="outlined"
               >
