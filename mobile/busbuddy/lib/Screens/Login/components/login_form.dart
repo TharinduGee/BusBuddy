@@ -1,24 +1,71 @@
+import 'package:busbuddy/Screens/Dashboard/driver_dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
 import '../../Signup/signup_screen.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({
-    Key? key,
-  }) : super(key: key);
+class LoginForm extends StatefulWidget {
+  const LoginForm({Key? key}) : super(key: key);
+
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    if (_formKey.currentState!.validate()) {
+      // API call to login
+      final response = await http.post(
+        Uri.parse('http://localhost:8081/api/v1/signIn'),
+        body: {
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Handle successful login
+        // Redirect user based on role
+        // Example:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => DriverDashboard()),
+        );
+      } else {
+        // Handle login failure
+        // Show error message to the user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login failed'),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
+            controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
-            onSaved: (email) {},
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your email';
+              }
+              return null;
+            },
             decoration: const InputDecoration(
               hintText: "Your email",
               prefixIcon: Padding(
@@ -30,9 +77,16 @@ class LoginForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
+              controller: _passwordController,
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your password';
+                }
+                return null;
+              },
               decoration: const InputDecoration(
                 hintText: "Your password",
                 prefixIcon: Padding(
@@ -44,7 +98,7 @@ class LoginForm extends StatelessWidget {
           ),
           const SizedBox(height: defaultPadding),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: _login,
             child: Text(
               "Login".toUpperCase(),
             ),
