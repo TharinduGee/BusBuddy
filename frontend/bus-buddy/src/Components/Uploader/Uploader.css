@@ -10,6 +10,18 @@
   border-radius: 5px;
 }
 
+.form-upload-on {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed #1475cf;
+  height: 300px;
+  width: 500px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: rgb(224, 247, 246);
+}
 .delete-doc {
   margin: 10px;
   cursor: pointer;
