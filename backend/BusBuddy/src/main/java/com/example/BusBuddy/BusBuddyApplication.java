@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @SpringBootApplication
 @EnableScheduling
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4883"})
 public class BusBuddyApplication implements CommandLineRunner {
 
 	@Bean
