@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:busbuddy/Screens/Dashboard/driver_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -21,17 +20,17 @@ class _LoginFormState extends State<LoginForm> {
 
   void login(String email, password) async {
     if (_formKey.currentState!.validate()) {
-      // API call to login
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:8081/api/v1/signIn'),
-        body: jsonEncode(<String, String>{
-          'email': _emailController.text,
-          'password': _passwordController.text,
-        }),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
+      try {
+        Response response = await post(
+          Uri.parse('http://10.0.2.2:8081/api/v1/signIn'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'password': password,
+          }),
+        );
 
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body.toString());
