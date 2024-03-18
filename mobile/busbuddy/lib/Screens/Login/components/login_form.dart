@@ -2,8 +2,7 @@ import 'dart:convert';
 
 import 'package:busbuddy/Screens/Dashboard/driver_dashboard.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
+import 'package:http/http.dart';
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
 import '../../Signup/signup_screen.dart';
@@ -17,10 +16,10 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-  Future<void> _login() async {
+  void login(String email, password) async {
     if (_formKey.currentState!.validate()) {
       // API call to login
       final response = await http.post(
@@ -34,23 +33,52 @@ class _LoginFormState extends State<LoginForm> {
         },
       );
 
-      if (response.statusCode == 200) {
-        // Handle successful login
-        // Redirect user based on role
-        // Example:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => DriverDashboard()),
-        );
-      } else {
-        // Handle login failure
-        // Show error message to the user
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login failed'),
-          ),
-        );
+        if (response.statusCode == 200) {
+          var data = jsonDecode(response.body.toString());
+          print(data['token']);
+          print('Login successfully');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DriverDashboard()),
+          );
+        } else {
+          print('failed');
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Login failed'),
+            ),
+          );
+        }
+      } catch (e) {
+        print(e.toString());
       }
+      // // API call to login
+      // Response response = await http.post(
+      //   Uri.parse('http://localhost:8081/api/v1/signIn'),
+      //   body: {
+      //     'email': emailController.text.toString(),
+      //     'password': passwordController.text.toString(),
+      //   },
+      // );
+      // print('Response Data: ${response.body}');
+
+      // if (response.statusCode == 200) {
+      //   // Print the response data
+      //   print('Response Data: ${response.body}');
+
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => DriverDashboard()),
+      //   );
+      // } else {
+      //   // Handle login failure
+      //   // Show error message to the user
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text('Login failed'),
+      //     ),
+      //   );
+      // }
     }
   }
 
@@ -61,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         children: [
           TextFormField(
-            controller: _emailController,
+            controller: emailController,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             cursorColor: kPrimaryColor,
@@ -82,7 +110,7 @@ class _LoginFormState extends State<LoginForm> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: TextFormField(
-              controller: _passwordController,
+              controller: passwordController,
               textInputAction: TextInputAction.done,
               obscureText: true,
               cursorColor: kPrimaryColor,
@@ -103,7 +131,10 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const SizedBox(height: defaultPadding),
           ElevatedButton(
-            onPressed: _login,
+            onPressed: () {
+              login(emailController.text.toString(),
+                  passwordController.text.toString());
+            },
             child: Text(
               "Login".toUpperCase(),
             ),
