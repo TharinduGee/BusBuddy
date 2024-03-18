@@ -28,10 +28,16 @@ public class Ledger{
             allocationSize = 1
     )
     @Column(
-            name = "ledgerId",
+            name = "transactionId",
             updatable = false
     )
-    private Long ledgerId;
+    private Long transactionId;
+
+    @Column(
+            name = "transactionName",
+            updatable = false
+    )
+    private String transactionName;
 
     @Column(
             name = "timestamp",
@@ -42,14 +48,10 @@ public class Ledger{
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    @Column(name = "debit")
-    private double debit;
+    @Column(name = "amount")
+    private double amount;
 
-    @Column(name = "credit")
-    private double credit;
 
-    @Column(name = "runningBalance")
-    private double runningBalance ;
 
     @OneToOne(mappedBy = "ledger")
     private Document document;

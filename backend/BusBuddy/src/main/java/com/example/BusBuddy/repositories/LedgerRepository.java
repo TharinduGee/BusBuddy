@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 
 @Repository
 public interface LedgerRepository extends JpaRepository<Ledger, Long> {
-    @Query("SELECT SUM(credit) FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
-    Float dailyIncome(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
-    @Query("SELECT SUM(debit) AS expense FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
-    Float dailyExpense(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
+//    @Query("SELECT SUM(credit) FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
+//    Float dailyIncome(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
+//    @Query("SELECT SUM(debit) AS expense FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
+//    Float dailyExpense(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
 }

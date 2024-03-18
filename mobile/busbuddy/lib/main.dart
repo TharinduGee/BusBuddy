@@ -1,6 +1,7 @@
 import 'package:busbuddy/Screens/Welcome/welcome_screen.dart';
 import 'package:busbuddy/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 void main() => runApp(const MyApp());
 

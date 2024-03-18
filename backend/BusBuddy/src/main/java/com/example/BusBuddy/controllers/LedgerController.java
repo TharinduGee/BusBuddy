@@ -21,24 +21,24 @@ public class LedgerController {
 
     private final LedgerService ledgerService;
 
-    @PostMapping("/addEntry")
-    public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest,
-                                           @RequestBody @Valid LedgerAddRequest ledgerAddRequest
-                                           ){
-        return ledgerService.addEntry(httpServletRequest, ledgerAddRequest);
-    }
-
-    @DeleteMapping("/remove")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> removeEntry(@RequestParam Long ledgerId){
-        return ledgerService.removeEntry(ledgerId);
-    }
-
-    @GetMapping("/dailyFinance")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<DailyFinanceResponse> dailyIncome(HttpServletRequest httpServletRequest){
-        return ledgerService.dailyIncome(httpServletRequest);
-    }
+//    @PostMapping("/addEntry")
+//    public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest,
+//                                           @RequestBody @Valid LedgerAddRequest ledgerAddRequest
+//                                           ){
+//        return ledgerService.addEntry(httpServletRequest, ledgerAddRequest);
+//    }
+//
+//    @DeleteMapping("/remove")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<String> removeEntry(@RequestParam Long ledgerId){
+//        return ledgerService.removeEntry(ledgerId);
+//    }
+//
+//    @GetMapping("/dailyFinance")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<DailyFinanceResponse> dailyIncome(HttpServletRequest httpServletRequest){
+//        return ledgerService.dailyIncome(httpServletRequest);
+//    }
 
 
 }
