@@ -112,19 +112,18 @@ CREATE TABLE IF NOT EXISTS public.employee
 
 CREATE TABLE IF NOT EXISTS public.ledger
 (
-    ledger_id bigint NOT NULL,
-    credit double precision,
-    debit double precision,
+    transaction_id bigint NOT NULL,
+    amount double precision,
     running_balance double precision,
     "timestamp" timestamp(6) without time zone NOT NULL,
     type character varying(255) COLLATE pg_catalog."default",
     b_id bigint,
-    CONSTRAINT ledger_pkey PRIMARY KEY (ledger_id),
+    CONSTRAINT transaction_pkey PRIMARY KEY (transaction_id),
     CONSTRAINT fk_bid FOREIGN KEY (b_id)
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT ledger_type_check CHECK (type::text = ANY (ARRAY['TRANSACTION_TYPE_TICKET'::character varying, 'TRANSACTION_TYPE_UNSPECIFIED'::character varying, 'TRANSACTION_TYPE_SERVICE'::character varying]::text[]))
+    CONSTRAINT ledger_type_check CHECK (type::text = ANY (ARRAY['TRANSACTION_TYPE_TICKET_INCOME'::character varying::text, 'TRANSACTION_TYPE_TICKET_EXPENSE'::character varying::text, 'TRANSACTION_TYPE_UNSPECIFIED'::character varying::text, 'TRANSACTION_TYPE_SERVICE'::character varying::text]))
 )
 
 

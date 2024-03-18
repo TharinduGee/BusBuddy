@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,11 +29,9 @@ public class LedgerService {
     public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest , @NotNull LedgerAddRequest ledgerAddRequest){
         Ledger ledger = Ledger.builder()
                 .type(ledgerAddRequest.getType())
-                .debit(ledgerAddRequest.getDebit())
-                .credit(ledgerAddRequest.getCredit())
                 .timestamp(LocalDateTime.now())
                 .business(businessService.extractBId(httpServletRequest))
-                .runningBalance(ledgerAddRequest.getDebit())
+                .amount(ledgerAddRequest.getAmount())
                 .build();
 
         ledgerRepository.save(ledger);
@@ -42,31 +42,32 @@ public class LedgerService {
     public void addTripLedgerEntry(@NotNull Trip trip){
         Ledger entry = Ledger.builder()
                 .timestamp(LocalDateTime.now())
-                .debit(trip.getExpense())
-                .credit(trip.getIncome())
-                .type(TransactionType.TRANSACTION_TYPE_TRIP)
+                .amount(trip.getIncome())
+                .transactionName(trip.getTripId()+" - Ticket Income")
+                .type(TransactionType.TRANSACTION_TYPE_TICKET_INCOME)
                 .business(trip.getBusiness())
-                .runningBalance(0)
                 .build();
         ledgerRepository.save(entry);
+        System.out.println("Ledger added");
     }
 
-    public ResponseEntity<String> removeEntry(Long ledgerId){
-        Ledger ledger = ledgerRepository.findById(ledgerId).orElseThrow(
-                ()-> new EntityNotFoundException("Ledger is not found"));
-        ledgerRepository.delete(ledger);
-        return ResponseEntity.status(HttpStatus.OK).body("Ledger entry is removed.");
-    }
+//    public ResponseEntity<String> removeEntry(Long ledgerId){
+//        Ledger ledger = ledgerRepository.findById(ledgerId).orElseThrow(
+//                ()-> new EntityNotFoundException("Ledger is not found"));
+//        ledgerRepository.delete(ledger);
+//        return ResponseEntity.status(HttpStatus.OK).body("Ledger entry is removed.");
+//    }
 
     public ResponseEntity<DailyFinanceResponse> dailyIncome(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         LocalDateTime localDateTime = LocalDateTime.now();
         LocalDateTime startOfDay = localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime endOfDay = localDateTime.withHour(23).withMinute(59).withSecond(59).withNano(0);
-        Float dailyIncome = ledgerRepository.dailyIncome(business, startOfDay , endOfDay );
-        Float dailyExpense = ledgerRepository.dailyExpense(business, startOfDay , endOfDay );
+        Map<String, Double> incomeAndExpense =  ledgerRepository.dailyIncomeAndExpense(business, startOfDay , endOfDay );
         DailyFinanceResponse dailyFinanceResponse = DailyFinanceResponse.builder()
-                .income(dailyIncome).expense(dailyExpense).build();
+                .income(incomeAndExpense.get("dailyIncome") == null ? 0 : incomeAndExpense.get("dailyIncome"))
+                .expense(incomeAndExpense.get("dailyExpense") == null ? 0 : incomeAndExpense.get("dailyExpense"))
+                .build();
         return ResponseEntity.ok(dailyFinanceResponse);
     }
 

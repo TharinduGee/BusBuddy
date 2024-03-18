@@ -250,6 +250,7 @@ public class TripService {
         for(Trip trip : trips){
             if(trip.getEndTime().before(currentTime) ){
                 if(trip.getStatus() != TripStatus.TRIP_STATUS_COMPLETED){
+                    System.out.println("Completed .");
                     trip.setStatus(TripStatus.TRIP_STATUS_COMPLETED);
                     tripRepository.save(trip);
                     System.out.println("Trip is over.");

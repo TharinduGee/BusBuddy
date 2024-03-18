@@ -9,11 +9,19 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.Tuple;
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface LedgerRepository extends JpaRepository<Ledger, Long> {
-    @Query("SELECT SUM(credit) FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
-    Float dailyIncome(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
-    @Query("SELECT SUM(debit) AS expense FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
-    Float dailyExpense(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
+//    @Query("SELECT SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
+//    Optional<Double> dailyIncome(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
+//
+//    @Query("SELECT SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END) AS expense FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND  ?3" )
+//    Optional<Double> dailyExpense(Business business , LocalDateTime startOfDay , LocalDateTime endOfDay);
+
+    @Query("SELECT SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS dailyIncome, " +
+            "SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END) AS dailyExpense " +
+            "FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND ?3")
+    Map<String, Double> dailyIncomeAndExpense(Business business, LocalDateTime startOfDay, LocalDateTime endOfDay);
 }

@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LedgerAddRequest {
     private TransactionType type;
-    private Double debit;
-    private Double credit;
+    private String name;
+    private Double amount;
 }

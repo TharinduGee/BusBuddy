@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DailyFinanceResponse {
-    private float income ;
-    private float expense ;
+    private double income ;
+    private double expense ;
 }
