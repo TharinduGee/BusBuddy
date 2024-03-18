@@ -74,7 +74,8 @@ public class SecurityConfig {
             .permitAll()
       .anyRequest().authenticated()
     )
-    .authenticationProvider(authenticationProvider()).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+    .authenticationProvider(authenticationProvider())
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .apply(corsConfigurer());
     return http.build();
   }

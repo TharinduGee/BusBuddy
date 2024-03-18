@@ -1,11 +1,8 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
-import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
-import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.dto.User.UserPaginationResponse;
 import com.example.BusBuddy.dto.User.UserResponse;
-import com.example.BusBuddy.models.Route;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,8 +31,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final ModelMapper modelMapper;
-
 
   public UserDetailsService userDetailsService() {
       return username -> userRepository.findByEmail(username)

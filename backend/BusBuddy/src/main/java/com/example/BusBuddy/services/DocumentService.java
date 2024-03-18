@@ -2,10 +2,7 @@ package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Document.DocumentPaginationResponse;
-import com.example.BusBuddy.dto.Document.DocumentRequest;
 import com.example.BusBuddy.dto.Document.DocumentResponse;
-import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
-import com.example.BusBuddy.dto.Route.RouteResponse;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.DocumentRepository;
@@ -14,7 +11,6 @@ import com.example.BusBuddy.repositories.RouteRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,8 +35,6 @@ public class DocumentService {
     private final RouteRepository routeRepository;
     private final BusRepository busRepository;
     private final BusinessService businessService;
-    private final ModelMapper modelMapper;
-
     @Transactional
     public DocumentPaginationResponse findDocumentByType(HttpServletRequest httpServletRequest,
                                                          DocCategory docCategory ,
