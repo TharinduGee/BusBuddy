@@ -8,12 +8,36 @@ function Uploader() {
   const [doc, setDoc] = useState(null);
   const [docName, setDocName] = useState("No Document Selected");
   const [type, setType] = useState("");
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDraggingOver(false);
+  };
+  const handleDrop = (event) => {
+    event.preventDefault();
+
+    const files = event.dataTransfer.files;
+    if (files[0]) {
+      setDocName(files[0].name);
+      setDoc(URL.createObjectURL(files[0]));
+      setType(files[0].type);
+      console.log(type);
+    }
+    setIsDraggingOver(false);
+  };
   return (
     <div>
       <form
-        className="form-upload"
+        className={`${isDraggingOver ? "form-upload-on" : "form-upload"}`}
         onClick={() => document.querySelector(".input-field").click()}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onDragLeave={handleDragLeave}
       >
         <input
           type="file"
