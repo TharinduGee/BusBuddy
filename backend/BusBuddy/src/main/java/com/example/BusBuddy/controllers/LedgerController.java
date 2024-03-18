@@ -28,11 +28,11 @@ public class LedgerController {
         return ledgerService.addEntry(httpServletRequest, ledgerAddRequest);
     }
 
-    @DeleteMapping("/remove")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> removeEntry(@RequestParam Long ledgerId){
-        return ledgerService.removeEntry(ledgerId);
-    }
+//    @DeleteMapping("/remove")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<String> removeEntry(@RequestParam Long ledgerId){
+//        return ledgerService.removeEntry(ledgerId);
+//    }
 
     @GetMapping("/dailyFinance")
     @PreAuthorize("hasRole('ADMIN')")
