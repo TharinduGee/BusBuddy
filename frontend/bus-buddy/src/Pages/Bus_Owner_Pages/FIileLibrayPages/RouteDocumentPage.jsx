@@ -1,7 +1,7 @@
 import React from "react";
 
 function RouteDocumentPage() {
-  return <div></div>;
+  return <div>RouteDocumentPage</div>;
 }
 
 export default RouteDocumentPage;

@@ -234,7 +234,15 @@ function Sidebar() {
             <li>
               <a
                 href="/filelibrary"
-                className={activeLink === "/filelibrary" ? "active-link" : ""}
+                className={
+                  activeLink === "/filelibrary" ||
+                  activeLink === "/filelibrary/BUS%20DOCUMENT" ||
+                  activeLink === "/filelibrary/NIC" ||
+                  activeLink === "/filelibrary/ROUTE%20PERMIT" ||
+                  activeLink === "/filelibrary/SERVICE%20AGREEMENT"
+                    ? "active-link"
+                    : ""
+                }
               >
                 <img src={FileLibrary} className="sidebaricon2" />
                 <span>File Library</span>

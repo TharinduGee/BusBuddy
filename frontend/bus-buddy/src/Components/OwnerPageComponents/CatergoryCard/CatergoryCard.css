@@ -1,19 +1,42 @@
 .card-main-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
   width: 150px;
   height: 150px;
   color: white;
   border-radius: 25px;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
+
   background: rgb(255, 255, 255);
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 1) 0%,
+    rgb(255, 219, 166) 0%,
     rgba(255, 118, 13, 1) 78%
   );
+  transition: all 0.5s ease;
+}
 
-  margin-left: 20px;
-  margin-right: 20px;
+.card-main-container:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+  background: linear-gradient(
+    90deg,
+    rgb(255, 219, 166) 0%,
+    rgba(255, 118, 13, 1) 78%
+  );
+}
+.card-main-container:active {
+  transform: scale(0.8); /* Example transformation on click */
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3); /* Example box shadow change */
+}
+
+@media (max-width: 400px) {
+  .card-main-container {
+    width: 100px;
+    height: 100px;
+    font-size: 10px;
+  }
 }

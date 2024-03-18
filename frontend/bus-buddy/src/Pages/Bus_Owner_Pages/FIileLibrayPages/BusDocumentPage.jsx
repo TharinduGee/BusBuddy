@@ -1,7 +1,7 @@
 import React from "react";
 
 function BusDocumentPage() {
-  return <div></div>;
+  return <div>BusDocumentPage</div>;
 }
 
 export default BusDocumentPage;

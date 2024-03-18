@@ -25,6 +25,10 @@ import Membership from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Membership
 import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactInfo";
 import BusInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/BusInfo";
 import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
+import BusDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/BusDocumentPage";
+import EmployeeDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/EmployeeDocumentPage";
+import RouteDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/RouteDocumentPage";
+import ServiceAgreementPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/ServiceAgreementPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -49,12 +53,24 @@ root.render(
           <Route path="routemanagement" element={<RouteManagement />} />
           <Route path="tripmanagement" element={<TripManagement />} />
           <Route path="teamdirectory/addemployee" element={<AddEmployee />} />
+          <Route
+            path="filelibrary/BUS DOCUMENT"
+            element={<BusDocumentPage />}
+          />
+          <Route path="filelibrary/NIC" element={<EmployeeDocumentPage />} />
+          <Route
+            path="filelibrary/ROUTE PERMIT"
+            element={<RouteDocumentPage />}
+          />
+          <Route
+            path="filelibrary/SERVICE AGREEMENT"
+            element={<ServiceAgreementPage />}
+          />
         </Route>
         <Route path="/SidebarDriver" element={<SidebarDriver />} />
         <Route path="/DriverDashboard" element={<DriverDashboard />} />
         <Route path="/DriverBusManagement" element={<DriverBusManagement />} />
         <Route path="/DriverFinancial" element={<DriverFinancial />} />
-        <Route path="/teamdirectory/addemployee" element={<AddEmployee />} />
         <Route path="/membership" element={<Membership />} />
         <Route path="/contactInfo" element={<ContactInfo />} />
         <Route path="/Bus_Info" element={<BusInfo Info />} />

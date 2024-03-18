@@ -1,0 +1,18 @@
+.file-library-Heading {
+  font-size: 40px;
+  color: rgb(112, 112, 112);
+}
+.file-library-sub-Heading {
+  font-size: 30px;
+  color: rgb(112, 112, 112);
+}
+
+@media (max-width: 500px) {
+  .file-library-Heading {
+    font-size: 25px;
+  }
+  .file-library-sub-Heading {
+    font-size: 20px;
+    color: rgb(112, 112, 112);
+  }
+}
