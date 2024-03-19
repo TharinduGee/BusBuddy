@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { DataGrid } from "@mui/x-data-grid";
@@ -101,29 +100,44 @@ function Route_Management() {
   });
 
   const columns = [
-    { field: "id", headerName: "Route ID", width: 130 },
-    { field: "startDestination", headerName: "Start Destination", width: 130 },
-    { field: "endDestination", headerName: "End Destination", width: 130 },
+    { field: "id", headerName: "Route ID", flex: 1, width: 130 },
+    {
+      field: "startDestination",
+      headerName: "Start Destination",
+      flex: 1,
+      minWidth: 130,
+    },
+    {
+      field: "endDestination",
+      headerName: "End Destination",
+      flex: 1,
+      minWidth: 130,
+    },
     {
       field: "distance",
       headerName: "Distance",
       type: "number",
-      width: 90,
+      flex: 1,
+      minWidth: 80,
     },
     {
       field: "noOfSections",
       headerName: "Sections",
-      width: 90,
+      type: "number",
+      flex: 1,
+      minWidth: 80,
     },
     {
       field: "permitExpDate",
+      flex: 1,
       headerName: "Permite Expire Date",
-      width: 150,
+      minWidth: 150,
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      flex: 1,
+      minWidth: 130,
       renderCell: (params) => (
         <div>
           <IconButton

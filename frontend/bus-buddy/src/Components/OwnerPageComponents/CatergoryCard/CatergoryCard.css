@@ -29,8 +29,8 @@
   );
 }
 .card-main-container:active {
-  transform: scale(0.8); /* Example transformation on click */
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3); /* Example box shadow change */
+  transform: scale(0.8);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 400px) {
