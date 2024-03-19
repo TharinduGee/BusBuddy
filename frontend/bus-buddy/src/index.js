@@ -57,7 +57,7 @@ root.render(
             path="filelibrary/BUS DOCUMENT"
             element={<BusDocumentPage />}
           />
-          <Route path="filelibrary/NIC" element={<EmployeeDocumentPage />} />
+          <Route path="filelibrary/OTHER" element={<EmployeeDocumentPage />} />
           <Route
             path="filelibrary/ROUTE PERMIT"
             element={<RouteDocumentPage />}

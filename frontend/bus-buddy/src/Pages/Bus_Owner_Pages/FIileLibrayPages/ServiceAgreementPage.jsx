@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
+import { IoIosFolderOpen } from "react-icons/io";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
+import axios from "axios";
 function ServiceAgreementPage() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
-  const [refresh, setRefresh] = useState(true);
 
   const table_theme = createTheme({
     components: {
@@ -101,7 +101,7 @@ function ServiceAgreementPage() {
             aria-label="delete"
             // onClick={() => handleEdit(params.row)}
           >
-            <EditNoteSharpIcon />
+            <IoIosFolderOpen />
           </IconButton>
           <IconButton
             style={{ color: "grey" }}
@@ -126,6 +126,48 @@ function ServiceAgreementPage() {
     page: 0,
     pageSize: 5,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: true,
+      }));
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/v1/document/findDocumentByType?docCategory=DOC_CATEGORY_SERVICE_AGREEMENT&docName=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const formattedData = response.data.content.map((docData) => ({
+          id: docData.docId,
+          docName: docData.docName,
+          uploadDate: docData.uploadDate,
+        }));
+        console.log(formattedData);
+
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: formattedData,
+          total: response.data.totalElements,
+        }));
+      } catch (error) {
+        console.error("There was an error!", error);
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+        }));
+      }
+    };
+
+    fetchData();
+  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">

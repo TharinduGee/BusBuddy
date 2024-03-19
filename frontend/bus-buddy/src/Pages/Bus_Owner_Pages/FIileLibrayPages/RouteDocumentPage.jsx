@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
+import { IoIosFolderOpen } from "react-icons/io";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
+import axios from "axios";
 
 function RouteDocumentPage() {
   const token = localStorage.getItem("token");
@@ -100,9 +101,9 @@ function RouteDocumentPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row)}
+            onClick={() => handleOpen(params.row)}
           >
-            <EditNoteSharpIcon />
+            <IoIosFolderOpen />
           </IconButton>
           <IconButton
             style={{ color: "grey" }}
@@ -127,6 +128,66 @@ function RouteDocumentPage() {
     page: 0,
     pageSize: 5,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setPageState((old) => ({
+        ...old,
+        isLoading: true,
+      }));
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/v1/document/findDocumentByType?docCategory=DOC_CATEGORY_ROUTE_PERMIT&docName=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const formattedData = response.data.content.map((docData) => ({
+          id: docData.docId,
+          docName: docData.docName,
+          uploadDate: docData.uploadDate,
+        }));
+        console.log(formattedData);
+
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: formattedData,
+          total: response.data.totalElements,
+        }));
+      } catch (error) {
+        console.error("There was an error!", error);
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+        }));
+      }
+    };
+
+    fetchData();
+  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+
+  const handleOpen = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/v1/document/getDocument?docId=17`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  };
+
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
