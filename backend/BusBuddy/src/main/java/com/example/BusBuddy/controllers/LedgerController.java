@@ -16,7 +16,7 @@ import javax.persistence.Tuple;
 @RestController
 @RequestMapping("api/v1/ledger")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class LedgerController {
 
     private final LedgerService ledgerService;

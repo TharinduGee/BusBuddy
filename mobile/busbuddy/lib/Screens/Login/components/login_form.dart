@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:busbuddy/Screens/Dashboard/driver_dashboard.dart';
+import 'package:busbuddy/Screens/Dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
@@ -14,6 +15,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  // Create storage
+  final storage = const FlutterSecureStorage();
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -22,7 +25,7 @@ class _LoginFormState extends State<LoginForm> {
     if (_formKey.currentState!.validate()) {
       try {
         Response response = await post(
-          Uri.parse('http://10.0.2.2:8081/api/v1/signIn'),
+          Uri.parse('http://$khost:8081/api/v1/signIn'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -36,9 +39,11 @@ class _LoginFormState extends State<LoginForm> {
           var data = jsonDecode(response.body.toString());
           print(data['token']);
           print('Login successfully');
+          // Write value
+          await storage.write(key: 'JWtoken', value: data['token']);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const DriverDashboard()),
+            MaterialPageRoute(builder: (context) => Dashboard()),
           );
         } else {
           print('failed');

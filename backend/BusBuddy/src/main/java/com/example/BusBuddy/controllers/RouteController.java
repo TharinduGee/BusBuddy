@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/route")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class RouteController {
 
     private  final RouteService routeService;
