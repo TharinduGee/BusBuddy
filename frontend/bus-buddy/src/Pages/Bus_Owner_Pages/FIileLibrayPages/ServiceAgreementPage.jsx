@@ -8,6 +8,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 function ServiceAgreementPage() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
@@ -99,7 +101,7 @@ function ServiceAgreementPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row)}
+            onClick={() => handleOpen(params.row.id)}
           >
             <IoIosFolderOpen />
           </IconButton>
@@ -168,6 +170,28 @@ function ServiceAgreementPage() {
 
     fetchData();
   }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+
+  const handleOpen = async (id) => {
+    console.log(id);
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/v1/document/getDocument?docId=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        }
+      );
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      Swal.fire("Error", "Failed to fetch PDF", "error");
+    }
+  };
+
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">

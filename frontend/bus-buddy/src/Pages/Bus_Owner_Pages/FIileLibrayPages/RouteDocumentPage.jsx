@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function RouteDocumentPage() {
   const token = localStorage.getItem("token");
@@ -100,8 +101,8 @@ function RouteDocumentPage() {
           <IconButton
             style={{ color: "grey" }}
             className="mx-2"
-            aria-label="delete"
-            onClick={() => handleOpen(params.row)}
+            aria-label="open"
+            onClick={() => handleOpen(params.row.id)}
           >
             <IoIosFolderOpen />
           </IconButton>
@@ -171,20 +172,24 @@ function RouteDocumentPage() {
     fetchData();
   }, [paginationModel.page, paginationModel.pageSize, searchInput]);
 
-  const handleOpen = async () => {
+  const handleOpen = async (id) => {
+    console.log(id);
     try {
       const response = await axios.get(
-        `http://localhost:8081/api/v1/document/getDocument?docId=17`,
+        `http://localhost:8081/api/v1/document/getDocument?docId=${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          responseType: "blob",
         }
       );
-
-      return response.data;
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
     } catch (error) {
       console.error(`Error: ${error}`);
+      Swal.fire("Error", "Failed to fetch PDF", "error");
     }
   };
 
