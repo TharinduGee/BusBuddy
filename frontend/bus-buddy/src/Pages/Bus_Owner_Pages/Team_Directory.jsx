@@ -175,34 +175,37 @@ function Team_Directory() {
   });
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "Name", headerName: "Full Name", width: 130 },
-    { field: "salary", headerName: "Salary", width: 130 },
+    { field: "id", headerName: "ID", minwidth: 70, flex: 1 },
+    { field: "Name", headerName: "Full Name", minwidth: 130, flex: 1 },
+    { field: "salary", headerName: "Salary", minwidth: 130, flex: 1 },
     {
       field: "age",
       headerName: "Age",
       type: "number",
-      width: 90,
+      minwidth: 90,
+      flex: 1,
     },
-    { field: "joinedDate", headerName: "Joined Date", width: 130 },
-    { field: "designation", headerName: "Designation", width: 130 },
-    { field: "docId", headerName: "Doc ID", width: 130 },
+    { field: "joinedDate", headerName: "Joined Date", minwidth: 130, flex: 1 },
+    { field: "designation", headerName: "Designation", minwidth: 130, flex: 1 },
+    // { field: "docId", headerName: "Doc ID", width: 130 },
     {
       field: "docName",
       headerName: "Doc Name",
       type: "number",
-      width: 90,
+      minwidth: 90,
+      flex: 1,
     },
-    {
-      field: "bday",
-      headerName: "Birthday",
-      type: "number",
-      width: 90,
-    },
+    // {
+    //   field: "bday",
+    //   headerName: "Birthday",
+    //   type: "number",
+    //   width: 90,
+    // },
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      minwidth: 140,
+      flex: 1,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -250,7 +253,7 @@ function Team_Directory() {
             Name: user.name,
             salary: user.salary,
             age: user.age,
-            joinedDate: user.joinedDate,
+            joinedDate: user.joinedDate.split("T")[0],
             designation: user.designation.split("_")[2],
             docId: user.docId,
             docName: user.docName,

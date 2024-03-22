@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,7 +47,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('ADMIN')")
     public  ResponseEntity<String> add(HttpServletRequest httpServletRequest,
                                        @RequestParam Float salary,
-                                       @RequestParam(required = false) Date joinedDate,
+                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date joinedDate,
                                        @RequestParam(required = false) Date bDay,
                                        @RequestParam String email,
                                        @RequestParam(value = "file", required = false) MultipartFile file){

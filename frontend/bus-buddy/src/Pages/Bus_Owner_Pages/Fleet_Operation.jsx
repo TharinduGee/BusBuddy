@@ -396,14 +396,13 @@ function Fleet_Operation() {
             data: "[form]",
           }
         )
-        .then(function (response) {
-          Swal.fire({
+        .then(async function (response) {
+          console.log("Data successfully posted:", response.data);
+          const ppopup = await Swal.fire({
             title: "Good job!",
-            text: "Bus Information Updated Successfully!",
+            text: "Bus Detailed Updated Successfully!",
             icon: "success",
           });
-          console.log("Data successfully Edited:", response.data);
-          console.log(file);
         })
         .catch(function (error) {
           Swal.fire({
