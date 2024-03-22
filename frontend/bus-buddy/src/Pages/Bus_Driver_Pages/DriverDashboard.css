@@ -11,3 +11,13 @@
   display: flex;
   justify-content: space-evenly;
 }
+
+.trip-date-text{
+  font-size: 24px;
+}
+
+.devider{
+  display: flex;
+  flex-direction: row;
+
+}
