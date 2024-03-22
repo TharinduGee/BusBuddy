@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import SidebarDriver from "../../Components/DriverPageComponents/SidebarDriver";
-import TomorrowTrip from "./todaytrip";
-import TripInformation from "../../Components/DriverPageComponents/Trip"; 
+import TomorrowTrip from "../../Components/DriverPageComponents/tomorrowtrips";
+import TodayTrip from "../../Components/DriverPageComponents/todaytrips";
 import './DriverDashboard.css';
+import SearchTrip from "../../Components/DriverPageComponents/searchtrip";
+
+
 
 function DriverDashboard() {
   // State variables to manage trip data and selected date
@@ -38,43 +41,29 @@ function DriverDashboard() {
   }, [selectedDate]);
 
   return (
-    <SidebarDriver>
-      <div className="d-flex flex-column justify-content-start">
+    <div>
+      <SidebarDriver>
+        <div className="d-flex flex-column justify-content-start">
         <h1>Driver Dashboard</h1>
+        </div>
         <br/>
         <div className="d-flex flex-row"> {/* Container for Today and Tomorrow */}
-          {/* Today Section */}
           <div>
-          <label htmlFor="datePicker">Select Date:</label>
-          <input 
-            type="date" 
-            id="datePicker" 
-            value={selectedDate} 
-            onChange={(e) => setSelectedDate(e.target.value)} 
-          />
-          <div className="get-trip"> {/* Add right margin for spacing */}
-            <h1> </h1>
-            <div>
-              {tripData.map((data, index) => (
-                <TripInformation
-                  key={index}
-                  startplace={data.startplace}
-                  endplace={data.endplace}
-                  startTime={data.startTime}
-                  endTime={data.endTime}
-                  conductor={data.conductor}
-                  status={data.status}
-                />
-              ))}
-            </div>
+             <TodayTrip/>
           </div>
-        </div> 
-        <div>
-         <TomorrowTrip/>
-       </div>
+          <div>
+             <TomorrowTrip/>
+          </div>
+          <div> 
+             <SearchTrip/>
+          </div>
+          
         </div>
-      </div>
-    </SidebarDriver>
+
+
+      </SidebarDriver>
+    </div>
+          
   );
 }
 
