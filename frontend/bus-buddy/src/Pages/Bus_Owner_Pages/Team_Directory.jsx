@@ -105,6 +105,7 @@ function Team_Directory() {
           text: "Employee Detailed Updated Successfully!",
           icon: "success",
         });
+        setRefresh(!refresh);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
@@ -311,13 +312,14 @@ function Team_Directory() {
               text: "User removed from your business.",
               icon: "success",
             });
+            setRefresh(!refresh);
           })
           .catch((error) => {
             console.error("Error deleting data:", error.message);
           });
-        setRefresh(!refresh);
       }
     });
+    setRefresh(!refresh);
   };
 
   return (

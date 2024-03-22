@@ -99,29 +99,38 @@ function Fleet_Operation() {
   });
 
   const columns = [
-    { field: "id", headerName: "Bus ID", width: 70 },
-    { field: "bustype", headerName: "Bus Type", width: 130 },
-    { field: "numberplate", headerName: "Number Plate", width: 130 },
+    { field: "id", headerName: "Bus ID", minwidth: 70, flex: 1 },
+    { field: "bustype", headerName: "Bus Type", minwidth: 130, flex: 1 },
+    {
+      field: "numberplate",
+      headerName: "Number Plate",
+      minwidth: 130,
+      flex: 1,
+    },
     {
       field: "lastservicedate",
       headerName: "Last Service Date",
 
-      width: 130,
+      minwidth: 130,
+      flex: 1,
     },
     {
       field: "regno",
       headerName: "Registration No",
-      width: 130,
+      minwidth: 130,
+      flex: 1,
     },
     {
       field: "numberofseats",
       headerName: "Number Of Seats",
-      width: 130,
+      minwidth: 130,
+      flex: 1,
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      minwidth: 140,
+      flex: 1,
       renderCell: (params) => (
         <div>
           <IconButton

@@ -271,6 +271,7 @@ function Route_Management() {
             icon: "success",
           });
           console.log("Data successfully posted:", response.data);
+          setRefresh(!refresh);
         })
         .catch(function (error) {
           Swal.fire({
@@ -338,6 +339,7 @@ function Route_Management() {
             text: "Route Information Updated Successfully!",
             icon: "success",
           });
+          setRefresh(!refresh);
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
@@ -371,6 +373,7 @@ function Route_Management() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setRefresh(!refresh);
           })
           .catch((error) => {
             console.error("Error deleting data:", error.message);

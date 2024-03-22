@@ -21,7 +21,7 @@ function Dashboard() {
     conductorCount: null,
     busCount: null,
   });
-
+  const [loadgraph, setLoadGraph] = useState(false);
   useEffect(() => {
     try {
       axios
@@ -60,6 +60,7 @@ function Dashboard() {
     } catch (error) {
       console.error("There was an error!", error);
     }
+    setLoadGraph(true);
   }, []);
 
   return (
@@ -75,7 +76,7 @@ function Dashboard() {
       </div>
 
       <div className="chart-container">
-        <Chart title="Income" aspect={3 / 1} data={data} />
+        {loadgraph && <Chart title="Income" aspect={3 / 1} data={data} />}
       </div>
     </div>
   );

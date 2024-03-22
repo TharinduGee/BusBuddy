@@ -161,7 +161,7 @@ function Trip_Management() {
       width: 90,
     },
     {
-      field: "condocterId",
+      field: "conductorId",
       headerName: "Conductor ID",
       width: 130,
     },
@@ -199,7 +199,16 @@ function Trip_Management() {
     console.log(tripData);
   };
 
+  //to clear the selected field text
+  const [routeIdfield, setrouteIdset] = useState("");
+  const [driverIdfield, setdriverIdset] = useState("");
+  const [busIdfield, setbusIdset] = useState("");
+  const [conducterIdfield, setconducterIdset] = useState("");
   const clear = () => {
+    setrouteIdset(null);
+    setdriverIdset(null);
+    setbusIdset(null);
+    setconducterIdset(null);
     setTripData({
       startTime: null,
       endTime: null,
@@ -367,6 +376,7 @@ function Trip_Management() {
       console.error("There was an error!", error);
     }
     console.log(durationDates);
+    console.log(tripData);
   }, [durationDates, tripData]);
 
   const AddTrip = () => {
@@ -415,9 +425,15 @@ function Trip_Management() {
         busId: tripData.busId,
         routeId: tripData.routeId,
         driverId: tripData.driverId,
-        condoctorId: tripData.condocterId,
+        conductorId: tripData.condocterId,
         expense: tripData.expense,
       };
+      console.log(
+        passingData.conductorId,
+        " sdadasd   ",
+        passingData.busId,
+        " passing data"
+      );
       axios
         .post(
           `http://localhost:8081/api/v1/trip/add?date=${formattedDate}`,
@@ -430,11 +446,12 @@ function Trip_Management() {
         )
         .then(function (response) {
           console.log("Data successfully posted:", response.data);
-          Swal.fire({
+          const popup = Swal.fire({
             title: "Good job!",
             text: "Trip Data Inserted Successfully!",
             icon: "success",
           });
+          setRefresh(!refresh);
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
@@ -450,7 +467,7 @@ function Trip_Management() {
       tripData.endTime === null ||
       tripData.busId === "" ||
       tripData.driverId === "" ||
-      // tripData.condocterId === null ||
+      tripData.condocterId === null ||
       tripData.income === "" ||
       tripData.expense === "" ||
       durationDates.firstDate === "" ||
@@ -500,7 +517,6 @@ function Trip_Management() {
         lastDate: lastformattedDate,
       };
 
-      console.log(passingData);
       axios
         .post(
           `http://localhost:8081/api/v1/trip/scheduleTripsForDuration`,
@@ -518,6 +534,7 @@ function Trip_Management() {
             text: "Trip Data Inserted Successfully!",
             icon: "success",
           });
+          setRefresh(!refresh);
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
@@ -557,6 +574,7 @@ function Trip_Management() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setRefresh(!refresh);
           })
           .catch((error) => {
             console.error("Error deleting data:", error.message);
@@ -731,22 +749,16 @@ function Trip_Management() {
               <Select
                 id="busId"
                 className="input-field-trip"
+                value={busIdfield}
                 options={busIDoptions}
                 isClearable={true}
                 onChange={async (newValue) => {
-                  if (newValue !== null) {
-                    await setTripData({
-                      ...tripData,
-                      busId: newValue.value,
-                    });
-                    console.log(tripData);
-                  } else {
-                    await setTripData({
-                      ...tripData,
-                      busId: newValue,
-                    });
-                    console.log(tripData);
-                  }
+                  await setTripData({
+                    ...tripData,
+                    busId: newValue ? newValue.value : null,
+                  });
+
+                  setbusIdset(newValue);
                 }}
               />
             </div>
@@ -757,21 +769,15 @@ function Trip_Management() {
                 id="routeId"
                 className="input-field-trip"
                 options={routeIDoptions}
+                value={routeIdfield}
                 isClearable={true}
                 onChange={async (newValue) => {
-                  if (newValue !== null) {
-                    await setTripData({
-                      ...tripData,
-                      routeId: newValue.value,
-                    });
-                    console.log(tripData);
-                  } else {
-                    await setTripData({
-                      ...tripData,
-                      routeId: newValue,
-                    });
-                    console.log(tripData);
-                  }
+                  await setTripData({
+                    ...tripData,
+                    routeId: newValue ? newValue.value : null,
+                  });
+
+                  setrouteIdset(newValue);
                 }}
               />
             </div>
@@ -782,22 +788,15 @@ function Trip_Management() {
               <Select
                 id="driverId"
                 className="input-field-trip"
+                value={driverIdfield}
                 options={driverIDoptions}
                 isClearable={true}
-                onChange={async (newValue) => {
-                  if (newValue !== null) {
-                    await setTripData({
-                      ...tripData,
-                      driverId: newValue.value,
-                    });
-                    console.log(tripData);
-                  } else {
-                    await setTripData({
-                      ...tripData,
-                      driverId: newValue,
-                    });
-                    console.log(tripData);
-                  }
+                onChange={(newValue) => {
+                  setTripData({
+                    ...tripData,
+                    driverId: newValue ? newValue.value : null,
+                  });
+                  setdriverIdset(newValue);
                 }}
               />
             </div>
@@ -808,21 +807,15 @@ function Trip_Management() {
                 id="condocterId"
                 className="input-field-trip"
                 options={ConductorIDoptions}
+                value={conducterIdfield}
                 isClearable={true}
                 onChange={async (newValue) => {
-                  if (newValue !== null) {
-                    await setTripData({
-                      ...tripData,
-                      condocterId: newValue.value,
-                    });
-                    console.log(tripData);
-                  } else {
-                    await setTripData({
-                      ...tripData,
-                      condocterId: newValue,
-                    });
-                    console.log(tripData);
-                  }
+                  await setTripData({
+                    ...tripData,
+                    condocterId: newValue ? newValue.value : null,
+                  });
+
+                  setconducterIdset(newValue);
                 }}
               />
             </div>

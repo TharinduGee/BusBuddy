@@ -127,6 +127,7 @@ function Team_Directory_Add_Employee() {
     setselectedRole(params.row.role);
   };
   const inputRef = useRef(null);
+  const [refresh, setRefresh] = useState(true);
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -189,6 +190,7 @@ function Team_Directory_Add_Employee() {
     paginationModel.pageSize,
     salary,
     file,
+    refresh,
   ]);
 
   function formatDate(date) {
@@ -225,6 +227,7 @@ function Team_Directory_Add_Employee() {
           text: "Employee Added Successfully!",
           icon: "success",
         });
+        setRefresh(!refresh);
         setOpenPopup(!openPopup);
         console.log("Data successfully posted:", response.data);
       })
