@@ -34,6 +34,8 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.10+1
   http: ^1.2.1
+  calendar_agenda:
+    path: dev_lib/calendar_agenda/
 
 dev_dependencies:
   flutter_lints: ^3.0.0
