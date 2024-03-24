@@ -26,9 +26,11 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
   final Color? calendarBackground;
   final Color? calendarEventSelectedColor;
   final Color? calendarEventColor;
+  final Color? notSelectedDayBgColor;
+
   final FullCalendarScroll fullCalendarScroll;
   final Widget? calendarLogo;
-  final ImageProvider<Object>? selectedDayLogo;
+  final Widget? selectedDayLogo;
 
   final String? locale;
   final bool? fullCalendar;
@@ -47,6 +49,7 @@ class CalendarAgenda extends StatefulWidget implements PreferredSizeWidget {
     required this.lastDate,
     required this.onDateSelected,
     this.backgroundColor,
+    this.notSelectedDayBgColor,
     this.selectedDayLogo,
     this.controller,
     this.selectedDateColor = Colors.black,
@@ -173,7 +176,9 @@ class CalendarAgendaState extends State<CalendarAgenda>
                         width: MediaQuery.of(context).size.width / 5 - 10,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
-                          color: isSelected ? Colors.white : null,
+                          color: isSelected
+                              ? Colors.white
+                              : widget.notSelectedDayBgColor,
                           boxShadow: [
                             isSelected
                                 ? BoxShadow(
@@ -189,78 +194,70 @@ class CalendarAgendaState extends State<CalendarAgenda>
                                     offset: Offset(0, 3),
                                   )
                           ],
-                          image: isSelected
-                              ? DecorationImage(
-                                  image: widget.selectedDayLogo ??
-                                      MemoryImage(
-                                          base64.decode(uri.split(',').last)),
-                                  colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.8),
-                                      BlendMode.dstOut),
-                                )
-                              : DecorationImage(
-                                  image: MemoryImage(
-                                      base64.decode(uri.split(',').last)),
-                                  colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.9),
-                                      BlendMode.clear),
-                                ),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Stack(
+                          alignment: Alignment.center,
                           children: [
-                            _eventDates
-                                    .contains(date.toString().split(" ").first)
-                                ? isSelected
-                                    ? Icon(
-                                        Icons.bookmark,
-                                        size: 16,
-                                        color: isSelected
-                                            ? widget.selectedDateColor
-                                            : widget.dateColor!
-                                                .withOpacity(0.5),
-                                      )
-                                    : Icon(
-                                        Icons.bookmark,
-                                        size: 8,
-                                        color: isSelected
-                                            ? widget.calendarEventColor
-                                            : widget.dateColor!
-                                                .withOpacity(0.5),
-                                      )
-                                : SizedBox(
-                                    height: 5.0,
+                            if (isSelected && widget.selectedDayLogo != null)
+                              widget.selectedDayLogo!,
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                _eventDates.contains(
+                                        date.toString().split(" ").first)
+                                    ? isSelected
+                                        ? Icon(
+                                            Icons.bookmark,
+                                            size: 16,
+                                            color: isSelected
+                                                ? widget.selectedDateColor
+                                                : widget.dateColor!
+                                                    .withOpacity(0.5),
+                                          )
+                                        : Icon(
+                                            Icons.bookmark,
+                                            size: 8,
+                                            color: isSelected
+                                                ? widget.calendarEventColor
+                                                : widget.dateColor!
+                                                    .withOpacity(0.5),
+                                          )
+                                    : SizedBox(
+                                        height: 5.0,
+                                      ),
+                                SizedBox(
+                                  height: 2.0,
+                                ),
+                                Text(
+                                  DateFormat("dd").format(date),
+                                  style: TextStyle(
+                                      fontSize: 22.0,
+                                      color: isSelected
+                                          ? widget.selectedDateColor
+                                          : widget.headerDateColor,
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.w500),
+                                ),
+                                SizedBox(height: 5),
+                                Text(
+                                  widget.weekDay == WeekDay.long
+                                      ? DateFormat.EEEE(
+                                              Locale(_locale).toString())
+                                          .format(date)
+                                      : DateFormat.E(Locale(_locale).toString())
+                                          .format(date),
+                                  style: TextStyle(
+                                    fontSize: 12.0,
+                                    color: isSelected
+                                        ? widget.selectedDateColor
+                                        : widget.headerDateColor,
+                                    fontWeight: isSelected
+                                        ? FontWeight.bold
+                                        : FontWeight.w400,
                                   ),
-                            SizedBox(
-                              height: 2.0,
-                            ),
-                            Text(
-                              DateFormat("dd").format(date),
-                              style: TextStyle(
-                                  fontSize: 22.0,
-                                  color: isSelected
-                                      ? widget.selectedDateColor
-                                      : widget.headerDateColor,
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              widget.weekDay == WeekDay.long
-                                  ? DateFormat.EEEE(Locale(_locale).toString())
-                                      .format(date)
-                                  : DateFormat.E(Locale(_locale).toString())
-                                      .format(date),
-                              style: TextStyle(
-                                fontSize: 12.0,
-                                color: isSelected
-                                    ? widget.selectedDateColor
-                                    : widget.headerDateColor,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.w400,
-                              ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
