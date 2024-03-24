@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./Trip_Management.css";
-import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
-import { IoIosArrowBack } from "react-icons/io";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Select from "react-select";
@@ -18,7 +14,6 @@ import Checkbox from "@mui/material/Checkbox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
-import dayjs from "dayjs";
 
 function Trip_Management() {
   const buttonStyle = {
@@ -106,23 +101,6 @@ function Trip_Management() {
   const text_box_the = createTheme({
     shape: {
       borderRadius: 12,
-    },
-  });
-
-  const theme = createTheme({
-    components: {
-      MuiOutlinedInput: {
-        styleOverrides: {
-          root: {
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              border: "none",
-            },
-          },
-          notchedOutline: {
-            borderWidth: "0",
-          },
-        },
-      },
     },
   });
 
@@ -296,7 +274,13 @@ function Trip_Management() {
 
       fetchData();
     }
-  }, [searchDates, paginationModel.page, paginationModel.pageSize, refresh]);
+  }, [
+    searchDates,
+    paginationModel.page,
+    paginationModel.pageSize,
+    refresh,
+    token,
+  ]);
 
   useEffect(() => {
     try {
@@ -377,7 +361,7 @@ function Trip_Management() {
     }
     console.log(durationDates);
     console.log(tripData);
-  }, [durationDates, tripData]);
+  }, [durationDates, tripData, token]);
 
   const AddTrip = () => {
     if (checked) {
@@ -446,7 +430,7 @@ function Trip_Management() {
         )
         .then(function (response) {
           console.log("Data successfully posted:", response.data);
-          const popup = Swal.fire({
+          Swal.fire({
             title: "Good job!",
             text: "Trip Data Inserted Successfully!",
             icon: "success",
@@ -820,7 +804,7 @@ function Trip_Management() {
           <div className="d-flex align-items-center justify-content-center">
             <div
               className={
-                checked == true
+                checked === true
                   ? "hidden-schedule"
                   : "d-flex flex-column align-items-start input-and-label mt-4 "
               }
@@ -849,7 +833,7 @@ function Trip_Management() {
 
           <div
             className={
-              checked == true
+              checked === true
                 ? "pair-container mt-4"
                 : "pair-container  hidden-schedule"
             }

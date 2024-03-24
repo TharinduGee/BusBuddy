@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import add_icon from "./../../Assets/Owner_assests/add_icon.png";
@@ -11,10 +10,9 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Popup from "./Update_popup";
-import Button_ from "@mui/material/Button";
+import ButtonAdd from "@mui/material/Button";
 import Swal from "sweetalert2";
 import axios from "axios";
-import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 
 function Team_Directory() {
   const token = localStorage.getItem("token");
@@ -57,9 +55,10 @@ function Team_Directory() {
   const [selectedID, setselectedID] = useState("");
   const [selectedRole, setselectedRole] = useState("");
   const [selectedSalary, setselectedSalary] = useState("");
+  const [joinedDate, setjoinedDate] = useState("");
   const handleRowClick = (params) => {
     setselectedID(params.row.id);
-
+    setjoinedDate(params.row.joinedDate);
     setselectedfullname(params.row.Name);
     setselectedRole(params.row.designation);
     setselectedSalary(params.row.salary);
@@ -85,7 +84,7 @@ function Team_Directory() {
 
     axios
       .post(
-        `http://localhost:8081/api/v1/employee/edit?empId=${selectedID}&salary=${salary}`,
+        `http://localhost:8081/api/v1/employee/edit?empId=${selectedID}&salary=${salary}&joinedDate=${joinedDate}`,
 
         form,
         {
@@ -277,6 +276,7 @@ function Team_Directory() {
           }));
         });
     };
+    console.log(joinedDate);
     console.log(file);
     fetchData();
   }, [
@@ -286,6 +286,8 @@ function Team_Directory() {
     salary,
     file,
     refresh,
+    token,
+    joinedDate,
   ]);
 
   const handleDelete = (id) => {
@@ -461,13 +463,13 @@ function Team_Directory() {
             />
 
             <div className="d-flex my-4 justify-content-center">
-              <Button_
+              <ButtonAdd
                 onClick={handlepopUpdate}
                 style={{ width: 200 }}
                 variant="outlined"
               >
                 Update
-              </Button_>
+              </ButtonAdd>
             </div>
           </div>
         </div>

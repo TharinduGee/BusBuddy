@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
-import Button_ from "@mui/material/Button";
+import ButtonAdd from "@mui/material/Button";
 import avatar from "./../../Assets/Owner_assests/Avatar.png";
 import { DataGrid } from "@mui/x-data-grid";
 import "./Team_Directory.css";
@@ -191,6 +190,7 @@ function Team_Directory_Add_Employee() {
     salary,
     file,
     refresh,
+    token,
   ]);
 
   function formatDate(date) {
@@ -339,7 +339,7 @@ function Team_Directory_Add_Employee() {
             <lable className="normal-details">{selectedemail}</lable>
             <lable className="normal-details"> {selectedmobile}</lable>
 
-            <Button_
+            <ButtonAdd
               className="mx-4 my-2"
               onClick={() => setOpenPopup(true)}
               style={{
@@ -351,7 +351,7 @@ function Team_Directory_Add_Employee() {
               startIcon={<AddCircleSharpIcon />}
             >
               ADD
-            </Button_>
+            </ButtonAdd>
           </div>
         </div>
       </div>
@@ -402,13 +402,13 @@ function Team_Directory_Add_Employee() {
             />
 
             <div className="d-flex my-4 justify-content-center">
-              <Button_
+              <ButtonAdd
                 onClick={handlepopADD}
                 style={{ width: 200 }}
                 variant="outlined"
               >
                 ADD
-              </Button_>
+              </ButtonAdd>
             </div>
           </div>
         </div>

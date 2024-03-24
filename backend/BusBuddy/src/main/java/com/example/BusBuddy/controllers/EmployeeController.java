@@ -59,7 +59,7 @@ public class EmployeeController {
     public  ResponseEntity<String> edit(HttpServletRequest httpServletRequest,
                                         @RequestParam Long empId,
                                         @RequestParam Float salary,
-                                        @RequestParam(required = false) Date joinedDate,
+                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date joinedDate,
                                         @RequestParam(required = false) Date bDay,
                                         @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         return employeeService.edit(httpServletRequest, empId, salary, joinedDate, bDay, file);
