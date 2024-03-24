@@ -12,7 +12,7 @@
   padding: 10px;
   display: flex;
   justify-content: flex-start;
-  align-items: start;
+  align-items: flex-start;
   background-color: black;
   width: 100% auto;
   bottom: 10px;

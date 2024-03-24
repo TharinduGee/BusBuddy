@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import Sidebar from "../../Components/OwnerPageComponents/Sidebar";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
 import IconButton from "@mui/material/IconButton";
@@ -247,7 +246,15 @@ function Fleet_Operation() {
     console.log(busData.lastServiceDate);
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+  }, [
+    paginationModel.page,
+    paginationModel.pageSize,
+    searchInput,
+    refresh,
+    token,
+    file,
+    busData,
+  ]);
 
   useEffect(() => {
     console.log(file);
@@ -407,7 +414,7 @@ function Fleet_Operation() {
         )
         .then(async function (response) {
           console.log("Data successfully posted:", response.data);
-          const ppopup = await Swal.fire({
+          await Swal.fire({
             title: "Good job!",
             text: "Bus Detailed Updated Successfully!",
             icon: "success",
@@ -446,7 +453,7 @@ function Fleet_Operation() {
       <div className="d-flex flex-column align-items-center  justify-content-end">
         <div
           style={{ width: "80%" }}
-          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+          className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
         >
           <ThemeProvider theme={theme}>
             <TextField
@@ -497,22 +504,22 @@ function Fleet_Operation() {
         <div className="trip-main-container">
           <div className="pair-container">
             <div className="input-and-label">
-              <label class="form-label">Number Plate*</label>
+              <label className="form-label">Number Plate*</label>
               <input
                 type="text"
                 id="numberPlate"
-                class="form-control input-field-trip"
+                className="form-control input-field-trip"
                 value={busData.numberPlate}
                 onChange={handleChange}
               />
             </div>
 
             <div className="input-and-label">
-              <label class="form-label">Registration No*</label>
+              <label className="form-label">Registration No*</label>
               <input
                 type="text"
                 id="regNo"
-                class="form-control input-field-trip"
+                className="form-control input-field-trip"
                 value={busData.regNo}
                 onChange={handleChange}
               />
@@ -520,11 +527,11 @@ function Fleet_Operation() {
           </div>
           <div className="pair-container">
             <div className="input-and-label">
-              <label class="form-label">Number of Seats*</label>
+              <label className="form-label">Number of Seats*</label>
               <input
                 type="text"
                 id="Seats"
-                class="form-control input-field-trip"
+                className="form-control input-field-trip"
                 value={busData.Seats}
                 onChange={handleChange}
                 onKeyPress={(event) => {
@@ -537,10 +544,10 @@ function Fleet_Operation() {
             </div>
 
             <div className="input-and-label">
-              <label class="form-label">Bus Type*</label>
+              <label className="form-label">Bus Type*</label>
               <select
                 id="type"
-                class="form-select input-field-trip"
+                className="form-select input-field-trip"
                 value={value}
                 onChange={(newValue) => {
                   setBusDate((prevState) => ({
@@ -559,7 +566,7 @@ function Fleet_Operation() {
           </div>
           <div className="pair-container align-items-end">
             <div className="d-flex flex-column input-and-label">
-              <label class="form-label">Service Date*</label>
+              <label className="form-label">Service Date*</label>
               <ThemeProvider theme={datepicker_theme}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -586,11 +593,11 @@ function Fleet_Operation() {
                 margin: 30,
                 marginBottom: 1,
               }}
-              class="input-group "
+              className="input-group "
             >
               <input
                 type="file"
-                class="form-control input-field-choosefile "
+                className="form-control input-field-choosefile "
                 id="inputGroupFile02"
                 onChange={handleFileChange}
                 ref={inputRef}

@@ -6,7 +6,7 @@
 }
 .seach-in-route {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 .input-field {
   height: 40px;
@@ -21,7 +21,7 @@
 .choosefile-expiredate {
   display: flex;
   flex-direction: row;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
 }
 

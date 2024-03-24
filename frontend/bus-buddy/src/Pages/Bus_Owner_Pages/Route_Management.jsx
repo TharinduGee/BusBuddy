@@ -435,14 +435,20 @@ function Route_Management() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+  }, [
+    paginationModel.page,
+    paginationModel.pageSize,
+    searchInput,
+    refresh,
+    token,
+  ]);
 
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
         <div
           style={{ width: "80%" }}
-          class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+          className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
         >
           <ThemeProvider theme={theme}>
             <TextField
@@ -493,21 +499,21 @@ function Route_Management() {
         <div className="op-main-container">
           <div className="d-flex flex-wrap  justify-content-between two-fields">
             <div className="input-and-label">
-              <label class="form-label">Start Destination*</label>
+              <label className="form-label">Start Destination*</label>
               <input
                 type="text"
                 id="startDestination"
-                class="form-control input-field"
+                className="form-control input-field"
                 value={routeData.startDestination}
                 onChange={handleChange}
               />
             </div>
             <div className="input-and-label">
-              <label class="form-label">End Destination*</label>
+              <label className="form-label">End Destination*</label>
               <input
                 type="text"
                 id="endDestination"
-                class="form-control input-field"
+                className="form-control input-field"
                 value={routeData.endDestination}
                 onChange={handleChange}
               />
@@ -515,11 +521,11 @@ function Route_Management() {
           </div>
           <div className="d-flex flex-wrap  justify-content-between two-fields">
             <div className="input-and-label">
-              <label class="form-label">Distance*</label>
+              <label className="form-label">Distance*</label>
               <input
                 type="text"
                 id="distance"
-                class="form-control input-field"
+                className="form-control input-field"
                 value={routeData.distance}
                 onChange={handleChange}
                 onKeyPress={(event) => {
@@ -531,11 +537,11 @@ function Route_Management() {
               />
             </div>
             <div className="input-and-label">
-              <label class="form-label">Number of Sections*</label>
+              <label className="form-label">Number of Sections*</label>
               <input
                 type="text"
                 id="noOfSections"
-                class="form-control input-field"
+                className="form-control input-field"
                 value={routeData.noOfSections}
                 onChange={handleChange}
                 onKeyPress={(event) => {
@@ -549,7 +555,7 @@ function Route_Management() {
           </div>
           <div className="choosefile-expiredate">
             <div className="d-flex flex-column input-and-label">
-              <label class="form-label">Permite Expire Date*</label>
+              <label className="form-label">Permite Expire Date*</label>
               <ThemeProvider theme={datepicker_theme}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -576,11 +582,11 @@ function Route_Management() {
                 margin: 30,
                 marginBottom: 1,
               }}
-              class="input-group "
+              className="input-group "
             >
               <input
                 type="file"
-                class="form-control input-field-choosefile "
+                className="form-control input-field-choosefile "
                 id="inputGroupFile02"
                 onChange={handleFileChange}
                 ref={inputRef}
