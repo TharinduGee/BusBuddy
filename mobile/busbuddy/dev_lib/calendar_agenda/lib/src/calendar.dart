@@ -134,8 +134,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
     Widget dayList() {
       return Container(
         width: MediaQuery.of(context).size.width,
-        height: widget.appbar ? 125 : 100,
-        padding: EdgeInsets.all(5),
+        height: widget.appbar ? 125 : 110,
         alignment: Alignment.bottomCenter,
         child: ScrollablePositionedList.builder(
             padding: _dates.length < 5
@@ -231,7 +230,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
                                 Text(
                                   DateFormat("dd").format(date),
                                   style: TextStyle(
-                                      fontSize: 22.0,
+                                      fontSize: 28.0,
                                       color: isSelected
                                           ? widget.selectedDateColor
                                           : widget.headerDateColor,
@@ -248,7 +247,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
                                       : DateFormat.E(Locale(_locale).toString())
                                           .format(date),
                                   style: TextStyle(
-                                    fontSize: 12.0,
+                                    fontSize: 15.0,
                                     color: isSelected
                                         ? widget.selectedDateColor
                                         : widget.headerDateColor,
@@ -270,68 +269,74 @@ class CalendarAgendaState extends State<CalendarAgenda>
       );
     }
 
+//backgrounddaylist
     return Container(
       width: MediaQuery.of(context).size.width,
       height: widget.appbar ? 210 : 150.0,
-      child: Stack(
-        children: [
-          Positioned(
-            top: 0.0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 190.0,
-              color: backgroundColor,
-            ),
-          ),
-          Positioned(
-            top: widget.appbar ? 50.0 : 20.0,
-            child: Padding(
-              padding: EdgeInsets.only(right: padding, left: 10),
-              child: Container(
-                width: MediaQuery.of(context).size.width - padding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    leading,
-                    widget.fullCalendar!
-                        ? GestureDetector(
-                            onTap: () => widget.fullCalendar!
-                                ? _showFullCalendar(_locale, widget.weekDay)
-                                : null,
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.calendar_today,
-                                  size: 18.0,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: 10.0,
-                                ),
-                                Text(
-                                  DateFormat.yMMMM(Locale(_locale).toString())
-                                      .format(_selectedDate!),
-                                  style: TextStyle(
-                                    fontSize: 18.0,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4.0),
+        ),
+        child: Stack(
+          children: [
+            // Positioned(
+            //   top: 0.0,
+            //   child: Container(
+            //     width: MediaQuery.of(context).size.width,
+            //     height: 190.0,
+            //     color: backgroundColor,
+            //   ),
+            // ),
+            Positioned(
+              top: widget.appbar ? 50.0 : 10.0,
+              child: Padding(
+                padding: EdgeInsets.only(right: padding, left: 10),
+                child: Container(
+                  width: MediaQuery.of(context).size.width - padding,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      leading,
+                      widget.fullCalendar!
+                          ? GestureDetector(
+                              onTap: () => widget.fullCalendar!
+                                  ? _showFullCalendar(_locale, widget.weekDay)
+                                  : null,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_today,
+                                    size: 18.0,
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w400,
                                   ),
-                                  textAlign: TextAlign.end,
-                                ),
-                              ],
-                            ),
-                          )
-                        : SizedBox(),
-                  ],
+                                  SizedBox(
+                                    width: 10.0,
+                                  ),
+                                  Text(
+                                    DateFormat.yMMMM(Locale(_locale).toString())
+                                        .format(_selectedDate!),
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ],
+                              ),
+                            )
+                          : SizedBox(),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0.0,
-            child: dayList(),
-          ),
-        ],
+            Positioned(
+              bottom: 0.0,
+              child: dayList(),
+            ),
+          ],
+        ),
       ),
     );
   }

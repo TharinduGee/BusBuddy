@@ -62,6 +62,8 @@ class _TripScheduleState extends State<TripSchedule> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: double.maxFinite,
+        elevation: 0,
         backgroundColor: Colors.amber,
         title: Text('TripSchedule'),
       ),
@@ -77,37 +79,47 @@ class _TripScheduleState extends State<TripSchedule> {
             //           style: TextStyle(fontSize: 24),
             //         ),
             // ),
-            CalendarAgenda(
-              controller: _calendarAgendaControllerAppBar,
-              appbar: false,
-              selectedDayPosition: SelectedDayPosition.left,
-              backgroundColor: Colors.amber.shade200,
-              weekDay: WeekDay.short,
-              fullCalendarScroll: FullCalendarScroll.horizontal,
-              fullCalendarDay: WeekDay.short,
-              selectedDateColor: Colors.white,
-              notSelectedDayBgColor: Colors.grey.withOpacity(0.3),
-              dateColor: Colors.black,
-              locale: 'en',
-              initialDate: DateTime.now(),
-              calendarEventColor: Colors.green,
-              firstDate: DateTime.now().subtract(Duration(days: 140)),
-              lastDate: DateTime.now().add(Duration(days: 60)),
-              onDateSelected: (date) {
-                setState(() {
-                  _selectedDateAppBBar = date;
-                });
-              },
-              selectedDayLogo: Container(
-                width: double.maxFinite,
-                height: double.maxFinite,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.orange, Colors.red],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+            Container(
+              padding: const EdgeInsets.only(bottom: 12),
+              decoration: const BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20)),
+              ),
+              child: CalendarAgenda(
+                controller: _calendarAgendaControllerAppBar,
+                appbar: false,
+                selectedDayPosition: SelectedDayPosition.center,
+                backgroundColor: Colors.amber.shade200,
+                weekDay: WeekDay.short,
+                fullCalendarScroll: FullCalendarScroll.horizontal,
+                fullCalendarDay: WeekDay.short,
+                selectedDateColor: Colors.white,
+                headerDateColor: Colors.black,
+                notSelectedDayBgColor: Colors.grey.withOpacity(0.3),
+                dateColor: Colors.black,
+                locale: 'en',
+                initialDate: DateTime.now(),
+                calendarEventColor: Colors.orange,
+                firstDate: DateTime.now().subtract(Duration(days: 140)),
+                lastDate: DateTime.now().add(Duration(days: 60)),
+                onDateSelected: (date) {
+                  setState(() {
+                    _selectedDateAppBBar = date;
+                  });
+                },
+                selectedDayLogo: Container(
+                  width: double.maxFinite,
+                  height: double.maxFinite,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.orange, Colors.red],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
