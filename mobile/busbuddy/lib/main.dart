@@ -1,3 +1,4 @@
+import 'package:busbuddy/Screens/Dashboard/components/trip_schedule.dart';
 import 'package:busbuddy/Screens/Welcome/welcome_screen.dart';
 import 'package:busbuddy/constants.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      home: const WelcomeScreen(),
+      // home: const WelcomeScreen(),
+      home: const TripSchedule(),
     );
   }
 }
