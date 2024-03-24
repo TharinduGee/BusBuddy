@@ -222,11 +222,12 @@ function Team_Directory_Add_Employee() {
         }
       )
       .then(function (response) {
-        Swal.fire({
+        const pop = Swal.fire({
           title: "Good job!",
           text: "Employee Added Successfully!",
           icon: "success",
         });
+        console.log(pop);
         setRefresh(!refresh);
         setOpenPopup(!openPopup);
         console.log("Data successfully posted:", response.data);

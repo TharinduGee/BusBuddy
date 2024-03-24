@@ -19,16 +19,16 @@ function File_Library() {
       <div className="d-flex flex-wrap justify-content-center  align-items-center">
         <div className="d-flex flex-column justify-content-center  px-2 mx-4">
           <div className="input-and-label">
-            <label class="form-label">Document Name*</label>
+            <label className="form-label">Document Name*</label>
             <input
               type="text"
               id="Document_name"
-              class="form-control input-field-trip mb-4"
+              className="form-control input-field-trip mb-4"
             />
           </div>
           <div className="input-and-label">
-            <label class="form-label">Document Catogory*</label>
-            <select class="form-select input-field-trip mb-4">
+            <label className="form-label">Document Catogory*</label>
+            <select className="form-select input-field-trip mb-4">
               <option value="DOC_CATEGORY_NIC">NIC</option>
               <option value="DOC_CATEGORY_SERVICE_AGREEMENT">
                 SERVICE AGREEMENT
@@ -39,11 +39,11 @@ function File_Library() {
             </select>
           </div>
           <div className="input-and-label">
-            <label class="form-label">Document ID*</label>
+            <label className="form-label">Document ID*</label>
             <input
               type="text"
               id="Document_id"
-              class="form-control input-field-trip mb-4"
+              className="form-control input-field-trip mb-4"
             />
           </div>
         </div>

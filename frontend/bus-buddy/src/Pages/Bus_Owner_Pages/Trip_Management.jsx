@@ -458,7 +458,6 @@ function Trip_Management() {
         });
       clear();
     }
-    setRefresh(!refresh);
   };
 
   const AddTripForADuration = () => {
@@ -540,7 +539,6 @@ function Trip_Management() {
           console.error("Error posting data:", error);
         });
       clear();
-      setRefresh(!refresh);
     }
   };
 
@@ -579,7 +577,6 @@ function Trip_Management() {
           .catch((error) => {
             console.error("Error deleting data:", error.message);
           });
-        setRefresh(!refresh);
       }
     });
   };

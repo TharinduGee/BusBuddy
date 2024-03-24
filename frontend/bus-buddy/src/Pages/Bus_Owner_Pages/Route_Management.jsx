@@ -282,7 +282,6 @@ function Route_Management() {
           console.error("Error posting data:", error);
         });
       clear();
-      setRefresh(!refresh);
     }
   };
 
@@ -344,7 +343,7 @@ function Route_Management() {
         .catch(function (error) {
           console.error("Error posting data:", error);
         });
-      setRefresh(!refresh);
+
       clear();
     }
   };
@@ -378,7 +377,6 @@ function Route_Management() {
           .catch((error) => {
             console.error("Error deleting data:", error.message);
           });
-        setRefresh(!refresh);
       }
     });
   };

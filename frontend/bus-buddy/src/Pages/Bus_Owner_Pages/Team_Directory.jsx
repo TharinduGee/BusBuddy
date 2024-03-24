@@ -319,7 +319,6 @@ function Team_Directory() {
           });
       }
     });
-    setRefresh(!refresh);
   };
 
   return (

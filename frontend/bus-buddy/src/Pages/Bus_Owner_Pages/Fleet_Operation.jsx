@@ -278,11 +278,11 @@ function Fleet_Operation() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setRefresh(!refresh);
           })
           .catch((error) => {
             console.error("Error deleting data:", error.message);
           });
-        setRefresh(!refresh);
       }
     });
   };
@@ -354,12 +354,12 @@ function Fleet_Operation() {
             text: "Bus Added Successfully!",
             icon: "success",
           });
+          setRefresh(!refresh);
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
         });
       clear();
-      setRefresh(!refresh);
     }
   };
 
@@ -412,6 +412,7 @@ function Fleet_Operation() {
             text: "Bus Detailed Updated Successfully!",
             icon: "success",
           });
+          setRefresh(!refresh);
         })
         .catch(function (error) {
           Swal.fire({
@@ -421,7 +422,7 @@ function Fleet_Operation() {
           });
           console.error("Error posting data:", error);
         });
-      setRefresh(!refresh);
+
       clear();
     }
   };
