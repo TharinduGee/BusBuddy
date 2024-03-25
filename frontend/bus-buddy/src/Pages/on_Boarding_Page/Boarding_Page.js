@@ -1,6 +1,7 @@
 import React from "react";
 import "./Boardingpage.css";
 import "../../App.css";
+import { Slide, Fade } from "react-awesome-reveal"; // Import the Slide effect from react-awesome-reveal
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 import Gallery from "../../Components/OnBoaringComponents/Gallery/Gallery";
 import MessageBox from "../../Components/OnBoaringComponents/MessageBox/MessageBox";
@@ -12,26 +13,45 @@ function Boarding_Page() {
   return (
     <div className="d-flex flex-column align-items-center">
       <Header />
+      <Fade direction="left" triggerOnce={true}>
+        <div className="empower-your-fleet">
+          Simplify Finances, Empower Your Fleet: The Bus Buddy Journey
+        </div>
+      </Fade>
+
+      <Fade direction="left" triggerOnce={true}>
+        <StepDetails />
+      </Fade>
       <div className="empower-your-fleet">
-        Simplify Finances, Empower Your Fleet: The Bus Buddy Journey
+        <Fade direction="right" triggerOnce={true}>
+          Ready to Take Control? Explore Our BusBuddy Subscriptions
+        </Fade>
       </div>
-      <StepDetails />
+      <Fade direction="right" triggerOnce={true}>
+        <PriceContainerGallery />
+      </Fade>
       <div className="empower-your-fleet">
-        Ready to Take Control? Explore Our BusBuddy Subscriptions
+        <Fade direction="left" triggerOnce={true}>
+          On the Move with BusBuddy: Inspiring stories, insights, and trends in
+          bus transportation.
+        </Fade>
       </div>
-      <PriceContainerGallery />
+      <Fade direction="left" triggerOnce={true}>
+        <Gallery />
+      </Fade>
       <div className="empower-your-fleet">
-        On the Move with BusBuddy: Inspiring stories, insights, and trends in
-        bus transportation.
+        <Fade direction="right" triggerOnce={true}>
+          On the Move with BusBuddy: Inspiring stories, insights, and trends in
+          bus transportation.
+        </Fade>
       </div>
-      <Gallery />
-      <div className="empower-your-fleet">
-        On the Move with BusBuddy: Inspiring stories, insights, and trends in
-        bus transportation.
-      </div>
-      <MessageBox />
+      <Fade direction="right" triggerOnce={true}>
+        <MessageBox />
+      </Fade>
       <div className="footer-full">
-        <Footer />
+        <Fade triggerOnce={true}>
+          <Footer />
+        </Fade>
       </div>
     </div>
   );
