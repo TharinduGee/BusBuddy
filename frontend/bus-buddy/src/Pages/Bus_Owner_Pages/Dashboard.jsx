@@ -23,44 +23,42 @@ function Dashboard() {
   });
   const [loadgraph, setLoadGraph] = useState(false);
   useEffect(() => {
-    try {
-      axios
-        .get(`http://localhost:8081/api/v1/bus/count`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          setcount((prevCount) => ({
-            ...prevCount,
-            busCount: response.data,
-          }));
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
+    axios
+      .get(`http://localhost:8081/api/v1/bus/count`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setcount((prevCount) => ({
+          ...prevCount,
+          busCount: response.data,
+        }));
+        axios
+          .get(`http://localhost:8081/api/v1/employee/countEmployee`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            setcount((prevCount) => ({
+              ...prevCount,
+              totalCount: response.data.totalCount,
+              driverCount: response.data.driverCount,
+              conductorCount: response.data.conductorCount,
+            }));
 
-      axios
-        .get(`http://localhost:8081/api/v1/employee/countEmployee`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          setcount((prevCount) => ({
-            ...prevCount,
-            totalCount: response.data.totalCount,
-            driverCount: response.data.driverCount,
-            conductorCount: response.data.conductorCount,
-          }));
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
-    setLoadGraph(true);
+            setTimeout(function () {
+              setLoadGraph(true);
+            }, 90);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
   }, []);
 
   return (
