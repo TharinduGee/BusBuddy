@@ -1,7 +1,7 @@
 import React from "react";
 import "./Boardingpage.css";
 import "../../App.css";
-import { Slide, Fade } from "react-awesome-reveal"; // Import the Slide effect from react-awesome-reveal
+import { Fade } from "react-awesome-reveal";
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
 import Gallery from "../../Components/OnBoaringComponents/Gallery/Gallery";
 import MessageBox from "../../Components/OnBoaringComponents/MessageBox/MessageBox";
