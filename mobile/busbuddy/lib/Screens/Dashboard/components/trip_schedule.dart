@@ -123,6 +123,22 @@ class _TripScheduleState extends State<TripSchedule> {
                 ),
               ),
             ),
+            Center(
+              child: Column(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _calendarAgendaControllerAppBar.goToDay(DateTime.now());
+                    },
+                    child: Text("Today, appbar = true"),
+                  ),
+                  Text('Selected date is $_selectedDateAppBBar'),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
