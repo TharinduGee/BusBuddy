@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:busbuddy/constants.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -136,6 +137,39 @@ class _TripScheduleState extends State<TripSchedule> {
                   SizedBox(
                     height: 20.0,
                   ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              height: 70,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: Colors.black,
+                    width: 100,
+                    height: 50,
+                    child: const Column(
+                      children: [
+                        Placeholder(),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  Container(
+                    color: Colors.black26,
+                    width: 100,
+                    height: 50,
+                    child: const Column(
+                      children: [
+                        Placeholder(),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
