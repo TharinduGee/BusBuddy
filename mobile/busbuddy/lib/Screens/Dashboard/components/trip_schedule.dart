@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:busbuddy/constants.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -134,45 +135,93 @@ class _TripScheduleState extends State<TripSchedule> {
                     child: Text("Today, appbar = true"),
                   ),
                   Text('Selected date is $_selectedDateAppBBar'),
-                  SizedBox(
+                  const SizedBox(
                     height: 20.0,
                   ),
                 ],
               ),
             ),
-            SizedBox(
-              width: double.infinity,
-              height: 70,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    color: Colors.black,
-                    width: 100,
-                    height: 50,
-                    child: const Column(
+            Container(
+              margin: const EdgeInsets.all(8),
+              color: Colors.amber,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Placeholder(),
+                        Container(
+                          color: Colors.black38,
+                          child: const Text(
+                            "Start Destination ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.black38,
+                          child: const Text(
+                            ": Galle at 10:24",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  Container(
-                    color: Colors.black26,
-                    width: 100,
-                    height: 50,
-                    child: const Column(
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Placeholder(),
+                        Container(
+                          color: Colors.black38,
+                          child: const Text(
+                            "End Destination ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.black38,
+                          child: const Text(
+                            ": Badulla at 17:45",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          color: Colors.black38,
+                          child: const Text(
+                            "Conducter ID : 3456897ID",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
