@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:busbuddy/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:busbuddy/models/driver_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,7 +15,7 @@ class Trips {
 
       if (token != null) {
         String url =
-            'http://localhost:8081/api/v1/trip/findForEmployee?date=$selectedDateString';
+            'http://$khost:8081/api/v1/trip/findForEmployee?date=$selectedDateString';
 
         var response = await http.get(Uri.parse(url), headers: {
           'Authorization': 'Bearer $token',
@@ -24,15 +25,17 @@ class Trips {
         if (response.statusCode == 200) {
           var jsonData = json.decode(response.body);
           List<DriverModel> fetchedTrips = [];
+          print(jsonData);
 
           for (var item in jsonData) {
             DriverModel trip = DriverModel(
               startDestination: item['startDestination'],
               endDestination: item['endDestination'],
-              starttime: item['starttime'],
-              endtime: item['endtime'],
-              conductorId: item['conductorId'],
+              starttime: item['startTime'],
+              endtime: item['endTime'],
+              conductorName: item['conductorName'],
               tripStatus: item['tripStatus'],
+              numberPlate: item['numberPlate'],
             );
             fetchedTrips.add(trip);
           }

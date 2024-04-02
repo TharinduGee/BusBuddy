@@ -3,14 +3,17 @@ class DriverModel {
   String? endDestination;
   String? starttime;
   String? endtime;
-  String? conductorId;
+  String? conductorName;
   String? tripStatus;
+  String? numberPlate;
 
-  DriverModel(
-      {this.conductorId,
-      this.endDestination,
-      this.endtime,
-      this.startDestination,
-      this.starttime,
-      this.tripStatus});
+  DriverModel({
+    this.conductorName,
+    this.endDestination,
+    this.endtime,
+    this.startDestination,
+    this.starttime,
+    this.tripStatus,
+    this.numberPlate,
+  });
 }
