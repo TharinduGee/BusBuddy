@@ -39,8 +39,8 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
-      // home: const WelcomeScreen(),
-      home: const TripSchedule(),
+      home: const WelcomeScreen(),
+      // home: const TripSchedule(),
     );
   }
 }

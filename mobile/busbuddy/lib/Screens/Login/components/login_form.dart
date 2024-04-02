@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:busbuddy/Screens/Dashboard/components/trip_schedule.dart';
 import 'package:busbuddy/Screens/Dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -43,7 +44,7 @@ class _LoginFormState extends State<LoginForm> {
           await storage.write(key: 'JWtoken', value: data['token']);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => Dashboard()),
+            MaterialPageRoute(builder: (context) => const TripSchedule()),
           );
         } else {
           print('failed');

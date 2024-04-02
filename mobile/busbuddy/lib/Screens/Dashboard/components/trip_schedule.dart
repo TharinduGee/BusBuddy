@@ -17,10 +17,10 @@ class TripSchedule extends StatefulWidget {
 class _TripScheduleState extends State<TripSchedule> {
   CalendarAgendaController _calendarAgendaControllerAppBar =
       CalendarAgendaController();
-  final storage = const FlutterSecureStorage();
-  late String token;
-  late String username = ''; // Initialize username with an empty string
-  bool isLoading = true;
+  // final storage = const FlutterSecureStorage();
+  // late String token;
+  // late String username = ''; // Initialize username with an empty string
+  bool isLoading = false;
   late DateTime _selectedDateAppBBar;
   List<DriverModel> driverTrips = [];
 
@@ -28,39 +28,40 @@ class _TripScheduleState extends State<TripSchedule> {
   void initState() {
     super.initState();
     _selectedDateAppBBar = DateTime.now();
-    _getTokenAndFetchUsername();
+    getTrips();
+    // _getTokenAndFetchUsername();
   }
 
-  Future<void> _getTokenAndFetchUsername() async {
-    try {
-      token = await storage.read(key: 'JWtoken') ?? "";
-      final response = await http.get(
-        Uri.parse('http://$khost:8081/api/v1/user/getUsername'),
-        headers: {'Authorization': 'Bearer $token'},
-      );
-      if (response.statusCode == 200) {
-        setState(() {
-          username = response.body;
-          isLoading = false;
-        });
-        getTrips();
-      } else {
-        throw Exception('Failed to load username');
-      }
-    } on http.ClientException catch (e) {
-      print('Error fetching username: $e');
-      setState(() {
-        isLoading = false;
-      });
-      // Handle the exception accordingly, e.g., show a snackbar with an error message
-    } catch (error) {
-      print('Other error fetching username: $error');
-      setState(() {
-        isLoading = false;
-      });
-      // Handle other exceptions accordingly
-    }
-  }
+  // Future<void> _getTokenAndFetchUsername() async {
+  //   try {
+  //     token = await storage.read(key: 'JWtoken') ?? "";
+  //     final response = await http.get(
+  //       Uri.parse('http://$khost:8081/api/v1/user/getUsername'),
+  //       headers: {'Authorization': 'Bearer $token'},
+  //     );
+  //     if (response.statusCode == 200) {
+  //       setState(() {
+  //         username = response.body;
+  //         isLoading = false;
+  //       });
+  //       getTrips();
+  //     } else {
+  //       throw Exception('Failed to load username');
+  //     }
+  //   } on http.ClientException catch (e) {
+  //     print('Error fetching username: $e');
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     // Handle the exception accordingly, e.g., show a snackbar with an error message
+  //   } catch (error) {
+  //     print('Other error fetching username: $error');
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //     // Handle other exceptions accordingly
+  //   }
+  // }
 
   void getTrips() async {
     Trips tripclass = Trips();
