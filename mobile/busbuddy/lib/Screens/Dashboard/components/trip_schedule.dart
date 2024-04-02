@@ -63,175 +63,198 @@ class _TripScheduleState extends State<TripSchedule> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: double.maxFinite,
-        elevation: 0,
-        backgroundColor: Colors.amber,
-        title: Text('TripSchedule'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Center(
-            //   child: isLoading
-            //       ? CircularProgressIndicator() // Show a loading indicator while fetching data
-            //       : Text(
-            //           'Welcome, $username',
-            //           style: TextStyle(fontSize: 24),
-            //         ),
-            // ),
-            Container(
-              padding: const EdgeInsets.only(bottom: 12),
-              decoration: const BoxDecoration(
-                color: Colors.amber,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20)),
-              ),
-              child: CalendarAgenda(
-                controller: _calendarAgendaControllerAppBar,
-                appbar: false,
-                selectedDayPosition: SelectedDayPosition.center,
-                backgroundColor: Colors.amber.shade200,
-                weekDay: WeekDay.short,
-                fullCalendarScroll: FullCalendarScroll.horizontal,
-                fullCalendarDay: WeekDay.short,
-                selectedDateColor: Colors.white,
-                headerDateColor: Colors.black,
-                notSelectedDayBgColor: Colors.grey.withOpacity(0.3),
-                dateColor: Colors.black,
-                locale: 'en',
-                initialDate: DateTime.now(),
-                calendarEventColor: Colors.orange,
-                firstDate: DateTime.now().subtract(Duration(days: 140)),
-                lastDate: DateTime.now().add(Duration(days: 60)),
-                onDateSelected: (date) {
-                  setState(() {
-                    _selectedDateAppBBar = date;
-                  });
-                },
-                selectedDayLogo: Container(
-                  width: double.maxFinite,
-                  height: double.maxFinite,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.orange, Colors.red],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Center(
+          //   child: isLoading
+          //       ? CircularProgressIndicator() // Show a loading indicator while fetching data
+          //       : Text(
+          //           'Welcome, $username',
+          //           style: TextStyle(fontSize: 24),
+          //         ),
+          // ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 12),
+            decoration: const BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20)),
+            ),
+            child: CalendarAgenda(
+              controller: _calendarAgendaControllerAppBar,
+              appbar: false,
+              selectedDayPosition: SelectedDayPosition.center,
+              backgroundColor: Colors.amber.shade200,
+              weekDay: WeekDay.short,
+              fullCalendarScroll: FullCalendarScroll.horizontal,
+              fullCalendarDay: WeekDay.short,
+              selectedDateColor: Colors.white,
+              headerDateColor: Colors.black,
+              notSelectedDayBgColor: Colors.grey.withOpacity(0.3),
+              dateColor: Colors.black,
+              locale: 'en',
+              initialDate: DateTime.now(),
+              calendarEventColor: Colors.orange,
+              firstDate: DateTime.now().subtract(const Duration(days: 140)),
+              lastDate: DateTime.now().add(const Duration(days: 60)),
+              onDateSelected: (date) {
+                setState(() {
+                  _selectedDateAppBBar = date;
+                });
+              },
+              selectedDayLogo: Container(
+                width: double.maxFinite,
+                height: double.maxFinite,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Colors.orange, Colors.red],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
-            Center(
+          ),
+          Center(
+            child: Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    _calendarAgendaControllerAppBar.goToDay(DateTime.now());
+                  },
+                  child: const Text("Today, appbar = true"),
+                ),
+                Text('Selected date is $_selectedDateAppBBar'),
+                const SizedBox(
+                  height: 20.0,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Colors.black26,
+            height: MediaQuery.of(context).size.height / 1.6,
+            child: SingleChildScrollView(
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      _calendarAgendaControllerAppBar.goToDay(DateTime.now());
-                    },
-                    child: Text("Today, appbar = true"),
+                  const Placeholder(
+                    fallbackHeight: 150,
                   ),
-                  Text('Selected date is $_selectedDateAppBBar'),
-                  const SizedBox(
-                    height: 20.0,
+                  const Placeholder(
+                    fallbackHeight: 150,
+                  ),
+                  const Placeholder(
+                    fallbackHeight: 150,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Material(
+                      color: Colors.amber,
+                      shadowColor: Colors.black,
+                      elevation: 20.0,
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    color: Colors.black12,
+                                    child: const Text(
+                                      "Start Destination ",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.black12,
+                                    child: const Text(
+                                      ": Galle at 10:24",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    color: Colors.black12,
+                                    child: const Text(
+                                      "End Destination ",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: Colors.black12,
+                                    child: const Text(
+                                      ": Badulla at 17:45",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    color: Colors.black12,
+                                    child: const Text(
+                                      "Conducter ID : 3456897ID",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Placeholder(
+                    fallbackHeight: 150,
+                  ),
+                  const Placeholder(
+                    fallbackHeight: 150,
+                  ),
+                  const Placeholder(
+                    fallbackHeight: 150,
+                  ),
+                  const Placeholder(
+                    fallbackHeight: 150,
                   ),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Material(
-                color: Colors.amber,
-                shadowColor: Colors.black,
-                elevation: 20.0,
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              color: Colors.black12,
-                              child: const Text(
-                                "Start Destination ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              color: Colors.black12,
-                              child: const Text(
-                                ": Galle at 10:24",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              color: Colors.black12,
-                              child: const Text(
-                                "End Destination ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              color: Colors.black12,
-                              child: const Text(
-                                ": Badulla at 17:45",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              color: Colors.black12,
-                              child: const Text(
-                                "Conducter ID : 3456897ID",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
