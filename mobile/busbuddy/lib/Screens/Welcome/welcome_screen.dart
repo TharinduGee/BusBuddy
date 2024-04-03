@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../components/background.dart';
 import '../../responsive.dart';
@@ -14,24 +16,27 @@ class WelcomeScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: SafeArea(
           child: Responsive(
-            desktop: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: WelcomeImage(),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 450,
-                        child: LoginAndSignupBtn(),
-                      ),
-                    ],
+            tablet: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: WelcomeImage(),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 450,
+                          child: LoginAndSignupBtn(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
             mobile: MobileWelcomeScreen(),
           ),
@@ -50,7 +55,7 @@ class MobileWelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: [
         WelcomeImage(),
         Row(
           children: [

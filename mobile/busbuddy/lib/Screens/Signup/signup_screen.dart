@@ -14,7 +14,7 @@ class SignUpScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: Responsive(
           mobile: MobileSignupScreen(),
-          desktop: Row(
+          tablet: Row(
             children: [
               Expanded(
                 child: SignUpScreenTopImage(),

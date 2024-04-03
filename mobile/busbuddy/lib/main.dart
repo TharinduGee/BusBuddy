@@ -1,4 +1,4 @@
-import 'package:busbuddy/Screens/Dashboard/components/trip_schedule.dart';
+import 'package:busbuddy/Screens/Dashboard/trip_schedule.dart';
 import 'package:busbuddy/Screens/Welcome/welcome_screen.dart';
 import 'package:busbuddy/constants.dart';
 import 'package:flutter/material.dart';

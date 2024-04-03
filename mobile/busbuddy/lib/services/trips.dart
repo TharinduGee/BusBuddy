@@ -25,26 +25,23 @@ class Trips {
       );
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
-        List<DriverModel> fetchedTrips = [];
         // print(jsonData);
 
         for (var item in jsonData) {
           DriverModel trip = DriverModel(
-            startDestination: item['startDestination'],
-            endDestination: item['endDestination'],
+            startDestination: item['startDestination'].toString().toUpperCase(),
+            endDestination: item['endDestination'].toString().toUpperCase(),
             starttime: item['startTime'],
             endtime: item['endTime'],
             conductorName: item['conductorName'],
             tripStatus: item['tripStatus'],
             numberPlate: item['numberPlate'],
           );
-          fetchedTrips.add(trip);
+          trips.add(trip);
         }
-
-        trips = fetchedTrips;
       } else {
         // Handle error responses
-        print('Failed to fetch trip data: ${response.reasonPhrase}');
+        print('Failed to fetch trip data: ${response.statusCode}');
       }
     } catch (error) {
       // Handle other errors

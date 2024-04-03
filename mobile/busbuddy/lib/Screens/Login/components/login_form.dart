@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:busbuddy/Screens/Dashboard/components/trip_schedule.dart';
+import 'package:busbuddy/Screens/Dashboard/trip_schedule.dart';
 import 'package:busbuddy/Screens/Dashboard/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -38,7 +38,7 @@ class _LoginFormState extends State<LoginForm> {
 
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body.toString());
-          print(data['token']);
+          // print(data['token']);
           print('Login successfully');
           // Write value
           await storage.write(key: 'JWtoken', value: data['token']);
@@ -57,33 +57,6 @@ class _LoginFormState extends State<LoginForm> {
       } catch (e) {
         print(e.toString());
       }
-      // // API call to login
-      // Response response = await http.post(
-      //   Uri.parse('http://localhost:8081/api/v1/signIn'),
-      //   body: {
-      //     'email': emailController.text.toString(),
-      //     'password': passwordController.text.toString(),
-      //   },
-      // );
-      // print('Response Data: ${response.body}');
-
-      // if (response.statusCode == 200) {
-      //   // Print the response data
-      //   print('Response Data: ${response.body}');
-
-      //   Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => DriverDashboard()),
-      //   );
-      // } else {
-      //   // Handle login failure
-      //   // Show error message to the user
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //       content: Text('Login failed'),
-      //     ),
-      //   );
-      // }
     }
   }
 
