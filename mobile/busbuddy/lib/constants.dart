@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-const khost = 'localhost';
+const khost = '192.168.8.100';
+// const khost = 'localhost';
 // const khost = '10.0.2.2';
 
 const kPrimaryColor = Color.fromARGB(255, 255, 122, 0);

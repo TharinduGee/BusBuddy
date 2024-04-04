@@ -78,6 +78,13 @@ class _TripScheduleState extends State<TripSchedule> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "BUSBUDDY",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.amber,
+      ),
       body: Responsive(
         tablet: TabletTripSchedule(),
         mobile: Column(
@@ -160,6 +167,7 @@ class _TripScheduleState extends State<TripSchedule> {
               ),
             ),
             Expanded(
+              flex: 1,
               child: isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ListView.builder(

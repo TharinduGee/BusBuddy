@@ -29,8 +29,8 @@ class Trips {
 
         for (var item in jsonData) {
           DriverModel trip = DriverModel(
-            startDestination: item['startDestination'].toString().toUpperCase(),
-            endDestination: item['endDestination'].toString().toUpperCase(),
+            startDestination: item['startDestination'],
+            endDestination: item['endDestination'],
             starttime: item['startTime'],
             endtime: item['endTime'],
             conductorName: item['conductorName'],

@@ -25,7 +25,7 @@ class LoginScreenTopImage extends StatelessWidget {
               child: SvgPicture.asset(
                 "assets/icons/businessman-explaining-the-strategy.svg",
                 semanticsLabel: 'My SVG Image',
-                height: 300,
+                width: 400,
                 // width: 40,
               ),
             ),

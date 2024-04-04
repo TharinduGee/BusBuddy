@@ -1,3 +1,4 @@
+import 'package:busbuddy/Screens/Dashboard/dashboard.dart';
 import 'package:busbuddy/Screens/Dashboard/trip_schedule.dart';
 import 'package:busbuddy/Screens/Welcome/welcome_screen.dart';
 import 'package:busbuddy/constants.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide.none,
             ),
           )),
+      // home: const Dashboard(),
       home: const WelcomeScreen(),
       // home: const TripSchedule(),
     );

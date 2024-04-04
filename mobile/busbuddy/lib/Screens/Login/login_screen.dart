@@ -20,11 +20,12 @@ class LoginScreen extends StatelessWidget {
                 child: LoginScreenTopImage(),
               ),
               Expanded(
+                flex: 1,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      width: 450,
+                      width: 350,
                       child: LoginForm(),
                     ),
                   ],
