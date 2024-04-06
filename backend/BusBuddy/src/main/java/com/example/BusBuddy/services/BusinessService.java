@@ -23,7 +23,7 @@ public class BusinessService {
         return businessRepository.save(newBusiness);
     }
 
-    public ResponseEntity<String> editInfo(HttpServletRequest httpServletRequest , @NotNull BusinessEditInfoReq request){
+    public String editInfo(HttpServletRequest httpServletRequest , @NotNull BusinessEditInfoReq request){
         Business business = extractBId(httpServletRequest);
         business.setBName(request.getBusinessName());
         business.setRegistrationNo(request.getRegistrationNo());
@@ -32,7 +32,7 @@ public class BusinessService {
 
         businessRepository.save(business);
 
-        return ResponseEntity.status(HttpStatus.OK).body("Edited successfully");
+        return "Edited successfully";
 
     }
 

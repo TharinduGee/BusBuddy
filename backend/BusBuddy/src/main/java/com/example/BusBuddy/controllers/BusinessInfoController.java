@@ -22,7 +22,7 @@ public class BusinessInfoController {
     @PostMapping("/editBusinessInfo")
     public ResponseEntity<String> editBusinessInfo(HttpServletRequest httpServletRequest ,
                                                    @RequestBody BusinessEditInfoReq businessEditInfoReq){
-            return businessService.editInfo(httpServletRequest, businessEditInfoReq);
+            return ResponseEntity.status(HttpStatus.OK).body(businessService.editInfo(httpServletRequest, businessEditInfoReq));
     }
 
     @GetMapping("/getInfo")

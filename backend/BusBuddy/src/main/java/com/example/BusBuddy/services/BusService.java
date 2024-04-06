@@ -38,7 +38,7 @@ public class BusService {
     private final ModelMapper modelMapper;
 
     @Transactional
-    public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+    public String add(HttpServletRequest httpServletRequest,
                                       BusType type,
                                       String numberPlate,
                                       Date lastServicedDate,
@@ -65,7 +65,7 @@ public class BusService {
             );
         }
 
-        return ResponseEntity.ok("Bus added successfully.");
+        return "Bus added successfully.";
     }
 
     public ResponseEntity<Bus> editBus(
@@ -109,16 +109,16 @@ public class BusService {
     }
 
 
-    public ResponseEntity<Bus> findByBusId(Long busId ) {
+    public Bus findByBusId(Long busId ) {
         Bus bus = busRepository.findById(busId)
                 .orElseThrow(()-> new EntityNotFoundException("Bus not found"));
 
-        return ResponseEntity.ok(bus);
+        return bus;
     }
 
 
     @Transactional
-    public ResponseEntity<BusPaginationResponse> findBuses(
+    public BusPaginationResponse findBuses(
             HttpServletRequest httpServletRequest,
             int pageNumber,
             int pageSize,
@@ -165,11 +165,11 @@ public class BusService {
                 .last(busPage.isLast())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(busPaginationResponse);
+        return busPaginationResponse;
 
     }
 
-    public ResponseEntity<BusPaginationResponse> findAll(int pageNumber, int pageSize){
+    public BusPaginationResponse findAll(int pageNumber, int pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Bus> busPage = busRepository.findAll(pageable);
 
@@ -186,19 +186,19 @@ public class BusService {
                 .totalPages(busPage.getTotalPages())
                 .last(busPage.isLast()).build();
 
-        return ResponseEntity.ok(busPaginationResponse);
+        return busPaginationResponse;
     }
 
-    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+    public List<Long> getBusIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         List<Long> busIdList = busRepository.findByBusiness(business);
 
-        return ResponseEntity.ok(busIdList);
+        return busIdList;
     }
 
-    public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest){
+    public Long countBus(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         Long count = busRepository.countByBusiness(business);
-        return ResponseEntity.ok(count);
+        return count;
     }
 }

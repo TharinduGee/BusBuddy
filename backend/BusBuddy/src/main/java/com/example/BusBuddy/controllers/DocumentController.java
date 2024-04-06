@@ -7,6 +7,8 @@ import com.example.BusBuddy.services.DocumentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,11 @@ public class DocumentController {
 
     @GetMapping("/getDocument")
     public ResponseEntity<byte[]> getDocument(@RequestParam Long docId) throws IOException {
-        return documentService.getDocument(docId);
+        byte[] data = documentService.getDocument(docId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentLength(data.length);
+        return ResponseEntity.ok(data);
     }
 
     @GetMapping("/findDocumentByType")
@@ -53,11 +59,11 @@ public class DocumentController {
                                        @RequestParam DocCategory category,
                                        @RequestParam(required = false) String name,
                                        @RequestParam(required = false) Long id) throws IOException {
-        return documentService.edit(file, docId, category, name, id);
+        return ResponseEntity.ok(documentService.edit(file, docId, category, name, id));
     }
 
     @DeleteMapping("/remove")
     public ResponseEntity<String> remove(@RequestParam Long docId){
-        return documentService.delete(docId);
+        return ResponseEntity.ok(documentService.delete(docId));
     }
 }

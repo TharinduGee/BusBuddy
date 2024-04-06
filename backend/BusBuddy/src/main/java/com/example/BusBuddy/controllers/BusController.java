@@ -9,6 +9,7 @@ import com.example.BusBuddy.services.BusService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,19 +37,21 @@ public class BusController {
                                       @RequestParam(required = false)  Integer seats,
                                       @RequestParam(required = false)  String regNo,
                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        return busService.add(httpServletRequest, type, numberPlate, lastServicedDate, seats, regNo, file);
+
+        return ResponseEntity.ok(busService.add(httpServletRequest, type, numberPlate, lastServicedDate, seats, regNo, file));
+
     }
 
     @GetMapping("/findById")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Bus> findById(@RequestParam Long busId)  {
-        return busService.findByBusId(busId);
+        return ResponseEntity.ok(busService.findByBusId(busId));
     }
 
     @GetMapping("/getBusIds")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
-        return busService.getBusIds(httpServletRequest);
+        return ResponseEntity.ok(busService.getBusIds(httpServletRequest));
     }
 
     @PostMapping("/edit")
@@ -75,22 +78,22 @@ public class BusController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BusPaginationResponse> findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                          @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize) {
-        return busService.findAll(pageNumber , pageSize);
+        return ResponseEntity.ok(busService.findAll(pageNumber , pageSize));
     }
 
     @GetMapping("/findBuses")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BusPaginationResponse> findRoutes(HttpServletRequest httpServletRequest,
+    public ResponseEntity<BusPaginationResponse> findBusses(HttpServletRequest httpServletRequest,
                                                               @RequestParam(value = "pageNo", defaultValue = "0" , required = false)int pageNumber,
                                                               @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize,
                                                               @RequestParam(required = false) String numberPlate
     ){
-        return busService.findBuses(httpServletRequest, pageNumber, pageSize, numberPlate);
+        return ResponseEntity.status(HttpStatus.OK).body(busService.findBuses(httpServletRequest, pageNumber, pageSize, numberPlate));
     }
 
     @GetMapping("/count")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Long> countBus(HttpServletRequest httpServletRequest) {
-        return busService.countBus(httpServletRequest);
+        return ResponseEntity.ok(busService.countBus(httpServletRequest));
     }
 }

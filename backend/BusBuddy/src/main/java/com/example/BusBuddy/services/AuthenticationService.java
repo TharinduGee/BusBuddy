@@ -32,7 +32,7 @@ public class AuthenticationService {
   private final BusinessService businessService;
 
   @Transactional
-  public ResponseEntity<String> signUp(@NotNull SignUpRequest request) {
+  public String signUp(@NotNull SignUpRequest request) {
 
       if(request.getRole() ==  Role.ROLE_ADMIN){
           var business =  new Business();
@@ -62,10 +62,10 @@ public class AuthenticationService {
           userService.save(user);
       }
 
-      return ResponseEntity.status(HttpStatus.CREATED).body("Account is created successfully.");
+      return "Account is created successfully.";
   }
 
-  public ResponseEntity<JwtAuthenticationResponse> signIn(@NotNull SignInRequest request) {
+  public JwtAuthenticationResponse signIn(@NotNull SignInRequest request) {
         var user = userRepository.findByEmail(request.getEmail())
               .orElseThrow(() -> new EntityNotFoundException("User is not found."));
           authenticationManager.authenticate(
@@ -81,20 +81,25 @@ public class AuthenticationService {
                   .refreshToken(refreshToken)
                   .role(user.getRole()).build();
 
-          return ResponseEntity.status(HttpStatus.OK).body(jwtAuthenticationResponse);
+          return jwtAuthenticationResponse;
 
   }
 
   @Transactional
-  public JwtAuthenticationResponse refreshToken(@NotNull RefreshTokenRequest refreshTokenRequest){
-      String userEmail = jwtService.extractUserName(refreshTokenRequest.getToken());
-      User user = userRepository.findByEmail(userEmail).orElseThrow();
-      if(jwtService.isTokenValid(refreshTokenRequest.getToken(),user )){
+  public JwtAuthenticationResponse refreshToken(String refreshToken){
+      String userEmail = jwtService.extractUserName(refreshToken);
+      User user = userRepository.findByEmail(userEmail).orElseThrow(
+              ()->new EntityNotFoundException("Email not found."));
+      if(jwtService.isTokenValid(refreshToken, user )){
           var jwt = jwtService.generateToken(user);
-          JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+          var refreshJwt = jwtService.generateRefreshToken(user);
+          var jwtAuthenticationResponse = JwtAuthenticationResponse.builder()
+                  .token(jwt)
+                  .refreshToken(refreshJwt)
+                  .role(user.getRole()).build();
 
           jwtAuthenticationResponse.setToken(jwt);
-          jwtAuthenticationResponse.setRefreshToken(refreshTokenRequest.getToken());
+          jwtAuthenticationResponse.setRefreshToken(refreshToken);
           return jwtAuthenticationResponse;
       }
       return null;

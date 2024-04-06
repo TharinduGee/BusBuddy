@@ -116,25 +116,14 @@ public class DocumentService {
 
 
     @Transactional
-    public ResponseEntity<byte[]> getDocument(Long docId) {
+    public byte[] getDocument(Long docId) {
         Document document = documentRepository.findById(docId).orElseThrow(() -> new EntityNotFoundException(
                 "Document is not found."
         ));
-
-        if (document.getData() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        byte[] data = document.getData();
-
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentLength(data.length);
-
-        return new ResponseEntity<>(data,  HttpStatus.OK);
+        return document.getData();
     }
 
-    public ResponseEntity<String> edit(MultipartFile file ,
+    public String edit(MultipartFile file ,
                                        Long docId,
                                        DocCategory category,
                                        String docName,
@@ -171,17 +160,17 @@ public class DocumentService {
 
         documentRepository.save(doc);
 
-        return  ResponseEntity.ok("Document successfully edited.");
+        return "Document successfully edited.";
 
     }
 
-    public ResponseEntity<String> delete(long docId){
+    public String delete(long docId){
         if (documentRepository.existsById(docId)){
             documentRepository.deleteById(docId);
         }else{
             throw new EntityNotFoundException("Document not found.");
         }
-        return ResponseEntity.ok("Document successfully deleted.");
+        return "Document successfully deleted.";
     }
 
 }

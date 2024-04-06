@@ -56,6 +56,7 @@ public class SecurityConfig {
               "/api/v1/signUp",
               "/api/v1/signUpAdmin",
               "/api/v1/signIn",
+              "/api/v1/refreshToken",
               "/api/v1/signUp/edit",
               "/api/v1/review/add").permitAll()
       .requestMatchers(HttpMethod.GET, "/api/v1/test/**").permitAll()
