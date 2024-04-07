@@ -1,15 +1,10 @@
 package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Employee.*;
-import com.example.BusBuddy.models.Employee;
-import com.example.BusBuddy.models.EmployeeType;
 import com.example.BusBuddy.services.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +26,7 @@ public class EmployeeController {
     @PreAuthorize("hasRole('SYSTEM_ADMIN')")
     public ResponseEntity<EmployeePaginationResponse>  findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                                @RequestParam(value = "pageSize", defaultValue = "6" , required = false)int pageSize){
-        return employeeService.findAll(pageNumber, pageSize);
+        return ResponseEntity.ok(employeeService.findAll(pageNumber, pageSize));
     }
 
     @GetMapping("/findEmployees")
@@ -40,7 +35,7 @@ public class EmployeeController {
             @RequestParam(value = "name" , required = false) String name,
                                                                      @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                                @RequestParam(value = "pageSize", defaultValue = "5" , required = false)int pageSize){
-        return employeeService.findEmployees(httpServletRequest,name, pageNumber, pageSize);
+        return ResponseEntity.ok(employeeService.findEmployees(httpServletRequest,name, pageNumber, pageSize));
     }
 
     @PostMapping("/add")
@@ -62,31 +57,31 @@ public class EmployeeController {
                                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date joinedDate,
                                         @RequestParam(required = false) Date bDay,
                                         @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
-        return employeeService.edit(httpServletRequest, empId, salary, joinedDate, bDay, file);
+        return ResponseEntity.ok(employeeService.edit(httpServletRequest, empId, salary, joinedDate, bDay, file));
     }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> removeEmployee(@RequestParam Long empId){
-        return employeeService.removeEmployee(empId);
+        return ResponseEntity.ok(employeeService.removeEmployee(empId));
     }
 
     @GetMapping("/countEmployee")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<EmployeeCountResponse> countEmployee(HttpServletRequest httpServletRequest){
-        return employeeService.countEmployee(httpServletRequest);
+        return ResponseEntity.ok(employeeService.countEmployee(httpServletRequest));
     }
 
     @GetMapping("/getDriverIds")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
-        return employeeService.getDriverIds(httpServletRequest);
+        return ResponseEntity.ok(employeeService.getDriverIds(httpServletRequest));
     }
 
     @GetMapping("/getConductorIds")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
-        return employeeService.getConductorIds(httpServletRequest);
+        return ResponseEntity.ok(employeeService.getConductorIds(httpServletRequest));
     }
 
 }

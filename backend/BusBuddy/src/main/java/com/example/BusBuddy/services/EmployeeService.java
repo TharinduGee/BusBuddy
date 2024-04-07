@@ -35,14 +35,14 @@ public class EmployeeService {
     private final DocumentRepository documentRepository;
     private final DocumentService documentService;
 
-    public ResponseEntity<EmployeePaginationResponse> findAll(int  pageNumber , int pageSize){
+    public EmployeePaginationResponse findAll(int  pageNumber , int pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Employee> employeePage = employeeRepository.findAll(pageable);
 
         List<Employee> employees = employeePage.getContent();
         List<EmployeeResponse> employeeResponses = employees.stream().map((element) -> modelMapper.map(element, EmployeeResponse.class)).collect(Collectors.toList());
 
-        EmployeePaginationResponse employeePaginationResponse = EmployeePaginationResponse.builder()
+        return EmployeePaginationResponse.builder()
                 .content(employeeResponses)
                 .pageNo(employeePage.getNumber())
                 .totalElements(employeePage.getTotalElements())
@@ -50,12 +50,10 @@ public class EmployeeService {
                 .totalPages(employeePage.getTotalPages())
                 .last(employeePage.isLast())
                 .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(employeePaginationResponse);
     }
 
     @Transactional
-    public ResponseEntity<EmployeePaginationResponse> findEmployees(HttpServletRequest httpServletRequest,
+    public EmployeePaginationResponse findEmployees(HttpServletRequest httpServletRequest,
                                                                               String name,
                                                                               int  pageNumber , int pageSize){
 
@@ -75,7 +73,7 @@ public class EmployeeService {
         List<Employee> employees = employeePage.getContent();
         List<EmployeeResponse> employeeResponses = employees.stream().map((element) -> modelMapper.map(element, EmployeeResponse.class)).collect(Collectors.toList());
 
-        EmployeePaginationResponse employeePaginationResponse = EmployeePaginationResponse.builder()
+        return EmployeePaginationResponse.builder()
                 .content(employeeResponses)
                 .pageNo(employeePage.getNumber())
                 .totalElements(employeePage.getTotalElements())
@@ -83,8 +81,6 @@ public class EmployeeService {
                 .totalPages(employeePage.getTotalPages())
                 .last(employeePage.isLast())
                 .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(employeePaginationResponse);
     }
 
     @Transactional
@@ -118,7 +114,7 @@ public class EmployeeService {
     }
 
     @Transactional
-    public ResponseEntity<String> edit(
+    public String edit(
             HttpServletRequest httpServletRequest,
             Long empId,
             Float salary,
@@ -146,27 +142,27 @@ public class EmployeeService {
         editedEmployee.setBDay(bDay);
         employeeRepository.save(editedEmployee);
 
-        return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
+        return  "Successfully Edited";
     }
 
     @Transactional
-    public ResponseEntity<String> removeEmployee(Long empId){
+    public String removeEmployee(Long empId){
         Employee employee = employeeRepository.findById(empId).orElseThrow(()-> new EntityNotFoundException("Employee not found."));
         User user = employee.getUser();
         user.setBusiness(null);
         userRepository.save(user);
         employeeRepository.deleteById(empId);
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully Deleted.");
+        return "Successfully Deleted.";
     }
 
-    public ResponseEntity<EmployeeCountResponse> countEmployee(HttpServletRequest httpServletRequest){
+    public EmployeeCountResponse countEmployee(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         Long totalCount = employeeRepository.countByBusiness(business);
         Long driverCount = employeeRepository.countByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
         Long conductorCount = employeeRepository.countByBusinessAndDesignation(business, EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
         EmployeeCountResponse employeeCountResponse = EmployeeCountResponse.builder().totalCount(totalCount)
                 .driverCount(driverCount).conductorCount(conductorCount).build();
-        return ResponseEntity.ok(employeeCountResponse);
+        return employeeCountResponse;
     }
 
     @Transactional
@@ -229,17 +225,17 @@ public class EmployeeService {
         return employeeRepository.findById(bId).orElseThrow(() -> new RuntimeException("Business not found."));
     }
 
-    public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
+    public List<Long> getDriverIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         List<Long> driverIds = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
 
-        return ResponseEntity.ok(driverIds);
+        return driverIds;
     }
 
-    public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
+    public List<Long> getConductorIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         List<Long> conductorIds = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
 
-        return ResponseEntity.ok(conductorIds);
+        return conductorIds;
     }
 }

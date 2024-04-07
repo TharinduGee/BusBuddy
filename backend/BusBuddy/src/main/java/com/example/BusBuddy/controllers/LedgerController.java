@@ -2,6 +2,7 @@ package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Ledger.DailyFinanceResponse;
 import com.example.BusBuddy.dto.Ledger.LedgerAddRequest;
+import com.example.BusBuddy.models.Ledger;
 import com.example.BusBuddy.services.LedgerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,19 +26,14 @@ public class LedgerController {
     public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest,
                                            @RequestBody @Valid LedgerAddRequest ledgerAddRequest
                                            ){
-        return ledgerService.addEntry(httpServletRequest, ledgerAddRequest);
+        return ResponseEntity.ok(ledgerService.addEntry(httpServletRequest, ledgerAddRequest));
     }
 
-//    @DeleteMapping("/remove")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public ResponseEntity<String> removeEntry(@RequestParam Long ledgerId){
-//        return ledgerService.removeEntry(ledgerId);
-//    }
 
     @GetMapping("/dailyFinance")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DailyFinanceResponse> dailyIncome(HttpServletRequest httpServletRequest){
-        return ledgerService.dailyIncome(httpServletRequest);
+        return ResponseEntity.ok(ledgerService.dailyIncome(httpServletRequest));
     }
 
 

@@ -50,7 +50,7 @@ public class DocumentController {
                                       @RequestParam(required = false) String name,
                                       @RequestParam(required = false) Long id
                                       ) throws IOException {
-        return documentService.add(file,httpServletRequest,category,name,id);
+        return ResponseEntity.ok(documentService.add(file,httpServletRequest,category,name,id));
     }
 
     @PostMapping("/edit")

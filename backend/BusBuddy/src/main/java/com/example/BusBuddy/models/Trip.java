@@ -88,7 +88,8 @@ public class Trip {
     private Employee conductor ;
 
     @OneToOne(
-            mappedBy = "trip"
+            mappedBy = "trip",
+            fetch = FetchType.LAZY
     )
     private Document document;
 
