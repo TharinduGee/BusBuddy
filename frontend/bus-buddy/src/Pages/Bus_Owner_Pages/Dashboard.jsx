@@ -63,7 +63,7 @@ function Dashboard() {
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center">
-      <h1>Dashboad</h1>
+      <h1>Dashboard</h1>
       <div className="d-flex flex-wrap justify-content-center align-items-center">
         <div className="d-flex justify-content-center align-items-center  m-3">
           <EmployeeCountCard data={count} />
