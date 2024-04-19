@@ -191,11 +191,142 @@ class _TripScheduleState extends State<TripSchedule> {
   }
 }
 
-class TabletTripSchedule extends StatelessWidget {
-  const TabletTripSchedule({super.key});
+class TabletTripSchedule extends StatefulWidget {
+  TabletTripSchedule({super.key});
 
   @override
+  State<TabletTripSchedule> createState() => _TabletTripScheduleState();
+}
+
+class _TabletTripScheduleState extends State<TabletTripSchedule> {
+  @override
+  void initState() {
+    super.initState();
+    _selectedDateAppBBar = DateTime.now();
+    getTrips();
+    // _getTokenAndFetchUsername();
+  }
+
+  void getTrips() async {
+    Trips tripclass = Trips();
+    await tripclass.getTrips(_selectedDateAppBBar);
+    setState(() {
+      driverTrips = tripclass.trips;
+      isLoading = false;
+    });
+  }
+
+  CalendarAgendaController _calendarAgendaControllerAppBar =
+      CalendarAgendaController();
+
+  // final storage = const FlutterSecureStorage();
+  bool isLoading = true;
+
+  late DateTime _selectedDateAppBBar;
+
+  List<DriverModel> driverTrips = [];
+
+  // Future<void> _getTokenAndFetchUsername() async {
+  @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(bottom: 12),
+          decoration: const BoxDecoration(
+            color: Colors.transparent,
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20)),
+          ),
+          child: CalendarAgenda(
+            controller: _calendarAgendaControllerAppBar,
+            appbar: false,
+            selectedDayPosition: SelectedDayPosition.center,
+            backgroundColor: Colors.amber.shade200,
+            weekDay: WeekDay.short,
+            fullCalendarScroll: FullCalendarScroll.horizontal,
+            fullCalendarDay: WeekDay.short,
+            selectedDateColor: Colors.white,
+            headerDateColor: Colors.black,
+            notSelectedDayBgColor: Colors.grey.withOpacity(0.3),
+            dateColor: Colors.black,
+            locale: 'en',
+            initialDate: DateTime.now(),
+            calendarEventColor: Colors.orange,
+            firstDate: DateTime.now().subtract(const Duration(days: 140)),
+            lastDate: DateTime.now().add(const Duration(days: 60)),
+            onDateSelected: (date) {
+              setState(() {
+                _selectedDateAppBBar = date;
+              });
+              getTrips();
+            },
+            selectedDayLogo: Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Colors.orange, Colors.red],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                width: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _calendarAgendaControllerAppBar.goToDay(DateTime.now());
+                  },
+                  child: Text("Today".toUpperCase()),
+                ),
+              ),
+              SizedBox(
+                width: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    _calendarAgendaControllerAppBar
+                        .goToDay(DateTime.now().add(const Duration(days: 1)));
+                  },
+                  child: Text("tomorrow".toUpperCase()),
+                ),
+              ),
+              // Text('Selected date is $_selectedDateAppBBar'),
+              // const SizedBox(
+              //   height: 20.0,
+              // ),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: driverTrips.length,
+                  itemBuilder: (context, index) {
+                    final trip = driverTrips[index];
+                    return TripTile(
+                      startdesti: trip.startDestination ?? 'Unknown',
+                      enddesti: trip.endDestination ?? 'Unknown',
+                      starttime: trip.starttime ?? 'Unknown',
+                      endtime: trip.endtime ?? 'Unknown',
+                      conductorname: trip.conductorName ?? 'Unknown',
+                    );
+                  },
+                ),
+        ),
+      ],
+    );
   }
 }
