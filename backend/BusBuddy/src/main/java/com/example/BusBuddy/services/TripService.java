@@ -255,7 +255,7 @@ public class TripService {
                     tripRepository.save(trip);
                     System.out.println("Trip is over.");
 
-                    ledgerService.addTripLedgerEntry(trip);
+                    //ledgerService.addTripLedgerEntry(trip);
                 }
             }else{
                 if(trip.getStatus() == TripStatus.TRIP_STATUS_SCHEDULED){

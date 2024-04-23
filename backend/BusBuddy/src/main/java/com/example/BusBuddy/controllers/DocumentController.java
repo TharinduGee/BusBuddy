@@ -19,7 +19,7 @@ import java.io.IOException;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/document/")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class DocumentController {
 
     private final DocumentService documentService;
