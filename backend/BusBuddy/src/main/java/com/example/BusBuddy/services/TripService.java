@@ -38,7 +38,7 @@ public class TripService {
     private final LedgerService ledgerService;
 
     @Transactional
-    public ResponseEntity<String> addTripsForDuration(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddForDurationRequest tripAddForDurationRequest ) {
+    public String addTripsForDuration(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddForDurationRequest tripAddForDurationRequest ) {
         LocalDate firstDate = tripAddForDurationRequest.getFirstDate();
         LocalDate lastDate = tripAddForDurationRequest.getLastDate();
 
@@ -51,7 +51,7 @@ public class TripService {
             currentDate = currentDate.plusDays(1);
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("The trips are scheduled successfully.");
+        return "The trips are scheduled successfully.";
     }
 
     private void addSingleTrip(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddRequest tripAddRequest , @RequestParam LocalDate localDate){
@@ -103,7 +103,7 @@ public class TripService {
 
     }
 
-    public ResponseEntity<String> addTrip(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddRequest tripAddRequest , @RequestParam LocalDate date){
+    public String addTrip(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddRequest tripAddRequest , @RequestParam LocalDate date){
         Bus bus;
         Employee driver;
         Employee conductor;
@@ -150,16 +150,16 @@ public class TripService {
 
         tripRepository.save(trip);
 
-        return ResponseEntity.status(HttpStatus.OK).body("Trip is scheduled successfully");
+        return "Trip is scheduled successfully";
     }
 
 
-    public ResponseEntity<String> remove(@RequestParam Long tripId){
+    public String remove(@RequestParam Long tripId){
         tripRepository.deleteById(tripId);
-        return ResponseEntity.status(HttpStatus.OK).body("Trip is successfully deleted");
+        return "Trip is successfully deleted";
     }
 
-    public ResponseEntity<List<TripResponseForEmployee>> findTripForEmployee(HttpServletRequest httpServletRequest, LocalDate date){
+    public List<TripResponseForEmployee> findTripForEmployee(HttpServletRequest httpServletRequest, LocalDate date){
         Employee employee = employeeService.extractEmpId(httpServletRequest);
         List<Trip> trips = tripRepository.findByDateAndDriver(date , employee);
         List<TripResponseForEmployee> tripResponseList ;
@@ -192,11 +192,11 @@ public class TripService {
             throw new InternalError("Employee type can't be identified.");
         }
 
-        return  ResponseEntity.status(HttpStatus.OK).body(tripResponseList);
+        return  tripResponseList;
     }
 
     @Transactional
-    public ResponseEntity<TripPaginationResponse> findTrips(HttpServletRequest httpServletRequest ,
+    public TripPaginationResponse findTrips(HttpServletRequest httpServletRequest ,
                                                             int pageNumber,
             int pageSize
             , LocalDate startDate
@@ -238,7 +238,7 @@ public class TripService {
                 .last(tripPage.isLast())
                .build();
 
-        return  ResponseEntity.status(HttpStatus.OK).body(tripPaginationResponse);
+        return  tripPaginationResponse;
     }
 
 

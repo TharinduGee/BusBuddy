@@ -28,25 +28,25 @@ public class TripController {
     @PostMapping("/scheduleTripsForDuration")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addTripsForDuration(HttpServletRequest httpServletRequest, @RequestBody TripAddForDurationRequest tripAddForDurationRequest){
-        return tripService.addTripsForDuration(httpServletRequest ,tripAddForDurationRequest);
+        return ResponseEntity.ok(tripService.addTripsForDuration(httpServletRequest ,tripAddForDurationRequest));
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addTrip(HttpServletRequest httpServletRequest, @RequestBody TripAddRequest tripAddRequest , @RequestParam LocalDate date){
-        return tripService.addTrip(httpServletRequest, tripAddRequest, date);
+        return ResponseEntity.ok(tripService.addTrip(httpServletRequest, tripAddRequest, date));
     }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> remove(@RequestParam Long tripId){
-        return tripService.remove(tripId);
+        return ResponseEntity.ok(tripService.remove(tripId));
     }
 
     @GetMapping("/findForEmployee")
     @PreAuthorize("hasAnyRole('DRIVER', 'CONDUCTOR')")
     public ResponseEntity<List<TripResponseForEmployee>> findTripByEmployee(HttpServletRequest httpServletRequest, @RequestParam @NotNull LocalDate date){
-        return tripService.findTripForEmployee(httpServletRequest , date);
+        return ResponseEntity.ok(tripService.findTripForEmployee(httpServletRequest , date));
     }
 
     @GetMapping("/findTrips")
@@ -57,7 +57,7 @@ public class TripController {
                                                             @RequestParam  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ){
-        return tripService.findTrips(httpServletRequest, pageNumber, pageSize, startDate, endDate);
+        return ResponseEntity.ok(tripService.findTrips(httpServletRequest, pageNumber, pageSize, startDate, endDate));
     }
 
 }

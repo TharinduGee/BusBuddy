@@ -29,7 +29,7 @@ public class ReviewService {
     private final BusinessRepository businessRepository;
 
     @Transactional
-    public ResponseEntity<String> addReview(@NotNull ReviewAddRequest reviewAddRequest){
+    public Review addReview(@NotNull ReviewAddRequest reviewAddRequest){
         Business business = null;
         Bus bus = null;
         Employee employee = null;
@@ -54,8 +54,8 @@ public class ReviewService {
                 .business(business)
                 .build();
 
-        reviewRepository.save(review);
-        return ResponseEntity.ok().body("Review is added successfully");
+        review = reviewRepository.save(review);
+        return review;
 
     }
 }
