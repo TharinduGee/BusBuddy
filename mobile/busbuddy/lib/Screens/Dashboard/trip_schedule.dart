@@ -159,10 +159,6 @@ class _TripScheduleState extends State<TripSchedule> {
                       child: Text("tomorrow".toUpperCase()),
                     ),
                   ),
-                  // Text('Selected date is $_selectedDateAppBBar'),
-                  // const SizedBox(
-                  //   height: 20.0,
-                  // ),
                 ],
               ),
             ),
@@ -174,12 +170,51 @@ class _TripScheduleState extends State<TripSchedule> {
                       itemCount: driverTrips.length,
                       itemBuilder: (context, index) {
                         final trip = driverTrips[index];
-                        return TripTile(
-                          startdesti: trip.startDestination ?? 'Unknown',
-                          enddesti: trip.endDestination ?? 'Unknown',
-                          starttime: trip.starttime ?? 'Unknown',
-                          endtime: trip.endtime ?? 'Unknown',
-                          conductorname: trip.conductorName ?? 'Unknown',
+                        return GestureDetector(
+                          onTap: () {
+                            // Handle the tap event here, you can access trip information
+                            // for example, you can show a dialog with trip details
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Trip Details'),
+                                  content: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                          'Start Destination: ${trip.startDestination ?? 'Unknown'}'),
+                                      Text(
+                                          'End Destination: ${trip.endDestination ?? 'Unknown'}'),
+                                      Text(
+                                          'Start Time: ${trip.starttime ?? 'Unknown'}'),
+                                      Text(
+                                          'End Time: ${trip.endtime ?? 'Unknown'}'),
+                                      Text(
+                                          'Conductor Name: ${trip.conductorName ?? 'Unknown'}'),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('Close'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: TripTile(
+                            startdesti: trip.startDestination ?? 'Unknown',
+                            enddesti: trip.endDestination ?? 'Unknown',
+                            starttime: trip.starttime ?? 'Unknown',
+                            endtime: trip.endtime ?? 'Unknown',
+                            conductorname: trip.conductorName ?? 'Unknown',
+                          ),
                         );
                       },
                     ),
@@ -204,7 +239,6 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
     super.initState();
     _selectedDateAppBBar = DateTime.now();
     getTrips();
-    // _getTokenAndFetchUsername();
   }
 
   void getTrips() async {
@@ -219,14 +253,12 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
   CalendarAgendaController _calendarAgendaControllerAppBar =
       CalendarAgendaController();
 
-  // final storage = const FlutterSecureStorage();
   bool isLoading = true;
 
   late DateTime _selectedDateAppBBar;
 
   List<DriverModel> driverTrips = [];
 
-  // Future<void> _getTokenAndFetchUsername() async {
   @override
   Widget build(BuildContext context) {
     return Column(
