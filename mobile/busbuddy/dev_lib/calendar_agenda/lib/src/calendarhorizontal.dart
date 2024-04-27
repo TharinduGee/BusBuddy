@@ -4,6 +4,7 @@ import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:calendar_agenda/src/controllerhorizontal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -136,15 +137,16 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
 
     Widget dayList() {
       return Container(
+        // color: Colors.blue,
         width: MediaQuery.of(context).size.width,
-        height: widget.appbar ? 125 : 110,
-        alignment: Alignment.bottomCenter,
+        height: MediaQuery.of(context).size.height / 1.6,
+        alignment: Alignment.bottomLeft,
         child: ScrollablePositionedList.builder(
             padding: _dates.length < 5
                 ? EdgeInsets.symmetric(
                     horizontal: MediaQuery.of(context).size.width *
                         (5 - _dates.length) /
-                        10)
+                        2)
                 : const EdgeInsets.symmetric(horizontal: 10),
             initialScrollIndex: _daySelectedIndex ?? 0,
             // initialAlignment: _scrollAlignment,
@@ -167,7 +169,7 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
 
               return Container(
                 child: Align(
-                  alignment: Alignment.center,
+                  alignment: Alignment.bottomLeft,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 5.0, horizontal: 5.0),
@@ -175,7 +177,7 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
                       onTap: () => _goToActualDay(index),
                       child: Container(
                         height: 100.0,
-                        width: MediaQuery.of(context).size.width / 5 - 10,
+                        width: MediaQuery.of(context).size.width / 8 - 10,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           color: isSelected
@@ -275,67 +277,59 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
 //backgrounddaylist
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: widget.appbar ? 210 : 150.0,
+      height: 150.0,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
         ),
         child: Stack(
           children: [
-            // Positioned(
-            //   top: 0.0,
-            //   child: Container(
-            //     width: MediaQuery.of(context).size.width,
-            //     height: 190.0,
-            //     color: backgroundColor,
-            //   ),
-            // ),
             Positioned(
-              top: widget.appbar ? 50.0 : 10.0,
-              child: Padding(
-                padding: EdgeInsets.only(right: padding, left: 10),
-                child: Container(
-                  width: MediaQuery.of(context).size.width - padding,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      leading,
-                      widget.fullCalendar!
-                          ? GestureDetector(
-                              onTap: () => widget.fullCalendar!
-                                  ? _showFullCalendar(_locale, widget.weekDay)
-                                  : null,
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.calendar_today,
-                                    size: 18.0,
-                                    color: Colors.white,
+              top: 10.0,
+              left: 50,
+              child: Container(
+                width: MediaQuery.of(context).size.width - padding,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    leading,
+                    widget.fullCalendar!
+                        ? GestureDetector(
+                            onTap: () => widget.fullCalendar!
+                                ? _showFullCalendar(_locale, widget.weekDay)
+                                : null,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  size: 22.0,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  DateFormat.yMMMM(Locale(_locale).toString())
+                                      .format(_selectedDate!),
+                                  style: TextStyle(
+                                    fontSize: 22.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  SizedBox(
-                                    width: 10.0,
-                                  ),
-                                  Text(
-                                    DateFormat.yMMMM(Locale(_locale).toString())
-                                        .format(_selectedDate!),
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                    textAlign: TextAlign.end,
-                                  ),
-                                ],
-                              ),
-                            )
-                          : SizedBox(),
-                    ],
-                  ),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox(),
+                  ],
                 ),
               ),
             ),
             Positioned(
               bottom: 0.0,
+              left: 60,
+              top: 40,
               child: dayList(),
             ),
           ],
@@ -386,9 +380,10 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
           height = ((MediaQuery.of(context).size.width - 2 * padding) / 7) * 5 +
               150.0;
         } else {
-          height = (MediaQuery.of(context).size.height - 100.0);
+          height = (MediaQuery.of(context).size.height) - padding;
         }
         return Container(
+          width: 450,
           height: widget.fullCalendarScroll == FullCalendarScroll.vertical
               ? height
               : (MediaQuery.of(context).size.height / 7) * 4.3,
@@ -401,10 +396,7 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
                 height: 6,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3.0),
-                    color: Color(0xFFE0E0E0)),
-              ),
-              SizedBox(
-                height: 20.0,
+                    color: Colors.black),
               ),
               Expanded(
                 child: FullCalendar(

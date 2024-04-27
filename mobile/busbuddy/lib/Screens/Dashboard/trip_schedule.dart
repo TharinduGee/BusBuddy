@@ -3,6 +3,7 @@ import 'package:busbuddy/Screens/Dashboard/components/trip_tile.dart';
 import 'package:busbuddy/responsive.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:calendar_agenda/calendar_agenda_horizontal.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -262,24 +263,19 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.only(bottom: 12),
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20)),
-          ),
+        SizedBox(
+          width: MediaQuery.sizeOf(context).width / 4.8,
+          height: MediaQuery.sizeOf(context).height,
           child: CalendarAgendaHorizontal(
             controller: _calendarAgendaControllerAppBar,
             appbar: false,
             selectedDayPosition: SelectedDayPosition.center,
             backgroundColor: Colors.amber.shade200,
             weekDay: WeekDay.short,
-            fullCalendarScroll: FullCalendarScroll.horizontal,
+            fullCalendarScroll: FullCalendarScroll.vertical,
             fullCalendarDay: WeekDay.short,
             selectedDateColor: Colors.white,
             headerDateColor: Colors.black,
@@ -312,7 +308,7 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
         ),
         Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
