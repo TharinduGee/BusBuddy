@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:busbuddy/Screens/Dashboard/components/trip_tile.dart';
 import 'package:busbuddy/responsive.dart';
 import 'package:calendar_agenda/calendar_agenda.dart';
+import 'package:calendar_agenda/calendar_agenda_horizontal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -250,8 +251,8 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
     });
   }
 
-  CalendarAgendaController _calendarAgendaControllerAppBar =
-      CalendarAgendaController();
+  CalendarAgendaHorizontalController _calendarAgendaControllerAppBar =
+      CalendarAgendaHorizontalController();
 
   bool isLoading = true;
 
@@ -272,7 +273,7 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20)),
           ),
-          child: CalendarAgenda(
+          child: CalendarAgendaHorizontal(
             controller: _calendarAgendaControllerAppBar,
             appbar: false,
             selectedDayPosition: SelectedDayPosition.center,
