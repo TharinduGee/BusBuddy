@@ -307,7 +307,7 @@ class CalendarAgendaState extends State<CalendarAgenda>
                                   Icon(
                                     Icons.calendar_today,
                                     size: 18.0,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                   ),
                                   SizedBox(
                                     width: 10.0,
@@ -317,8 +317,8 @@ class CalendarAgendaState extends State<CalendarAgenda>
                                         .format(_selectedDate!),
                                     style: TextStyle(
                                       fontSize: 18.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     textAlign: TextAlign.end,
                                   ),
@@ -397,8 +397,9 @@ class CalendarAgendaState extends State<CalendarAgenda>
                 width: 60,
                 height: 6,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3.0),
-                    color: Color(0xFFE0E0E0)),
+                  borderRadius: BorderRadius.circular(3.0),
+                  color: Colors.black,
+                ),
               ),
               SizedBox(
                 height: 20.0,

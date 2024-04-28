@@ -266,7 +266,10 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        Container(
+          margin: const EdgeInsets.only(
+            left: 10,
+          ),
           width: MediaQuery.sizeOf(context).width / 4.8,
           height: MediaQuery.sizeOf(context).height,
           child: CalendarAgendaHorizontal(
@@ -321,6 +324,9 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
                 ),
               ),
               SizedBox(
+                height: MediaQuery.sizeOf(context).height / 20,
+              ),
+              SizedBox(
                 width: 150,
                 child: ElevatedButton(
                   onPressed: () {
@@ -330,10 +336,10 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
                   child: Text("tomorrow".toUpperCase()),
                 ),
               ),
-              // Text('Selected date is $_selectedDateAppBBar'),
-              // const SizedBox(
-              //   height: 20.0,
-              // ),
+              Expanded(
+                  child: SizedBox(
+                height: MediaQuery.sizeOf(context).height / 3,
+              ))
             ],
           ),
         ),
