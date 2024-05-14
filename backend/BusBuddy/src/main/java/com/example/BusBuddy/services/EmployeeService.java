@@ -54,8 +54,8 @@ public class EmployeeService {
 
     @Transactional
     public EmployeePaginationResponse findEmployees(HttpServletRequest httpServletRequest,
-                                                                              String name,
-                                                                              int  pageNumber , int pageSize){
+                                                    String name,
+                                                    int  pageNumber , int pageSize){
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Employee> employeePage;
@@ -85,11 +85,11 @@ public class EmployeeService {
 
     @Transactional
     public String add(HttpServletRequest httpServletRequest,
-                                Float salary,
-                                Date joinedDate,
-                                Date bDay,
-                                String email,
-                                MultipartFile file){
+                      Float salary,
+                      Date joinedDate,
+                      Date bDay,
+                      String email,
+                      MultipartFile file){
         Business business = businessService.extractBId(httpServletRequest);
         User user = userRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException("User Not found."));
         if(user.getEmployee() != null){
@@ -160,9 +160,8 @@ public class EmployeeService {
         Long totalCount = employeeRepository.countByBusiness(business);
         Long driverCount = employeeRepository.countByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
         Long conductorCount = employeeRepository.countByBusinessAndDesignation(business, EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
-        EmployeeCountResponse employeeCountResponse = EmployeeCountResponse.builder().totalCount(totalCount)
+        return EmployeeCountResponse.builder().totalCount(totalCount)
                 .driverCount(driverCount).conductorCount(conductorCount).build();
-        return employeeCountResponse;
     }
 
     @Transactional
@@ -227,15 +226,13 @@ public class EmployeeService {
 
     public List<Long> getDriverIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
-        List<Long> driverIds = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
 
-        return driverIds;
+        return employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
     }
 
     public List<Long> getConductorIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
-        List<Long> conductorIds = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
 
-        return conductorIds;
+        return employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
     }
 }
