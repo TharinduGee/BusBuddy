@@ -166,6 +166,7 @@ public class TripService {
         if(employee.getDesignation() == EmployeeType.EMPLOYEE_TYPE_DRIVER){
             tripResponseList = trips.stream().map(
                             trip -> TripResponseForEmployee.builder()
+                                    .tripId(trip.getTripId())
                                     .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
                                     .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
                                     .startTime(trip.getStartTime())
@@ -179,6 +180,7 @@ public class TripService {
         else if(employee.getDesignation() == EmployeeType.EMPLOYEE_TYPE_CONDUCTOR){
             tripResponseList = trips.stream().map(
                             trip -> TripResponseForEmployee.builder()
+                                    .tripId(trip.getTripId())
                                     .startDestination(trip.getRoute() != null ? trip.getRoute().getStartDestination() : null)
                                     .endDestination(trip.getRoute() != null ? trip.getRoute().getEndDestination() : null)
                                     .numberPlate(trip.getBus() != null ? trip.getBus().getNumberPlate() : null)
