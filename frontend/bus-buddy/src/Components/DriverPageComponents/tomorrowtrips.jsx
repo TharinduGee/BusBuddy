@@ -47,8 +47,8 @@ function TomorrowTrip() {
           {tripData.map((data, index) => (
             <TripInformation
               key={index}
-              startplace={data.startplace}
-              endplace={data.endplace}
+              startplace={data.startDestination}
+              endplace={data.endDestination}
               startTime={data.startTime}
               endTime={data.endTime}
               conductor={data.conductor}
