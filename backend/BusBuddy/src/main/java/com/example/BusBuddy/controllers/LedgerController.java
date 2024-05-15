@@ -23,6 +23,7 @@ public class LedgerController {
     private final LedgerService ledgerService;
 
     @PostMapping("/addEntry")
+    @PreAuthorize("hasAnyRole('DRIVER', 'CONDUCTOR', 'ADMIN')")
     public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest,
                                            @RequestBody @Valid LedgerAddRequest ledgerAddRequest
                                            ){
