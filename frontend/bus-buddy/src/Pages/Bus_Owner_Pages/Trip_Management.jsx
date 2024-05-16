@@ -494,7 +494,7 @@ function Trip_Management() {
           busId: tripData.busId,
           routeId: tripData.routeId,
           driverId: tripData.driverId,
-          condocterId: tripData.condocterId,
+          conductorId: tripData.condocterId,
           expense: tripData.expense,
         },
         lastDate: lastformattedDate,
