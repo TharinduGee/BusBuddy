@@ -20,6 +20,7 @@ function profile () {
             </div>
 
           </div>
+          
         </div>
   )
 
