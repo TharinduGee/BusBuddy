@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,15 +31,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  public UserDetailsService userDetailsService() {
-      return username -> userRepository.findByEmail(username)
-              .orElseThrow(() -> new EntityNotFoundException("User not found"));
-  }
+    public UserDetailsService userDetailsService() {
+        return username -> userRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
 
     @Transactional
-    public ResponseEntity<UserPaginationResponse> findUnEnrolledUsers(
+    public UserPaginationResponse findUnEnrolledUsers(
             int pageNumber,
             int pageSize,
             String email){
@@ -70,7 +71,7 @@ public class UserService {
                 )
                 .collect(Collectors.toList());
 
-        UserPaginationResponse userPaginationResponse = UserPaginationResponse.builder()
+        return UserPaginationResponse.builder()
                 .content(userResponses)
                 .pageSize(userPage.getSize())
                 .pageNo(userPage.getNumber())
@@ -79,22 +80,20 @@ public class UserService {
                 .last(userPage.isLast())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(userPaginationResponse);
-
     }
 
 
-  public ResponseEntity<String> uploadImage(HttpServletRequest httpServletRequest, MultipartFile imageFile) throws IOException {
-      String username = (String) httpServletRequest.getAttribute("username");
-      User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
-              "User is not found."
-      ));
+    public ResponseEntity<String> uploadImage(HttpServletRequest httpServletRequest, MultipartFile imageFile) throws IOException {
+        String username = (String) httpServletRequest.getAttribute("username");
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
+                "User is not found."
+        ));
 
-      user.setImage(imageFile.getBytes());
-      save(user);
+        user.setImage(imageFile.getBytes());
+        save(user);
 
-      return ResponseEntity.status(HttpStatus.OK).body("Image is updated successfully.");
-  }
+        return ResponseEntity.status(HttpStatus.OK).body("Image is updated successfully.");
+    }
 
 
 
@@ -129,13 +128,13 @@ public class UserService {
     }
 
 
-  public User save(User newUser) {
-    if (newUser.getId() == null) {
-      newUser.setCreatedAt(LocalDateTime.now());
-    }
+    public User save(User newUser) {
+        if (newUser.getId() == null) {
+            newUser.setCreatedAt(LocalDateTime.now());
+        }
 
-    newUser.setUpdatedAt(LocalDateTime.now());
-    return userRepository.save(newUser);
-  }
+        newUser.setUpdatedAt(LocalDateTime.now());
+        return userRepository.save(newUser);
+    }
 
 }

@@ -14,7 +14,7 @@ import java.io.IOException;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/user")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class UserController {
     private final UserService userService;
 
@@ -23,7 +23,7 @@ public class UserController {
     public ResponseEntity<UserPaginationResponse>  findUnEnrolledUsers(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                                           @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize,
                                                                           @RequestParam(required = false) String email) {
-        return userService.findUnEnrolledUsers(pageNumber , pageSize, email);
+        return ResponseEntity.ok(userService.findUnEnrolledUsers(pageNumber , pageSize, email));
     }
 
     @PostMapping("/uploadImage")

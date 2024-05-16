@@ -13,6 +13,7 @@ import java.sql.Time;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TripResponseForEmployee {
+    private Long tripId;
     private String startDestination;
     private String endDestination;
     private String numberPlate;

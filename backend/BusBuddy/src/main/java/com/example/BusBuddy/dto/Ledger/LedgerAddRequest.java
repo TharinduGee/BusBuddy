@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LedgerAddRequest {
+    @NotNull
     private TransactionType type;
 
     private String name;

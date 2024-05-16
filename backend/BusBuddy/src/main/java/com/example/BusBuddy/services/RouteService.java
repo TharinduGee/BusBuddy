@@ -34,7 +34,7 @@ public class RouteService {
     private final DocumentRepository documentRepository;
 
     @Transactional
-    public ResponseEntity<RoutePaginationResponse> findRoutes(
+    public RoutePaginationResponse findRoutes(
             HttpServletRequest httpServletRequest,
             int pageNumber,
             int pageSize,
@@ -81,11 +81,11 @@ public class RouteService {
                 .last(routePage.isLast())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(routePaginationResponse);
+        return routePaginationResponse;
 
     }
 
-    public ResponseEntity<RoutePaginationResponse> findAll(int pageNumber,
+    public RoutePaginationResponse findAll(int pageNumber,
                                     int pageSize ){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
         Page<Route> routePage = routeRepository.findAll(pageable);
@@ -103,12 +103,12 @@ public class RouteService {
                 .last(routePage.isLast())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.OK).body(routePaginationResponse);
+        return routePaginationResponse;
 
     }
 
     @Transactional
-    public ResponseEntity<String> add(HttpServletRequest httpServletRequest,
+    public String add(HttpServletRequest httpServletRequest,
                                              String startDestination,
                                              String endDestination,
                                              double distance,
@@ -135,18 +135,18 @@ public class RouteService {
             );
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("Route added successfully");
+        return "Route added successfully";
     }
 
-    public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
+    public List<Long> getRouteIds(HttpServletRequest httpServletRequest){
         Business business = businessService.extractBId(httpServletRequest);
         List<Long> routeIds = routeRepository.findByBusiness(business);
 
-        return ResponseEntity.ok(routeIds);
+        return routeIds;
     }
 
     @Transactional
-    public ResponseEntity<String> edit(
+    public String edit(
             HttpServletRequest httpServletRequest,
             Long routeId,
             String startDestination,
@@ -178,11 +178,11 @@ public class RouteService {
         editedRoute.setPermitExpDate(permitExpDate);
         routeRepository.save(editedRoute);
 
-        return  ResponseEntity.status(HttpStatus.OK).body("Successfully Edited");
+        return  "Successfully Edited";
     }
 
-    public ResponseEntity<String> remove(long routeId){
+    public String remove(long routeId){
         routeRepository.deleteById(routeId);
-        return ResponseEntity.ok("Successfully Deleted");
+        return "Successfully Deleted";
     }
 }

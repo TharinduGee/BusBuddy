@@ -85,6 +85,7 @@ public class LedgerService {
         return "Ledger entry added successfully!";
     }
 
+
     public void addTripLedgerEntry(@NotNull Trip trip){
         Ledger entry = Ledger.builder()
                 .timestamp(LocalDateTime.now())

@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/route")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class RouteController {
 
     private  final RouteService routeService;
@@ -37,7 +37,7 @@ public class RouteController {
                                                               @RequestParam(value = "pageSize", defaultValue = "5" , required = false) int pageSize,
                                                               @RequestParam(required = false) String startDestination
                                                               ){
-        return routeService.findRoutes(httpServletRequest, pageNumber, pageSize, startDestination);
+        return ResponseEntity.ok(routeService.findRoutes(httpServletRequest, pageNumber, pageSize, startDestination));
 
     }
 
@@ -52,7 +52,7 @@ public class RouteController {
                                        Date permitExpDate,
                                        @RequestParam(value = "file", required = false) MultipartFile file
     ) throws IOException {
-        return routeService.add(httpServletRequest, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
+        return ResponseEntity.ok(routeService.add(httpServletRequest, startDestination, endDestination, distance, noOfSections, permitExpDate, file));
     }
 
     @PostMapping("/edit")
@@ -68,18 +68,18 @@ public class RouteController {
                                       Date permitExpDate,
                                       @RequestParam(value = "file",required = false) MultipartFile file
     ) throws IOException {
-        return routeService.edit(httpServletRequest, routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file);
+        return ResponseEntity.ok(routeService.edit(httpServletRequest, routeId, startDestination, endDestination, distance, noOfSections, permitExpDate, file));
     }
 
     @GetMapping("/geRouteIds")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Long>> getRouteIds(HttpServletRequest httpServletRequest){
-        return routeService.getRouteIds(httpServletRequest);
+        return ResponseEntity.ok(routeService.getRouteIds(httpServletRequest));
     }
 
     @DeleteMapping("/remove")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> remove(@RequestParam Long routeId){
-        return routeService.remove(routeId);
+        return ResponseEntity.ok(routeService.remove(routeId));
     }
 }
