@@ -2,7 +2,7 @@ import React from "react";
 import Uploader from "../../../Components/Uploader/Uploader";
 import CatergoryCard from "../../../Components/OwnerPageComponents/CatergoryCard/CatergoryCard";
 import "./FileLibrary.css";
-
+import Button from "@mui/material-next/Button";
 function File_Library() {
   return (
     <div className="d-flex flex-column align-items-center  justify-content-center">
@@ -49,6 +49,19 @@ function File_Library() {
         </div>
         <Uploader />
       </div>
+
+      <Button
+        style={{
+          borderRadius: 10,
+          margin: 30,
+          backgroundColor: "#ff760d",
+          color: "white",
+        }}
+        className="d-flex  update-btn"
+        variant="contained"
+      >
+        Submit
+      </Button>
     </div>
   );
 }

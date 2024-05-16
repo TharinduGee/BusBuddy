@@ -15,7 +15,6 @@ const CustomButton = styled(Button)({
   fontFamily: "Roboto",
   fontSize: "16px",
   fontWeight: 500,
-
   letterSpacing: "0.5px",
   width: "210px",
   height: "50px",
@@ -45,7 +44,6 @@ const CustomButton_sign_up = styled(Button)({
   fontFamily: "Roboto",
   fontSize: "16px",
   fontWeight: 500,
-
   letterSpacing: "0.5px",
   width: "160px",
   height: "40px",
