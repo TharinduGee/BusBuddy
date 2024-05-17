@@ -12,5 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
-    Page<Document> findByBusinessAndCategoryAndDocNameContainingIgnoreCase(Business business, DocCategory docCategory, Optional<String> docName , Pageable pageable);
+    Page<Document> findByBusinessAndCategoryAndDocNameContainingIgnoreCase(Business business, DocCategory docCategory, String docName , Pageable pageable);
 }
