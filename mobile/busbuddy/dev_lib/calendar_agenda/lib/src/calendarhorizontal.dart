@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:calendar_agenda/calendar_agenda.dart';
 import 'package:calendar_agenda/src/controllerhorizontal.dart';
+import 'package:calendar_agenda/src/fullcalanderhorizontal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -9,7 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-import 'fullcalendar.dart';
+// import 'fullcalendar.dart';
 import 'typedata.dart';
 
 class CalendarAgendaHorizontal extends StatefulWidget
@@ -69,7 +70,7 @@ class CalendarAgendaHorizontal extends StatefulWidget
     this.events,
     this.fullCalendar = true,
     this.leftMargin = 0,
-    this.fullCalendarScroll = FullCalendarScroll.vertical,
+    this.fullCalendarScroll = FullCalendarScroll.horizontal,
     this.fullCalendarDay = WeekDay.short,
     this.weekDay = WeekDay.short,
     this.selectedDayPosition = SelectedDayPosition.left,
@@ -383,7 +384,7 @@ class CalendarAgendaHorizontalState extends State<CalendarAgendaHorizontal>
           height = (MediaQuery.of(context).size.height) - padding;
         }
         return Container(
-          width: 450,
+          width: MediaQuery.sizeOf(context).width / 1,
           height: widget.fullCalendarScroll == FullCalendarScroll.vertical
               ? height
               : (MediaQuery.of(context).size.height / 7) * 4.3,

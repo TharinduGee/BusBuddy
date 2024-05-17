@@ -4,7 +4,7 @@ import { MdCloudUpload, MdDelete } from "react-icons/md";
 import { AiFillFileImage } from "react-icons/ai";
 import PdfLogo from "../../Assets/pdflogo.png";
 
-function Uploader() {
+function Uploader({ handleFileChange }) {
   const [doc, setDoc] = useState(null);
   const [docName, setDocName] = useState("No Document Selected");
   const [type, setType] = useState("");
@@ -26,10 +26,12 @@ function Uploader() {
       setDocName(files[0].name);
       setDoc(URL.createObjectURL(files[0]));
       setType(files[0].type);
-      console.log(type);
+      handleFileChange(files[0]);
+      // console.log(type);
     }
     setIsDraggingOver(false);
   };
+
   return (
     <div>
       <form
@@ -50,7 +52,8 @@ function Uploader() {
             if (files) {
               setDoc(URL.createObjectURL(files[0]));
               setType(files[0].type);
-              console.log(type);
+              handleFileChange(files[0]);
+              //console.log(type);
             }
           }}
         />

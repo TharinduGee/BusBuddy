@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./UserSelectPage.css";
-import Briefcase from "../../Assets/Briefcase.png"
-import SteeringWheel from "../../Assets/SteeringWheel.png"
-import User from "../../Assets/User.png"
+import Briefcase from "../../Assets/Briefcase.png";
+import SteeringWheel from "../../Assets/SteeringWheel.png";
+import User from "../../Assets/User.png";
 import Footer from "../../Components/OnBoaringComponents/Footer/Footer";
-import {useLocation} from 'react-router-dom';
-
+import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 function UserSelectPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -26,16 +26,13 @@ function UserSelectPage() {
     }
   }, [location.state]);
 
-
   const [selectedRole, setSelectedRole] = useState("");
 
   const handleRoleSelect = (role) => {
-
-    
     setSelectedRole(role);
     setUser({
       ...user,
-      role: mapRoleToApiRole(role), 
+      role: mapRoleToApiRole(role),
     });
   };
 
@@ -54,15 +51,20 @@ function UserSelectPage() {
 
   const handlePostRequest = async () => {
     try {
-      console.log("userdata",user);
+      console.log("userdata", user);
       const response = await axios.post(
         "http://localhost:8081/api/v1/signUp",
-        user 
+        user
       );
       console.log("Response:", response.data);
-      navigate('/login'); 
+      navigate("/login");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error:", error.response.data);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Username or mobile number is already taken sign up again to procced",
+      });
     }
   };
 
@@ -70,13 +72,17 @@ function UserSelectPage() {
     <div>
       <div className="d-flex justify-content-center">
         <div className="user_container_width shadow p-5 pt-3 m-5 rounded-4 p-4 border">
-          <button className="back-button" onClick={() => navigate('/signup')}>Back</button>
+          <button className="back-button" onClick={() => navigate("/signup")}>
+            Back
+          </button>
           <div className="userrole-text-main">Select User Role</div>
-          
+
           <div className="row d-flex justify-content-around">
             <div className="col d-flex justify-content-center ">
-              <button 
-                className={`user-container d-flex flex-column justify-content-center ${selectedRole === "Owner" ? "selected" : ""}`}
+              <button
+                className={`user-container d-flex flex-column justify-content-center ${
+                  selectedRole === "Owner" ? "selected" : ""
+                }`}
                 onClick={() => handleRoleSelect("Owner")}
               >
                 <div className="d-flex flex-column justify-content-center text-center ">
@@ -95,8 +101,10 @@ function UserSelectPage() {
             </div>
 
             <div className="col d-flex justify-content-center ">
-              <button 
-                className={`user-container d-flex flex-column justify-content-center ${selectedRole === "Driver" ? "selected" : ""}`}
+              <button
+                className={`user-container d-flex flex-column justify-content-center ${
+                  selectedRole === "Driver" ? "selected" : ""
+                }`}
                 onClick={() => handleRoleSelect("Driver")}
               >
                 <div className="d-flex flex-column justify-content-center text-center ">
@@ -115,8 +123,10 @@ function UserSelectPage() {
             </div>
 
             <div className="col d-flex justify-content-center ">
-              <button 
-                className={`user-container d-flex flex-column justify-content-center ${selectedRole === "Conductor" ? "selected" : ""}`}
+              <button
+                className={`user-container d-flex flex-column justify-content-center ${
+                  selectedRole === "Conductor" ? "selected" : ""
+                }`}
                 onClick={() => handleRoleSelect("Conductor")}
               >
                 <div className="d-flex flex-column justify-content-center text-center ">
@@ -135,7 +145,6 @@ function UserSelectPage() {
             </div>
           </div>
 
-          
           <div className="d-grid gap-2 mt-3 d-md-flex justify-content-center">
             <button
               className="btn me-md-2 create-btn"
@@ -145,7 +154,6 @@ function UserSelectPage() {
               CREATE ACCOUNT
             </button>
           </div>
-          
         </div>
       </div>
       <div className="footer-full">
