@@ -244,7 +244,7 @@ public class TripService {
     }
 
 
-    @Scheduled(fixedRate = 300000)// check every 5 minutes
+    @Scheduled(fixedRate = 60000)// check every 1 minutes
     public void checkTrips(){
         Time currentTime = Time.valueOf(LocalTime.now());
         LocalDate date = LocalDate.now();
