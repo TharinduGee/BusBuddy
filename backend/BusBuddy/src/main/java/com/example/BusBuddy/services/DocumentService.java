@@ -46,7 +46,7 @@ public class DocumentService {
         Pageable pageable = PageRequest.of(pageNo,pageSize);
         Page<Document> documentPage = documentRepository.findByBusinessAndCategoryAndDocNameContainingIgnoreCase(
                 businessService.extractBId(httpServletRequest),
-                docCategory, Optional.ofNullable(docName),
+                docCategory, docName,
                 pageable
                 );
 
