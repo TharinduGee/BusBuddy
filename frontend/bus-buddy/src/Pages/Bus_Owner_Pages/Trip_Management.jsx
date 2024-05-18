@@ -645,7 +645,13 @@ function Trip_Management() {
           </div>
         </div>
       </div>
-      <TripScheduleStepper />
+      <div
+        className="justify-content-center align-items-center d-flex "
+        style={{ width: "100%" }}
+      >
+        <TripScheduleStepper />
+      </div>
+
       {/* <div
         className="justify-content-center align-items-center d-flex py-4"
         style={{ width: "100%" }}
