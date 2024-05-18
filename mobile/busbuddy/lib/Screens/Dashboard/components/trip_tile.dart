@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 class TripTile extends StatelessWidget {
   final String startdesti, enddesti, starttime, endtime, conductorname;
+  final int tripId;
   const TripTile({
     super.key,
     required this.conductorname,
@@ -10,6 +11,7 @@ class TripTile extends StatelessWidget {
     required this.endtime,
     required this.startdesti,
     required this.starttime,
+    required this.tripId,
   });
 
   @override
@@ -95,27 +97,35 @@ class TripTile extends StatelessWidget {
                       height: 10,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Row(
+                        Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.man_rounded,
                               color: Colors.red,
                             ),
-                            Text(
+                            const Text(
                               "Conductor Name ",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
                             ),
+                            Text(
+                              ": $conductorname",
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
                           ],
                         ),
                         Text(
-                          ": $conductorname",
+                          "Trip ID: $tripId",
                           style: const TextStyle(
-                            fontSize: 15,
+                            color: Color.fromARGB(255, 100, 99, 99),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 11,
                           ),
                         ),
                       ],

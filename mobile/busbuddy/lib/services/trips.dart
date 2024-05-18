@@ -36,6 +36,7 @@ class Trips {
             conductorName: item['conductorName'],
             tripStatus: item['tripStatus'],
             numberPlate: item['numberPlate'],
+            tripId: item['tripId'],
           );
           trips.add(trip);
         }
