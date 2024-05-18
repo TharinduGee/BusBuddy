@@ -1,147 +1,209 @@
-import { Formik } from "formik";
-import React from "react";
-import * as yup from "yup";
-import Button from "@mui/material-next/Button";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import StepContent from "@mui/material/StepContent";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { TextField } from "@mui/material";
 
-const validationSchema = yup.object({
-  firstDate: yup.date().required("First Date is required"),
-  lastDate: yup.date().required("Last Date is required"),
-});
-
-const buttonStyle = {
-  borderRadius: 10,
-  margin: 30,
-  backgroundColor: "#ff760d",
-  color: "white",
-};
-
-const text_box_the = createTheme({
+const textBoxTheme = createTheme({
   shape: {
     borderRadius: 12,
   },
 });
 
-function TripScheduleStepper() {
+const validationSchemaStep1 = Yup.object().shape({
+  startDate: Yup.date().required("Start Date is required"),
+  endDate: Yup.date()
+    .required("End Date is required")
+    .min(Yup.ref("startDate"), "End Date must be after Start Date"),
+});
+
+const validationSchemaStep2 = Yup.object().shape({
+  // Define validation for Step 2 if needed
+});
+
+const validationSchemaStep3 = Yup.object().shape({
+  // Define validation for Step 3 if needed
+});
+
+export default function TripScheduleStepper() {
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = (values) => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  const steps = [
+    {
+      label: "Step 1",
+      validationSchema: validationSchemaStep1,
+      content: (formik) => (
+        <>
+          <div className="d-flex flex-column input-and-label mt-1">
+            <label className="form-label">Start Date*</label>
+            <ThemeProvider theme={textBoxTheme}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Field name="startDate">
+                  {({ field, form }) => (
+                    <DatePicker
+                      format="DD/MM/YYYY"
+                      value={formik.values.startDate}
+                      onChange={(value) =>
+                        formik.setFieldValue("startDate", value, true)
+                      }
+                      slotProps={{
+                        textField: {
+                          variant: "outlined",
+                          error:
+                            formik.touched.startDate &&
+                            Boolean(formik.errors.startDate),
+                          helperText:
+                            formik.touched.startDate && formik.errors.startDate,
+                        },
+                      }}
+                    />
+                  )}
+                </Field>
+              </LocalizationProvider>
+            </ThemeProvider>
+          </div>
+          <div className="d-flex flex-column input-and-label mt-1">
+            <label className="form-label">Ending Date*</label>
+            <ThemeProvider theme={textBoxTheme}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Field name="endDate">
+                  {({ field, form }) => (
+                    <DatePicker
+                      format="DD/MM/YYYY"
+                      value={formik.values.endDate}
+                      onChange={(value) =>
+                        formik.setFieldValue("endDate", value, true)
+                      }
+                      slotProps={{
+                        textField: {
+                          variant: "outlined",
+                          error:
+                            formik.touched.endDate &&
+                            Boolean(formik.errors.endDate),
+                          helperText:
+                            formik.touched.endDate && formik.errors.endDate,
+                        },
+                      }}
+                    />
+                  )}
+                </Field>
+              </LocalizationProvider>
+            </ThemeProvider>
+          </div>
+          <Box sx={{ mb: 2 }}>
+            <div>
+              <Button
+                variant="contained"
+                onClick={() => formik.handleSubmit()}
+                sx={{ mt: 1, mr: 1 }}
+              >
+                Continue
+              </Button>
+            </div>
+          </Box>
+        </>
+      ),
+    },
+    {
+      label: "Step 2",
+      validationSchema: validationSchemaStep2,
+      content: (formik) => (
+        <>
+          <Typography>Step 2 content goes here</Typography>
+          <Box sx={{ mb: 2 }}>
+            <div>
+              <Button
+                variant="contained"
+                onClick={() => formik.handleSubmit()}
+                sx={{ mt: 1, mr: 1 }}
+              >
+                Continue
+              </Button>
+              <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                Back
+              </Button>
+            </div>
+          </Box>
+        </>
+      ),
+    },
+    {
+      label: "Step 3",
+      validationSchema: validationSchemaStep3,
+      content: (formik) => (
+        <>
+          <Typography>Step 3 content goes here</Typography>
+          <Box sx={{ mb: 2 }}>
+            <div>
+              <Button
+                variant="contained"
+                onClick={() => formik.handleSubmit()}
+                sx={{ mt: 1, mr: 1 }}
+              >
+                Finish
+              </Button>
+              <Button onClick={handleBack} sx={{ mt: 1, mr: 1 }}>
+                Back
+              </Button>
+            </div>
+          </Box>
+        </>
+      ),
+    },
+  ];
+
   return (
-    <div
-      className="justify-content-center align-items-center d-flex "
-      style={{ width: "100%" }}
-    >
-      <Formik
-        initialValues={{
-          income: null,
-          startTime: null,
-          endTime: null,
-          busId: null,
-          driverId: null,
-          condocterId: null,
-          expense: null,
-          firstDate: null,
-          lastDate: null,
-        }}
-        onSubmit={(values) => {
-          alert(JSON.stringify(values, null, 2));
-        }}
-        validationSchema={validationSchema}
-      >
-        {(formik) => (
-          <form
-            onSubmit={formik.handleSubmit}
-            className="flex-column justify-content-center align-items-center d-flex "
-            style={{ width: "100%" }}
-          >
-            {/* <div className="input-and-label">
-              <label className="form-label" htmlFor="income">
-                Income*
-              </label>
-              <input
-                type="number"
-                id="income"
-                name="income"
-                className="form-control input-field-trip"
-                value={formik.values.income}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.income && formik.errors.income ? (
-                <div className="text-danger">{formik.errors.income}</div>
-              ) : null}
-            </div> */}
-
-            <div className="d-flex flex-column input-and-label">
-              <label class="form-label">First Date*</label>
-              <ThemeProvider theme={text_box_the}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    type="date"
-                    sx={{ width: 200 }}
-                    value={formik.values.firstDate}
-                    name="firstDate"
-                    format="DD/MM/YYYY"
-                    onChange={(value) =>
-                      formik.setFieldValue("firstDate", value, true)
-                    }
-                    slotProps={{
-                      textField: {
-                        variant: "outlined",
-                        error:
-                          formik.touched.firstDate &&
-                          Boolean(formik.errors.firstDate),
-                        helperText:
-                          formik.touched.firstDate && formik.errors.firstDate,
-                      },
-                    }}
-                  />
-                </LocalizationProvider>
-              </ThemeProvider>
-            </div>
-
-            <div className="d-flex flex-column input-and-label">
-              <label class="form-label">Last Date*</label>
-              <ThemeProvider theme={text_box_the}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    type="date"
-                    sx={{ width: 200 }}
-                    value={formik.values.lastDate}
-                    name="lastDate"
-                    format="DD/MM/YYYY"
-                    onChange={(value) =>
-                      formik.setFieldValue("lastDate", value, true)
-                    }
-                    slotProps={{
-                      textField: {
-                        variant: "outlined",
-                        error:
-                          formik.touched.lastDate &&
-                          Boolean(formik.errors.lastDate),
-                        helperText:
-                          formik.touched.lastDate && formik.errors.lastDate,
-                      },
-                    }}
-                  />
-                </LocalizationProvider>
-              </ThemeProvider>
-            </div>
-
-            <Button
-              style={buttonStyle}
-              className="d-flex update-btn"
-              variant="contained"
-              type="submit"
-            >
-              ADD TRIP
-            </Button>
-          </form>
-        )}
-      </Formik>
-    </div>
+    <Box sx={{ maxWidth: 400 }}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        {steps.map((step, index) => (
+          <Step key={index}>
+            <StepLabel>{step.label}</StepLabel>
+            <StepContent>
+              <Formik
+                initialValues={{
+                  startDate: null,
+                  endDate: null,
+                }}
+                validationSchema={step.validationSchema}
+                onSubmit={(values) => handleNext(values)}
+              >
+                {(formik) => <Form>{step.content(formik)}</Form>}
+              </Formik>
+            </StepContent>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === steps.length && (
+        <Paper square elevation={0} sx={{ p: 3 }}>
+          <Typography>All steps completed - you're finished</Typography>
+          <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+            Reset
+          </Button>
+        </Paper>
+      )}
+    </Box>
   );
 }
-
-export default TripScheduleStepper;
