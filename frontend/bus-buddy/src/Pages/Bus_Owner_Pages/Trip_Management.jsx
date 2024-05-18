@@ -14,6 +14,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Swal from "sweetalert2";
 import { format } from "date-fns";
+import TripScheduleStepper from "../../Components/OwnerPageComponents/TripManagement/TripScheduleStepper";
 
 function Trip_Management() {
   const buttonStyle = {
@@ -556,6 +557,9 @@ function Trip_Management() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setTimeout(function () {
+              setRefresh(!refresh);
+            }, 90);
             setRefresh(!refresh);
           })
           .catch((error) => {
@@ -641,7 +645,8 @@ function Trip_Management() {
           </div>
         </div>
       </div>
-      <div
+      <TripScheduleStepper />
+      {/* <div
         className="justify-content-center align-items-center d-flex py-4"
         style={{ width: "100%" }}
       >
@@ -897,7 +902,7 @@ function Trip_Management() {
             </Button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

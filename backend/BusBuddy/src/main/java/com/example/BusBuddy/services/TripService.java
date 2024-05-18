@@ -19,10 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Driver;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static io.debezium.relational.mapping.ColumnMappers.build;
 
@@ -111,6 +114,7 @@ public class TripService {
         if(tripAddRequest.getBusId() != null){
              bus = busRepository.findById(tripAddRequest.getBusId())
                     .orElseThrow(()->new EntityNotFoundException("Bus is not found"));
+
         }else{
             bus = null;
         }
@@ -243,6 +247,14 @@ public class TripService {
         return  tripPaginationResponse;
     }
 
+//    @Transactional
+//    public Set<Employee> getDriversCantBeAssignedForDuration(HttpServletRequest httpServletRequest, LocalDate startDate , LocalDate endDate , LocalTime startTime , LocalTime endTime){
+//        Business business = businessService.extractBId(httpServletRequest);
+//
+//        List<Trip> trips = tripRepository.findByBusinessAndDateBetweenAndStartTimeAfterOrEndTimeBefore(business, startDate, endDate, startTime, endTime);
+//        return  trips.stream().map(Trip::getDriver).collect(Collectors.toSet());
+//    }
+
 
     @Scheduled(fixedRate = 60000)// check every 1 minutes
     public void checkTrips(){
@@ -256,8 +268,6 @@ public class TripService {
                     trip.setStatus(TripStatus.TRIP_STATUS_COMPLETED);
                     tripRepository.save(trip);
                     System.out.println("Trip is over.");
-
-                    //ledgerService.addTripLedgerEntry(trip);
                 }
             }else{
                 if(trip.getStatus() == TripStatus.TRIP_STATUS_SCHEDULED){

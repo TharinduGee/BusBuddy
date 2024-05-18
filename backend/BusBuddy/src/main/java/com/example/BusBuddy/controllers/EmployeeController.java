@@ -1,6 +1,9 @@
 package com.example.BusBuddy.controllers;
 
 import com.example.BusBuddy.dto.Employee.*;
+import com.example.BusBuddy.dto.Trip.EmployeeInfo;
+import com.example.BusBuddy.models.Employee;
+import com.example.BusBuddy.models.Trip;
 import com.example.BusBuddy.services.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -11,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -72,16 +77,28 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.countEmployee(httpServletRequest));
     }
 
-    @GetMapping("/getDriverIds")
+//    @GetMapping("/getDriverIds")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
+//        return ResponseEntity.ok(employeeService.getDriverIds(httpServletRequest));
+//    }
+
+    @GetMapping("/getDriverInfo")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Long>> getDriverIds(HttpServletRequest httpServletRequest){
-        return ResponseEntity.ok(employeeService.getDriverIds(httpServletRequest));
+    public ResponseEntity<List<EmployeeInfo>> getValidDrivers(HttpServletRequest httpServletRequest, @RequestParam LocalDate startDate , @RequestParam  LocalDate endDate, @RequestParam LocalTime startTime, @RequestParam LocalTime endTime){
+        return ResponseEntity.ok(employeeService.getValidDrivers(httpServletRequest, startDate, endDate, startTime, endTime));
     }
 
-    @GetMapping("/getConductorIds")
+    @GetMapping("/getConductorInfo")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
-        return ResponseEntity.ok(employeeService.getConductorIds(httpServletRequest));
+    public ResponseEntity<List<EmployeeInfo>> getValidConductors(HttpServletRequest httpServletRequest, @RequestParam LocalDate startDate , @RequestParam  LocalDate endDate, @RequestParam LocalTime startTime, @RequestParam LocalTime endTime){
+        return ResponseEntity.ok(employeeService.getValidConductors(httpServletRequest, startDate, endDate, startTime, endTime));
     }
+
+//    @GetMapping("/getConductorIds")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<List<Long>> getConductorIds(HttpServletRequest httpServletRequest){
+//        return ResponseEntity.ok(employeeService.getConductorIds(httpServletRequest));
+//    }
 
 }
