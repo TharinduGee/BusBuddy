@@ -25,7 +25,7 @@ class Trips {
       );
       if (response.statusCode == 200) {
         var jsonData = json.decode(response.body);
-        print(jsonData);
+        // print(jsonData);
 
         for (var item in jsonData) {
           DriverModel trip = DriverModel(
