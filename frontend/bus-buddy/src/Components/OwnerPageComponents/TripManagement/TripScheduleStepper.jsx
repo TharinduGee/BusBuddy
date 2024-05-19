@@ -38,8 +38,14 @@ const validationSchemaStep3 = Yup.object().shape({
 
 export default function TripScheduleStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [formValues, setFormValues] = React.useState({
+    startDate: null,
+    endDate: null,
+    // add other form values here as needed
+  });
 
   const handleNext = (values) => {
+    setFormValues(values);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -48,6 +54,11 @@ export default function TripScheduleStepper() {
   };
 
   const handleReset = () => {
+    setFormValues({
+      startDate: null,
+      endDate: null,
+      // reset other form values here as needed
+    });
     setActiveStep(0);
   };
 
@@ -183,10 +194,7 @@ export default function TripScheduleStepper() {
             <StepLabel>{step.label}</StepLabel>
             <StepContent>
               <Formik
-                initialValues={{
-                  startDate: null,
-                  endDate: null,
-                }}
+                initialValues={formValues}
                 validationSchema={step.validationSchema}
                 onSubmit={(values) => handleNext(values)}
               >
