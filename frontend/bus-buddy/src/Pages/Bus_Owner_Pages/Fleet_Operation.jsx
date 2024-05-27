@@ -501,8 +501,8 @@ function Fleet_Operation() {
         className="justify-content-center align-items-center d-flex py-4"
         style={{ width: "100%" }}
       >
-        <div className="trip-main-container">
-          <div className="pair-container">
+        <div className="trip-main-container ">
+          <div className="pair-container justify-content-between">
             <div className="input-and-label">
               <label className="form-label">Number Plate*</label>
               <input
@@ -525,7 +525,7 @@ function Fleet_Operation() {
               />
             </div>
           </div>
-          <div className="pair-container">
+          <div className="pair-container justify-content-between">
             <div className="input-and-label">
               <label className="form-label">Number of Seats*</label>
               <input
@@ -564,7 +564,7 @@ function Fleet_Operation() {
               </select>
             </div>
           </div>
-          <div className="pair-container align-items-end">
+          <div className="pair-container justify-content-between align-items-end">
             <div className="d-flex flex-column input-and-label">
               <label className="form-label">Service Date*</label>
               <ThemeProvider theme={datepicker_theme}>

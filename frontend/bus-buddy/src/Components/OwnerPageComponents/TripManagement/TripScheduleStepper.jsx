@@ -54,6 +54,15 @@ const validationSchemaStep3 = Yup.object().shape({
 });
 
 const validationSchemaStep4 = Yup.object().shape({
+  income_: Yup.number()
+    .required("Income is required")
+    .min(0, "Income cannot be negative"),
+  expenses_: Yup.number()
+    .required("Expenses are required")
+    .min(0, "Expenses cannot be negative"),
+});
+
+const validationSchemaStep5 = Yup.object().shape({
   driver_: Yup.string().required("Driver is required"),
   conductor_: Yup.string().required("Conductor is required"),
   bus_: Yup.string().required("Bus is required"),
@@ -117,6 +126,8 @@ export default function TripScheduleStepper() {
     conductor_: "",
     route_: "",
     bus_: "",
+    income_: "",
+    expenses_: "",
   });
 
   const [value, setValue] = React.useState("a");
@@ -145,6 +156,8 @@ export default function TripScheduleStepper() {
       conductor_: "",
       route_: "",
       bus_: "",
+      income_: "",
+      expenses_: "",
     });
     setActiveStep(0);
   };
@@ -420,6 +433,67 @@ export default function TripScheduleStepper() {
     {
       label: "Step 4",
       validationSchema: validationSchemaStep4,
+      content: (formik) => (
+        <>
+          <div className="d-flex flex-column input-and-label mt-1">
+            <>
+              <div className="input-and-label">
+                <label className="form-label">Income</label>
+                <input
+                  type="number"
+                  id="income_"
+                  className="form-control input-field-trip"
+                  value={formik.values.income_}
+                  onChange={(event) =>
+                    formik.setFieldValue("income_", event.target.value, true)
+                  }
+                />
+                {formik.touched.income_ && formik.errors.income_ && (
+                  <Typography color="error">{formik.errors.income_}</Typography>
+                )}
+              </div>
+              <div className="input-and-label mb-4">
+                <label className="form-label">Expenses</label>
+                <input
+                  type="number"
+                  id="expenses_"
+                  className="form-control input-field-trip"
+                  value={formik.values.expenses_}
+                  onChange={(event) =>
+                    formik.setFieldValue("expenses_", event.target.value, true)
+                  }
+                />
+                {formik.touched.expenses_ && formik.errors.expenses_ && (
+                  <Typography color="error">
+                    {formik.errors.expenses_}
+                  </Typography>
+                )}
+              </div>
+            </>
+          </div>
+          <Box sx={{ mb: 2 }}>
+            <div>
+              <Button
+                variant="contained"
+                onClick={() => formik.handleSubmit()}
+                sx={{ mt: 1, mr: 1 }}
+              >
+                Continue
+              </Button>
+              <Button
+                onClick={() => handleBack(formik.values)}
+                sx={{ mt: 1, mr: 1 }}
+              >
+                Back
+              </Button>
+            </div>
+          </Box>
+        </>
+      ),
+    },
+    {
+      label: "Step 5",
+      validationSchema: validationSchemaStep5,
       content: (formik) => (
         <>
           <div className="d-flex flex-column input-and-label mt-1">
