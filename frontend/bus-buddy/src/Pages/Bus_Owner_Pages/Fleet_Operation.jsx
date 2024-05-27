@@ -98,7 +98,7 @@ function Fleet_Operation() {
   });
 
   const columns = [
-    { field: "id", headerName: "Bus ID", minwidth: 70, flex: 1 },
+    { field: "id", headerName: "Bus ID", width: 70 },
     { field: "bustype", headerName: "Bus Type", minwidth: 130, flex: 1 },
     {
       field: "numberplate",
@@ -129,7 +129,7 @@ function Fleet_Operation() {
       field: "actions",
       headerName: "Actions",
       minwidth: 140,
-      flex: 1,
+
       renderCell: (params) => (
         <div>
           <IconButton
@@ -464,7 +464,7 @@ function Fleet_Operation() {
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 10,
                   borderColor: "FF760D",
                 },
@@ -570,7 +570,7 @@ function Fleet_Operation() {
               <ThemeProvider theme={datepicker_theme}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    sx={{ width: 300 }}
+                    sx={{ width: 200 }}
                     slotProps={{ field: { clearable: true } }}
                     value={value_date}
                     onChange={(newValue) => {
