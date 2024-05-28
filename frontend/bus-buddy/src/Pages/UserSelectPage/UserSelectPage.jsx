@@ -5,6 +5,7 @@ import Briefcase from '../../Assets/Briefcase.png';
 import SteeringWheel from '../../Assets/SteeringWheel.png';
 import User from '../../Assets/User.png';
 import Footer from '../../Components/OnBoaringComponents/Footer/Footer';
+import Swal from 'sweetalert2';
 
 function UserSelectPage() {
 	const navigate = useNavigate();
@@ -30,6 +31,12 @@ function UserSelectPage() {
 	const handleNextStep = () => {
 		if (selectedRole) {
 			navigate('/signup', { state: { role: mapRoleToApiRole(selectedRole) } });
+		} else {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Please select a role before proceeding.',
+			});
 		}
 	};
 
