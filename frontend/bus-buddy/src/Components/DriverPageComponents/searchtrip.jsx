@@ -50,7 +50,7 @@ function SearchTrip(){
             endplace={data.endDestination}
             startTime={data.startTime}
             endTime={data.endTime}
-            conductor={data.conductor}
+            conductor={data.employeeName}
             status={data.status}
           />
         ))}
