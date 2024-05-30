@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -25,6 +25,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import axios from "axios";
 import { format } from "date-fns";
+import Swal from "sweetalert2";
 
 const textBoxTheme = createTheme({
   shape: {
@@ -228,7 +229,9 @@ export default function TripScheduleStepper() {
     try {
       axios
         .get(
-          `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+          `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
+          }`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -783,7 +786,7 @@ export default function TripScheduleStepper() {
                 onClick={() => formik.handleSubmit()}
                 sx={{ mt: 1, mr: 1 }}
               >
-                Finish
+                Continue
               </Button>
               <Button
                 onClick={() => handleBack(formik.values)}
@@ -797,6 +800,127 @@ export default function TripScheduleStepper() {
       ),
     },
   ];
+
+  const AddTripForTheDate = () => {
+    const StartTime = formValues.startTime_.toDate();
+    const formattedStartTime = format(StartTime, "HH:mm:ss");
+    const EndTime = formValues.endTime_.toDate();
+    const formattedEndTime = format(EndTime, "HH:mm:ss");
+
+    const year = formValues.startDate_.year();
+    const month = formValues.startDate_.month() + 1;
+    const day = formValues.startDate_.date();
+    const formattedStartDate = `${year}-${String(month).padStart(
+      2,
+      "0"
+    )}-${String(day).padStart(2, "0")}`;
+
+    const passingData = {
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
+      income: formValues.income_,
+      busId: formValues.bus_,
+      routeId: formValues.route_,
+      driverId: formValues.driver_,
+      conductorId: formValues.conductor_,
+      expense: formValues.expenses_,
+    };
+
+    axios
+      .post(
+        `http://localhost:8081/api/v1/trip/add?date=${formattedStartDate}`,
+        passingData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("Data successfully posted:", response.data);
+        Swal.fire({
+          title: "Good job!",
+          text: "Trip Data Inserted Successfully!",
+          icon: "success",
+        });
+        setRefresh(!refresh);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+    handleReset();
+  };
+
+  const AddTripForADuration = () => {
+    const StartTime = formValues.startTime_.toDate();
+    const formattedStartTime = format(StartTime, "HH:mm:ss");
+    const EndTime = formValues.endTime_.toDate();
+    const formattedEndTime = format(EndTime, "HH:mm:ss");
+
+    const year = formValues.startDate_.year();
+    const month = formValues.startDate_.month() + 1;
+    const day = formValues.startDate_.date();
+    const formattedStartDate = `${year}-${String(month).padStart(
+      2,
+      "0"
+    )}-${String(day).padStart(2, "0")}`;
+
+    const eyear = formValues.endDate_.year();
+    const emonth = formValues.endDate_.month() + 1;
+    const eday = formValues.endDate_.date();
+    const formattedEndDate = `${eyear}-${String(emonth).padStart(
+      2,
+      "0"
+    )}-${String(eday).padStart(2, "0")}`;
+
+    const passingData = {
+      firstDate: formattedStartDate,
+      tripAddRequest: {
+        startTime: formattedStartTime,
+        endTime: formattedEndTime,
+        income: formValues.income_,
+        busId: formValues.bus_,
+        routeId: formValues.route_,
+        driverId: formValues.driver_,
+        conductorId: formValues.conductor_,
+        expense: formValues.expenses_,
+      },
+      lastDate: formattedEndDate,
+    };
+
+    axios
+      .post(
+        `http://localhost:8081/api/v1/trip/scheduleTripsForDuration`,
+        passingData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("Data successfully posted:", response.data);
+        Swal.fire({
+          title: "Good job!",
+          text: "Trip Data Inserted Successfully!",
+          icon: "success",
+        });
+        setRefresh(!refresh);
+      })
+      .catch(function (error) {
+        console.error("Error posting data:", error);
+      });
+    handleReset();
+  };
+
+  const AddTrip = () => {
+    if (value === "a") {
+      AddTripForTheDate();
+    } else {
+      AddTripForADuration();
+    }
+  };
+
   return (
     <ThemeProvider theme={customTheme}>
       <Box sx={{ Width: "80%" }}>
@@ -823,9 +947,20 @@ export default function TripScheduleStepper() {
         {activeStep === steps.length && (
           <Paper square elevation={0} sx={{ p: 3 }}>
             <Typography>All steps completed - you're finished</Typography>
-            <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-              Reset
-            </Button>
+            <Box sx={{ mb: 2 }}>
+              <div>
+                <Button
+                  variant="contained"
+                  onClick={() => AddTrip()}
+                  sx={{ mt: 1, mr: 1 }}
+                >
+                  Submit
+                </Button>
+                <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                  Reset
+                </Button>
+              </div>
+            </Box>
           </Paper>
         )}
       </Box>

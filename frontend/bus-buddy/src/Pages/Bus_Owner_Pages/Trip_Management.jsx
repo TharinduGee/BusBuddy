@@ -9,32 +9,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Swal from "sweetalert2";
-import { format } from "date-fns";
 import TripScheduleStepper from "../../Components/OwnerPageComponents/TripManagement/TripScheduleStepper";
 
 function Trip_Management() {
-  const buttonStyle = {
-    borderRadius: 10,
-    margin: 30,
-    backgroundColor: "#ff760d",
-    color: "white",
-  };
-  const [tripData, setTripData] = useState({
-    startTime: null,
-    endTime: null,
-    busId: null,
-    routeId: null,
-    driverId: null,
-    condocterId: null,
-    income: null,
-    expense: null,
-    date: null,
-  });
-
-  const [durationDates, setDurationDates] = useState({
-    firstDate: null,
-    lastDate: null,
-  });
   const [searchDates, setsearchDates] = useState({
     firstDate: null,
     lastDate: null,
@@ -160,43 +137,6 @@ function Trip_Management() {
     },
   ];
 
-  const handleChange = (e) => {
-    const value_ = e.target.value;
-    setTripData({
-      ...tripData,
-      [e.target.id]: value_,
-    });
-
-    console.log(tripData);
-  };
-
-  //to clear the selected field text
-  const [routeIdfield, setrouteIdset] = useState("");
-  const [driverIdfield, setdriverIdset] = useState("");
-  const [busIdfield, setbusIdset] = useState("");
-  const [conducterIdfield, setconducterIdset] = useState("");
-  const clear = () => {
-    setrouteIdset(null);
-    setdriverIdset(null);
-    setbusIdset(null);
-    setconducterIdset(null);
-    setTripData({
-      startTime: null,
-      endTime: null,
-      busId: null,
-      routeId: null,
-      driverId: null,
-      condocterId: null,
-      income: "",
-      expense: "",
-      date: null,
-    });
-    setDurationDates({
-      firstDate: null,
-      lastDate: null,
-    });
-  };
-
   useEffect(() => {
     console.log("sdsad", searchDates.lastDate);
     if (searchDates.firstDate !== null && searchDates.lastDate !== null) {
@@ -282,159 +222,6 @@ function Trip_Management() {
     } else {
       AddTripForTheDate();
       console.log("notduration");
-    }
-  };
-  const AddTripForTheDate = () => {
-    if (
-      tripData.startTime === null ||
-      tripData.endTime === null ||
-      tripData.busId === "" ||
-      tripData.driverId === "" ||
-      tripData.condocterId === "" ||
-      tripData.income === "" ||
-      tripData.expense === "" ||
-      tripData.date === "" ||
-      tripData.date === null
-    ) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "All the fields should be filled!",
-      });
-    } else {
-      const year = tripData.date.year();
-      const month = tripData.date.month() + 1;
-      const day = tripData.date.date();
-      const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(
-        day
-      ).padStart(2, "0")}`;
-
-      const jsStartTime = tripData.startTime.toDate();
-      const formattedStartTime = format(jsStartTime, "HH:mm:ss");
-
-      const jsEndTime = tripData.endTime.toDate();
-      const formattedEndTime = format(jsEndTime, "HH:mm:ss");
-      const passingData = {
-        startTime: formattedStartTime,
-        endTime: formattedEndTime,
-        income: tripData.income,
-        busId: tripData.busId,
-        routeId: tripData.routeId,
-        driverId: tripData.driverId,
-        conductorId: tripData.condocterId,
-        expense: tripData.expense,
-      };
-      console.log(
-        passingData.conductorId,
-        " sdadasd   ",
-        passingData.busId,
-        " passing data"
-      );
-      axios
-        .post(
-          `http://localhost:8081/api/v1/trip/add?date=${formattedDate}`,
-          passingData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then(function (response) {
-          console.log("Data successfully posted:", response.data);
-          Swal.fire({
-            title: "Good job!",
-            text: "Trip Data Inserted Successfully!",
-            icon: "success",
-          });
-          setRefresh(!refresh);
-        })
-        .catch(function (error) {
-          console.error("Error posting data:", error);
-        });
-      clear();
-    }
-  };
-
-  const AddTripForADuration = () => {
-    if (
-      tripData.startTime === null ||
-      tripData.endTime === null ||
-      tripData.busId === "" ||
-      tripData.driverId === "" ||
-      tripData.condocterId === null ||
-      tripData.income === "" ||
-      tripData.expense === "" ||
-      durationDates.firstDate === "" ||
-      durationDates.lastDate === "" ||
-      durationDates.lastDate === null ||
-      durationDates.firstDate === null
-    ) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "All the fields should be filled!",
-      });
-    } else {
-      const fyear = durationDates.firstDate.year();
-      const fmonth = durationDates.firstDate.month() + 1;
-      const fday = durationDates.firstDate.date();
-      const firstformattedDate = `${fyear}-${String(fmonth).padStart(
-        2,
-        "0"
-      )}-${String(fday).padStart(2, "0")}`;
-
-      const lyear = durationDates.lastDate.year();
-      const lmonth = durationDates.lastDate.month() + 1;
-      const lday = durationDates.lastDate.date();
-      const lastformattedDate = `${lyear}-${String(lmonth).padStart(
-        2,
-        "0"
-      )}-${String(lday).padStart(2, "0")}`;
-
-      const jsStartTime = tripData.startTime.toDate();
-      const formattedStartTime = format(jsStartTime, "HH:mm:ss");
-
-      const jsEndTime = tripData.endTime.toDate();
-      const formattedEndTime = format(jsEndTime, "HH:mm:ss");
-      const passingData = {
-        firstDate: firstformattedDate,
-        tripAddRequest: {
-          startTime: formattedStartTime,
-          endTime: formattedEndTime,
-          income: tripData.income,
-          busId: tripData.busId,
-          routeId: tripData.routeId,
-          driverId: tripData.driverId,
-          conductorId: tripData.condocterId,
-          expense: tripData.expense,
-        },
-        lastDate: lastformattedDate,
-      };
-
-      axios
-        .post(
-          `http://localhost:8081/api/v1/trip/scheduleTripsForDuration`,
-          passingData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then(function (response) {
-          console.log("Data successfully posted:", response.data);
-          Swal.fire({
-            title: "Good job!",
-            text: "Trip Data Inserted Successfully!",
-            icon: "success",
-          });
-          setRefresh(!refresh);
-        })
-        .catch(function (error) {
-          console.error("Error posting data:", error);
-        });
-      clear();
     }
   };
 
