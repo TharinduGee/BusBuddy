@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -23,6 +23,8 @@ import { orange } from "@mui/material/colors";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import axios from "axios";
+import { format } from "date-fns";
 
 const textBoxTheme = createTheme({
   shape: {
@@ -116,6 +118,11 @@ const customTheme = createTheme({
 });
 
 export default function TripScheduleStepper() {
+  const token = localStorage.getItem("token");
+  const [busIDoptions, setbusIDoptions] = useState([]);
+  const [routeIDoptions, setrouteIDoptions] = useState([]);
+  const [driverIDoptions, setdriverIDoptions] = useState([]);
+  const [ConductorIDoptions, setConductorIDoptions] = useState([]);
   const [activeStep, setActiveStep] = React.useState(0);
   const [formValues, setFormValues] = React.useState({
     startDate_: null,
@@ -139,6 +146,7 @@ export default function TripScheduleStepper() {
   const handleNext = (values) => {
     setFormValues(values);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    console.log(formValues);
   };
 
   const handleBack = (values) => {
@@ -160,6 +168,131 @@ export default function TripScheduleStepper() {
       expenses_: "",
     });
     setActiveStep(0);
+  };
+
+  const getDropDownInfo = () => {
+    const StartTime = formValues.startTime_.toDate();
+    const formattedStartTime = format(StartTime, "HH:mm:ss");
+    const EndTime = formValues.endTime_.toDate();
+    const formattedEndTime = format(EndTime, "HH:mm:ss");
+
+    const year = formValues.startDate_.year();
+    const month = formValues.startDate_.month() + 1;
+    const day = formValues.startDate_.date();
+    const formattedStartDate = `${year}-${String(month).padStart(
+      2,
+      "0"
+    )}-${String(day).padStart(2, "0")}`;
+
+    var formattedEndDate = null;
+    if (formValues.endDate_ !== null) {
+      const eyear = formValues.endDate_.year();
+      const emonth = formValues.endDate_.month() + 1;
+      const eday = formValues.endDate_.date();
+      formattedEndDate = `${eyear}-${String(emonth).padStart(2, "0")}-${String(
+        eday
+      ).padStart(2, "0")}`;
+    }
+
+    console.log(
+      "sDate : " + formattedEndDate + "\n eDate : " + formattedStartDate
+    );
+    try {
+      axios
+        .get(
+          `http://localhost:8081/api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          const datafromApi = response.data;
+          const newOptions = datafromApi.map((item) => ({
+            value: item.empId,
+            label: item.name,
+          }));
+          setdriverIDoptions(newOptions);
+          console.log("drivers options " + newOptions[0].value);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+
+    try {
+      axios
+        .get(
+          `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          const datafromApi = response.data;
+          const newOptions = datafromApi.map((item) => ({
+            value: item.empId,
+            label: item.name,
+          }));
+          setConductorIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+
+    try {
+      axios
+        .get(`http://localhost:8081/api/v1/bus/getBusIds`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const busIDs = response.data;
+
+          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          setbusIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+    try {
+      axios
+        .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          const busIDs = response.data;
+
+          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          setrouteIDoptions(newOptions);
+        })
+        .catch((error) => {
+          console.error("There was an error!", error);
+        });
+    } catch (error) {
+      console.error("There was an error!", error);
+    }
+  };
+
+  const handleButtonClick = (formik) => {
+    formik.handleSubmit();
+    getDropDownInfo();
   };
 
   const steps = [
@@ -475,7 +608,7 @@ export default function TripScheduleStepper() {
             <div>
               <Button
                 variant="contained"
-                onClick={() => formik.handleSubmit()}
+                onClick={() => handleButtonClick(formik)}
                 sx={{ mt: 1, mr: 1 }}
               >
                 Continue
@@ -528,9 +661,11 @@ export default function TripScheduleStepper() {
                         formik.touched.driver_ && Boolean(formik.errors.driver_)
                       }
                     >
-                      <MenuItem value={"Driver 1"}>Driver 1</MenuItem>
-                      <MenuItem value={"Driver 2"}>Driver 2</MenuItem>
-                      <MenuItem value={"Driver 3"}>Driver 3</MenuItem>
+                      {driverIDoptions.map((item, index) => (
+                        <MenuItem key={index} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 </Field>
@@ -563,9 +698,11 @@ export default function TripScheduleStepper() {
                         Boolean(formik.errors.conductor_)
                       }
                     >
-                      <MenuItem value={"Conductor 1"}>Conductor 1</MenuItem>
-                      <MenuItem value={"Conductor 2"}>Conductor 2</MenuItem>
-                      <MenuItem value={"Conductor 3"}>Conductor 3</MenuItem>
+                      {ConductorIDoptions.map((item, index) => (
+                        <MenuItem key={index} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 </Field>
@@ -593,9 +730,11 @@ export default function TripScheduleStepper() {
                       }
                       error={formik.touched.bus_ && Boolean(formik.errors.bus_)}
                     >
-                      <MenuItem value={"Bus 1"}>Bus 1</MenuItem>
-                      <MenuItem value={"Bus 2"}>Bus 2</MenuItem>
-                      <MenuItem value={"Bus 3"}>Bus 3</MenuItem>
+                      {busIDoptions.map((item, index) => (
+                        <MenuItem key={index} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 </Field>
@@ -623,9 +762,11 @@ export default function TripScheduleStepper() {
                         formik.touched.route_ && Boolean(formik.errors.route_)
                       }
                     >
-                      <MenuItem value={"Route 1"}>Route 1</MenuItem>
-                      <MenuItem value={"Route 2"}>Route 2</MenuItem>
-                      <MenuItem value={"Route 3"}>Route 3</MenuItem>
+                      {routeIDoptions.map((item, index) => (
+                        <MenuItem key={index} value={item.value}>
+                          {item.label}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 </Field>
