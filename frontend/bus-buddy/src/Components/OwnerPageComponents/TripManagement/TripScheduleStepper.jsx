@@ -255,16 +255,24 @@ export default function TripScheduleStepper() {
 
     try {
       axios
-        .get(`http://localhost:8081/api/v1/bus/getBusIds`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .get(
+          `http://localhost:8081/api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
-          const busIDs = response.data;
-
-          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+          const datafromApi = response.data;
+          const newOptions = datafromApi.map((item) => ({
+            value: item.busId,
+            label: item.numberPlate,
+          }));
           setbusIDoptions(newOptions);
+          console.log(datafromApi);
         })
         .catch((error) => {
           console.error("There was an error!", error);
