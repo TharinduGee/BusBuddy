@@ -46,8 +46,6 @@ class _SignUpFormState extends State<SignUpForm> {
         print('Response body: ${response.body}');
 
         if (response.statusCode == 201) {
-          // var data = jsonDecode(response.body.toString());
-          // print('Sign-up successful: $data');
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -64,35 +62,26 @@ class _SignUpFormState extends State<SignUpForm> {
           );
         } else {
           print('Sign-up failed ');
-          // print('Sign-up failed with status: ${response.statusCode}');
-          // ScaffoldMessenger.of(context).showSnackBar(
-          //   SnackBar(
-          //     content: Text('Sign-up failed: ${response.body}'),
-          //   ),
-          // );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Sign-up failed: ${response.body}'),
+            ),
+          );
         }
       } catch (e) {
         print('Error during sign-up: ${e.toString()}');
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text('An error occurred: ${e.toString()}'),
-        //   ),
-        // );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return const LoginScreen();
-            },
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred: ${e.toString()}'),
           ),
         );
       }
     } else {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     content: Text('Please complete the form and select a role'),
-      //   ),
-      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please complete the form and select a role'),
+        ),
+      );
     }
   }
 
@@ -163,6 +152,8 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your email';
+              } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                return 'Please enter a valid email address';
               }
               return null;
             },
@@ -184,6 +175,16 @@ class _SignUpFormState extends State<SignUpForm> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
+                } else if (value.length < 8) {
+                  return 'Password must be at least 8 characters long';
+                } else if (!RegExp(r'[0-9]').hasMatch(value)) {
+                  return 'Password must contain at least one number';
+                } else if (!RegExp(r'[a-z]').hasMatch(value)) {
+                  return 'Password must contain at least one lowercase letter';
+                } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
+                  return 'Password must contain at least one uppercase letter';
+                } else if (!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
+                  return 'Password must contain at least one special character';
                 }
                 return null;
               },
@@ -204,6 +205,8 @@ class _SignUpFormState extends State<SignUpForm> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your mobile number';
+              } else if (!RegExp(r'^\+?[0-9]{10,15}$').hasMatch(value)) {
+                return 'Please enter a valid mobile number';
               }
               return null;
             },

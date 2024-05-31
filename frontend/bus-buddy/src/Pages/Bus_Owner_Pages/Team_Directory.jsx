@@ -175,7 +175,7 @@ function Team_Directory() {
   });
 
   const columns = [
-    { field: "id", headerName: "ID", minwidth: 70, flex: 1 },
+    { field: "id", headerName: "ID", width: 70 },
     { field: "Name", headerName: "Full Name", minwidth: 130, flex: 1 },
     { field: "salary", headerName: "Salary", minwidth: 130, flex: 1 },
     {
@@ -339,7 +339,7 @@ function Team_Directory() {
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 10,
                   border: "none",
                 },
@@ -368,7 +368,7 @@ function Team_Directory() {
         >
           <div
             className="justify-content-center align-items-center"
-            style={{ width: "80%", height: 325 }}
+            style={{ width: "90%", height: 325 }}
           >
             <ThemeProvider theme={table_theme}>
               <DataGrid

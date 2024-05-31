@@ -98,7 +98,7 @@ function Fleet_Operation() {
   });
 
   const columns = [
-    { field: "id", headerName: "Bus ID", minwidth: 70, flex: 1 },
+    { field: "id", headerName: "Bus ID", width: 70 },
     { field: "bustype", headerName: "Bus Type", minwidth: 130, flex: 1 },
     {
       field: "numberplate",
@@ -129,7 +129,7 @@ function Fleet_Operation() {
       field: "actions",
       headerName: "Actions",
       minwidth: 140,
-      flex: 1,
+
       renderCell: (params) => (
         <div>
           <IconButton
@@ -464,7 +464,7 @@ function Fleet_Operation() {
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 10,
                   borderColor: "FF760D",
                 },
@@ -501,8 +501,8 @@ function Fleet_Operation() {
         className="justify-content-center align-items-center d-flex py-4"
         style={{ width: "100%" }}
       >
-        <div className="trip-main-container">
-          <div className="pair-container">
+        <div className="trip-main-container ">
+          <div className="pair-container justify-content-between">
             <div className="input-and-label">
               <label className="form-label">Number Plate*</label>
               <input
@@ -525,7 +525,7 @@ function Fleet_Operation() {
               />
             </div>
           </div>
-          <div className="pair-container">
+          <div className="pair-container justify-content-between">
             <div className="input-and-label">
               <label className="form-label">Number of Seats*</label>
               <input
@@ -564,13 +564,13 @@ function Fleet_Operation() {
               </select>
             </div>
           </div>
-          <div className="pair-container align-items-end">
+          <div className="pair-container justify-content-between align-items-end">
             <div className="d-flex flex-column input-and-label">
               <label className="form-label">Service Date*</label>
               <ThemeProvider theme={datepicker_theme}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    sx={{ width: 300 }}
+                    sx={{ width: 200 }}
                     slotProps={{ field: { clearable: true } }}
                     value={value_date}
                     onChange={(newValue) => {

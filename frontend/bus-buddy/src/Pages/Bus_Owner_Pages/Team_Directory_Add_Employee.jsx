@@ -272,7 +272,7 @@ function Team_Directory_Add_Employee() {
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 10,
                   borderColor: "FF760D",
                 },
