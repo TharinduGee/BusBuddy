@@ -2,6 +2,7 @@ package com.example.BusBuddy.controllers;
 
 
 
+import com.example.BusBuddy.dto.Bus.BusInfo;
 import com.example.BusBuddy.dto.Bus.BusPaginationResponse;
 import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.models.BusType;
@@ -17,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -48,11 +51,11 @@ public class BusController {
         return ResponseEntity.ok(busService.findByBusId(busId));
     }
 
-    @GetMapping("/getBusIds")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
-        return ResponseEntity.ok(busService.getBusIds(httpServletRequest));
-    }
+//    @GetMapping("/getBusIds")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<List<Long>> getBusIds(HttpServletRequest httpServletRequest){
+//        return ResponseEntity.ok(busService.getBusIds(httpServletRequest));
+//    }
 
     @PostMapping("/edit")
     @PreAuthorize("hasRole('ADMIN')")
@@ -89,6 +92,14 @@ public class BusController {
                                                               @RequestParam(required = false) String numberPlate
     ){
         return ResponseEntity.status(HttpStatus.OK).body(busService.findBuses(httpServletRequest, pageNumber, pageSize, numberPlate));
+    }
+
+    @GetMapping("/getValidBuses")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<BusInfo>> findValidBuses(HttpServletRequest httpServletRequest,
+                                                  @RequestParam LocalDate startDate , @RequestParam  LocalDate endDate ,
+                                                  @RequestParam LocalTime startTime , @RequestParam LocalTime endTime){
+        return ResponseEntity.ok(busService.getValidBuses(httpServletRequest, startDate, endDate, startTime , endTime));
     }
 
     @GetMapping("/count")

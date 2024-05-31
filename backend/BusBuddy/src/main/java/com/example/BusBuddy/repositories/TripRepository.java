@@ -37,6 +37,12 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
     List<Employee> findDistinctInvalidConductors(Business business, LocalDate startDate, LocalDate endDate,
                                                 LocalTime startTime, LocalTime endTime , TripStatus status);
 
+    @Query("SELECT DISTINCT t.bus FROM trip t WHERE t.business = ?1 " +
+            "AND t.date BETWEEN ?2 AND ?3 AND t.status <> ?6  AND (t.startTime <= ?4 AND t.endTime >= ?4) OR (t.startTime <= ?5 AND t.endTime >= ?5) " +
+            "OR (t.startTime >= ?4 AND t.endTime <= ?5) OR (t.startTime <= ?4 AND t.endTime >= ?5)")
+    List<Bus> findDistinctInvalidBuses(Business business, LocalDate startDate, LocalDate endDate,
+                                                 LocalTime startTime, LocalTime endTime , TripStatus status);
+
     List<Trip> findByBusiness(Business business);
     Page<Trip> findByBusinessAndDateBetween(Business business, LocalDate startDate, LocalDate endDate ,Pageable pageable);
     List<Trip> findByDateAndDriver(LocalDate date , Employee driver);
