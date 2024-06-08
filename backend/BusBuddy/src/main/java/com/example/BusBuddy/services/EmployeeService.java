@@ -2,9 +2,11 @@ package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Employee.*;
+import com.example.BusBuddy.dto.Trip.EmployeeInfo;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.DocumentRepository;
 import com.example.BusBuddy.repositories.EmployeeRepository;
+import com.example.BusBuddy.repositories.TripRepository;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -20,8 +22,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +40,7 @@ public class EmployeeService {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
     private final DocumentService documentService;
+    private final TripRepository tripRepository;
 
     public EmployeePaginationResponse findAll(int  pageNumber , int pageSize){
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
@@ -224,15 +231,53 @@ public class EmployeeService {
         return employeeRepository.findById(bId).orElseThrow(() -> new RuntimeException("Business not found."));
     }
 
-    public List<Long> getDriverIds(HttpServletRequest httpServletRequest){
-        Business business = businessService.extractBId(httpServletRequest);
+//    public List<Long> getDriverIds(HttpServletRequest httpServletRequest){
+//        Business business = businessService.extractBId(httpServletRequest);
+//
+//        return employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
+//    }
 
-        return employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
+    @Transactional
+    public List<EmployeeInfo> getValidDrivers(HttpServletRequest httpServletRequest,
+                                                                         LocalDate startDate , LocalDate endDate ,
+                                                                         LocalTime startTime , LocalTime endTime){
+
+        // if duration exceeds for another day should check other day and logic should be changed also. This should be implemented
+
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Employee> allEmployees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
+        List<Employee> invalidEmployees = tripRepository.findDistinctInvalidDrivers(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+
+        allEmployees.removeAll(invalidEmployees.stream().toList());
+
+        return allEmployees.stream().map(employee -> {
+            return EmployeeInfo.builder().empId(employee.getEmpId()).name(employee.getName()).build();
+        }).toList();
     }
 
-    public List<Long> getConductorIds(HttpServletRequest httpServletRequest){
-        Business business = businessService.extractBId(httpServletRequest);
+    @Transactional
+    public List<EmployeeInfo> getValidConductors(HttpServletRequest httpServletRequest,
+                                              LocalDate startDate , LocalDate endDate ,
+                                              LocalTime startTime , LocalTime endTime){
 
-        return employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
+        // if duration exceeds for another day should check other day and logic should be changed also. This should be implemented
+
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Employee> allEmployees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
+        List<Employee> invalidEmployees = tripRepository.findDistinctInvalidConductors(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+
+        allEmployees.removeAll(invalidEmployees.stream().toList());
+
+        return allEmployees.stream().map(employee -> {
+            return EmployeeInfo.builder().empId(employee.getEmpId()).name(employee.getName()).build();
+        }).toList();
     }
+
+
+//    public List<Long> getConductorIds(HttpServletRequest httpServletRequest){
+//        Business business = businessService.extractBId(httpServletRequest);
+//
+//        return employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
+//    }
+
 }

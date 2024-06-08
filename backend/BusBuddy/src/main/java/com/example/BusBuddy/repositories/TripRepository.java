@@ -1,9 +1,7 @@
 package com.example.BusBuddy.repositories;
 
-import com.example.BusBuddy.models.Bus;
-import com.example.BusBuddy.models.Business;
-import com.example.BusBuddy.models.Employee;
-import com.example.BusBuddy.models.Trip;
+import com.example.BusBuddy.dto.Trip.EmployeeInfo;
+import com.example.BusBuddy.models.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,9 +21,27 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
             String ticketApi , LocalDate date , LocalTime start_time , LocalTime end_time
     );
 
+    List<Trip> findByBusinessAndDateBetweenAndStartTimeAfterOrEndTimeBefore(
+            Business business , LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime
+    );
 
-    //Optional<Trip> findByBusiness(Business business, Pageable pageable);
+    @Query("SELECT DISTINCT t.driver FROM trip t WHERE t.business = ?1 " +
+            "AND t.date BETWEEN ?2 AND ?3 AND t.status <> ?6  AND (t.startTime <= ?4 AND t.endTime >= ?4) OR (t.startTime <= ?5 AND t.endTime >= ?5) " +
+            "OR (t.startTime >= ?4 AND t.endTime <= ?5) OR (t.startTime <= ?4 AND t.endTime >= ?5)")
+    List<Employee> findDistinctInvalidDrivers(Business business, LocalDate startDate, LocalDate endDate,
+                                                LocalTime startTime, LocalTime endTime , TripStatus status);
 
+    @Query("SELECT DISTINCT t.conductor FROM trip t WHERE t.business = ?1 " +
+            "AND t.date BETWEEN ?2 AND ?3 AND t.status <> ?6  AND (t.startTime <= ?4 AND t.endTime >= ?4) OR (t.startTime <= ?5 AND t.endTime >= ?5) " +
+            "OR (t.startTime >= ?4 AND t.endTime <= ?5) OR (t.startTime <= ?4 AND t.endTime >= ?5)")
+    List<Employee> findDistinctInvalidConductors(Business business, LocalDate startDate, LocalDate endDate,
+                                                LocalTime startTime, LocalTime endTime , TripStatus status);
+
+    @Query("SELECT DISTINCT t.bus FROM trip t WHERE t.business = ?1 " +
+            "AND t.date BETWEEN ?2 AND ?3 AND t.status <> ?6  AND (t.startTime <= ?4 AND t.endTime >= ?4) OR (t.startTime <= ?5 AND t.endTime >= ?5) " +
+            "OR (t.startTime >= ?4 AND t.endTime <= ?5) OR (t.startTime <= ?4 AND t.endTime >= ?5)")
+    List<Bus> findDistinctInvalidBuses(Business business, LocalDate startDate, LocalDate endDate,
+                                                 LocalTime startTime, LocalTime endTime , TripStatus status);
 
     List<Trip> findByBusiness(Business business);
     Page<Trip> findByBusinessAndDateBetween(Business business, LocalDate startDate, LocalDate endDate ,Pageable pageable);

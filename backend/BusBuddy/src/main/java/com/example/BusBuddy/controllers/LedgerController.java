@@ -1,7 +1,9 @@
 package com.example.BusBuddy.controllers;
 
+import com.example.BusBuddy.dto.Employee.EmployeePaginationResponse;
 import com.example.BusBuddy.dto.Ledger.DailyFinanceResponse;
 import com.example.BusBuddy.dto.Ledger.LedgerAddRequest;
+import com.example.BusBuddy.dto.Ledger.LedgerPaginationResponse;
 import com.example.BusBuddy.models.Ledger;
 import com.example.BusBuddy.services.LedgerService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,13 @@ import javax.persistence.Tuple;
 public class LedgerController {
 
     private final LedgerService ledgerService;
+
+    @GetMapping("/findAll")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<LedgerPaginationResponse>  findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                             @RequestParam(value = "pageSize", defaultValue = "20" , required = false)int pageSize){
+        return ResponseEntity.ok(ledgerService.findAll(pageNumber, pageSize));
+    }
 
     @PostMapping("/addEntry")
     @PreAuthorize("hasAnyRole('DRIVER', 'CONDUCTOR', 'ADMIN')")

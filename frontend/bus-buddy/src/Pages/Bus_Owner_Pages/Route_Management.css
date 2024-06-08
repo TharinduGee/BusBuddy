@@ -92,4 +92,8 @@
   .input-group {
     width: 250px;
   }
+
+  .input-field {
+    width: 250px;
+  }
 }

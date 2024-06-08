@@ -1,65 +1,67 @@
 {
-  "name": "bus-buddy",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "@fontsource/roboto": "^5.0.8",
-    "@mui/icons-material": "^5.15.10",
-    "@mui/material": "^5.15.10",
-    "@mui/material-next": "^6.0.0-alpha.123",
-    "@mui/x-data-grid": "^6.19.4",
-    "@mui/x-date-pickers": "^6.19.5",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/react-select": "^5.0.1",
-    "axios": "^1.6.2",
-    "bootstrap": "^5.3.2",
-    "chart.js": "^4.4.1",
-    "date-fns": "^3.4.0",
-    "dayjs": "^1.11.10",
-    "install": "^0.13.0",
-    "package-name": "^0.1.0",
-    "react": "^18.2.0",
-    "react-awesome-reveal": "^4.2.8",
-    "react-bootstrap": "^2.9.1",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.12.0",
-    "react-pdf": "^7.7.1",
-    "react-router-dom": "^6.22.2",
-    "react-scripts": "^5.0.1",
-    "react-scroll": "^1.9.0",
-    "react-select": "^5.8.0",
-    "recharts": "^2.12.2",
-    "styled-components": "^6.1.8",
-    "sweetalert2": "^11.10.6",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "bus-buddy",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@emotion/react": "^11.11.4",
+		"@emotion/styled": "^11.11.0",
+		"@fontsource/roboto": "^5.0.8",
+		"@mui/icons-material": "^5.15.10",
+		"@mui/material": "^5.15.10",
+		"@mui/material-next": "^6.0.0-alpha.123",
+		"@mui/x-data-grid": "^6.19.4",
+		"@mui/x-date-pickers": "^6.19.5",
+		"@testing-library/jest-dom": "^5.17.0",
+		"@testing-library/react": "^13.4.0",
+		"@testing-library/user-event": "^13.5.0",
+		"@types/react-select": "^5.0.1",
+		"axios": "^1.6.2",
+		"bootstrap": "^5.3.2",
+		"chart.js": "^4.4.1",
+		"date-fns": "^3.4.0",
+		"dayjs": "^1.11.10",
+		"formik": "^2.4.6",
+		"install": "^0.13.0",
+		"package-name": "^0.1.0",
+		"react": "^18.2.0",
+		"react-awesome-reveal": "^4.2.8",
+		"react-bootstrap": "^2.9.1",
+		"react-chartjs-2": "^5.2.0",
+		"react-dom": "^18.2.0",
+		"react-icons": "^4.12.0",
+		"react-pdf": "^7.7.1",
+		"react-router-dom": "^6.22.2",
+		"react-scripts": "^5.0.1",
+		"react-scroll": "^1.9.0",
+		"react-select": "^5.8.0",
+		"recharts": "^2.12.2",
+		"styled-components": "^6.1.8",
+		"sweetalert2": "^11.10.6",
+		"web-vitals": "^2.1.4",
+		"yup": "^1.4.0"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	}
 }

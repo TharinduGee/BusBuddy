@@ -6,6 +6,7 @@ class DriverModel {
   String? conductorName;
   String? tripStatus;
   String? numberPlate;
+  int? tripId;
 
   DriverModel({
     this.conductorName,
@@ -15,5 +16,6 @@ class DriverModel {
     this.starttime,
     this.tripStatus,
     this.numberPlate,
+    this.tripId,
   });
 }

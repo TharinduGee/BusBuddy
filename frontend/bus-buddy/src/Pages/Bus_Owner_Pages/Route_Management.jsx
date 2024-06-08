@@ -459,7 +459,7 @@ function Route_Management() {
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 10,
                   borderColor: "FF760D",
                 },
@@ -560,7 +560,7 @@ function Route_Management() {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     slotProps={{ field: { clearable: true } }}
-                    sx={{ width: 300 }}
+                    sx={{ width: 200 }}
                     value={value}
                     onChange={async (newValue) =>
                       await setRouteDate(
@@ -578,7 +578,7 @@ function Route_Management() {
             </div>
             <div
               style={{
-                width: 340,
+                width: 300,
                 margin: 30,
                 marginBottom: 1,
               }}

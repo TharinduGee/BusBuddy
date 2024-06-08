@@ -2,7 +2,7 @@ import 'package:busbuddy/constants.dart';
 import 'package:busbuddy/responsive.dart';
 import 'package:flutter/material.dart';
 import '../../components/background.dart';
-import 'components/sign_up_top_image.dart';
+// import 'components/sign_up_top_image.dart';
 import 'components/signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -16,9 +16,9 @@ class SignUpScreen extends StatelessWidget {
           mobile: MobileSignupScreen(),
           tablet: Row(
             children: [
-              Expanded(
-                child: SignUpScreenTopImage(),
-              ),
+              // Expanded(
+              //   child: SignUpScreenTopImage(),
+              // ),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +50,7 @@ class MobileSignupScreen extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SignUpScreenTopImage(),
+        // SignUpScreenTopImage(),
         Row(
           children: [
             Spacer(),

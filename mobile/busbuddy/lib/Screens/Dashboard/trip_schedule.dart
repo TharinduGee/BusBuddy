@@ -216,6 +216,7 @@ class _TripScheduleState extends State<TripSchedule> {
                             starttime: trip.starttime ?? 'Unknown',
                             endtime: trip.endtime ?? 'Unknown',
                             conductorname: trip.conductorName ?? 'Unknown',
+                            tripId: trip.tripId ?? -1,
                           ),
                         );
                       },
@@ -357,6 +358,7 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
                       starttime: trip.starttime ?? 'Unknown',
                       endtime: trip.endtime ?? 'Unknown',
                       conductorname: trip.conductorName ?? 'Unknown',
+                      tripId: trip.tripId ?? -1,
                     );
                   },
                 ),

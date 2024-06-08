@@ -4,10 +4,12 @@ import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.Bus.*;
 import com.example.BusBuddy.dto.Route.RoutePaginationResponse;
 import com.example.BusBuddy.dto.Route.RouteResponse;
+import com.example.BusBuddy.dto.Trip.EmployeeInfo;
 import com.example.BusBuddy.models.*;
 import com.example.BusBuddy.repositories.BusRepository;
 import com.example.BusBuddy.repositories.BusinessRepository;
 import com.example.BusBuddy.repositories.DocumentRepository;
+import com.example.BusBuddy.repositories.TripRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +40,7 @@ public class BusService {
     private final DocumentService documentService;
     private final DocumentRepository documentRepository;
     private final ModelMapper modelMapper;
+    private final TripRepository tripRepository;
 
     @Transactional
     public String add(HttpServletRequest httpServletRequest,
@@ -189,11 +194,30 @@ public class BusService {
         return busPaginationResponse;
     }
 
-    public List<Long> getBusIds(HttpServletRequest httpServletRequest){
-        Business business = businessService.extractBId(httpServletRequest);
-        List<Long> busIdList = busRepository.findByBusiness(business);
+//    public List<Long> getBusIds(HttpServletRequest httpServletRequest){
+//        Business business = businessService.extractBId(httpServletRequest);
+//        List<Long> busIdList = busRepository.findByBusiness(business);
+//
+//        return busIdList;
+//    }
 
-        return busIdList;
+    @Transactional
+    public List<BusInfo> getValidBuses(HttpServletRequest httpServletRequest,
+                                              LocalDate startDate , LocalDate endDate ,
+                                              LocalTime startTime , LocalTime endTime){
+
+        // if duration exceeds for another day should check other day and logic should be changed also. This should be implemented
+
+        Business business = businessService.extractBId(httpServletRequest);
+        List<Bus> allBuses = busRepository.findByBusiness(business);
+        List<Bus> invalidBuses = tripRepository.findDistinctInvalidBuses(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+
+        allBuses.removeAll(invalidBuses.stream().toList());
+
+        return allBuses.stream().map(bus -> {
+            return BusInfo.builder().busId(bus.getBusId()).numberPlate(bus.getNumberPlate())
+                    .seats(bus.getSeats()).build();
+        }).toList();
     }
 
     public Long countBus(HttpServletRequest httpServletRequest){
