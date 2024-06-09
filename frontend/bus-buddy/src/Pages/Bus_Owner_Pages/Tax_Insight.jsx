@@ -265,6 +265,11 @@ function Tax_Insight() {
                 setRefresh(!refresh);
                 resetForm();
               } catch (error) {
+                Swal.fire({
+                  icon: "error",
+                  title: "Oops...",
+                  text: "Something went wrong!",
+                });
                 console.error("Error posting data:", error);
               }
 

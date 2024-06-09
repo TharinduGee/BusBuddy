@@ -916,6 +916,11 @@ export default function TripScheduleStepper() {
         setRefresh(!refresh);
       })
       .catch(function (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
         console.error("Error posting data:", error);
       });
     handleReset();
