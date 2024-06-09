@@ -102,6 +102,7 @@ public class LedgerService {
                 .transactionName(ledger.getTransactionName())
                 .time(ledger.getTimestamp())
                 .amount(ledger.getAmount())
+                .transactionType(ledger.getType())
                 .refId(ledger.getBus() != null ? ledger.getBus().getBusId() : ledger.getEmployee() != null ?
                         ledger.getEmployee().getEmpId() : ledger.getTrip() != null ? ledger.getTrip().getTripId() : null)
                 .docId(ledger.getDocument()  != null ? ledger.getDocument().getDocId() : null)

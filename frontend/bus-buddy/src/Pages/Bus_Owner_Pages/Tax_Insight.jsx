@@ -107,7 +107,7 @@ function Tax_Insight() {
 
   const columns = [
     {
-      field: "transaction_id",
+      field: "id",
       headerName: "Transaction ID",
       flex: 1,
       width: 130,
@@ -122,14 +122,19 @@ function Tax_Insight() {
       minWidth: 80,
     },
     {
-      field: "bus_id",
-      headerName: "Bus ID",
+      field: "refId",
+      headerName: "Reference ID",
       type: "number",
       flex: 1,
       minWidth: 80,
     },
-    { field: "emp_id", flex: 1, headerName: "Employee ID", minWidth: 150 },
-    { field: "trip_id", flex: 1, headerName: "Trip ID", minWidth: 150 },
+    { field: "docId", flex: 1, headerName: "Document ID", minWidth: 150 },
+    {
+      field: "transactionType",
+      flex: 1,
+      headerName: "Transaction Type",
+      minWidth: 150,
+    },
   ];
 
   const [pageState, setPageState] = useState({
@@ -173,34 +178,37 @@ function Tax_Insight() {
     const fetchData = async () => {
       setPageState((old) => ({ ...old, isLoading: true }));
 
-      // try {
-      //   const response = await axios.get(
-      //     `http://localhost:8081/api/v1/route/findRoutes?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
-      //     { headers: { Authorization: `Bearer ${token}` } }
-      //   );
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/v1/ledger/findAll?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-      //   const formattedData = response.data.content.map((routeData) => ({
-      //     id: routeData.routeId,
-      //     startDestination: routeData.startDestination,
-      //     endDestination: routeData.endDestination,
-      //     distance: routeData.distance,
-      //     noOfSections: routeData.noOfSections,
-      //     permitExpDate: routeData.permitExpDate.split("T")[0],
-      //   }));
+        console.log(response.data);
 
-      //   setPageState((old) => ({
-      //     ...old,
-      //     isLoading: false,
-      //     data: formattedData,
-      //     total: response.data.totalElements,
-      //   }));
-      // } catch (error) {
-      //   console.error("There was an error!", error);
-      //   setPageState((old) => ({ ...old, isLoading: false }));
-      // }
+        const formattedData = response.data.content.map((ledgerData) => ({
+          id: ledgerData.transactionId,
+          amount: ledgerData.amount,
+          timestamp: ledgerData.time.split("T")[0],
+          transaction_name: ledgerData.transactionName,
+          refId: ledgerData.refId,
+          transactionType: ledgerData.transactionType.split("E_")[1],
+          docId: ledgerData.docId,
+        }));
+
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: formattedData,
+          total: response.data.totalElements,
+        }));
+      } catch (error) {
+        console.error("There was an error!", error);
+        setPageState((old) => ({ ...old, isLoading: false }));
+      }
     };
 
-    // fetchData();
+    fetchData();
   }, [paginationModel.page, paginationModel.pageSize, refresh, token]);
 
   return (
@@ -316,7 +324,7 @@ function Tax_Insight() {
                     />
                   </div>
                 </div>
-                <div className="d-flex flex-wrap  justify-content-between w-80 px-5 pb-5 ">
+                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
                   <div className="d-flex flex-column pt-5">
                     <label className="form-label">
                       Amount<span className="text-danger">*</span>
@@ -333,7 +341,7 @@ function Tax_Insight() {
                       className="form-control input-field"
                     />
                   </div>
-                  <div className="d-flex flex-column  pt-5">
+                  <div className="d-flex flex-column  pt-5 pe-3">
                     <label className="form-label">
                       Reference Id<span className="text-danger">*</span>
                     </label>
@@ -358,7 +366,7 @@ function Tax_Insight() {
                     variant="contained"
                     disabled={isSubmitting}
                   >
-                    Add Route
+                    Add Edger Entry
                   </Button>
                 </div>
               </Form>
