@@ -15,6 +15,10 @@ function Dashboard() {
     { name: "Sunday", Total: 1100, Expenses: 400 },
   ];
   const token = localStorage.getItem("token");
+  const [income_expenses, setIncome_expenses] = useState({
+    income: 0,
+    expense: 0,
+  });
   const [count, setcount] = useState({
     totalCount: null,
     driverCount: null,
@@ -34,6 +38,7 @@ function Dashboard() {
           ...prevCount,
           busCount: response.data,
         }));
+
         axios
           .get(`http://localhost:8081/api/v1/employee/countEmployee`, {
             headers: {
@@ -59,6 +64,22 @@ function Dashboard() {
       .catch((error) => {
         console.error("There was an error!", error);
       });
+  }, [token]);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8081/api/v1/ledger/dailyFinance`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setIncome_expenses({
+          income: response.data.income,
+          expense: response.data.expense,
+        });
+      });
+    console.log(income_expenses);
   }, []);
 
   return (
@@ -69,7 +90,7 @@ function Dashboard() {
           <EmployeeCountCard data={count} />
         </div>
         <div className="m-3">
-          <IncomeExpensesViewer />
+          <IncomeExpensesViewer data={income_expenses} />
         </div>
       </div>
 
