@@ -7,7 +7,7 @@ class TripListView extends StatelessWidget {
   final bool isLoading;
   List<DriverModel> driverTrips = [];
 
-  TripListView({required this.isLoading, required this.driverTrips});
+  TripListView({super.key, required this.isLoading, required this.driverTrips});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class TripListView extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('Trip Details'),
+                          title: const Text('Trip Details'),
                           content: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,13 +48,13 @@ class TripListView extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text('Close'),
+                              child: const Text('Close'),
                             ),
                             TextButton(
                               onPressed: () {
                                 _showAddEntryDialog(context, trip.tripId!);
                               },
-                              child: Text('Add Entry'),
+                              child: const Text('Add Entry'),
                             ),
                           ],
                         );
@@ -66,7 +66,7 @@ class TripListView extends StatelessWidget {
                     enddesti: trip.endDestination ?? 'Unknown',
                     starttime: trip.starttime ?? 'Unknown',
                     endtime: trip.endtime ?? 'Unknown',
-                    conductorname: trip.conductorName ?? 'Unknown',
+                    conductorname: trip.conductorName ?? '',
                     tripId: trip.tripId ?? -1,
                   ),
                 );
@@ -88,7 +88,7 @@ class TripListView extends StatelessWidget {
 class AddEntryDialog extends StatefulWidget {
   final int tripId;
 
-  AddEntryDialog({required this.tripId});
+  const AddEntryDialog({required this.tripId});
 
   @override
   _AddEntryDialogState createState() => _AddEntryDialogState();
@@ -110,7 +110,7 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     return AlertDialog(
-      title: isLandscape ? null : Text('Add Entry'),
+      title: isLandscape ? null : const Text('Add Entry'),
       content: SingleChildScrollView(
         child: isLandscape ? _buildLandscapeContent() : _buildPortraitContent(),
       ),
@@ -119,7 +119,7 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel'),
+          child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: () async {
@@ -135,7 +135,7 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
               Navigator.of(context).pop();
             }
           },
-          child: Text('Add'),
+          child: const Text('Add'),
         ),
       ],
     );
@@ -146,7 +146,7 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
       children: [
         Expanded(
           child: DropdownButton<String>(
-            hint: Text('Select Type'),
+            hint: const Text('Select Type'),
             value: _selectedType != null
                 ? transactionTypes.entries
                     .firstWhere((entry) => entry.value == _selectedType)
@@ -169,19 +169,19 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
         if (_selectedType != null) ...[
           Expanded(
             child: Padding(
-              padding: EdgeInsets.zero, // Removing unnecessary padding
+              padding: EdgeInsets.zero,
               child: TextField(
                 controller: _nameController,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
               ),
             ),
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.zero, // Removing unnecessary padding
+              padding: EdgeInsets.zero,
               child: TextField(
                 controller: _amountController,
-                decoration: InputDecoration(labelText: 'Amount LKR'),
+                decoration: const InputDecoration(labelText: 'Amount LKR'),
                 keyboardType: TextInputType.number,
               ),
             ),
@@ -196,7 +196,7 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
       mainAxisSize: MainAxisSize.min,
       children: [
         DropdownButton<String>(
-          hint: Text('Select Type'),
+          hint: const Text('Select Type'),
           value: _selectedType != null
               ? transactionTypes.entries
                   .firstWhere((entry) => entry.value == _selectedType)
@@ -218,11 +218,11 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
         if (_selectedType != null) ...[
           TextField(
             controller: _nameController,
-            decoration: InputDecoration(labelText: 'Description'),
+            decoration: const InputDecoration(labelText: 'Description'),
           ),
           TextField(
             controller: _amountController,
-            decoration: InputDecoration(labelText: 'Amount LKR'),
+            decoration: const InputDecoration(labelText: 'Amount LKR'),
             keyboardType: TextInputType.number,
           ),
         ],
