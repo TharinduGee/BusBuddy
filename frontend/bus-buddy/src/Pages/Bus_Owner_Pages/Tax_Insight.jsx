@@ -109,15 +109,21 @@ function Tax_Insight() {
     {
       field: "id",
       headerName: "Transaction ID",
-      flex: 1,
       width: 130,
+      type: "number",
     },
-    { field: "amount", headerName: "Amount", flex: 1, minWidth: 130 },
+    {
+      field: "amount",
+      headerName: "Amount",
+      flex: 1,
+      minWidth: 130,
+      type: "number",
+    },
     { field: "timestamp", headerName: "Date and Time", flex: 1, minWidth: 130 },
     {
       field: "transaction_name",
       headerName: "Transaction name",
-      type: "number",
+
       flex: 1,
       minWidth: 80,
     },

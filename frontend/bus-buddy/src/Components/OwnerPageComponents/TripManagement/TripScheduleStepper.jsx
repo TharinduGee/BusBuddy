@@ -851,7 +851,6 @@ export default function TripScheduleStepper() {
           text: "Trip Data Inserted Successfully!",
           icon: "success",
         });
-        setRefresh(!refresh);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
@@ -913,7 +912,6 @@ export default function TripScheduleStepper() {
           text: "Trip Data Inserted Successfully!",
           icon: "success",
         });
-        setRefresh(!refresh);
       })
       .catch(function (error) {
         Swal.fire({
