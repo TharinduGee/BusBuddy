@@ -278,9 +278,8 @@ function Tax_Insight() {
                 Swal.fire({
                   icon: "error",
                   title: "Oops...",
-                  text: "Something went wrong!",
+                  text: error.response.data,
                 });
-                console.error("Error posting data:", error);
               }
 
               setSubmitting(false);
