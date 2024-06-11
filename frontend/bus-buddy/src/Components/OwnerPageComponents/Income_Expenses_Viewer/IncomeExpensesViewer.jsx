@@ -31,7 +31,7 @@ const IncomeExpensesViewer = (props) => {
             <img style={{ height: 60, width: 60 }} src={expenseicon} alt="" />
             <div className="d-flex flex-column">
               <div className="income-txt">Expenses</div>
-              <div className="income-value">{props.data.expense}</div>
+              <div className="income-value">{Math.abs(props.data.expense)}</div>
             </div>
           </div>
         </div>

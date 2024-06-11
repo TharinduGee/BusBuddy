@@ -294,7 +294,7 @@ function Tax_Insight() {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <FormControl className="pt-5" sx={{ width: "250px" }}>
+                  <FormControl className="pt-5  pe-3" sx={{ width: "300px" }}>
                     <label className="form-label">
                       Transaction Type<span className="text-danger">*</span>
                     </label>
@@ -336,7 +336,7 @@ function Tax_Insight() {
                   </div>
                 </div>
                 <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <div className="d-flex flex-column pt-5">
+                  <div className="d-flex flex-column pt-5  pe-3">
                     <label className="form-label">
                       Amount<span className="text-danger">*</span>
                     </label>
