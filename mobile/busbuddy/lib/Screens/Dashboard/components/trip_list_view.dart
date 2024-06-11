@@ -26,20 +26,22 @@ class TripListView extends StatelessWidget {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text('Trip Details'),
-                          content: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                  'Start Destination: ${trip.startDestination ?? 'Unknown'}'),
-                              Text(
-                                  'End Destination: ${trip.endDestination ?? 'Unknown'}'),
-                              Text(
-                                  'Start Time: ${trip.starttime ?? 'Unknown'}'),
-                              Text('End Time: ${trip.endtime ?? 'Unknown'}'),
-                              Text(
-                                  'Conductor Name: ${trip.conductorName ?? 'Unknown'}'),
-                            ],
+                          content: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    'Start Destination: ${trip.startDestination ?? 'Unknown'}'),
+                                Text(
+                                    'End Destination: ${trip.endDestination ?? 'Unknown'}'),
+                                Text(
+                                    'Start Time: ${trip.starttime ?? 'Unknown'}'),
+                                Text('End Time: ${trip.endtime ?? 'Unknown'}'),
+                                Text(
+                                    'Conductor Name: ${trip.conductorName ?? 'Unknown'}'),
+                              ],
+                            ),
                           ),
                           actions: [
                             TextButton(
@@ -104,47 +106,13 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return AlertDialog(
-      title: Text('Add Entry'),
+      title: isLandscape ? null : Text('Add Entry'),
       content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            DropdownButton<String>(
-              hint: Text('Select Type'),
-              value: _selectedType != null
-                  ? transactionTypes.entries
-                      .firstWhere((entry) => entry.value == _selectedType)
-                      .key
-                  : null,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedType = transactionTypes[newValue]!;
-                });
-              },
-              items: transactionTypes.keys
-                  .map<DropdownMenuItem<String>>((String key) {
-                return DropdownMenuItem<String>(
-                  value: key,
-                  child: Text(key),
-                );
-              }).toList(),
-            ),
-            if (_selectedType != null) ...[
-              // Text(
-              //     'Selected Type: ${transactionTypes.entries.firstWhere((entry) => entry.value == _selectedType).key}'),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Description'),
-              ),
-              TextField(
-                controller: _amountController,
-                decoration: InputDecoration(labelText: 'Amount LKR'),
-                keyboardType: TextInputType.number,
-              ),
-            ],
-          ],
-        ),
+        child: isLandscape ? _buildLandscapeContent() : _buildPortraitContent(),
       ),
       actions: [
         TextButton(
@@ -169,6 +137,95 @@ class _AddEntryDialogState extends State<AddEntryDialog> {
           },
           child: Text('Add'),
         ),
+      ],
+    );
+  }
+
+  Widget _buildLandscapeContent() {
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButton<String>(
+            hint: Text('Select Type'),
+            value: _selectedType != null
+                ? transactionTypes.entries
+                    .firstWhere((entry) => entry.value == _selectedType)
+                    .key
+                : null,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedType = transactionTypes[newValue]!;
+              });
+            },
+            items: transactionTypes.keys
+                .map<DropdownMenuItem<String>>((String key) {
+              return DropdownMenuItem<String>(
+                value: key,
+                child: Text(key),
+              );
+            }).toList(),
+          ),
+        ),
+        if (_selectedType != null) ...[
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.zero, // Removing unnecessary padding
+              child: TextField(
+                controller: _nameController,
+                decoration: InputDecoration(labelText: 'Description'),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.zero, // Removing unnecessary padding
+              child: TextField(
+                controller: _amountController,
+                decoration: InputDecoration(labelText: 'Amount LKR'),
+                keyboardType: TextInputType.number,
+              ),
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildPortraitContent() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        DropdownButton<String>(
+          hint: Text('Select Type'),
+          value: _selectedType != null
+              ? transactionTypes.entries
+                  .firstWhere((entry) => entry.value == _selectedType)
+                  .key
+              : null,
+          onChanged: (String? newValue) {
+            setState(() {
+              _selectedType = transactionTypes[newValue]!;
+            });
+          },
+          items:
+              transactionTypes.keys.map<DropdownMenuItem<String>>((String key) {
+            return DropdownMenuItem<String>(
+              value: key,
+              child: Text(key),
+            );
+          }).toList(),
+        ),
+        if (_selectedType != null) ...[
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(labelText: 'Description'),
+          ),
+          TextField(
+            controller: _amountController,
+            decoration: InputDecoration(labelText: 'Amount LKR'),
+            keyboardType: TextInputType.number,
+          ),
+        ],
       ],
     );
   }
