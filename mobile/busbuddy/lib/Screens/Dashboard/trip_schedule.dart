@@ -288,25 +288,7 @@ class _TabletTripScheduleState extends State<TabletTripSchedule> {
             ],
           ),
         ),
-        Expanded(
-          flex: 1,
-          child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: driverTrips.length,
-                  itemBuilder: (context, index) {
-                    final trip = driverTrips[index];
-                    return TripTile(
-                      startdesti: trip.startDestination ?? 'Unknown',
-                      enddesti: trip.endDestination ?? 'Unknown',
-                      starttime: trip.starttime ?? 'Unknown',
-                      endtime: trip.endtime ?? 'Unknown',
-                      conductorname: trip.conductorName ?? 'Unknown',
-                      tripId: trip.tripId ?? -1,
-                    );
-                  },
-                ),
-        ),
+        TripListView(isLoading: isLoading, driverTrips: driverTrips),
       ],
     );
   }
