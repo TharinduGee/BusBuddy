@@ -175,7 +175,11 @@ function Tax_Insight() {
     amount: Yup.number()
       .required("Amount is required")
       .positive("Amount must be positive"),
-    refId: Yup.string().required("Reference ID is required"),
+    refId: Yup.string().when("type", {
+      is: "TRANSACTION_TYPE_UNSPECIFIED",
+      then: (validationSchema) => validationSchema.optional(),
+      otherwise: (validationSchema) => validationSchema.required(),
+    }),
   });
 
   const [refresh, setRefresh] = useState(true);
@@ -352,22 +356,24 @@ function Tax_Insight() {
                       className="form-control input-field"
                     />
                   </div>
-                  <div className="d-flex flex-column  pt-5 pe-3">
-                    <label className="form-label">
-                      Reference Id<span className="text-danger">*</span>
-                    </label>
-                    <TextField
-                      type="text"
-                      id="refId"
-                      name="refId"
-                      value={values.refId}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.refId && Boolean(errors.refId)}
-                      helperText={touched.refId && errors.refId}
-                      className="form-control input-field"
-                    />
-                  </div>
+                  {values.type !== "TRANSACTION_TYPE_UNSPECIFIED" && (
+                    <div className="d-flex flex-column  pt-5 pe-3">
+                      <label className="form-label">
+                        Reference Id<span className="text-danger">*</span>
+                      </label>
+                      <TextField
+                        type="text"
+                        id="refId"
+                        name="refId"
+                        value={values.refId}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.refId && Boolean(errors.refId)}
+                        helperText={touched.refId && errors.refId}
+                        className="form-control input-field"
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="d-flex justify-content-center">
                   <Button
