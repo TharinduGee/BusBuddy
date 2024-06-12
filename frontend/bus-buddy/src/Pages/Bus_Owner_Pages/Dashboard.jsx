@@ -5,15 +5,7 @@ import IncomeExpensesViewer from "../../Components/OwnerPageComponents/Income_Ex
 import EmployeeCountCard from "../../Components/OwnerPageComponents/EmployeeCountCard/EmployeeCountCard";
 import axios from "axios";
 function Dashboard() {
-  const data = [
-    { name: "Monday", Total: 1200, Expenses: 600 },
-    { name: "Tuesday", Total: 2100, Expenses: 300 },
-    { name: "Wednsday", Total: 800, Expenses: 1200 },
-    { name: "Thursday", Total: 1600, Expenses: 300 },
-    { name: "Friday", Total: 900, Expenses: 3000 },
-    { name: "Saturday", Total: 1700, Expenses: 1200 },
-    { name: "Sunday", Total: 1100, Expenses: 400 },
-  ];
+  const [chartData, setChartData] = useState([]);
   const token = localStorage.getItem("token");
   const [income_expenses, setIncome_expenses] = useState({
     income: 0,
@@ -79,7 +71,31 @@ function Dashboard() {
           expense: response.data.expense,
         });
       });
-    console.log(income_expenses);
+    axios
+      .get(`http://localhost:8081/api/v1/ledger/getFinanceOfLastSevenDays`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const responseData = response.data;
+
+        const formatter = new Intl.DateTimeFormat("en-US", { weekday: "long" });
+
+        const transformedData = Object.keys(responseData).map((date) => {
+          const dayOfWeek = formatter.format(new Date(date));
+          return {
+            name: dayOfWeek,
+            Total: responseData[date].income,
+            Expenses: Math.abs(responseData[date].expense),
+          };
+        });
+
+        const reversedData = transformedData.reverse();
+
+        setChartData(reversedData);
+        console.log(chartData);
+      });
   }, []);
 
   return (
@@ -95,7 +111,7 @@ function Dashboard() {
       </div>
 
       <div className="chart-container">
-        {loadgraph && <Chart title="Income" aspect={3 / 1} data={data} />}
+        {loadgraph && <Chart title="Income" aspect={3 / 1} data={chartData} />}
       </div>
     </div>
   );

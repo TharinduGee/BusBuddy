@@ -259,6 +259,7 @@ function Team_Directory_Add_Employee() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1>Add Employee Directory</h1>
         <div
           style={{ width: "80%" }}
           class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
