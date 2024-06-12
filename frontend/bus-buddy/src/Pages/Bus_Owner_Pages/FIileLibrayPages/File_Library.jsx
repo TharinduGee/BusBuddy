@@ -73,7 +73,7 @@ function File_Library() {
   }, [refresh]);
   return (
     <div className="d-flex flex-column align-items-center  justify-content-center">
-      <div className="d-flex mt-4 file-library-Heading">File Library</div>
+      <h1>File Library </h1>
       <div className="justify-content-center align-items-center d-flex flex-wrap py-4">
         <CatergoryCard catorgory={"SERVICE AGREEMENT"} />
         <CatergoryCard catorgory={"ROUTE PERMIT"} />
@@ -149,6 +149,7 @@ function File_Library() {
           margin: 30,
           backgroundColor: "#ff760d",
           color: "white",
+          width: "250px",
         }}
         className="d-flex  update-btn"
         variant="contained"

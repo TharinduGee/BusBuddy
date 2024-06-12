@@ -195,12 +195,7 @@ function Team_Directory() {
       minwidth: 90,
       flex: 1,
     },
-    // {
-    //   field: "bday",
-    //   headerName: "Birthday",
-    //   type: "number",
-    //   width: 90,
-    // },
+
     {
       field: "actions",
       headerName: "Actions",
@@ -212,7 +207,6 @@ function Team_Directory() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row.id)}
             onClick={() => setOpenPopup(true)}
           >
             <EditNoteSharpIcon />
@@ -326,6 +320,7 @@ function Team_Directory() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1>Team Directory</h1>
         <div
           style={{ width: "80%" }}
           class="d-flex flex-wrap-reverse align-items-center  justify-content-between"

@@ -14,6 +14,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Tuple;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Map;
 
 
 @RestController
@@ -22,13 +25,20 @@ import javax.persistence.Tuple;
 @CrossOrigin(origins = "http://localhost:3000")
 public class LedgerController {
 
-    private final LedgerService ledgerService;
+    private final LedgerService ledgerService ;
 
     @GetMapping("/findAll")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<LedgerPaginationResponse>  findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                              @RequestParam(value = "pageSize", defaultValue = "20" , required = false)int pageSize){
         return ResponseEntity.ok(ledgerService.findAll(pageNumber, pageSize));
+    }
+
+    @GetMapping("/findAllByDate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<LedgerPaginationResponse>  findAllByDate(@RequestParam LocalDate date , @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                             @RequestParam(value = "pageSize", defaultValue = "20" , required = false)int pageSize){
+        return ResponseEntity.ok(ledgerService.findAllByDate(date , pageNumber, pageSize));
     }
 
     @PostMapping("/addEntry")
@@ -44,6 +54,12 @@ public class LedgerController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DailyFinanceResponse> dailyIncome(HttpServletRequest httpServletRequest){
         return ResponseEntity.ok(ledgerService.dailyIncome(httpServletRequest));
+    }
+
+    @GetMapping("/getFinanceOfLastSevenDays")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<LocalDate,DailyFinanceResponse>> get(HttpServletRequest httpServletRequest){
+        return ResponseEntity.ok(ledgerService.getFinanceOfLastSevenDays(httpServletRequest));
     }
 
 

@@ -264,6 +264,7 @@ function Trip_Management() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1>Trip Management</h1>
         <div
           style={{ width: "80%" }}
           class="d-flex flex-wrap align-items-center  justify-content-start"
