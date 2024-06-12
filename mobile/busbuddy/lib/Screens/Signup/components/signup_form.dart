@@ -318,7 +318,7 @@ class RoleSelectionButton extends StatelessWidget {
               size: 32,
               color: isSelected ? Colors.white : Colors.black,
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
