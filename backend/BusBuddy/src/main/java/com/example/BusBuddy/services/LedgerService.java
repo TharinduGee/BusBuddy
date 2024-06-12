@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -146,5 +146,26 @@ public class LedgerService {
                 .build();
         return dailyFinanceResponse;
     }
+
+    public Map<LocalDate,DailyFinanceResponse> getFinanceOfLastSevenDays(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        Map<LocalDate, DailyFinanceResponse> dto = new HashMap<>();
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        for(int i = 0 ; i < 7 ; i++){
+            localDateTime = localDateTime.minusDays(1);
+            LocalDateTime startOfDay = localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
+            LocalDateTime endOfDay = localDateTime.withHour(23).withMinute(59).withSecond(59).withNano(0);
+
+            Map<String, Double> incomeAndExpense =  ledgerRepository.dailyIncomeAndExpense(business, startOfDay , endOfDay );
+            DailyFinanceResponse dailyFinanceResponse = DailyFinanceResponse.builder()
+                    .income(incomeAndExpense.get("dailyIncome") == null ? 0 : incomeAndExpense.get("dailyIncome"))
+                    .expense(incomeAndExpense.get("dailyExpense") == null ? 0 : incomeAndExpense.get("dailyExpense"))
+                    .build();
+            dto.put(localDateTime.toLocalDate(), dailyFinanceResponse);
+
+        }
+        return dto;
+    } ;
 
 }
