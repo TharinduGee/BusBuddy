@@ -66,7 +66,7 @@ class TripListView extends StatelessWidget {
                     enddesti: trip.endDestination ?? 'Unknown',
                     starttime: trip.starttime ?? 'Unknown',
                     endtime: trip.endtime ?? 'Unknown',
-                    conductorname: trip.conductorName ?? '',
+                    conductorname: trip.conductorName ?? 'Unknown',
                     tripId: trip.tripId ?? -1,
                   ),
                 );

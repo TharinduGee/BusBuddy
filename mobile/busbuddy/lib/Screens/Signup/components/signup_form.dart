@@ -54,14 +54,14 @@ class _SignUpFormState extends State<SignUpForm> {
               },
             ),
           );
-          print('Sign-up successful');
+          // print('Sign-up successful');
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Sign-up successful'),
             ),
           );
         } else {
-          print('Sign-up failed ');
+          // print('Sign-up failed ');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Sign-up failed: ${response.body}'),
@@ -69,7 +69,7 @@ class _SignUpFormState extends State<SignUpForm> {
           );
         }
       } catch (e) {
-        print('Error during sign-up: ${e.toString()}');
+        // print('Error during sign-up: ${e.toString()}');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('An error occurred: ${e.toString()}'),
@@ -318,7 +318,7 @@ class RoleSelectionButton extends StatelessWidget {
               size: 32,
               color: isSelected ? Colors.white : Colors.black,
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(
