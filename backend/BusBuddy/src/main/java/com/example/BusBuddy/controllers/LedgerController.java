@@ -34,6 +34,13 @@ public class LedgerController {
         return ResponseEntity.ok(ledgerService.findAll(pageNumber, pageSize));
     }
 
+    @GetMapping("/findAllByDate")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<LedgerPaginationResponse>  findAllByDate(@RequestParam LocalDate date , @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+                                                             @RequestParam(value = "pageSize", defaultValue = "20" , required = false)int pageSize){
+        return ResponseEntity.ok(ledgerService.findAllByDate(date , pageNumber, pageSize));
+    }
+
     @PostMapping("/addEntry")
     @PreAuthorize("hasAnyRole('DRIVER', 'CONDUCTOR', 'ADMIN')")
     public ResponseEntity<String> addEntry(HttpServletRequest httpServletRequest,

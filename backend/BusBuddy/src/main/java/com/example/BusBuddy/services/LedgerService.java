@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -120,6 +121,35 @@ public class LedgerService {
 
     }
 
+    public LedgerPaginationResponse findAllByDate(LocalDate localDate, int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Ledger> ledgerPage = ledgerRepository.findByTimestampBetween(localDate.atStartOfDay() ,localDate.atTime(LocalTime.MAX) ,pageable);
+
+
+        List<Ledger> ledgerList = ledgerPage.getContent();
+        List<LedgerResponse> ledgerResponses = ledgerList.stream().map(ledger -> LedgerResponse.builder()
+                .transactionId(ledger.getTransactionId())
+                .transactionName(ledger.getTransactionName())
+                .time(ledger.getTimestamp())
+                .amount(ledger.getAmount())
+                .transactionType(ledger.getType())
+                .refId(ledger.getBus() != null ? ledger.getBus().getBusId() : ledger.getEmployee() != null ?
+                        ledger.getEmployee().getEmpId() : ledger.getTrip() != null ? ledger.getTrip().getTripId() : null)
+                .docId(ledger.getDocument()  != null ? ledger.getDocument().getDocId() : null)
+                .build()
+        ).toList();
+
+        return LedgerPaginationResponse.builder()
+                .content(ledgerResponses)
+                .totalPages(ledgerPage.getTotalPages())
+                .pageSize(ledgerPage.getSize())
+                .pageNo(ledgerPage.getNumber())
+                .totalElements(ledgerPage.getTotalElements())
+                .last(ledgerPage.isLast())
+                .build();
+
+    }
+
 
     public void addTripLedgerEntry(@NotNull Trip trip){
         Ledger entry = Ledger.builder()
@@ -153,7 +183,6 @@ public class LedgerService {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         for(int i = 0 ; i < 7 ; i++){
-            localDateTime = localDateTime.minusDays(1);
             LocalDateTime startOfDay = localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
             LocalDateTime endOfDay = localDateTime.withHour(23).withMinute(59).withSecond(59).withNano(0);
 
@@ -163,6 +192,7 @@ public class LedgerService {
                     .expense(incomeAndExpense.get("dailyExpense") == null ? 0 : incomeAndExpense.get("dailyExpense"))
                     .build();
             dto.put(localDateTime.toLocalDate(), dailyFinanceResponse);
+            localDateTime = localDateTime.minusDays(1);
 
         }
         return dto;
