@@ -4,9 +4,6 @@ import expenseicon from "../../../Assets/Owner_assests/expenses_icon.png";
 import Divider from "@mui/material/Divider";
 import { useEffect } from "react";
 const IncomeExpensesViewer = (props) => {
-  useEffect(() => {
-    console.log(props);
-  });
   return (
     <div className="income-expenses-container">
       <div>Daily Income & Expenses</div>

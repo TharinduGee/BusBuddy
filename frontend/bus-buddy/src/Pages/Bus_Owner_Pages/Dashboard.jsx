@@ -14,6 +14,8 @@ function Dashboard() {
     { name: "Saturday", Total: 1700, Expenses: 1200 },
     { name: "Sunday", Total: 1100, Expenses: 400 },
   ];
+
+  const [chartData, setChartData] = useState([]);
   const token = localStorage.getItem("token");
   const [income_expenses, setIncome_expenses] = useState({
     income: 0,
@@ -79,7 +81,33 @@ function Dashboard() {
           expense: response.data.expense,
         });
       });
-    console.log(income_expenses);
+    axios
+      .get(`http://localhost:8081/api/v1/ledger/getFinanceOfLastSevenDays`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        const responseData = response.data;
+
+        // Create a formatter for the day of the week
+        const formatter = new Intl.DateTimeFormat("en-US", { weekday: "long" });
+
+        const transformedData = Object.keys(responseData).map((date) => {
+          const dayOfWeek = formatter.format(new Date(date));
+          return {
+            name: dayOfWeek,
+            Total: responseData[date].income,
+            Expenses: Math.abs(responseData[date].expense),
+          };
+        });
+
+        // Reverse the transformed data array
+        const reversedData = transformedData.reverse();
+
+        setChartData(reversedData);
+        console.log(chartData);
+      });
   }, []);
 
   return (
@@ -95,7 +123,7 @@ function Dashboard() {
       </div>
 
       <div className="chart-container">
-        {loadgraph && <Chart title="Income" aspect={3 / 1} data={data} />}
+        {loadgraph && <Chart title="Income" aspect={3 / 1} data={chartData} />}
       </div>
     </div>
   );
