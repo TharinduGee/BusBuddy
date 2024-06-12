@@ -45,7 +45,6 @@ class MobileSignupScreen extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        // SignUpScreenTopImage(),
         Row(
           children: [
             Spacer(),
@@ -56,7 +55,6 @@ class MobileSignupScreen extends StatelessWidget {
             Spacer(),
           ],
         ),
-        // const SocalSignUp()
       ],
     );
   }
