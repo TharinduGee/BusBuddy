@@ -5,16 +5,6 @@ import IncomeExpensesViewer from "../../Components/OwnerPageComponents/Income_Ex
 import EmployeeCountCard from "../../Components/OwnerPageComponents/EmployeeCountCard/EmployeeCountCard";
 import axios from "axios";
 function Dashboard() {
-  const data = [
-    { name: "Monday", Total: 1200, Expenses: 600 },
-    { name: "Tuesday", Total: 2100, Expenses: 300 },
-    { name: "Wednsday", Total: 800, Expenses: 1200 },
-    { name: "Thursday", Total: 1600, Expenses: 300 },
-    { name: "Friday", Total: 900, Expenses: 3000 },
-    { name: "Saturday", Total: 1700, Expenses: 1200 },
-    { name: "Sunday", Total: 1100, Expenses: 400 },
-  ];
-
   const [chartData, setChartData] = useState([]);
   const token = localStorage.getItem("token");
   const [income_expenses, setIncome_expenses] = useState({
@@ -90,7 +80,6 @@ function Dashboard() {
       .then((response) => {
         const responseData = response.data;
 
-        // Create a formatter for the day of the week
         const formatter = new Intl.DateTimeFormat("en-US", { weekday: "long" });
 
         const transformedData = Object.keys(responseData).map((date) => {
@@ -102,7 +91,6 @@ function Dashboard() {
           };
         });
 
-        // Reverse the transformed data array
         const reversedData = transformedData.reverse();
 
         setChartData(reversedData);

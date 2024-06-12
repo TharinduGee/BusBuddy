@@ -67,6 +67,7 @@ function Route_Management() {
     margin: 30,
     backgroundColor: isUpdateButtonDisabled ? "#CCCCCC" : "#ff760d",
     color: "white",
+    width: "200px",
   };
 
   const buttonStyle_Add = {
@@ -74,6 +75,7 @@ function Route_Management() {
     margin: 30,
     backgroundColor: isAddButtonDisabled ? "#CCCCCC" : "#ff760d",
     color: "white",
+    width: "200px",
   };
 
   const theme = createTheme({
@@ -446,6 +448,7 @@ function Route_Management() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1>Route Managment</h1>
         <div
           style={{ width: "80%" }}
           className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
@@ -610,6 +613,7 @@ function Route_Management() {
                 margin: 30,
                 backgroundColor: "#ff760d",
                 color: "white",
+                width: "200px",
               }}
               className="d-flex  update-btn"
               variant="contained"
