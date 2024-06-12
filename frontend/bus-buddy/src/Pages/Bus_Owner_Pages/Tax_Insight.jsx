@@ -109,15 +109,21 @@ function Tax_Insight() {
     {
       field: "id",
       headerName: "Transaction ID",
-      flex: 1,
       width: 130,
+      type: "number",
     },
-    { field: "amount", headerName: "Amount", flex: 1, minWidth: 130 },
+    {
+      field: "amount",
+      headerName: "Amount",
+      flex: 1,
+      minWidth: 130,
+      type: "number",
+    },
     { field: "timestamp", headerName: "Date and Time", flex: 1, minWidth: 130 },
     {
       field: "transaction_name",
       headerName: "Transaction name",
-      type: "number",
+
       flex: 1,
       minWidth: 80,
     },
@@ -169,7 +175,11 @@ function Tax_Insight() {
     amount: Yup.number()
       .required("Amount is required")
       .positive("Amount must be positive"),
-    refId: Yup.string().required("Reference ID is required"),
+    refId: Yup.string().when("type", {
+      is: "TRANSACTION_TYPE_UNSPECIFIED",
+      then: (validationSchema) => validationSchema.optional(),
+      otherwise: (validationSchema) => validationSchema.required(),
+    }),
   });
 
   const [refresh, setRefresh] = useState(true);
@@ -268,9 +278,8 @@ function Tax_Insight() {
                 Swal.fire({
                   icon: "error",
                   title: "Oops...",
-                  text: "Something went wrong!",
+                  text: error.response.data,
                 });
-                console.error("Error posting data:", error);
               }
 
               setSubmitting(false);
@@ -288,7 +297,7 @@ function Tax_Insight() {
             }) => (
               <Form onSubmit={handleSubmit}>
                 <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <FormControl className="pt-5" sx={{ width: "250px" }}>
+                  <FormControl className="pt-5  pe-3" sx={{ width: "300px" }}>
                     <label className="form-label">
                       Transaction Type<span className="text-danger">*</span>
                     </label>
@@ -330,7 +339,7 @@ function Tax_Insight() {
                   </div>
                 </div>
                 <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <div className="d-flex flex-column pt-5">
+                  <div className="d-flex flex-column pt-5  pe-3">
                     <label className="form-label">
                       Amount<span className="text-danger">*</span>
                     </label>
@@ -346,22 +355,24 @@ function Tax_Insight() {
                       className="form-control input-field"
                     />
                   </div>
-                  <div className="d-flex flex-column  pt-5 pe-3">
-                    <label className="form-label">
-                      Reference Id<span className="text-danger">*</span>
-                    </label>
-                    <TextField
-                      type="text"
-                      id="refId"
-                      name="refId"
-                      value={values.refId}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.refId && Boolean(errors.refId)}
-                      helperText={touched.refId && errors.refId}
-                      className="form-control input-field"
-                    />
-                  </div>
+                  {values.type !== "TRANSACTION_TYPE_UNSPECIFIED" && (
+                    <div className="d-flex flex-column  pt-5 pe-3">
+                      <label className="form-label">
+                        Reference Id<span className="text-danger">*</span>
+                      </label>
+                      <TextField
+                        type="text"
+                        id="refId"
+                        name="refId"
+                        value={values.refId}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.refId && Boolean(errors.refId)}
+                        helperText={touched.refId && errors.refId}
+                        className="form-control input-field"
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="d-flex justify-content-center">
                   <Button
