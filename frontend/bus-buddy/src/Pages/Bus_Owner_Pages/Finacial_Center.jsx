@@ -122,7 +122,7 @@ function Finacial_Center() {
     {
       field: "amount",
       headerName: "Amount",
-      flex: 1,
+
       minWidth: 130,
       type: "number",
     },
@@ -131,7 +131,6 @@ function Finacial_Center() {
       field: "transaction_name",
       headerName: "Transaction name",
 
-      flex: 1,
       minWidth: 80,
     },
     {
@@ -144,7 +143,7 @@ function Finacial_Center() {
     { field: "docId", flex: 1, headerName: "Document ID", minWidth: 150 },
     {
       field: "transactionType",
-      flex: 1,
+
       headerName: "Transaction Type",
       minWidth: 150,
     },
