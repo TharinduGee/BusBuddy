@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import "./Finacial_Center.css";
 import "./Team_Directory.css";
 import "./Route_Management.css";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -367,13 +368,13 @@ function Finacial_Center() {
               setFieldValue,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center px-5 ">
-                  <FormControl className="pt-5  pe-3">
+                <div className="field-container-finacial">
+                  <FormControl>
                     <label className="form-label">
                       Transaction Type<span className="text-danger">*</span>
                     </label>
                     <Select
-                      sx={{ width: "300px" }}
+                      className="input-field-finacial"
                       labelId="transaction-type-label"
                       id="type"
                       name="type"
@@ -394,7 +395,7 @@ function Finacial_Center() {
                     )}
                   </FormControl>
 
-                  <div className="d-flex flex-column pt-5">
+                  <div className="d-flex flex-column ">
                     <label className="form-label">
                       Transaction Name<span className="text-danger">*</span>
                     </label>
@@ -406,12 +407,12 @@ function Finacial_Center() {
                       onBlur={handleBlur}
                       error={touched.name && Boolean(errors.name)}
                       helperText={touched.name && errors.name}
-                      className="form-control input-field"
+                      className="input-field-finacial"
                     />
                   </div>
                 </div>
-                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center   px-5 ">
-                  <div className="d-flex flex-column pt-5  pe-3">
+                <div className="field-container-finacial">
+                  <div className="d-flex flex-column ">
                     <label className="form-label">
                       Amount<span className="text-danger">*</span>
                     </label>
@@ -424,11 +425,11 @@ function Finacial_Center() {
                       onBlur={handleBlur}
                       error={touched.amount && Boolean(errors.amount)}
                       helperText={touched.amount && errors.amount}
-                      className="form-control input-field"
+                      className="input-field-finacial"
                     />
                   </div>
                   {values.type !== "TRANSACTION_TYPE_UNSPECIFIED" && (
-                    <div className="d-flex flex-column  pt-5 pe-3">
+                    <div className="d-flex flex-column  ">
                       <label className="form-label">
                         Reference Id<span className="text-danger">*</span>
                       </label>
@@ -441,7 +442,7 @@ function Finacial_Center() {
                         onBlur={handleBlur}
                         error={touched.refId && Boolean(errors.refId)}
                         helperText={touched.refId && errors.refId}
-                        className="form-control input-field"
+                        className="input-field-finacial"
                       />
                     </div>
                   )}
