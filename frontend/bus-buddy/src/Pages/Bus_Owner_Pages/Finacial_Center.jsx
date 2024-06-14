@@ -320,12 +320,7 @@ function Finacial_Center() {
             />
           </ThemeProvider>
         </div>
-      </div>
 
-      <div
-        className="justify-content-center align-items-center d-flex py-4"
-        style={{ width: "100%" }}
-      >
         <div className="op-main-container">
           <Formik
             initialValues={formValues}
@@ -372,12 +367,13 @@ function Finacial_Center() {
               setFieldValue,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <FormControl className="pt-5  pe-3" sx={{ width: "300px" }}>
+                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center px-5 ">
+                  <FormControl className="pt-5  pe-3">
                     <label className="form-label">
                       Transaction Type<span className="text-danger">*</span>
                     </label>
                     <Select
+                      sx={{ width: "300px" }}
                       labelId="transaction-type-label"
                       id="type"
                       name="type"
@@ -414,7 +410,7 @@ function Finacial_Center() {
                     />
                   </div>
                 </div>
-                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
+                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center   px-5 ">
                   <div className="d-flex flex-column pt-5  pe-3">
                     <label className="form-label">
                       Amount<span className="text-danger">*</span>
