@@ -408,6 +408,7 @@ function Route_Management() {
           }
         );
 
+        console.log(response);
         const formattedData = response.data.content.map((routeData) => ({
           id: routeData.routeId,
           startDestination: routeData.startDestination,
@@ -416,7 +417,6 @@ function Route_Management() {
           noOfSections: routeData.noOfSections,
           permitExpDate: routeData.permitExpDate.split("T")[0],
         }));
-        console.log(formattedData);
 
         setPageState((old) => ({
           ...old,
