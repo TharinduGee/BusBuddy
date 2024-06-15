@@ -187,12 +187,8 @@ function Team_Directory() {
     },
     { field: "joinedDate", headerName: "Joined Date", width: 230 },
     { field: "designation", headerName: "Designation", width: 130 },
-    // { field: "docId", headerName: "Doc ID", width: 130 },
-    {
-      field: "docName",
-      headerName: "Doc Name",
-      width: 230,
-    },
+    { field: "docId", headerName: "Document ID", width: 130 },
+    { field: "docName", headerName: "Document Name", width: 130 },
 
     {
       field: "actions",
@@ -240,6 +236,7 @@ function Team_Directory() {
         )
         .then((response) => {
           const fetchedData = response.data.content;
+          console.log(fetchedData);
           const formattedData = fetchedData.map((user) => ({
             id: user.empId,
             Name: user.name,
@@ -250,6 +247,8 @@ function Team_Directory() {
             docId: user.docId,
             docName: user.docName,
             bday: user.bday,
+            docId: user.docId,
+            docName: user.docName,
           }));
 
           setPageState((old) => ({
@@ -258,7 +257,6 @@ function Team_Directory() {
             data: formattedData,
             total: response.data.totalElements,
           }));
-          console.log("formateed", formattedData);
         })
         .catch((error) => {
           console.error("There was an error!", error);
@@ -309,6 +307,11 @@ function Team_Directory() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
             console.error("Error deleting data:", error.message);
           });
       }
