@@ -98,37 +98,32 @@ function Fleet_Operation() {
   });
 
   const columns = [
-    { field: "id", headerName: "Bus ID", width: 70 },
-    { field: "bustype", headerName: "Bus Type", minwidth: 130, flex: 1 },
+    { field: "id", headerName: "Bus ID", width: 100 },
+    { field: "bustype", headerName: "Bus Type", width: 250 },
     {
       field: "numberplate",
       headerName: "Number Plate",
-      minwidth: 130,
-      flex: 1,
+      width: 200,
     },
     {
       field: "lastservicedate",
       headerName: "Last Service Date",
-
-      minwidth: 130,
-      flex: 1,
+      width: 200,
     },
     {
       field: "regno",
       headerName: "Registration No",
-      minwidth: 130,
-      flex: 1,
+      width: 200,
     },
     {
       field: "numberofseats",
       headerName: "Number Of Seats",
-      minwidth: 130,
-      flex: 1,
+      width: 200,
     },
     {
       field: "actions",
       headerName: "Actions",
-      minwidth: 140,
+      width: 140,
 
       renderCell: (params) => (
         <div>
@@ -451,7 +446,7 @@ function Fleet_Operation() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
-        <h1>Fleet Operations</h1>
+        <h1 className="pb-4">Fleet Operations</h1>
         <div
           style={{ width: "80%" }}
           className="d-flex flex-wrap-reverse align-items-center  justify-content-between"

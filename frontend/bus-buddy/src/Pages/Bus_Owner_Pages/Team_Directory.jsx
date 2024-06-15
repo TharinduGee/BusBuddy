@@ -175,32 +175,30 @@ function Team_Directory() {
   });
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "Name", headerName: "Full Name", minwidth: 130, flex: 1 },
-    { field: "salary", headerName: "Salary", minwidth: 130, flex: 1 },
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "Name", headerName: "Full Name", minwidth: 130 },
+    { field: "salary", headerName: "Salary", minwidth: 130 },
     {
       field: "age",
       headerName: "Age",
       type: "number",
       minwidth: 90,
-      flex: 1,
     },
-    { field: "joinedDate", headerName: "Joined Date", minwidth: 130, flex: 1 },
-    { field: "designation", headerName: "Designation", minwidth: 130, flex: 1 },
+    { field: "joinedDate", headerName: "Joined Date", minwidth: 130 },
+    { field: "designation", headerName: "Designation", minwidth: 130 },
     // { field: "docId", headerName: "Doc ID", width: 130 },
     {
       field: "docName",
       headerName: "Doc Name",
       type: "number",
       minwidth: 90,
-      flex: 1,
     },
 
     {
       field: "actions",
       headerName: "Actions",
-      minwidth: 140,
-      flex: 1,
+      width: 140,
+
       renderCell: (params) => (
         <div>
           <IconButton

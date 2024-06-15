@@ -86,7 +86,7 @@ function Dashboard() {
           const dayOfWeek = formatter.format(new Date(date));
           return {
             name: dayOfWeek,
-            Total: responseData[date].income,
+            Income: responseData[date].income,
             Expenses: Math.abs(responseData[date].expense),
           };
         });

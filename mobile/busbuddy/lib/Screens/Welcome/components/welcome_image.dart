@@ -26,7 +26,6 @@ class WelcomeImage extends StatelessWidget {
                 "assets/icons/businessman-explaining-the-strategy.svg",
                 semanticsLabel: 'My SVG Image',
                 height: 300,
-                // width: 40,
               ),
             ),
             const Spacer(),

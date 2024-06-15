@@ -102,44 +102,41 @@ function Route_Management() {
   });
 
   const columns = [
-    { field: "id", headerName: "Route ID", flex: 1, width: 130 },
+    { field: "id", headerName: "Route ID", width: 150, type: "text" },
     {
       field: "startDestination",
       headerName: "Start Destination",
-      flex: 1,
-      minWidth: 130,
+      type: "text",
+      width: 200,
     },
     {
       field: "endDestination",
       headerName: "End Destination",
-      flex: 1,
-      minWidth: 130,
+      type: "text",
+      width: 200,
     },
     {
       field: "distance",
       headerName: "Distance",
-      type: "number",
-      flex: 1,
-      minWidth: 80,
+      type: "text",
+      width: 200,
     },
     {
       field: "noOfSections",
       headerName: "Sections",
-      type: "number",
-      flex: 1,
-      minWidth: 80,
+      type: "text",
+      width: 200,
     },
     {
       field: "permitExpDate",
-      flex: 1,
+      type: "text",
       headerName: "Permite Expire Date",
-      minWidth: 150,
+      width: 200,
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1,
-      minWidth: 130,
+      width: 200,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -448,7 +445,7 @@ function Route_Management() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
-        <h1>Route Managment</h1>
+        <h1 className="pb-4">Route Managment</h1>
         <div
           style={{ width: "80%" }}
           className="d-flex flex-wrap-reverse align-items-center  justify-content-between"

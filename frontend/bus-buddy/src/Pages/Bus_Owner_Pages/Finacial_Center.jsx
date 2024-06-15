@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import "./Finacial_Center.css";
 import "./Team_Directory.css";
 import "./Route_Management.css";
-import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
-import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -25,6 +26,7 @@ function Finacial_Center() {
     margin: 30,
     backgroundColor: "#ff760d",
     color: "white",
+    width: "300px",
   };
 
   const token = localStorage.getItem("token");
@@ -105,6 +107,12 @@ function Finacial_Center() {
     },
   });
 
+  const text_box_the = createTheme({
+    shape: {
+      borderRadius: 12,
+    },
+  });
+
   const columns = [
     {
       field: "id",
@@ -115,7 +123,7 @@ function Finacial_Center() {
     {
       field: "amount",
       headerName: "Amount",
-      flex: 1,
+
       minWidth: 130,
       type: "number",
     },
@@ -124,7 +132,6 @@ function Finacial_Center() {
       field: "transaction_name",
       headerName: "Transaction name",
 
-      flex: 1,
       minWidth: 80,
     },
     {
@@ -137,7 +144,7 @@ function Finacial_Center() {
     { field: "docId", flex: 1, headerName: "Document ID", minWidth: 150 },
     {
       field: "transactionType",
-      flex: 1,
+
       headerName: "Transaction Type",
       minWidth: 150,
     },
@@ -183,6 +190,7 @@ function Finacial_Center() {
   });
 
   const [refresh, setRefresh] = useState(true);
+  const [searchDate, setSearchDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -218,13 +226,82 @@ function Finacial_Center() {
       }
     };
 
-    fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, refresh, token]);
+    const fetchDatatoDate = async () => {
+      setPageState((old) => ({ ...old, isLoading: true }));
+      const fyear = searchDate.year();
+      const fmonth = searchDate.month() + 1;
+      const fday = searchDate.date();
+      const firstformattedDate = `${fyear}-${String(fmonth).padStart(
+        2,
+        "0"
+      )}-${String(fday).padStart(2, "0")}`;
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8081/api/v1/ledger/findAllByDate?date=${firstformattedDate}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log(response.data);
+
+        const formattedData = response.data.content.map((ledgerData) => ({
+          id: ledgerData.transactionId,
+          amount: ledgerData.amount,
+          timestamp: ledgerData.time.split("T")[0],
+          transaction_name: ledgerData.transactionName,
+          refId: ledgerData.refId,
+          transactionType: ledgerData.transactionType.split("E_")[1],
+          docId: ledgerData.docId,
+        }));
+
+        setPageState((old) => ({
+          ...old,
+          isLoading: false,
+          data: formattedData,
+          total: response.data.totalElements,
+        }));
+      } catch (error) {
+        console.error("There was an error!", error);
+        setPageState((old) => ({ ...old, isLoading: false }));
+      }
+    };
+
+    if (searchDate == null) {
+      fetchData();
+    } else {
+      fetchDatatoDate();
+    }
+  }, [
+    paginationModel.page,
+    paginationModel.pageSize,
+    refresh,
+    token,
+    searchDate,
+  ]);
 
   return (
     <div>
       <h1 className="d-flex justify-content-center">Fincial Center</h1>
-      <div className="d-flex justify-content-center">
+
+      <div className="d-flex flex-column align-items-center">
+        <div
+          className="d-flex flex-column  input-and-label mt-3 "
+          style={{ width: "80%" }}
+        >
+          <label class="form-label">Search By Date</label>
+          <ThemeProvider theme={text_box_the}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ width: 200 }}
+                slotProps={{ field: { clearable: true } }}
+                value={searchDate}
+                onChange={(value) => {
+                  setSearchDate(value);
+                }}
+              />
+            </LocalizationProvider>
+          </ThemeProvider>
+        </div>
         <div
           className="justify-content-center align-items-center"
           style={{ width: "80%", height: 325 }}
@@ -244,12 +321,7 @@ function Finacial_Center() {
             />
           </ThemeProvider>
         </div>
-      </div>
 
-      <div
-        className="justify-content-center align-items-center d-flex py-4"
-        style={{ width: "100%" }}
-      >
         <div className="op-main-container">
           <Formik
             initialValues={formValues}
@@ -296,12 +368,13 @@ function Finacial_Center() {
               setFieldValue,
             }) => (
               <Form onSubmit={handleSubmit}>
-                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <FormControl className="pt-5  pe-3" sx={{ width: "300px" }}>
+                <div className="field-container-finacial">
+                  <FormControl>
                     <label className="form-label">
                       Transaction Type<span className="text-danger">*</span>
                     </label>
                     <Select
+                      className="input-field-finacial"
                       labelId="transaction-type-label"
                       id="type"
                       name="type"
@@ -322,7 +395,7 @@ function Finacial_Center() {
                     )}
                   </FormControl>
 
-                  <div className="d-flex flex-column pt-5">
+                  <div className="d-flex flex-column ">
                     <label className="form-label">
                       Transaction Name<span className="text-danger">*</span>
                     </label>
@@ -334,12 +407,12 @@ function Finacial_Center() {
                       onBlur={handleBlur}
                       error={touched.name && Boolean(errors.name)}
                       helperText={touched.name && errors.name}
-                      className="form-control input-field"
+                      className="input-field-finacial"
                     />
                   </div>
                 </div>
-                <div className="d-flex flex-wrap justify-content-lg-between justify-content-md-center  w-100 px-5 ">
-                  <div className="d-flex flex-column pt-5  pe-3">
+                <div className="field-container-finacial">
+                  <div className="d-flex flex-column ">
                     <label className="form-label">
                       Amount<span className="text-danger">*</span>
                     </label>
@@ -352,11 +425,11 @@ function Finacial_Center() {
                       onBlur={handleBlur}
                       error={touched.amount && Boolean(errors.amount)}
                       helperText={touched.amount && errors.amount}
-                      className="form-control input-field"
+                      className="input-field-finacial"
                     />
                   </div>
                   {values.type !== "TRANSACTION_TYPE_UNSPECIFIED" && (
-                    <div className="d-flex flex-column  pt-5 pe-3">
+                    <div className="d-flex flex-column  ">
                       <label className="form-label">
                         Reference Id<span className="text-danger">*</span>
                       </label>
@@ -369,7 +442,7 @@ function Finacial_Center() {
                         onBlur={handleBlur}
                         error={touched.refId && Boolean(errors.refId)}
                         helperText={touched.refId && errors.refId}
-                        className="form-control input-field"
+                        className="input-field-finacial"
                       />
                     </div>
                   )}

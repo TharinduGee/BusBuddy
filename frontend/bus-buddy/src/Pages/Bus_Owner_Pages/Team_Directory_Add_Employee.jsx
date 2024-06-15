@@ -84,20 +84,20 @@ function Team_Directory_Add_Employee() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", minwidth: 70, flex: 1 },
-    { field: "firstName", headerName: "First name", minwidth: 130, flex: 1 },
-    { field: "lastName", headerName: "Last name", minwidth: 130, flex: 1 },
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "firstName", headerName: "First name", width: 130 },
+    { field: "lastName", headerName: "Last name", width: 130 },
 
-    { field: "email", headerName: "Email", minwidth: 300, flex: 1 },
-    { field: "mobileNo", headerName: "Mobile No", minwidth: 130, flex: 1 },
-    { field: "role", headerName: "Role", minwidth: 160, flex: 1 },
+    { field: "email", headerName: "Email", width: 300, flex: 1 },
+    { field: "mobileNo", headerName: "Mobile No", width: 130 },
+    { field: "role", headerName: "Role", width: 160 },
     {
       field: "fullName",
       headerName: "Full name",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      minwidth: 160,
-      flex: 1,
+      width: 160,
+
       valueGetter: (params) =>
         `${params.row.firstName || " "} ${params.row.lastName || ""}`,
     },
