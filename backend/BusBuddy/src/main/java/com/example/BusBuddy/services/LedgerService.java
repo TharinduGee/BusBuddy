@@ -49,6 +49,8 @@ public class LedgerService {
             ));
             ledger.setTrip(trip);
 
+            trip.setIncome(ledger.getAmount());
+            tripRepository.save(trip);
         }
         else if (ledgerAddRequest.getType() == TransactionType.TRANSACTION_TYPE_TICKET_EXPENSE) {
             ledger.setAmount(-ledgerAddRequest.getAmount());
@@ -57,7 +59,8 @@ public class LedgerService {
                     "Trip not found."
             ));
             ledger.setTrip(trip);
-
+            trip.setExpense(ledger.getAmount());
+            tripRepository.save(trip);
         } else if (ledgerAddRequest.getType() == TransactionType.TRANSACTION_TYPE_EMPLOYEE_SALARY) {
             ledger.setAmount(-ledgerAddRequest.getAmount());
             ledger.setType(TransactionType.TRANSACTION_TYPE_EMPLOYEE_SALARY);
