@@ -101,7 +101,7 @@ function EmployeeDocumentPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row)}
+            onClick={() => handleOpen(params.row.id)}
           >
             <IoIosFolderOpen />
           </IconButton>
@@ -138,20 +138,20 @@ function EmployeeDocumentPage() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/v1/document/findDocumentByType?docCategory=DOC_CATEGORY_ROUTE_PERMIT&docName=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          `http://localhost:8081/api/v1/document/findDocumentByType?docCategory=DOC_CATEGORY_UNSPECIFIED&docName=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
+        console.log("other" + response);
 
         const formattedData = response.data.content.map((docData) => ({
           id: docData.docId,
           docName: docData.docName,
           uploadDate: docData.uploadDate,
         }));
-        console.log(formattedData);
 
         setPageState((old) => ({
           ...old,
@@ -171,6 +171,27 @@ function EmployeeDocumentPage() {
     fetchData();
   }, [paginationModel.page, paginationModel.pageSize, searchInput]);
 
+  const handleOpen = async (id) => {
+    console.log(id);
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/api/v1/document/getDocument?docId=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        }
+      );
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      window.open(url);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      Swal.fire("Error", "Failed to fetch PDF", "error");
+    }
+  };
+
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
@@ -187,7 +208,7 @@ function EmployeeDocumentPage() {
           <ThemeProvider theme={theme}>
             <TextField
               id="outlined-basic"
-              label="Search by Start Destination"
+              label="Search by Document Name"
               variant="outlined"
               onChange={handleSearchInputChange}
               InputProps={{
