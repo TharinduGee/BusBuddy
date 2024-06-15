@@ -215,16 +215,6 @@ function Trip_Management() {
     token,
   ]);
 
-  const AddTrip = () => {
-    if (checked) {
-      AddTripForADuration();
-      console.log("duration");
-    } else {
-      AddTripForTheDate();
-      console.log("notduration");
-    }
-  };
-
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
