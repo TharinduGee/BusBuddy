@@ -3,8 +3,9 @@ import "./Uploader.css";
 import { MdCloudUpload, MdDelete } from "react-icons/md";
 import { AiFillFileImage } from "react-icons/ai";
 import PdfLogo from "../../Assets/pdflogo.png";
+import { forwardRef, useImperativeHandle } from "react";
 
-function Uploader({ handleFileChange }) {
+const Uploader = forwardRef(({ handleFileChange }, ref) => {
   const [doc, setDoc] = useState(null);
   const [docName, setDocName] = useState("No Document Selected");
   const [type, setType] = useState("");
@@ -32,6 +33,15 @@ function Uploader({ handleFileChange }) {
     setIsDraggingOver(false);
   };
 
+  const resetform = () => {
+    setDocName("No Selected File");
+    setDoc(null);
+  };
+
+  useImperativeHandle(ref, () => ({
+    resetform,
+  }));
+
   return (
     <div>
       <form
@@ -53,7 +63,6 @@ function Uploader({ handleFileChange }) {
               setDoc(URL.createObjectURL(files[0]));
               setType(files[0].type);
               handleFileChange(files[0]);
-              //console.log(type);
             }
           }}
         />
@@ -78,14 +87,13 @@ function Uploader({ handleFileChange }) {
             size={20}
             className="delete-doc"
             onClick={() => {
-              setDocName("No Selected File");
-              setDoc(null);
+              resetform();
             }}
           />
         </span>
       </section>
     </div>
   );
-}
+});
 
 export default Uploader;
