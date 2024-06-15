@@ -38,7 +38,6 @@ public class TripService {
     private final EmployeeRepository employeeRepository;
     private final RouteRepository routeRepository;
     private final EmployeeService employeeService;
-    private final LedgerService ledgerService;
 
     @Transactional
     public String addTripsForDuration(HttpServletRequest httpServletRequest, @RequestBody @NotNull TripAddForDurationRequest tripAddForDurationRequest ) {
@@ -91,8 +90,6 @@ public class TripService {
                 .date(localDate)
                 .startTime(tripAddRequest.getStartTime())
                 .endTime(tripAddRequest.getEndTime())
-                .income(tripAddRequest.getIncome())
-                .expense(tripAddRequest.getExpense())
                 .status(TripStatus.TRIP_STATUS_SCHEDULED)
                 .bus(bus)
                 .conductor(conductor)
@@ -100,6 +97,8 @@ public class TripService {
                 .route(route)
                 .ticketApi(tripAddRequest.getTicketApiToken())
                 .business(businessService.extractBId(httpServletRequest))
+                .income(0.0)
+                .expense(0.0)
                 .build();
 
         tripRepository.save(trip);
@@ -142,14 +141,14 @@ public class TripService {
                     .startTime(tripAddRequest.getStartTime())
                     .endTime(tripAddRequest.getEndTime())
                     .bus(bus)
-                .income(tripAddRequest.getIncome())
-                .expense(tripAddRequest.getExpense())
                 .status(TripStatus.TRIP_STATUS_SCHEDULED)
                     .conductor(conductor)
                     .driver(driver)
                     .route(route)
                 .ticketApi(tripAddRequest.getTicketApiToken())
                     .business(businessService.extractBId(httpServletRequest))
+                .income(0.0)
+                .expense(0.0)
                     .build();
 
         tripRepository.save(trip);
