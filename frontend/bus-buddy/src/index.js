@@ -26,7 +26,7 @@ import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactIn
 import BusInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/BusInfo";
 import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
 import BusDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/BusDocumentPage";
-import EmployeeDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/EmployeeDocumentPage";
+import OtherDocument from "./Pages/Bus_Owner_Pages/FIileLibrayPages/OtherDocument";
 import RouteDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/RouteDocumentPage";
 import ServiceAgreementPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/ServiceAgreementPage";
 
@@ -57,7 +57,7 @@ root.render(
             path="filelibrary/BUS DOCUMENT"
             element={<BusDocumentPage />}
           />
-          <Route path="filelibrary/OTHER" element={<EmployeeDocumentPage />} />
+          <Route path="filelibrary/OTHER" element={<OtherDocument />} />
           <Route
             path="filelibrary/ROUTE PERMIT"
             element={<RouteDocumentPage />}

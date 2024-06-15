@@ -59,6 +59,7 @@ function Team_Directory() {
   const handleRowClick = (params) => {
     setselectedID(params.row.id);
     setjoinedDate(params.row.joinedDate);
+    setSalary(params.row.salary);
     setselectedfullname(params.row.Name);
     setselectedRole(params.row.designation);
     setselectedSalary(params.row.salary);
@@ -176,22 +177,21 @@ function Team_Directory() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
-    { field: "Name", headerName: "Full Name", minwidth: 130 },
-    { field: "salary", headerName: "Salary", minwidth: 130 },
+    { field: "Name", headerName: "Full Name", width: 230 },
+    { field: "salary", headerName: "Salary", width: 130 },
     {
       field: "age",
       headerName: "Age",
-      type: "number",
-      minwidth: 90,
+
+      width: 90,
     },
-    { field: "joinedDate", headerName: "Joined Date", minwidth: 130 },
-    { field: "designation", headerName: "Designation", minwidth: 130 },
+    { field: "joinedDate", headerName: "Joined Date", width: 230 },
+    { field: "designation", headerName: "Designation", width: 130 },
     // { field: "docId", headerName: "Doc ID", width: 130 },
     {
       field: "docName",
       headerName: "Doc Name",
-      type: "number",
-      minwidth: 90,
+      width: 230,
     },
 
     {
@@ -431,13 +431,9 @@ function Team_Directory() {
               id="outlined-basic"
               label="Enter the salary"
               variant="outlined"
+              value={salary}
               onChange={handleSalaryChange}
-              onKeyPress={(event) => {
-                const char = String.fromCharCode(event.charCode);
-                if (!/^\d|\.$|^[-]/.test(char)) {
-                  event.preventDefault();
-                }
-              }}
+              type="number"
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
