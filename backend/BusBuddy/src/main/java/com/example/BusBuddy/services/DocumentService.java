@@ -1,6 +1,7 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.dto.Document.DocumentDataResponse;
 import com.example.BusBuddy.dto.Document.DocumentPaginationResponse;
 import com.example.BusBuddy.dto.Document.DocumentResponse;
 import com.example.BusBuddy.models.*;
@@ -101,10 +102,10 @@ public class DocumentService {
         }else if(category == DocCategory.DOC_CATEGORY_BUS_DOC) {
             Bus bus = busRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("Bus is not found."));
-            doc.setCategory(DocCategory.DOC_CATEGORY_BUS_DOC);
+            doc.setCategory(category);
             doc.setBus(bus);
         }else if(category == DocCategory.DOC_CATEGORY_UNSPECIFIED) {
-            doc.setCategory(DocCategory.DOC_CATEGORY_UNSPECIFIED);
+            doc.setCategory(category);
         }
         else{
             throw new InternalError("Document category isn't handled.");
@@ -117,11 +118,14 @@ public class DocumentService {
 
 
     @Transactional
-    public byte[] getDocument(Long docId) {
+    public DocumentDataResponse getDocument(Long docId) {
         Document document = documentRepository.findById(docId).orElseThrow(() -> new EntityNotFoundException(
                 "Document is not found."
         ));
-        return document.getData();
+        return DocumentDataResponse.builder()
+                .data(document.getData())
+                .docName(document.getDocName())
+                .build();
     }
 
     public String edit(MultipartFile file ,
