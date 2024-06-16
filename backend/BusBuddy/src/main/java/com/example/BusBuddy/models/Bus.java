@@ -79,11 +79,8 @@ public class Bus {
     private Set<Trip> trips;
 
     @OneToOne(
-            mappedBy = "bus",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            mappedBy = "bus"
     )
-    @OnDelete(action = OnDeleteAction.SET_NULL)
     private Document document;
 
 }
