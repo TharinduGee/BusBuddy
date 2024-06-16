@@ -50,7 +50,7 @@ public class EmployeeController {
                                        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date joinedDate,
                                        @RequestParam(required = false) Date bDay,
                                        @RequestParam String email,
-                                       @RequestParam(value = "file", required = false) MultipartFile file){
+                                       @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         return ResponseEntity.ok(employeeService.add(httpServletRequest, salary, joinedDate, bDay, email, file));
     }
 
