@@ -4,6 +4,7 @@ import Button from "@mui/material-next/Button";
 import add_icon from "./../../Assets/Owner_assests/add_icon.png";
 import avatar from "./../../Assets/Owner_assests/Avatar.png";
 import { DataGrid } from "@mui/x-data-grid";
+import { IoIosFolderOpen } from "react-icons/io";
 import "./Team_Directory.css";
 import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
 import IconButton from "@mui/material/IconButton";
@@ -13,6 +14,7 @@ import Popup from "./Update_popup";
 import ButtonAdd from "@mui/material/Button";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Team_Directory() {
   const token = localStorage.getItem("token");
@@ -193,7 +195,7 @@ function Team_Directory() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      width: 240,
 
       renderCell: (params) => (
         <div>
@@ -212,6 +214,14 @@ function Team_Directory() {
             onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton
+            style={{ color: "grey" }}
+            className="mx-2"
+            aria-label="delete"
+            onClick={() => handleOpen(params.row)}
+          >
+            <IoIosFolderOpen />
           </IconButton>
         </div>
       ),
@@ -279,6 +289,17 @@ function Team_Directory() {
     token,
     joinedDate,
   ]);
+  const navigate = useNavigate();
+  const handleOpen = async (row) => {
+    console.log(row);
+    if (row.docId != null) {
+      navigate("/filelibrary/SERVICE AGREEMENT", {
+        state: { id: row.docId, docName: row.docName },
+      });
+    } else {
+      Swal.fire("Error", "No Document to Open", "error");
+    }
+  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -440,7 +461,7 @@ function Team_Directory() {
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 2,
                 },
               }}
@@ -449,7 +470,7 @@ function Team_Directory() {
               type="file"
               class="form-control input-field-choosefile mt-4"
               id="inputGroupFile02"
-              style={{ width: 350 }}
+              style={{ width: 250 }}
               onChange={handleFileChange}
               ref={inputRef}
             />
