@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { IoIosFolderOpen } from "react-icons/io";
 import IconButton from "@mui/material/IconButton";
@@ -9,6 +9,7 @@ import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ServiceAgreementPage() {
   const token = localStorage.getItem("token");
@@ -133,6 +134,20 @@ function ServiceAgreementPage() {
     pageSize: 5,
   });
   const [refresh, setRefresh] = useState(true);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasOpened = useRef(false);
+  useEffect(() => {
+    const { id, docName } = location.state || {};
+    if (!hasOpened.current && id != null) {
+      handleOpen(id);
+      hasOpened.current = true;
+      setSearchInput(docName.split(".")[0]);
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate, location.pathname]);
+
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({
@@ -196,7 +211,7 @@ function ServiceAgreementPage() {
             console.log("Data successfully deleted:", response.data);
             Swal.fire({
               title: "Deleted!",
-              text: "User removed from your business.",
+              text: "FIle Deleted Successfully.",
               icon: "success",
             });
             setRefresh(!refresh);
@@ -250,8 +265,9 @@ function ServiceAgreementPage() {
           <ThemeProvider theme={theme}>
             <TextField
               id="outlined-basic"
-              label="Search by Document Name"
+              label={searchInput ? "" : "Search by Document Name"}
               variant="outlined"
+              value={searchInput}
               onChange={handleSearchInputChange}
               InputProps={{
                 sx: {

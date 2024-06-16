@@ -133,6 +133,7 @@ function Team_Directory_Add_Employee() {
   };
   const clear = () => {
     setSalary(null);
+    console.log("clear funciton");
     if (inputRef.current.value) {
       inputRef.current.value = null;
     }
@@ -195,7 +196,7 @@ function Team_Directory_Add_Employee() {
 
   function formatDate(date) {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 because months are zero-indexed
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
@@ -379,16 +380,12 @@ function Team_Directory_Add_Employee() {
               label="Enter the salary"
               variant="outlined"
               onChange={handleSalaryChange}
-              onKeyPress={(event) => {
-                const char = String.fromCharCode(event.charCode);
-                if (!/^\d|\.$|^[-]/.test(char)) {
-                  event.preventDefault();
-                }
-              }}
+              value={salary}
+              type="number"
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: "100%",
                   borderRadius: 2,
                 },
               }}
@@ -397,7 +394,7 @@ function Team_Directory_Add_Employee() {
               type="file"
               class="form-control input-field-choosefile mt-4"
               id="inputGroupFile02"
-              style={{ width: 350 }}
+              style={{ width: "70%" }}
               onChange={handleFileChange}
               ref={inputRef}
             />
