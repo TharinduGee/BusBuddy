@@ -317,6 +317,7 @@ function Fleet_Operation() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire("Error", "Oops Somthing Happened", "error");
             console.error("Error deleting data:", error.message);
           });
       }
