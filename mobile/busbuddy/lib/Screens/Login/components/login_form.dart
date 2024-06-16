@@ -38,20 +38,16 @@ class _LoginFormState extends State<LoginForm> {
 
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body.toString());
-          print(data);
 
-          // Check if the user role is either 'ROLE_DRIVER' or 'ROLE_CONDUCTOR'
           if (data['role'] == 'ROLE_DRIVER' ||
               data['role'] == 'ROLE_CONDUCTOR') {
             print('Login successfully');
-            // Write value
             await storage.write(key: 'JWtoken', value: data['token']);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const TripSchedule()),
             );
           } else {
-            // User role is not 'ROLE_DRIVER' or 'ROLE_CONDUCTOR'
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content:
@@ -83,8 +79,8 @@ class _LoginFormState extends State<LoginForm> {
       } catch (e) {
         print(e.toString());
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('An error occurred: $e'),
+          const SnackBar(
+            content: Text('An error occurred: '),
           ),
         );
       }
