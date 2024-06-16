@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Uploader from "../../../Components/Uploader/Uploader";
 import CatergoryCard from "../../../Components/OwnerPageComponents/CatergoryCard/CatergoryCard";
 import "./FileLibrary.css";
@@ -8,9 +8,8 @@ import Swal from "sweetalert2";
 
 function File_Library() {
   const token = localStorage.getItem("token");
-  const [doctype, setdoctype] = useState("");
-  const [docID, setdocID] = useState("");
   const [docName, setDocName] = useState("");
+  const childRef = useRef();
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
     const nwfile = e;
@@ -18,11 +17,11 @@ function File_Library() {
     setRefresh(!refresh);
   };
   const AddFile = () => {
-    if (doctype === null || docName === "" || docID === "" || file === null) {
+    if (docName === "" || file === null) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "All the fields should be filled!",
+        text: "Document Name and File is Required ",
       });
     } else {
       const form = new FormData();
@@ -30,7 +29,7 @@ function File_Library() {
 
       axios
         .post(
-          `http://localhost:8081/api/v1/document/add?category=${doctype}&name=${docName}&id=${docID}`,
+          `http://localhost:8081/api/v1/document/add?category=DOC_CATEGORY_UNSPECIFIED&name=${docName}`,
           form,
           {
             headers: {
@@ -47,6 +46,7 @@ function File_Library() {
             text: "File Added Successfully!",
             icon: "success",
           });
+          childRef.current?.resetform();
           console.log("Data successfully posted:", response.data);
         })
         .catch(function (error) {
@@ -62,8 +62,6 @@ function File_Library() {
   };
 
   const clear = () => {
-    setdocID("");
-    setdoctype("");
     setDocName("");
   };
 
@@ -83,64 +81,25 @@ function File_Library() {
       <div className="d-flex my-4 py-4 file-library-sub-Heading">
         Add File to the Library
       </div>
-      <div className="d-flex flex-wrap justify-content-center  align-items-center">
-        <div className="d-flex flex-column justify-content-center  px-2 mx-4">
-          <div className="input-and-label">
-            <label className="form-label">Document Name*</label>
-            <input
-              type="text"
-              id="Document_name"
-              className="form-control input-field-trip mb-4"
-              value={docName}
-              onChange={(newValue) => {
-                const selectedValue = newValue.target.value;
-                setDocName(selectedValue);
-                console.log("doc name", selectedValue);
-              }}
-            />
-          </div>
-          <div className="input-and-label">
-            <label className="form-label">Document Catogory*</label>
-            <select
-              className="form-select input-field-trip mb-4"
-              onChange={(newValue) => {
-                const selectedValue = newValue.target.value;
-                setdoctype(selectedValue);
-                console.log("one change date", selectedValue);
-              }}
-              value={doctype}
-            >
-              <option value="DOC_CATEGORY_NIC">NIC</option>
-              <option value="DOC_CATEGORY_SERVICE_AGREEMENT">
-                SERVICE AGREEMENT
-              </option>
-              <option value="DOC_CATEGORY_ROUTE_PERMIT">ROUTE PERMIT</option>
-              <option value="DOC_CATEGORY_BUS_DOC">BUS DOC</option>
-              <option value="DOC_CATEGORY_UNSPECIFIED">UNSPECIFIED</option>
-            </select>
-          </div>
-          <div className="input-and-label">
-            <label className="form-label">Document Related ID*</label>
-            <input
-              type="text"
-              id="Document_id"
-              className="form-control input-field-trip mb-4"
-              onChange={(newValue) => {
-                const selectedValue = newValue.target.value;
-                setdocID(selectedValue);
-                console.log("doc id", selectedValue);
-              }}
-              value={docID}
-              onKeyPress={(event) => {
-                const char = String.fromCharCode(event.charCode);
-                if (!/^\d|\.$|^[-]/.test(char)) {
-                  event.preventDefault();
-                }
-              }}
-            />
-          </div>
+      <div className="d-flex flex-column justify-content-center  align-items-center">
+        <div className="input-and-label">
+          <label className="form-label">
+            Document Name<span style={{ color: "red" }}>*</span>
+          </label>
+          <input
+            type="text"
+            id="Document_name"
+            className="form-control input-field-trip mb-4"
+            value={docName}
+            onChange={(newValue) => {
+              const selectedValue = newValue.target.value;
+              setDocName(selectedValue);
+              console.log("doc name", selectedValue);
+            }}
+          />
         </div>
-        <Uploader handleFileChange={handleFileChange} />
+
+        <Uploader ref={childRef} handleFileChange={handleFileChange} />
       </div>
 
       <Button

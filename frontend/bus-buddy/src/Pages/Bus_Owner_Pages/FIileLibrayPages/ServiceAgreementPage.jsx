@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { IoIosFolderOpen } from "react-icons/io";
 import IconButton from "@mui/material/IconButton";
@@ -9,6 +9,7 @@ import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ServiceAgreementPage() {
   const token = localStorage.getItem("token");
@@ -76,25 +77,29 @@ function ServiceAgreementPage() {
   };
 
   const columns = [
-    { field: "id", flex: 1, headerName: "Document ID", minWidth: 130 },
+    { field: "id", headerName: "Document ID", width: 180 },
     {
       field: "docName",
-      flex: 1,
+
       headerName: "Document Name",
-      minWidthwidth: 130,
+      width: 350,
+    },
+    {
+      field: "refId",
+      headerName: "Reference ID",
+      width: 180,
     },
     {
       field: "uploadDate",
-      flex: 1,
       headerName: "Uploaded Date",
-      minWidth: 130,
+      width: 250,
     },
 
     {
       field: "actions",
       headerName: "Actions",
-      minWidth: 130,
-      flex: 1,
+      width: 200,
+
       renderCell: (params) => (
         <div>
           <IconButton
@@ -109,7 +114,7 @@ function ServiceAgreementPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -128,6 +133,20 @@ function ServiceAgreementPage() {
     page: 0,
     pageSize: 5,
   });
+  const [refresh, setRefresh] = useState(true);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const hasOpened = useRef(false);
+  useEffect(() => {
+    const { id, docName } = location.state || {};
+    if (!hasOpened.current && id != null) {
+      handleOpen(id);
+      hasOpened.current = true;
+      setSearchInput(docName.split(".")[0]);
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location.state, navigate, location.pathname]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -145,14 +164,14 @@ function ServiceAgreementPage() {
             },
           }
         );
+        console.log(response);
 
         const formattedData = response.data.content.map((docData) => ({
           id: docData.docId,
           docName: docData.docName,
           uploadDate: docData.uploadDate,
+          refId: docData.refId,
         }));
-        console.log(formattedData);
-
         setPageState((old) => ({
           ...old,
           isLoading: false,
@@ -169,7 +188,45 @@ function ServiceAgreementPage() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/document/remove?docId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "FIle Deleted Successfully.",
+              icon: "success",
+            });
+            setRefresh(!refresh);
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+            console.error("Error deleting data:", error.message);
+          });
+      }
+    });
+  };
 
   const handleOpen = async (id) => {
     console.log(id);
@@ -208,8 +265,9 @@ function ServiceAgreementPage() {
           <ThemeProvider theme={theme}>
             <TextField
               id="outlined-basic"
-              label="Search by Document Name"
+              label={searchInput ? "" : "Search by Document Name"}
               variant="outlined"
+              value={searchInput}
               onChange={handleSearchInputChange}
               InputProps={{
                 sx: {

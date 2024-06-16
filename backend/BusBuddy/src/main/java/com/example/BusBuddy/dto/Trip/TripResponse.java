@@ -22,9 +22,10 @@ public class TripResponse {
     private Time endTime;
     private Double income;
     private Double expense;
-    private Long driverId;
-    private Long conductorId;
-    private Long busId;
-    private Long routeId;
+    private String driverName;
+    private String conductorName;
+    private String numberPlate;
+    private String routeStart;
+    private String routeEnd;
     private TripStatus status;
 }

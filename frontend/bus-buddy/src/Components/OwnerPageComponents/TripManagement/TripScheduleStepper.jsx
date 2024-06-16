@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -57,15 +57,6 @@ const validationSchemaStep3 = Yup.object().shape({
 });
 
 const validationSchemaStep4 = Yup.object().shape({
-  income_: Yup.number()
-    .required("Income is required")
-    .min(0, "Income cannot be negative"),
-  expenses_: Yup.number()
-    .required("Expenses are required")
-    .min(0, "Expenses cannot be negative"),
-});
-
-const validationSchemaStep5 = Yup.object().shape({
   driver_: Yup.string().required("Driver is required"),
   conductor_: Yup.string().required("Conductor is required"),
   bus_: Yup.string().required("Bus is required"),
@@ -134,11 +125,7 @@ export default function TripScheduleStepper() {
     conductor_: "",
     route_: "",
     bus_: "",
-    income_: "",
-    expenses_: "",
   });
-
-  const [value, setValue] = React.useState("a");
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -165,13 +152,30 @@ export default function TripScheduleStepper() {
       conductor_: "",
       route_: "",
       bus_: "",
-      income_: "",
-      expenses_: "",
     });
     setActiveStep(0);
   };
+  const [value, setValue] = React.useState("a");
+
+  const [triggerDropDownInfo, setTriggerDropDownInfo] = useState(false);
+
+  useEffect(() => {
+    console.log(formValues);
+    if (triggerDropDownInfo) {
+      getDropDownInfo();
+      setTriggerDropDownInfo(false);
+    }
+  }, [formValues, triggerDropDownInfo]);
+
+  const handleButtonClick = (formik) => {
+    formik.handleSubmit();
+    setTimeout(function () {
+      setTriggerDropDownInfo(true);
+    }, 90);
+  };
 
   const getDropDownInfo = () => {
+    console.log("sadas" + formValues.startTime_);
     const StartTime = formValues.startTime_.toDate();
     const formattedStartTime = format(StartTime, "HH:mm:ss");
     const EndTime = formValues.endTime_.toDate();
@@ -299,11 +303,6 @@ export default function TripScheduleStepper() {
     } catch (error) {
       console.error("There was an error!", error);
     }
-  };
-
-  const handleButtonClick = (formik) => {
-    formik.handleSubmit();
-    getDropDownInfo();
   };
 
   const steps = [
@@ -558,67 +557,6 @@ export default function TripScheduleStepper() {
             <div>
               <Button
                 variant="contained"
-                onClick={() => formik.handleSubmit()}
-                sx={{ mt: 1, mr: 1 }}
-              >
-                Continue
-              </Button>
-              <Button
-                onClick={() => handleBack(formik.values)}
-                sx={{ mt: 1, mr: 1 }}
-              >
-                Back
-              </Button>
-            </div>
-          </Box>
-        </>
-      ),
-    },
-    {
-      label: "Step 4",
-      validationSchema: validationSchemaStep4,
-      content: (formik) => (
-        <>
-          <div className="d-flex flex-column input-and-label mt-1">
-            <>
-              <div className="input-and-label">
-                <label className="form-label">Income</label>
-                <input
-                  type="number"
-                  id="income_"
-                  className="form-control input-field-trip"
-                  value={formik.values.income_}
-                  onChange={(event) =>
-                    formik.setFieldValue("income_", event.target.value, true)
-                  }
-                />
-                {formik.touched.income_ && formik.errors.income_ && (
-                  <Typography color="error">{formik.errors.income_}</Typography>
-                )}
-              </div>
-              <div className="input-and-label mb-4">
-                <label className="form-label">Expenses</label>
-                <input
-                  type="number"
-                  id="expenses_"
-                  className="form-control input-field-trip"
-                  value={formik.values.expenses_}
-                  onChange={(event) =>
-                    formik.setFieldValue("expenses_", event.target.value, true)
-                  }
-                />
-                {formik.touched.expenses_ && formik.errors.expenses_ && (
-                  <Typography color="error">
-                    {formik.errors.expenses_}
-                  </Typography>
-                )}
-              </div>
-            </>
-          </div>
-          <Box sx={{ mb: 2 }}>
-            <div>
-              <Button
-                variant="contained"
                 onClick={() => handleButtonClick(formik)}
                 sx={{ mt: 1, mr: 1 }}
               >
@@ -635,9 +573,10 @@ export default function TripScheduleStepper() {
         </>
       ),
     },
+
     {
-      label: "Step 5",
-      validationSchema: validationSchemaStep5,
+      label: "Step 4",
+      validationSchema: validationSchemaStep4,
       content: (formik) => (
         <>
           <div className="d-flex flex-column input-and-label mt-1">
@@ -853,6 +792,12 @@ export default function TripScheduleStepper() {
         });
       })
       .catch(function (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+
         console.error("Error posting data:", error);
       });
     handleReset();

@@ -78,7 +78,19 @@ public class EmployeeService {
         }
 
         List<Employee> employees = employeePage.getContent();
-        List<EmployeeResponse> employeeResponses = employees.stream().map((element) -> modelMapper.map(element, EmployeeResponse.class)).collect(Collectors.toList());
+        List<EmployeeResponse> employeeResponses = employees.stream().map( employee ->
+                EmployeeResponse.builder()
+                        .empId(employee.getEmpId())
+                        .name(employee.getName())
+                        .salary(employee.getSalary())
+                        .bDay(employee.getBDay())
+                        .age(employee.getAge())
+                        .joinedDate(employee.getJoinedDate())
+                        .designation(employee.getDesignation())
+                        .docId(employee.getDocument() != null ? employee.getDocument().getDocId() : null )
+                        .docName(employee.getDocument() != null ? employee.getDocument().getDocName() : null )
+                        .build()
+        ).toList();
 
         return EmployeePaginationResponse.builder()
                 .content(employeeResponses)

@@ -22,29 +22,29 @@ function Boarding_Page() {
       <Fade direction="left" triggerOnce={true}>
         <StepDetails />
       </Fade>
-      <div className="empower-your-fleet">
+      <section id="subscriptions" className="empower-your-fleet">
         <Fade direction="right" triggerOnce={true}>
           Ready to Take Control? Explore Our BusBuddy Subscriptions
         </Fade>
-      </div>
+      </section>
       <Fade direction="right" triggerOnce={true}>
         <PriceContainerGallery />
       </Fade>
-      <div className="empower-your-fleet">
+      <section id="features" className="empower-your-fleet">
         <Fade direction="left" triggerOnce={true}>
           On the Move with BusBuddy: Inspiring stories, insights, and trends in
           bus transportation.
         </Fade>
-      </div>
+      </section>
       <Fade direction="left" triggerOnce={true}>
         <Gallery />
       </Fade>
-      <div className="empower-your-fleet">
+      <section id="contact" className="empower-your-fleet">
         <Fade direction="right" triggerOnce={true}>
           On the Move with BusBuddy: Inspiring stories, insights, and trends in
           bus transportation.
         </Fade>
-      </div>
+      </section>
       <Fade direction="right" triggerOnce={true}>
         <MessageBox />
       </Fade>

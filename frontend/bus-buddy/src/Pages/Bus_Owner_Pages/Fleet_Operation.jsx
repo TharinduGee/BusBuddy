@@ -12,6 +12,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { IoIosFolderOpen } from "react-icons/io";
 function Fleet_Operation() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
@@ -98,37 +100,42 @@ function Fleet_Operation() {
   });
 
   const columns = [
-    { field: "id", headerName: "Bus ID", width: 70 },
-    { field: "bustype", headerName: "Bus Type", minwidth: 130, flex: 1 },
+    { field: "id", headerName: "Bus ID", width: 100 },
+    { field: "bustype", headerName: "Bus Type", width: 120 },
     {
       field: "numberplate",
       headerName: "Number Plate",
-      minwidth: 130,
-      flex: 1,
+      width: 150,
     },
     {
       field: "lastservicedate",
       headerName: "Last Service Date",
-
-      minwidth: 130,
-      flex: 1,
+      width: 150,
     },
     {
       field: "regno",
       headerName: "Registration No",
-      minwidth: 130,
-      flex: 1,
+      width: 130,
+    },
+    {
+      field: "docId",
+      headerName: "Document ID",
+      width: 100,
+    },
+    {
+      field: "docName",
+      headerName: "Document name",
+      width: 230,
     },
     {
       field: "numberofseats",
-      headerName: "Number Of Seats",
-      minwidth: 130,
-      flex: 1,
+      headerName: "Seats",
+      width: 100,
     },
     {
       field: "actions",
       headerName: "Actions",
-      minwidth: 140,
+      width: 200,
 
       renderCell: (params) => (
         <div>
@@ -147,6 +154,14 @@ function Fleet_Operation() {
             onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton
+            style={{ color: "grey" }}
+            className="mx-2"
+            aria-label="delete"
+            onClick={() => handleOpen(params.row)}
+          >
+            <IoIosFolderOpen />
           </IconButton>
         </div>
       ),
@@ -225,8 +240,10 @@ function Fleet_Operation() {
           numberofseats: busData.seats,
           regno: busData.regNo,
           lastservicedate: busData.lastServiceDate.split("T")[0],
+          docId: busData.docId,
+          docName: busData.docName,
         }));
-        console.log(formattedData);
+        console.log(response);
 
         setPageState((old) => ({
           ...old,
@@ -260,6 +277,18 @@ function Fleet_Operation() {
     console.log(file);
     console.log(busData);
   }, [file, busId, busData]);
+
+  const navigate = useNavigate();
+  const handleOpen = async (row) => {
+    console.log(row);
+    if (row.docId != null) {
+      navigate("/filelibrary/BUS DOCUMENT", {
+        state: { id: row.docId, docName: row.docName },
+      });
+    } else {
+      Swal.fire("Error", "No Document to Open", "error");
+    }
+  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -413,7 +442,6 @@ function Fleet_Operation() {
           }
         )
         .then(async function (response) {
-          console.log("Data successfully posted:", response.data);
           await Swal.fire({
             title: "Good job!",
             text: "Bus Detailed Updated Successfully!",
@@ -440,8 +468,6 @@ function Fleet_Operation() {
       ...busData,
       [e.target.id]: value_,
     });
-
-    console.log(busData);
   };
 
   const handleSearchInputChange = (event) => {
@@ -451,7 +477,7 @@ function Fleet_Operation() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
-        <h1>Fleet Operations</h1>
+        <h1 className="pb-4">Fleet Operations</h1>
         <div
           style={{ width: "80%" }}
           className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
