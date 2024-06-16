@@ -17,3 +17,7 @@ body {
   --headline-small: Lexend;
   --font-josefin-sans: "Josefin Sans";
 }
+
+html {
+  scroll-behavior: smooth;
+}

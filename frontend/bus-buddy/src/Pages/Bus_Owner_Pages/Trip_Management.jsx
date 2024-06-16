@@ -81,42 +81,42 @@ function Trip_Management() {
     {
       field: "endTime",
       headerName: "End Time",
-      width: 90,
+      width: 130,
     },
     {
       field: "income",
       headerName: "Income",
-      width: 90,
+      width: 130,
     },
     {
       field: "expense",
       headerName: "Expenses",
-      width: 90,
+      width: 130,
     },
     {
-      field: "busId",
-      headerName: "Bus ID",
-      width: 90,
+      field: "numberPlate",
+      headerName: "Bus Number Plate",
+      width: 130,
     },
     {
       field: "routeId",
       headerName: "Route ID",
-      width: 90,
-    },
-    {
-      field: "driverId",
-      headerName: "Driver ID",
-      width: 90,
-    },
-    {
-      field: "conductorId",
-      headerName: "Conductor ID",
       width: 130,
+    },
+    {
+      field: "driverName",
+      headerName: "Driver Name",
+      width: 130,
+    },
+    {
+      field: "conductorName",
+      headerName: "Conductor Name",
+      width: 180,
     },
     {
       field: "status",
       headerName: "Status",
-      width: 200,
+      width: 150,
     },
     {
       field: "actions",
@@ -182,11 +182,13 @@ function Trip_Management() {
             endTime: tripdata.endTime,
             income: tripdata.income,
             expense: tripdata.expense,
-            driverId: tripdata.driverId,
-            conductorId: tripdata.conductorId,
-            busId: tripdata.busId,
+            driverName: tripdata.driverName,
+            conductorName: tripdata.conductorName,
+            numberPlate: tripdata.numberPlate,
             routeId: tripdata.routeId,
-            status: tripdata.status,
+            status: tripdata.status.split("_")[2],
+            routeEnd: tripdata.routeEnd,
+            routeStart: tripdata.routeStart,
           }));
           console.log(formattedData);
 
@@ -245,6 +247,11 @@ function Trip_Management() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
             console.error("Error deleting data:", error.message);
           });
       }

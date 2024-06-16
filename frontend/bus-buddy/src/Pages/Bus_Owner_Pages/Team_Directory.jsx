@@ -59,6 +59,7 @@ function Team_Directory() {
   const handleRowClick = (params) => {
     setselectedID(params.row.id);
     setjoinedDate(params.row.joinedDate);
+    setSalary(params.row.salary);
     setselectedfullname(params.row.Name);
     setselectedRole(params.row.designation);
     setselectedSalary(params.row.salary);
@@ -176,23 +177,18 @@ function Team_Directory() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
-    { field: "Name", headerName: "Full Name", minwidth: 130 },
-    { field: "salary", headerName: "Salary", minwidth: 130 },
+    { field: "Name", headerName: "Full Name", width: 230 },
+    { field: "salary", headerName: "Salary", width: 130 },
     {
       field: "age",
       headerName: "Age",
-      type: "number",
-      minwidth: 90,
+
+      width: 90,
     },
-    { field: "joinedDate", headerName: "Joined Date", minwidth: 130 },
-    { field: "designation", headerName: "Designation", minwidth: 130 },
-    // { field: "docId", headerName: "Doc ID", width: 130 },
-    {
-      field: "docName",
-      headerName: "Doc Name",
-      type: "number",
-      minwidth: 90,
-    },
+    { field: "joinedDate", headerName: "Joined Date", width: 230 },
+    { field: "designation", headerName: "Designation", width: 130 },
+    { field: "docId", headerName: "Document ID", width: 130 },
+    { field: "docName", headerName: "Document Name", width: 130 },
 
     {
       field: "actions",
@@ -240,6 +236,7 @@ function Team_Directory() {
         )
         .then((response) => {
           const fetchedData = response.data.content;
+          console.log(fetchedData);
           const formattedData = fetchedData.map((user) => ({
             id: user.empId,
             Name: user.name,
@@ -250,6 +247,8 @@ function Team_Directory() {
             docId: user.docId,
             docName: user.docName,
             bday: user.bday,
+            docId: user.docId,
+            docName: user.docName,
           }));
 
           setPageState((old) => ({
@@ -258,7 +257,6 @@ function Team_Directory() {
             data: formattedData,
             total: response.data.totalElements,
           }));
-          console.log("formateed", formattedData);
         })
         .catch((error) => {
           console.error("There was an error!", error);
@@ -309,6 +307,11 @@ function Team_Directory() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
             console.error("Error deleting data:", error.message);
           });
       }
@@ -431,13 +434,9 @@ function Team_Directory() {
               id="outlined-basic"
               label="Enter the salary"
               variant="outlined"
+              value={salary}
               onChange={handleSalaryChange}
-              onKeyPress={(event) => {
-                const char = String.fromCharCode(event.charCode);
-                if (!/^\d|\.$|^[-]/.test(char)) {
-                  event.preventDefault();
-                }
-              }}
+              type="number"
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",

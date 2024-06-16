@@ -25,7 +25,9 @@
   justify-content: center;
   flex-wrap: wrap;
   flex-direction: row;
+  padding: 0;
 }
+
 .text-label {
   color: var(--Main-White, var(--Main-White, #ffffff));
   margin-left: 30px;
@@ -36,8 +38,13 @@
   font-weight: 400;
   line-height: 16px; /* 100% */
   letter-spacing: 0.5px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.text-label:hover {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 .simplyfy-your-div {
   margin-top: 160px;

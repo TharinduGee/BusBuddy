@@ -102,41 +102,53 @@ function Route_Management() {
   });
 
   const columns = [
-    { field: "id", headerName: "Route ID", width: 150, type: "text" },
+    { field: "id", headerName: "Route ID", width: 100, type: "text" },
     {
       field: "startDestination",
       headerName: "Start Destination",
       type: "text",
-      width: 200,
+      width: 150,
     },
     {
       field: "endDestination",
       headerName: "End Destination",
       type: "text",
-      width: 200,
+      width: 150,
     },
     {
       field: "distance",
       headerName: "Distance",
       type: "text",
-      width: 200,
+      width: 150,
     },
     {
       field: "noOfSections",
       headerName: "Sections",
       type: "text",
-      width: 200,
+      width: 100,
     },
     {
       field: "permitExpDate",
       type: "text",
       headerName: "Permite Expire Date",
+      width: 170,
+    },
+    {
+      field: "docId",
+      type: "text",
+      headerName: "Document ID",
+      width: 100,
+    },
+    {
+      field: "docName",
+      type: "text",
+      headerName: "Document Name",
       width: 200,
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 200,
+      width: 150,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -374,6 +386,11 @@ function Route_Management() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
             console.error("Error deleting data:", error.message);
           });
       }
@@ -416,6 +433,8 @@ function Route_Management() {
           distance: routeData.distance,
           noOfSections: routeData.noOfSections,
           permitExpDate: routeData.permitExpDate.split("T")[0],
+          docId: routeData.docId,
+          docName: routeData.docName,
         }));
 
         setPageState((old) => ({

@@ -110,7 +110,7 @@ function BusDocumentPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -170,7 +170,45 @@ function BusDocumentPage() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/document/remove?docId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "User removed from your business.",
+              icon: "success",
+            });
+            setRefresh(!refresh);
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+            console.error("Error deleting data:", error.message);
+          });
+      }
+    });
+  };
 
   const handleOpen = async (id) => {
     console.log(id);

@@ -76,25 +76,29 @@ function ServiceAgreementPage() {
   };
 
   const columns = [
-    { field: "id", flex: 1, headerName: "Document ID", minWidth: 130 },
+    { field: "id", headerName: "Document ID", width: 180 },
     {
       field: "docName",
-      flex: 1,
+
       headerName: "Document Name",
-      minWidthwidth: 130,
+      width: 350,
+    },
+    {
+      field: "refId",
+      headerName: "Reference ID",
+      width: 180,
     },
     {
       field: "uploadDate",
-      flex: 1,
       headerName: "Uploaded Date",
-      minWidth: 130,
+      width: 250,
     },
 
     {
       field: "actions",
       headerName: "Actions",
-      minWidth: 130,
-      flex: 1,
+      width: 200,
+
       renderCell: (params) => (
         <div>
           <IconButton
@@ -109,7 +113,7 @@ function ServiceAgreementPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -128,7 +132,7 @@ function ServiceAgreementPage() {
     page: 0,
     pageSize: 5,
   });
-
+  const [refresh, setRefresh] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       setPageState((old) => ({
@@ -145,14 +149,14 @@ function ServiceAgreementPage() {
             },
           }
         );
+        console.log(response);
 
         const formattedData = response.data.content.map((docData) => ({
           id: docData.docId,
           docName: docData.docName,
           uploadDate: docData.uploadDate,
+          refId: docData.refId,
         }));
-        console.log(formattedData);
-
         setPageState((old) => ({
           ...old,
           isLoading: false,
@@ -169,7 +173,45 @@ function ServiceAgreementPage() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/document/remove?docId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "User removed from your business.",
+              icon: "success",
+            });
+            setRefresh(!refresh);
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+            console.error("Error deleting data:", error.message);
+          });
+      }
+    });
+  };
 
   const handleOpen = async (id) => {
     console.log(id);

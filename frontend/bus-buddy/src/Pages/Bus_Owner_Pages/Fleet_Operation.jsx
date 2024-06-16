@@ -99,16 +99,16 @@ function Fleet_Operation() {
 
   const columns = [
     { field: "id", headerName: "Bus ID", width: 100 },
-    { field: "bustype", headerName: "Bus Type", width: 250 },
+    { field: "bustype", headerName: "Bus Type", width: 150 },
     {
       field: "numberplate",
       headerName: "Number Plate",
-      width: 200,
+      width: 150,
     },
     {
       field: "lastservicedate",
       headerName: "Last Service Date",
-      width: 200,
+      width: 150,
     },
     {
       field: "regno",
@@ -116,9 +116,19 @@ function Fleet_Operation() {
       width: 200,
     },
     {
+      field: "docId",
+      headerName: "Document ID",
+      width: 100,
+    },
+    {
+      field: "docName",
+      headerName: "Document name",
+      width: 200,
+    },
+    {
       field: "numberofseats",
       headerName: "Number Of Seats",
-      width: 200,
+      width: 100,
     },
     {
       field: "actions",
@@ -220,8 +230,10 @@ function Fleet_Operation() {
           numberofseats: busData.seats,
           regno: busData.regNo,
           lastservicedate: busData.lastServiceDate.split("T")[0],
+          docId: busData.docId,
+          docName: busData.docName,
         }));
-        console.log(formattedData);
+        console.log(response);
 
         setPageState((old) => ({
           ...old,
@@ -408,7 +420,6 @@ function Fleet_Operation() {
           }
         )
         .then(async function (response) {
-          console.log("Data successfully posted:", response.data);
           await Swal.fire({
             title: "Good job!",
             text: "Bus Detailed Updated Successfully!",
@@ -435,8 +446,6 @@ function Fleet_Operation() {
       ...busData,
       [e.target.id]: value_,
     });
-
-    console.log(busData);
   };
 
   const handleSearchInputChange = (event) => {
