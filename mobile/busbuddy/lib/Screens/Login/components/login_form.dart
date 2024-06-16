@@ -38,6 +38,7 @@ class _LoginFormState extends State<LoginForm> {
 
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body.toString());
+          print(data);
 
           // Check if the user role is either 'ROLE_DRIVER' or 'ROLE_CONDUCTOR'
           if (data['role'] == 'ROLE_DRIVER' ||
