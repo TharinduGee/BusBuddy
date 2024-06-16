@@ -17,8 +17,6 @@ public class TripAddRequest {
     private Time startTime;
     @NotNull(message = "End time is required.")
     private Time endTime;
-    private Float income;
-    private Float Expense;
     private Long busId;
     private Long routeId;
     private Long driverId;

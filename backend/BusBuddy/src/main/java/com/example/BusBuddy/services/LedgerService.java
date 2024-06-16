@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,11 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -48,6 +49,8 @@ public class LedgerService {
             ));
             ledger.setTrip(trip);
 
+            trip.setIncome(ledger.getAmount());
+            tripRepository.save(trip);
         }
         else if (ledgerAddRequest.getType() == TransactionType.TRANSACTION_TYPE_TICKET_EXPENSE) {
             ledger.setAmount(-ledgerAddRequest.getAmount());
@@ -56,7 +59,8 @@ public class LedgerService {
                     "Trip not found."
             ));
             ledger.setTrip(trip);
-
+            trip.setExpense(ledger.getAmount());
+            tripRepository.save(trip);
         } else if (ledgerAddRequest.getType() == TransactionType.TRANSACTION_TYPE_EMPLOYEE_SALARY) {
             ledger.setAmount(-ledgerAddRequest.getAmount());
             ledger.setType(TransactionType.TRANSACTION_TYPE_EMPLOYEE_SALARY);
@@ -102,6 +106,36 @@ public class LedgerService {
                 .transactionName(ledger.getTransactionName())
                 .time(ledger.getTimestamp())
                 .amount(ledger.getAmount())
+                .transactionType(ledger.getType())
+                .refId(ledger.getBus() != null ? ledger.getBus().getBusId() : ledger.getEmployee() != null ?
+                        ledger.getEmployee().getEmpId() : ledger.getTrip() != null ? ledger.getTrip().getTripId() : null)
+                .docId(ledger.getDocument()  != null ? ledger.getDocument().getDocId() : null)
+                .build()
+        ).toList();
+
+        return LedgerPaginationResponse.builder()
+                .content(ledgerResponses)
+                .totalPages(ledgerPage.getTotalPages())
+                .pageSize(ledgerPage.getSize())
+                .pageNo(ledgerPage.getNumber())
+                .totalElements(ledgerPage.getTotalElements())
+                .last(ledgerPage.isLast())
+                .build();
+
+    }
+
+    public LedgerPaginationResponse findAllByDate(LocalDate localDate, int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Ledger> ledgerPage = ledgerRepository.findByTimestampBetween(localDate.atStartOfDay() ,localDate.atTime(LocalTime.MAX) ,pageable);
+
+
+        List<Ledger> ledgerList = ledgerPage.getContent();
+        List<LedgerResponse> ledgerResponses = ledgerList.stream().map(ledger -> LedgerResponse.builder()
+                .transactionId(ledger.getTransactionId())
+                .transactionName(ledger.getTransactionName())
+                .time(ledger.getTimestamp())
+                .amount(ledger.getAmount())
+                .transactionType(ledger.getType())
                 .refId(ledger.getBus() != null ? ledger.getBus().getBusId() : ledger.getEmployee() != null ?
                         ledger.getEmployee().getEmpId() : ledger.getTrip() != null ? ledger.getTrip().getTripId() : null)
                 .docId(ledger.getDocument()  != null ? ledger.getDocument().getDocId() : null)
@@ -145,5 +179,26 @@ public class LedgerService {
                 .build();
         return dailyFinanceResponse;
     }
+
+    public Map<LocalDate,DailyFinanceResponse> getFinanceOfLastSevenDays(HttpServletRequest httpServletRequest){
+        Business business = businessService.extractBId(httpServletRequest);
+        Map<LocalDate, DailyFinanceResponse> dto = new HashMap<>();
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        for(int i = 0 ; i < 7 ; i++){
+            LocalDateTime startOfDay = localDateTime.withHour(0).withMinute(0).withSecond(0).withNano(0);
+            LocalDateTime endOfDay = localDateTime.withHour(23).withMinute(59).withSecond(59).withNano(0);
+
+            Map<String, Double> incomeAndExpense =  ledgerRepository.dailyIncomeAndExpense(business, startOfDay , endOfDay );
+            DailyFinanceResponse dailyFinanceResponse = DailyFinanceResponse.builder()
+                    .income(incomeAndExpense.get("dailyIncome") == null ? 0 : incomeAndExpense.get("dailyIncome"))
+                    .expense(incomeAndExpense.get("dailyExpense") == null ? 0 : incomeAndExpense.get("dailyExpense"))
+                    .build();
+            dto.put(localDateTime.toLocalDate(), dailyFinanceResponse);
+            localDateTime = localDateTime.minusDays(1);
+
+        }
+        return dto;
+    } ;
 
 }

@@ -84,20 +84,20 @@ function Team_Directory_Add_Employee() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", minwidth: 70, flex: 1 },
-    { field: "firstName", headerName: "First name", minwidth: 130, flex: 1 },
-    { field: "lastName", headerName: "Last name", minwidth: 130, flex: 1 },
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "firstName", headerName: "First name", width: 130 },
+    { field: "lastName", headerName: "Last name", width: 130 },
 
-    { field: "email", headerName: "Email", minwidth: 300, flex: 1 },
-    { field: "mobileNo", headerName: "Mobile No", minwidth: 130, flex: 1 },
-    { field: "role", headerName: "Role", minwidth: 160, flex: 1 },
+    { field: "email", headerName: "Email", width: 300, flex: 1 },
+    { field: "mobileNo", headerName: "Mobile No", width: 130 },
+    { field: "role", headerName: "Role", width: 160 },
     {
       field: "fullName",
       headerName: "Full name",
       description: "This column has a value getter and is not sortable.",
       sortable: false,
-      minwidth: 160,
-      flex: 1,
+      width: 160,
+
       valueGetter: (params) =>
         `${params.row.firstName || " "} ${params.row.lastName || ""}`,
     },
@@ -133,6 +133,7 @@ function Team_Directory_Add_Employee() {
   };
   const clear = () => {
     setSalary(null);
+    console.log("clear funciton");
     if (inputRef.current.value) {
       inputRef.current.value = null;
     }
@@ -195,7 +196,7 @@ function Team_Directory_Add_Employee() {
 
   function formatDate(date) {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Adding 1 because months are zero-indexed
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
 
     return `${year}-${month}-${day}`;
@@ -259,6 +260,7 @@ function Team_Directory_Add_Employee() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1>Add Employee Directory</h1>
         <div
           style={{ width: "80%" }}
           class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
@@ -378,16 +380,12 @@ function Team_Directory_Add_Employee() {
               label="Enter the salary"
               variant="outlined"
               onChange={handleSalaryChange}
-              onKeyPress={(event) => {
-                const char = String.fromCharCode(event.charCode);
-                if (!/^\d|\.$|^[-]/.test(char)) {
-                  event.preventDefault();
-                }
-              }}
+              value={salary}
+              type="number"
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: "100%",
                   borderRadius: 2,
                 },
               }}
@@ -396,7 +394,7 @@ function Team_Directory_Add_Employee() {
               type="file"
               class="form-control input-field-choosefile mt-4"
               id="inputGroupFile02"
-              style={{ width: 350 }}
+              style={{ width: "70%" }}
               onChange={handleFileChange}
               ref={inputRef}
             />

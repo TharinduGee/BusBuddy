@@ -14,6 +14,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { IoIosFolderOpen } from "react-icons/io";
 
 function Route_Management() {
   const token = localStorage.getItem("token");
@@ -67,6 +69,7 @@ function Route_Management() {
     margin: 30,
     backgroundColor: isUpdateButtonDisabled ? "#CCCCCC" : "#ff760d",
     color: "white",
+    width: "200px",
   };
 
   const buttonStyle_Add = {
@@ -74,6 +77,7 @@ function Route_Management() {
     margin: 30,
     backgroundColor: isAddButtonDisabled ? "#CCCCCC" : "#ff760d",
     color: "white",
+    width: "200px",
   };
 
   const theme = createTheme({
@@ -100,44 +104,53 @@ function Route_Management() {
   });
 
   const columns = [
-    { field: "id", headerName: "Route ID", flex: 1, width: 130 },
+    { field: "id", headerName: "Route ID", width: 100, type: "text" },
     {
       field: "startDestination",
       headerName: "Start Destination",
-      flex: 1,
-      minWidth: 130,
+      type: "text",
+      width: 150,
     },
     {
       field: "endDestination",
       headerName: "End Destination",
-      flex: 1,
-      minWidth: 130,
+      type: "text",
+      width: 150,
     },
     {
       field: "distance",
       headerName: "Distance",
-      type: "number",
-      flex: 1,
-      minWidth: 80,
+      type: "text",
+      width: 100,
     },
     {
       field: "noOfSections",
       headerName: "Sections",
-      type: "number",
-      flex: 1,
-      minWidth: 80,
+      type: "text",
+      width: 100,
     },
     {
       field: "permitExpDate",
-      flex: 1,
+      type: "text",
       headerName: "Permite Expire Date",
-      minWidth: 150,
+      width: 170,
+    },
+    {
+      field: "docId",
+      type: "text",
+      headerName: "Document ID",
+      width: 100,
+    },
+    {
+      field: "docName",
+      type: "text",
+      headerName: "Document Name",
+      width: 200,
     },
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1,
-      minWidth: 130,
+      width: 200,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -155,6 +168,14 @@ function Route_Management() {
             onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton
+            style={{ color: "grey" }}
+            className="mx-2"
+            aria-label="delete"
+            onClick={() => handleOpen(params.row)}
+          >
+            <IoIosFolderOpen />
           </IconButton>
         </div>
       ),
@@ -289,6 +310,18 @@ function Route_Management() {
     setSearchInput(event.target.value);
   };
 
+  const navigate = useNavigate();
+  const handleOpen = async (row) => {
+    console.log(row);
+    if (row.docId != null) {
+      navigate("/filelibrary/ROUTE PERMIT", {
+        state: { id: row.docId, docName: row.docName },
+      });
+    } else {
+      Swal.fire("Error", "No Document to Open", "error");
+    }
+  };
+
   const UpdateRoute = () => {
     if (
       routeData.distance === null ||
@@ -375,6 +408,11 @@ function Route_Management() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
             console.error("Error deleting data:", error.message);
           });
       }
@@ -409,6 +447,7 @@ function Route_Management() {
           }
         );
 
+        console.log(response);
         const formattedData = response.data.content.map((routeData) => ({
           id: routeData.routeId,
           startDestination: routeData.startDestination,
@@ -416,8 +455,9 @@ function Route_Management() {
           distance: routeData.distance,
           noOfSections: routeData.noOfSections,
           permitExpDate: routeData.permitExpDate.split("T")[0],
+          docId: routeData.docId,
+          docName: routeData.docName,
         }));
-        console.log(formattedData);
 
         setPageState((old) => ({
           ...old,
@@ -446,6 +486,7 @@ function Route_Management() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1 className="pb-4">Route Managment</h1>
         <div
           style={{ width: "80%" }}
           className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
@@ -610,6 +651,7 @@ function Route_Management() {
                 margin: 30,
                 backgroundColor: "#ff760d",
                 color: "white",
+                width: "200px",
               }}
               className="d-flex  update-btn"
               variant="contained"

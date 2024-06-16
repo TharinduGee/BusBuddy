@@ -4,6 +4,7 @@ import Button from "@mui/material-next/Button";
 import add_icon from "./../../Assets/Owner_assests/add_icon.png";
 import avatar from "./../../Assets/Owner_assests/Avatar.png";
 import { DataGrid } from "@mui/x-data-grid";
+import { IoIosFolderOpen } from "react-icons/io";
 import "./Team_Directory.css";
 import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
 import IconButton from "@mui/material/IconButton";
@@ -13,6 +14,7 @@ import Popup from "./Update_popup";
 import ButtonAdd from "@mui/material/Button";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Team_Directory() {
   const token = localStorage.getItem("token");
@@ -59,6 +61,7 @@ function Team_Directory() {
   const handleRowClick = (params) => {
     setselectedID(params.row.id);
     setjoinedDate(params.row.joinedDate);
+    setSalary(params.row.salary);
     setselectedfullname(params.row.Name);
     setselectedRole(params.row.designation);
     setselectedSalary(params.row.salary);
@@ -175,44 +178,31 @@ function Team_Directory() {
   });
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "Name", headerName: "Full Name", minwidth: 130, flex: 1 },
-    { field: "salary", headerName: "Salary", minwidth: 130, flex: 1 },
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "Name", headerName: "Full Name", width: 180 },
+    { field: "salary", headerName: "Salary", width: 130 },
     {
       field: "age",
       headerName: "Age",
-      type: "number",
-      minwidth: 90,
-      flex: 1,
+
+      width: 90,
     },
-    { field: "joinedDate", headerName: "Joined Date", minwidth: 130, flex: 1 },
-    { field: "designation", headerName: "Designation", minwidth: 130, flex: 1 },
-    // { field: "docId", headerName: "Doc ID", width: 130 },
-    {
-      field: "docName",
-      headerName: "Doc Name",
-      type: "number",
-      minwidth: 90,
-      flex: 1,
-    },
-    // {
-    //   field: "bday",
-    //   headerName: "Birthday",
-    //   type: "number",
-    //   width: 90,
-    // },
+    { field: "joinedDate", headerName: "Joined Date", width: 180 },
+    { field: "designation", headerName: "Designation", width: 130 },
+    { field: "docId", headerName: "Document ID", width: 130 },
+    { field: "docName", headerName: "Document Name", width: 280 },
+
     {
       field: "actions",
       headerName: "Actions",
-      minwidth: 140,
-      flex: 1,
+      width: 240,
+
       renderCell: (params) => (
         <div>
           <IconButton
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleEdit(params.row.id)}
             onClick={() => setOpenPopup(true)}
           >
             <EditNoteSharpIcon />
@@ -224,6 +214,14 @@ function Team_Directory() {
             onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton
+            style={{ color: "grey" }}
+            className="mx-2"
+            aria-label="delete"
+            onClick={() => handleOpen(params.row)}
+          >
+            <IoIosFolderOpen />
           </IconButton>
         </div>
       ),
@@ -248,6 +246,7 @@ function Team_Directory() {
         )
         .then((response) => {
           const fetchedData = response.data.content;
+          console.log(fetchedData);
           const formattedData = fetchedData.map((user) => ({
             id: user.empId,
             Name: user.name,
@@ -258,6 +257,8 @@ function Team_Directory() {
             docId: user.docId,
             docName: user.docName,
             bday: user.bday,
+            docId: user.docId,
+            docName: user.docName,
           }));
 
           setPageState((old) => ({
@@ -266,7 +267,6 @@ function Team_Directory() {
             data: formattedData,
             total: response.data.totalElements,
           }));
-          console.log("formateed", formattedData);
         })
         .catch((error) => {
           console.error("There was an error!", error);
@@ -289,6 +289,17 @@ function Team_Directory() {
     token,
     joinedDate,
   ]);
+  const navigate = useNavigate();
+  const handleOpen = async (row) => {
+    console.log(row);
+    if (row.docId != null) {
+      navigate("/filelibrary/SERVICE AGREEMENT", {
+        state: { id: row.docId, docName: row.docName },
+      });
+    } else {
+      Swal.fire("Error", "No Document to Open", "error");
+    }
+  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -317,6 +328,11 @@ function Team_Directory() {
             setRefresh(!refresh);
           })
           .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
             console.error("Error deleting data:", error.message);
           });
       }
@@ -326,6 +342,7 @@ function Team_Directory() {
   return (
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
+        <h1>Team Directory</h1>
         <div
           style={{ width: "80%" }}
           class="d-flex flex-wrap-reverse align-items-center  justify-content-between"
@@ -438,17 +455,13 @@ function Team_Directory() {
               id="outlined-basic"
               label="Enter the salary"
               variant="outlined"
+              value={salary}
               onChange={handleSalaryChange}
-              onKeyPress={(event) => {
-                const char = String.fromCharCode(event.charCode);
-                if (!/^\d|\.$|^[-]/.test(char)) {
-                  event.preventDefault();
-                }
-              }}
+              type="number"
               InputProps={{
                 sx: {
                   backgroundColor: "#F4F4F4",
-                  width: 350,
+                  width: 250,
                   borderRadius: 2,
                 },
               }}
@@ -457,7 +470,7 @@ function Team_Directory() {
               type="file"
               class="form-control input-field-choosefile mt-4"
               id="inputGroupFile02"
-              style={{ width: 350 }}
+              style={{ width: 250 }}
               onChange={handleFileChange}
               ref={inputRef}
             />
