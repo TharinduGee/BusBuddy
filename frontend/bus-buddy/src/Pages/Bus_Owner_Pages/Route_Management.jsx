@@ -14,6 +14,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { IoIosFolderOpen } from "react-icons/io";
 
 function Route_Management() {
   const token = localStorage.getItem("token");
@@ -119,7 +121,7 @@ function Route_Management() {
       field: "distance",
       headerName: "Distance",
       type: "text",
-      width: 150,
+      width: 100,
     },
     {
       field: "noOfSections",
@@ -148,7 +150,7 @@ function Route_Management() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 200,
       renderCell: (params) => (
         <div>
           <IconButton
@@ -166,6 +168,14 @@ function Route_Management() {
             onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton
+            style={{ color: "grey" }}
+            className="mx-2"
+            aria-label="delete"
+            onClick={() => handleOpen(params.row)}
+          >
+            <IoIosFolderOpen />
           </IconButton>
         </div>
       ),
@@ -298,6 +308,18 @@ function Route_Management() {
 
   const handleSearchInputChange = async (event) => {
     setSearchInput(event.target.value);
+  };
+
+  const navigate = useNavigate();
+  const handleOpen = async (row) => {
+    console.log(row);
+    if (row.docId != null) {
+      navigate("/filelibrary/ROUTE PERMIT", {
+        state: { id: row.docId, docName: row.docName },
+      });
+    } else {
+      Swal.fire("Error", "No Document to Open", "error");
+    }
   };
 
   const UpdateRoute = () => {

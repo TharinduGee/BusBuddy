@@ -14,7 +14,7 @@ import Popup from "./Update_popup";
 import ButtonAdd from "@mui/material/Button";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Team_Directory() {
   const token = localStorage.getItem("token");

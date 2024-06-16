@@ -141,9 +141,9 @@ function ServiceAgreementPage() {
   useEffect(() => {
     const { id, docName } = location.state || {};
     if (!hasOpened.current && id != null) {
-      setSearchInput(docName);
       handleOpen(id);
       hasOpened.current = true;
+      setSearchInput(docName.split(".")[0]);
       navigate(location.pathname, { replace: true });
     }
   }, [location.state, navigate, location.pathname]);

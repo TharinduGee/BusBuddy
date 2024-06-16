@@ -12,6 +12,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { IoIosFolderOpen } from "react-icons/io";
 function Fleet_Operation() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
@@ -99,7 +101,7 @@ function Fleet_Operation() {
 
   const columns = [
     { field: "id", headerName: "Bus ID", width: 100 },
-    { field: "bustype", headerName: "Bus Type", width: 150 },
+    { field: "bustype", headerName: "Bus Type", width: 120 },
     {
       field: "numberplate",
       headerName: "Number Plate",
@@ -113,7 +115,7 @@ function Fleet_Operation() {
     {
       field: "regno",
       headerName: "Registration No",
-      width: 200,
+      width: 130,
     },
     {
       field: "docId",
@@ -123,17 +125,17 @@ function Fleet_Operation() {
     {
       field: "docName",
       headerName: "Document name",
-      width: 200,
+      width: 230,
     },
     {
       field: "numberofseats",
-      headerName: "Number Of Seats",
+      headerName: "Seats",
       width: 100,
     },
     {
       field: "actions",
       headerName: "Actions",
-      width: 140,
+      width: 200,
 
       renderCell: (params) => (
         <div>
@@ -152,6 +154,14 @@ function Fleet_Operation() {
             onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
+          </IconButton>
+          <IconButton
+            style={{ color: "grey" }}
+            className="mx-2"
+            aria-label="delete"
+            onClick={() => handleOpen(params.row)}
+          >
+            <IoIosFolderOpen />
           </IconButton>
         </div>
       ),
@@ -267,6 +277,18 @@ function Fleet_Operation() {
     console.log(file);
     console.log(busData);
   }, [file, busId, busData]);
+
+  const navigate = useNavigate();
+  const handleOpen = async (row) => {
+    console.log(row);
+    if (row.docId != null) {
+      navigate("/filelibrary/BUS DOCUMENT", {
+        state: { id: row.docId, docName: row.docName },
+      });
+    } else {
+      Swal.fire("Error", "No Document to Open", "error");
+    }
+  };
 
   const handleDelete = (id) => {
     Swal.fire({
