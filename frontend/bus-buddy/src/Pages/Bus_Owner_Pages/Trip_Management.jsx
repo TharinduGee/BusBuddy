@@ -98,11 +98,7 @@ function Trip_Management() {
       headerName: "Bus Number Plate",
       width: 130,
     },
-    {
-      field: "routeId",
-      headerName: "Route ID",
-      width: 130,
-    },
+
     {
       field: "driverName",
       headerName: "Driver Name",
@@ -190,7 +186,7 @@ function Trip_Management() {
             routeEnd: tripdata.routeEnd,
             routeStart: tripdata.routeStart,
           }));
-          console.log(formattedData);
+          console.log(response);
 
           setPageState((old) => ({
             ...old,

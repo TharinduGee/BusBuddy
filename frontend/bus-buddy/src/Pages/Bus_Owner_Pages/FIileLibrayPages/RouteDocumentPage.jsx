@@ -193,7 +193,7 @@ function RouteDocumentPage() {
             console.log("Data successfully deleted:", response.data);
             Swal.fire({
               title: "Deleted!",
-              text: "User removed from your business.",
+              text: "FIle Deleted Successfully.",
               icon: "success",
             });
             setRefresh(!refresh);

@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function EmployeeDocumentPage() {
   const token = localStorage.getItem("token");
@@ -109,7 +110,7 @@ function EmployeeDocumentPage() {
             style={{ color: "grey" }}
             className="mx-2"
             aria-label="delete"
-            // onClick={() => handleDelete(params.row.id)}
+            onClick={() => handleDelete(params.row.id)}
           >
             <DeleteIcon />
           </IconButton>
@@ -169,7 +170,7 @@ function EmployeeDocumentPage() {
     };
 
     fetchData();
-  }, [paginationModel.page, paginationModel.pageSize, searchInput]);
+  }, [paginationModel.page, paginationModel.pageSize, searchInput, refresh]);
 
   const handleOpen = async (id) => {
     console.log(id);
@@ -190,6 +191,43 @@ function EmployeeDocumentPage() {
       console.error(`Error: ${error}`);
       Swal.fire("Error", "Failed to fetch PDF", "error");
     }
+  };
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8081/api/v1/document/remove?docId=${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            console.log("Data successfully deleted:", response.data);
+            Swal.fire({
+              title: "Deleted!",
+              text: "FIle Deleted Successfully.",
+              icon: "success",
+            });
+            setRefresh(!refresh);
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+            console.error("Error deleting data:", error.message);
+          });
+      }
+    });
   };
 
   return (

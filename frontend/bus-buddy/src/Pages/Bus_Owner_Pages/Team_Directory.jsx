@@ -177,7 +177,7 @@ function Team_Directory() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 100 },
-    { field: "Name", headerName: "Full Name", width: 230 },
+    { field: "Name", headerName: "Full Name", width: 180 },
     { field: "salary", headerName: "Salary", width: 130 },
     {
       field: "age",
@@ -185,10 +185,10 @@ function Team_Directory() {
 
       width: 90,
     },
-    { field: "joinedDate", headerName: "Joined Date", width: 230 },
+    { field: "joinedDate", headerName: "Joined Date", width: 180 },
     { field: "designation", headerName: "Designation", width: 130 },
     { field: "docId", headerName: "Document ID", width: 130 },
-    { field: "docName", headerName: "Document Name", width: 130 },
+    { field: "docName", headerName: "Document Name", width: 280 },
 
     {
       field: "actions",
