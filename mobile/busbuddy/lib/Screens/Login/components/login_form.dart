@@ -22,7 +22,7 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void login(String email, password) async {
+  void login(String email, String password) async {
     if (_formKey.currentState!.validate()) {
       try {
         Response response = await post(
@@ -38,24 +38,54 @@ class _LoginFormState extends State<LoginForm> {
 
         if (response.statusCode == 200) {
           var data = jsonDecode(response.body.toString());
-          // print(data['token']);
-          print('Login successfully');
-          // Write value
-          await storage.write(key: 'JWtoken', value: data['token']);
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const TripSchedule()),
-          );
+
+          // Check if the user role is either 'ROLE_DRIVER' or 'ROLE_CONDUCTOR'
+          if (data['role'] == 'ROLE_DRIVER' ||
+              data['role'] == 'ROLE_CONDUCTOR') {
+            print('Login successfully');
+            // Write value
+            await storage.write(key: 'JWtoken', value: data['token']);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const TripSchedule()),
+            );
+          } else {
+            // User role is not 'ROLE_DRIVER' or 'ROLE_CONDUCTOR'
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content:
+                    Text('Access restricted to drivers and conductors only'),
+              ),
+            );
+          }
         } else {
-          print('failed');
+          var responseData = jsonDecode(response.body.toString());
+          String errorMessage = 'Login failed';
+
+          if (response.statusCode == 400 && responseData == 'Bad credentials') {
+            errorMessage = 'Email or password incorrect';
+          } else if (response.statusCode == 404 &&
+              responseData == 'User is not found.') {
+            errorMessage = 'User is not found.';
+          } else if (response.statusCode == 406 &&
+              responseData['message'] ==
+                  'User not assigned for this operation.') {
+            errorMessage = 'Bus Business owner needs to assign you';
+          }
+
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Login failed'),
+            SnackBar(
+              content: Text(errorMessage),
             ),
           );
         }
       } catch (e) {
         print(e.toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('An error occurred: $e'),
+          ),
+        );
       }
     }
   }
