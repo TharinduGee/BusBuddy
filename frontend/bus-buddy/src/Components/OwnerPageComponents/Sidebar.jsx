@@ -15,6 +15,7 @@ import { IoIosMenu, IoIosClose } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { refreshTokenFetch } from "../../Pages/RefreshToken.js";
 
 function Sidebar() {
   const [sidebarClass, setSidebarClass] = useState("sidebar");
@@ -89,6 +90,7 @@ function Sidebar() {
           console.log("Data successfully fetched:", username);
         })
         .catch(function (error) {
+          refreshTokenFetch(error.message);
           console.error("Error posting data:", error);
         });
     }

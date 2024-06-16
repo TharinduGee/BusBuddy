@@ -179,6 +179,7 @@ function ServiceAgreementPage() {
           total: response.data.totalElements,
         }));
       } catch (error) {
+        Swal.fire("Error", "Oops something happend", "error");
         console.error("There was an error!", error);
         setPageState((old) => ({
           ...old,
@@ -229,7 +230,6 @@ function ServiceAgreementPage() {
   };
 
   const handleOpen = async (id) => {
-    console.log(id);
     try {
       const response = await axios.get(
         `http://localhost:8081/api/v1/document/getDocument?docId=${id}`,
@@ -240,6 +240,7 @@ function ServiceAgreementPage() {
           responseType: "blob",
         }
       );
+      console.log(response);
       const blob = new Blob([response.data], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       window.open(url);
