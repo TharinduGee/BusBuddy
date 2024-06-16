@@ -170,32 +170,27 @@ CREATE TABLE IF NOT EXISTS public.document
     CONSTRAINT fk_bid FOREIGN KEY (b_id)
         REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_busid FOREIGN KEY (bus_id)
         REFERENCES public.bus (bus_id) MATCH SIMPLE
-        REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_empid FOREIGN KEY (emp_id)
         REFERENCES public.employee (emp_id) MATCH SIMPLE
-        REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_ledgerid FOREIGN KEY (ledger_id)
         REFERENCES public.ledger (transaction_id) MATCH SIMPLE
-        REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_routeid FOREIGN KEY (route_id)
         REFERENCES public.route (route_id) MATCH SIMPLE
-        REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT fk_tripid FOREIGN KEY (trip_id)
         REFERENCES public.trip (trip_id) MATCH SIMPLE
-        REFERENCES public.business (b_id) MATCH SIMPLE
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
+        ON DELETE CASCADE,
     CONSTRAINT document_category_check CHECK (category::text = ANY (ARRAY['DOC_CATEGORY_NIC'::character varying::text, 'DOC_CATEGORY_SERVICE_AGREEMENT'::character varying::text, 'DOC_CATEGORY_ROUTE_PERMIT'::character varying::text, 'DOC_CATEGORY_UNSPECIFIED'::character varying::text, 'DOC_CATEGORY_BUS_DOC'::character varying::text]))
 )
 
