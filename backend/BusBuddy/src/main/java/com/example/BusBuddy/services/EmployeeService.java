@@ -132,7 +132,7 @@ public class EmployeeService {
         userRepository.save(user);
 
         if(file != null){
-            documentService.add(file,httpServletRequest,DocCategory.DOC_CATEGORY_NIC,
+            documentService.add(file,httpServletRequest,DocCategory.DOC_CATEGORY_SERVICE_AGREEMENT,
                     file.getOriginalFilename(), employee.getEmpId());
         }
 
