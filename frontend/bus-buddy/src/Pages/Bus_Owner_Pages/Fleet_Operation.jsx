@@ -198,8 +198,11 @@ function Fleet_Operation() {
   });
 
   const [busId, setBusId] = useState("");
+  const [fileName, setfileName] = useState("");
+
   const handleEdit = (e) => {
     setValue(e.bustype);
+    setfileName(e.docName);
     const updatedId = e.id;
     setBusId(updatedId);
     setValue_date(dayjs(e.lastservicedate));
@@ -331,6 +334,7 @@ function Fleet_Operation() {
     console.log("clear");
     setFile(null);
     setValue("NORMAL");
+    setfileName(null);
 
     setValue_date(null);
     setBusDate({
@@ -530,7 +534,7 @@ function Fleet_Operation() {
         style={{ width: "100%" }}
       >
         <div className="trip-main-container ">
-          <div className="pair-container justify-content-between">
+          <div className="pair-container-fleet ">
             <div className="input-and-label">
               <label className="form-label">Number Plate*</label>
               <input
@@ -553,21 +557,15 @@ function Fleet_Operation() {
               />
             </div>
           </div>
-          <div className="pair-container justify-content-between">
+          <div className="pair-container-fleet ">
             <div className="input-and-label">
               <label className="form-label">Number of Seats*</label>
               <input
-                type="text"
+                type="number"
                 id="Seats"
                 className="form-control input-field-trip"
                 value={busData.Seats}
                 onChange={handleChange}
-                onKeyPress={(event) => {
-                  const char = String.fromCharCode(event.charCode);
-                  if (!/^\d|\.$|^[-]/.test(char)) {
-                    event.preventDefault();
-                  }
-                }}
               />
             </div>
 
@@ -592,8 +590,8 @@ function Fleet_Operation() {
               </select>
             </div>
           </div>
-          <div className="pair-container justify-content-between align-items-end">
-            <div className="d-flex flex-column input-and-label">
+          <div className="file-field-pair">
+            <div className="d-flex flex-column input-and-label mb-0">
               <label className="form-label">Service Date*</label>
               <ThemeProvider theme={datepicker_theme}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -615,13 +613,10 @@ function Fleet_Operation() {
                 </LocalizationProvider>
               </ThemeProvider>
             </div>
+
             <div
-              style={{
-                width: 340,
-                margin: 30,
-                marginBottom: 1,
-              }}
-              className="input-group "
+              className="d-flex flex-column align-items-center justify-items-center "
+              style={{ margin: 30, marginBottom: 0 }}
             >
               <input
                 type="file"
@@ -630,6 +625,9 @@ function Fleet_Operation() {
                 onChange={handleFileChange}
                 ref={inputRef}
               />
+              {fileName && (
+                <div className="normal-details-filename">{fileName}</div>
+              )}
             </div>
           </div>
           <div className="d-flex flex-wrap mt-4 justify-content-between two-fields">
