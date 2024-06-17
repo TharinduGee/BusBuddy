@@ -86,6 +86,7 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<?> handleSqlHelper(@NotNull Exception ex){
