@@ -196,6 +196,7 @@ function Trip_Management() {
           }));
         } catch (error) {
           console.error("There was an error!", error);
+
           setPageState((old) => ({
             ...old,
             isLoading: false,

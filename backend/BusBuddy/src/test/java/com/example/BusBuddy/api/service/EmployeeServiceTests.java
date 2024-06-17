@@ -23,6 +23,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,7 +95,7 @@ public class EmployeeServiceTests {
     }
 
     @Test
-    void testAddEmployee_Success() {
+    void testAddEmployee_Success() throws IOException {
 
         User user = new User();
         user.setRole(Role.ROLE_DRIVER);

@@ -22,6 +22,10 @@ class TripTile extends StatelessWidget {
     String formattedStartTime = DateFormat("HH:mm").format(parsedStartTime);
     String formattedEndTime = DateFormat("HH:mm").format(parsedEndTime);
 
+    String getFirstName(String fullName) {
+      return fullName.split(' ').first;
+    }
+
     return Column(
       children: [
         Container(
@@ -113,10 +117,12 @@ class TripTile extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              ": $conductorname",
+                              ": ${getFirstName(conductorname)}",
                               style: const TextStyle(
                                 fontSize: 15,
                               ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ],
                         ),

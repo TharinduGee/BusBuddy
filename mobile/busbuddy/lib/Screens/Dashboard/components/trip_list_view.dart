@@ -39,7 +39,7 @@ class TripListView extends StatelessWidget {
                                     'Start Time: ${trip.starttime ?? 'Unknown'}'),
                                 Text('End Time: ${trip.endtime ?? 'Unknown'}'),
                                 Text(
-                                    'Conductor Name: ${trip.conductorName ?? 'Unknown'}'),
+                                    'Conductor Name: ${trip.conductorName ?? 'Unassigned'}'),
                               ],
                             ),
                           ),
@@ -66,7 +66,7 @@ class TripListView extends StatelessWidget {
                     enddesti: trip.endDestination ?? 'Unknown',
                     starttime: trip.starttime ?? 'Unknown',
                     endtime: trip.endtime ?? 'Unknown',
-                    conductorname: trip.conductorName ?? 'Unknown',
+                    conductorname: trip.conductorName ?? 'Unassigned',
                     tripId: trip.tripId ?? -1,
                   ),
                 );

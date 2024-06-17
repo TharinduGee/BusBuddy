@@ -1,5 +1,6 @@
 package com.example.BusBuddy.controllers;
 
+import com.example.BusBuddy.dto.Document.DocumentDataResponse;
 import com.example.BusBuddy.dto.Document.DocumentPaginationResponse;
 import com.example.BusBuddy.dto.Document.DocumentRequest;
 import com.example.BusBuddy.models.DocCategory;
@@ -26,11 +27,24 @@ public class DocumentController {
 
     @GetMapping("/getDocument")
     public ResponseEntity<byte[]> getDocument(@RequestParam Long docId) throws IOException {
-        byte[] data = documentService.getDocument(docId);
+        DocumentDataResponse documentDataResponse = documentService.getDocument(docId);
+        int i = documentDataResponse.getDocName().lastIndexOf('.');
+        String extension = "none";
+        if (i > 0) {
+            extension = documentDataResponse.getDocName().substring(i+1);
+        }
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentLength(data.length);
-        return ResponseEntity.ok(data);
+        if(extension.equals("jpeg")  || extension.equals("jpg")){
+            headers.setContentType(MediaType.IMAGE_JPEG);
+        } else if (extension.equals("png")) {
+            headers.setContentType(MediaType.IMAGE_PNG);
+        } else if (extension.equals("pdf")){
+            headers.setContentType(MediaType.APPLICATION_PDF);
+        }else{
+            throw new RuntimeException("Type is not correct");
+        }
+        headers.setContentLength(documentDataResponse.getData().length);
+        return ResponseEntity.ok(documentDataResponse.getData());
     }
 
     @GetMapping("/findDocumentByType")

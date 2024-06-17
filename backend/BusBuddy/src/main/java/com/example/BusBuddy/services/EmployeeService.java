@@ -108,12 +108,14 @@ public class EmployeeService {
                       Date joinedDate,
                       Date bDay,
                       String email,
-                      MultipartFile file){
+                      MultipartFile file) throws IOException {
         Business business = businessService.extractBId(httpServletRequest);
         User user = userRepository.findByEmail(email).orElseThrow(()->new EntityNotFoundException("User Not found."));
         if(user.getEmployee() != null){
             throw new EntityNotFoundException("User is enrolled to a another business.");
         }
+
+
         Employee employee = Employee.builder()
                 .designation(EmployeeType.valueOf("EMPLOYEE_TYPE_" + user.getRole().toString().substring(5)))
                 .salary(salary)
@@ -128,6 +130,11 @@ public class EmployeeService {
         user.setEmployee(employee);
         user.setBusiness(business);
         userRepository.save(user);
+
+        if(file != null){
+            documentService.add(file,httpServletRequest,DocCategory.DOC_CATEGORY_SERVICE_AGREEMENT,
+                    file.getOriginalFilename(), employee.getEmpId());
+        }
 
         return "User enrolled to the business as a employee.";
     }
