@@ -17,7 +17,7 @@ class Trips {
       token = await storage.read(key: 'JWtoken') ?? "";
 
       String url =
-          'http://$khost:8081/api/v1/trip/findForEmployee?date=$selectedDateString';
+          '$khost/api/v1/trip/findForEmployee?date=$selectedDateString';
 
       final response = await http.get(
         Uri.parse(url),
