@@ -220,8 +220,9 @@ export default function TripScheduleStepper() {
             value: item.empId,
             label: item.name,
           }));
+          console.log("response " + response.data);
           setdriverIDoptions(newOptions);
-          console.log("drivers options " + newOptions[0].value);
+          console.log("drivers options " + newOptions);
         })
         .catch((error) => {
           console.error("There was an error!", error);
@@ -748,6 +749,8 @@ export default function TripScheduleStepper() {
     },
   ];
 
+  const [refresh, setRefresh] = useState(true);
+  useEffect(() => {}, [refresh]);
   const AddTripForTheDate = () => {
     const StartTime = formValues.startTime_.toDate();
     const formattedStartTime = format(StartTime, "HH:mm:ss");
@@ -801,6 +804,7 @@ export default function TripScheduleStepper() {
         console.error("Error posting data:", error);
       });
     handleReset();
+    setRefresh(!refresh);
   };
 
   const AddTripForADuration = () => {
@@ -867,6 +871,7 @@ export default function TripScheduleStepper() {
         console.error("Error posting data:", error);
       });
     handleReset();
+    setRefresh(!refresh);
   };
 
   const AddTrip = () => {
