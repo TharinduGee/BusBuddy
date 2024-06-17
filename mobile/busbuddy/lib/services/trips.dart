@@ -33,7 +33,7 @@ class Trips {
             endDestination: item['endDestination'],
             starttime: item['startTime'],
             endtime: item['endTime'],
-            conductorName: item['conductorName'],
+            conductorName: item['employeeName'],
             tripStatus: item['tripStatus'],
             numberPlate: item['numberPlate'],
             tripId: item['tripId'],
