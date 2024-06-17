@@ -190,6 +190,7 @@ function Route_Management() {
   const [value, setValue] = useState(null);
   const inputRef = useRef(null);
   const [routeId, setrouteId] = useState("");
+  const [fileName, setfileName] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [routeData, setRouteDate] = useState({
     startDestination: "",
@@ -204,6 +205,7 @@ function Route_Management() {
     setrouteId(updatedId);
     const updatedValue = dayjs(e.permitExpDate);
     setValue(updatedValue);
+    setfileName(e.docName);
     setRouteDate({
       startDestination: e.startDestination,
       endDestination: e.endDestination,
@@ -231,6 +233,7 @@ function Route_Management() {
     if (inputRef.current.value) {
       inputRef.current.value = null;
     }
+    setfileName("");
     setFile(null);
     setValue(null);
     setRouteDate({
@@ -564,33 +567,21 @@ function Route_Management() {
             <div className="input-and-label">
               <label className="form-label">Distance*</label>
               <input
-                type="text"
+                type="number"
                 id="distance"
                 className="form-control input-field"
                 value={routeData.distance}
                 onChange={handleChange}
-                onKeyPress={(event) => {
-                  const char = String.fromCharCode(event.charCode);
-                  if (!/^\d|\.$|^[-]/.test(char)) {
-                    event.preventDefault();
-                  }
-                }}
               />
             </div>
             <div className="input-and-label">
               <label className="form-label">Number of Sections*</label>
               <input
-                type="text"
+                type="number"
                 id="noOfSections"
                 className="form-control input-field"
                 value={routeData.noOfSections}
                 onChange={handleChange}
-                onKeyPress={(event) => {
-                  const char = String.fromCharCode(event.charCode);
-                  if (!/^\d|\.$|^[-]/.test(char)) {
-                    event.preventDefault();
-                  }
-                }}
               />
             </div>
           </div>
@@ -625,13 +616,16 @@ function Route_Management() {
               }}
               className="input-group "
             >
-              <input
-                type="file"
-                className="form-control input-field-choosefile "
-                id="inputGroupFile02"
-                onChange={handleFileChange}
-                ref={inputRef}
-              />
+              <div className="d-flex flex-column align-items-center">
+                <input
+                  type="file"
+                  className="form-control input-field-choosefile "
+                  id="inputGroupFile02"
+                  onChange={handleFileChange}
+                  ref={inputRef}
+                />
+                <div className="normal-details-filename">{fileName}</div>
+              </div>
             </div>
           </div>
 
