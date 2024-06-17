@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TripInformation from "./TripDesign"; 
+import TripModal from "./TripModal";
 import '../../Pages/Bus_Driver_Pages/DriverDashboard.css';
 
 function TomorrowTrip() {
@@ -11,12 +12,14 @@ function TomorrowTrip() {
     return tomorrow.toISOString().split('T')[0]; // Default to tomorrow's date
   });
 
+  const [open, setOpen] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
+
   useEffect(() => {
     // Function to fetch trip data for tomorrow
     const fetchTripData = async () => {
       try {
         const token = localStorage.getItem('token'); // Get JWT token from local storage
-        //const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbXBfaWQiOiIxIiwiYXVkIjoiMyIsInN1YiI6InBhYmFzYXJhQGdtYWlsLmNvbSIsImlhdCI6MTcxMDE1NDQ3NCwiZXhwIjoxNzEwMTk0MDc0fQ.HUgUMThkkBza5tmJxLEjkXnR9kusGcO5FqulrTK4bVU';
         const response = await fetch(`http://localhost:8081/api/v1/trip/findForEmployee?date=${selectedDate}`, {
           method: 'GET',
           headers: {
@@ -38,11 +41,20 @@ function TomorrowTrip() {
     fetchTripData(); // Fetch trip data when component mounts
   }, [selectedDate]);
 
+  const handleOpen = (trip) => {
+    setSelectedTrip(trip);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedTrip(null);
+  };
+
   return (
     <div className="d-flex flex-column justify-content-start">
-      
       <div className="get-trip"> {/* Add right margin for spacing */}
-      <h5 className="trip-date-text">Tomorrow Trips</h5>
+        <h5 className="trip-date-text">Tomorrow Trips</h5>
         <div>
           {tripData.map((data, index) => (
             <TripInformation
@@ -53,10 +65,18 @@ function TomorrowTrip() {
               endTime={data.endTime}
               conductor={data.employeeName}
               status={data.status}
+              onClick={() => handleOpen(data)}
             />
           ))}
         </div>
       </div>
+      {selectedTrip && (
+        <TripModal
+          open={open}
+          handleClose={handleClose}
+          refId={selectedTrip.tripId}
+        />
+      )}
     </div>
   );
 }
