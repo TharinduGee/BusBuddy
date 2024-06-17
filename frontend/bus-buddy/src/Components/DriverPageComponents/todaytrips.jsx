@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
 import TripInformation from "./TripDesign"; 
+import TripModal from "./TripModal";
 import '../../Pages/Bus_Driver_Pages/DriverDashboard.css';
 
 function TodayTrip() {
-  // State variables to manage trip data and selected date
   const [tripData, setTripData] = useState([]);
   const [selectedDate] = useState(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate()); // Set the date to tomorrow
-    return tomorrow.toISOString().split('T')[0]; // Default to tomorrow's date
+    const today = new Date();
+    return today.toISOString().split('T')[0];
   });
+  const [open, setOpen] = useState(false);
+  const [selectedTrip, setSelectedTrip] = useState(null);
 
   useEffect(() => {
-    // Function to fetch trip data for tomorrow
     const fetchTripData = async () => {
       try {
-        const token = localStorage.getItem('token'); // Get JWT token from local storage
-        
+        const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:8081/api/v1/trip/findForEmployee?date=${selectedDate}`, {
           method: 'GET',
           headers: {
@@ -35,14 +34,23 @@ function TodayTrip() {
       }
     };
 
-    fetchTripData(); // Fetch trip data when component mounts
+    fetchTripData();
   }, [selectedDate]);
+
+  const handleOpen = (trip) => {
+    setSelectedTrip(trip);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedTrip(null);
+  };
 
   return (
     <div className="d-flex flex-column justify-content-start">
-      
-      <div className="get-trip"> {/* Add right margin for spacing */}
-      <h5 className="trip-date-text">Today Trips</h5>
+      <div className="get-trip">
+        <h5 className="trip-date-text">Today Trips</h5>
         <div>
           {tripData.map((data, index) => (
             <TripInformation
@@ -53,10 +61,19 @@ function TodayTrip() {
               endTime={data.endTime}
               conductor={data.employeeName}
               status={data.status}
+              refId={data.tripId}
+              onClick={() => handleOpen(data)}
             />
           ))}
         </div>
       </div>
+      {selectedTrip && (
+        <TripModal
+          open={open}
+          handleClose={handleClose}
+          refId={selectedTrip.tripId}
+        />
+      )}
     </div>
   );
 }

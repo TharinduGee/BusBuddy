@@ -16,7 +16,9 @@
 }
 
 .input-field-choosefile {
+  margin: 0;
   height: 35px;
+  width: 300px;
 }
 .choosefile-expiredate {
   display: flex;
@@ -42,6 +44,19 @@
   height: 50px;
 
   padding-left: 10px;
+}
+.file-field-pair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.pair-container-fleet {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-self: center;
 }
 
 @media (max-width: 1440px) {
@@ -85,6 +100,12 @@
 
   .op-main-container {
     min-width: 350px;
+  }
+}
+
+@media (max-width: 500px) {
+  .input-field-choosefile {
+    width: 200px;
   }
 }
 

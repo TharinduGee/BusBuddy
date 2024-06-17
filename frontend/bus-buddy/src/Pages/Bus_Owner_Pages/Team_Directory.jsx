@@ -57,6 +57,7 @@ function Team_Directory() {
   const [selectedID, setselectedID] = useState("");
   const [selectedRole, setselectedRole] = useState("");
   const [selectedSalary, setselectedSalary] = useState("");
+  const [selectedFileName, setselectedFileName] = useState("");
   const [joinedDate, setjoinedDate] = useState("");
   const handleRowClick = (params) => {
     setselectedID(params.row.id);
@@ -65,6 +66,7 @@ function Team_Directory() {
     setselectedfullname(params.row.Name);
     setselectedRole(params.row.designation);
     setselectedSalary(params.row.salary);
+    setselectedFileName(params.row.docName);
   };
 
   const handlepopUpdate = () => {
@@ -474,6 +476,9 @@ function Team_Directory() {
               onChange={handleFileChange}
               ref={inputRef}
             />
+            <div className="normal-details-filename">
+              <lable> {selectedFileName}</lable>
+            </div>
 
             <div className="d-flex my-4 justify-content-center">
               <ButtonAdd

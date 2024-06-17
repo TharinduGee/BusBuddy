@@ -236,6 +236,7 @@ function RouteDocumentPage() {
           responseType: "blob",
         }
       );
+      console.log(response);
       const blob = new Blob([response.data], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
       window.open(url);
