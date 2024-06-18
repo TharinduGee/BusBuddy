@@ -30,6 +30,7 @@ import OtherDocument from "./Pages/Bus_Owner_Pages/FIileLibrayPages/OtherDocumen
 import RouteDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/RouteDocumentPage";
 import ServiceAgreementPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/ServiceAgreementPage";
 import ForgotPassword from "./Pages/LoginPage/Password_Reset/ForgotPassword";
+import PasswordResetPage from "./Pages/LoginPage/Password_Reset/PasswordResetPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -70,6 +71,7 @@ root.render(
         </Route>
         <Route path="/SidebarDriver" element={<SidebarDriver />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
+        <Route path="/resetpassword" element={<PasswordResetPage />} />
         <Route path="/DriverDashboard" element={<DriverDashboard />} />
         <Route path="/DriverBusManagement" element={<DriverBusManagement />} />
         <Route path="/DriverFinancial" element={<DriverFinancial />} />
