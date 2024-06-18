@@ -128,6 +128,28 @@ public class DocumentService {
                 .build();
     }
 
+    public String  getDocType(Long docId){
+        Document document = documentRepository.findById(docId).orElseThrow(() -> new EntityNotFoundException(
+                "Document is not found."
+        ));
+        int i = document.getDocName().lastIndexOf('.');
+        String extension = "none";
+        if (i > 0) {
+            extension = document.getDocName().substring(i+1);
+        }
+        if(extension.equals("jpeg")  || extension.equals("jpg")){
+           // headers.setContentType(MediaType.IMAGE_JPEG);
+            return "IMAGE_JPEG";
+        } else if (extension.equals("png")) {
+            //headers.setContentType(MediaType.IMAGE_PNG);
+            return "IMAGE_PNG";
+        } else if (extension.equals("pdf")){
+            return "APPLICATION_PDF";
+        }else{
+            throw new RuntimeException("Type is not correct");
+        }
+    }
+
     public String edit(MultipartFile file ,
                                        Long docId,
                                        DocCategory category,
