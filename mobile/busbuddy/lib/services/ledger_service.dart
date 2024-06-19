@@ -15,7 +15,7 @@ class LedgerService {
     try {
       String token = await storage.read(key: 'JWtoken') ?? "";
 
-      String url = 'http://$khost:8081/api/v1/ledger/addEntry';
+      String url = '$khost/api/v1/ledger/addEntry';
 
       final response = await http.post(
         Uri.parse(url),

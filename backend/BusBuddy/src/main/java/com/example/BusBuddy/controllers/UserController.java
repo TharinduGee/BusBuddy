@@ -1,5 +1,6 @@
 package com.example.BusBuddy.controllers;
 
+import com.example.BusBuddy.dto.User.UserDetailsResponse;
 import com.example.BusBuddy.dto.User.UserPaginationResponse;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.services.UserService;
@@ -40,6 +41,11 @@ public class UserController {
     @GetMapping("/getUsername")
     public ResponseEntity<String> getUsername(HttpServletRequest httpServletRequest) throws IOException {
         return userService.getUsername(httpServletRequest);
+    }
+
+    @GetMapping("/getUserDetails")
+    public ResponseEntity<UserDetailsResponse> getUserDetails(HttpServletRequest httpServletRequest) {
+        return ResponseEntity.ok(userService.getUserDetails(httpServletRequest));
     }
 
     @RequestMapping("/{id}")

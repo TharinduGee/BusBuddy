@@ -195,9 +195,6 @@ CREATE TABLE IF NOT EXISTS public.document
 )
 
 
-
-
-
 -- Table: public.trip
 
 -- DROP TABLE IF EXISTS public.trip;
@@ -356,8 +353,11 @@ CREATE TABLE IF NOT EXISTS public.users
     updated_at timestamp(6) without time zone,
     b_id bigint,
     emp_id bigint,
+    image oid,
+    token_id bigint,
     CONSTRAINT users_pkey PRIMARY KEY (id),
     CONSTRAINT uk_39smkrxk7iywhmw463bgxc0a UNIQUE (emp_id),
+    CONSTRAINT uk_e8xd6tjf4fgnq0xcwg8bktkvm UNIQUE (token_id),
     CONSTRAINT uk_p0ph17e6328j6uu1cr2tyd8vb UNIQUE (mobile_no),
     CONSTRAINT user_email_unique UNIQUE (email),
     CONSTRAINT user_password_unique UNIQUE (password),
@@ -369,6 +369,18 @@ CREATE TABLE IF NOT EXISTS public.users
         REFERENCES public.employee (emp_id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE SET NULL,
-    CONSTRAINT users_role_check CHECK (role::text = ANY (ARRAY['ROLE_SYSTEM_ADMIN'::character varying, 'ROLE_ADMIN'::character varying, 'ROLE_DRIVER'::character varying, 'ROLE_CONDUCTOR'::character varying, 'ROLE_SUPPORTER'::character varying]::text[]))
-);
+    CONSTRAINT fk_tokenid FOREIGN KEY (token_id)
+        REFERENCES public.password_reset_token (token_id) MATCH SIMPLE
+        ON UPDATE CASCADE
+        ON DELETE SET NULL,
+    CONSTRAINT users_role_check CHECK (role::text = ANY (ARRAY['ROLE_SYSTEM_ADMIN'::character varying::text, 'ROLE_ADMIN'::character varying::text, 'ROLE_DRIVER'::character varying::text, 'ROLE_CONDUCTOR'::character varying::text, 'ROLE_SUPPORTER'::character varying::text]))
+)
+
+CREATE TABLE IF NOT EXISTS public.password_reset_token
+(
+    token_id bigint NOT NULL DEFAULT nextval('password_reset_token_token_id_seq'::regclass),
+    expire_date_time timestamp(6) without time zone NOT NULL,
+    token character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT password_reset_token_pkey PRIMARY KEY (token_id)
+)
 

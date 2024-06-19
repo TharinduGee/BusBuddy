@@ -1,12 +1,14 @@
 package com.example.BusBuddy.services;
 
 import com.example.BusBuddy.Exception.EntityNotFoundException;
+import com.example.BusBuddy.dto.User.UserDetailsResponse;
 import com.example.BusBuddy.dto.User.UserPaginationResponse;
 import com.example.BusBuddy.dto.User.UserResponse;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +127,30 @@ public class UserService {
         ));
         String fullName = user.getFirstName() + " " + user.getLastName();
         return  ResponseEntity.ok(fullName);
+    }
+
+    @Transactional
+    public UserDetailsResponse getUserDetails(HttpServletRequest httpServletRequest) {
+        String username = (String) httpServletRequest.getAttribute("username");
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new EntityNotFoundException(
+                "User is not found."
+        ));
+
+        UserDetailsResponse userDetailsResponse = UserDetailsResponse.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .mobileNo(user.getMobileNo())
+                .role(user.getRole())
+                .empID(user.getEmployee() != null ? user.getEmployee().getEmpId() : null)
+                .type(user.getEmployee() != null ? user.getEmployee().getDesignation() : null)
+                .bDay(user.getEmployee() != null ? user.getEmployee().getBDay() : null)
+                .age(user.getEmployee() != null ? user.getEmployee().getAge() : null)
+                .salary(user.getEmployee() != null ? user.getEmployee().getSalary() : null)
+                .build();
+
+        return  userDetailsResponse;
     }
 
 

@@ -28,23 +28,15 @@ public class DocumentController {
     @GetMapping("/getDocument")
     public ResponseEntity<byte[]> getDocument(@RequestParam Long docId) throws IOException {
         DocumentDataResponse documentDataResponse = documentService.getDocument(docId);
-        int i = documentDataResponse.getDocName().lastIndexOf('.');
-        String extension = "none";
-        if (i > 0) {
-            extension = documentDataResponse.getDocName().substring(i+1);
-        }
         HttpHeaders headers = new HttpHeaders();
-        if(extension.equals("jpeg")  || extension.equals("jpg")){
-            headers.setContentType(MediaType.IMAGE_JPEG);
-        } else if (extension.equals("png")) {
-            headers.setContentType(MediaType.IMAGE_PNG);
-        } else if (extension.equals("pdf")){
-            headers.setContentType(MediaType.APPLICATION_PDF);
-        }else{
-            throw new RuntimeException("Type is not correct");
-        }
+        headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentLength(documentDataResponse.getData().length);
         return ResponseEntity.ok(documentDataResponse.getData());
+    }
+
+    @GetMapping("/getDocType")
+    public ResponseEntity<String> getDocType(@RequestParam Long docId) throws IOException {
+        return ResponseEntity.ok(documentService.getDocType(docId));
     }
 
     @GetMapping("/findDocumentByType")

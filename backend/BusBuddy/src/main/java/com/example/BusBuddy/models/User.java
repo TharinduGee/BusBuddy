@@ -99,6 +99,14 @@ public class User implements UserDetails {
   @OnDelete(action = OnDeleteAction.SET_NULL)
   private  Employee employee;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(
+          name = "tokenId",
+          foreignKey =  @ForeignKey(name = "fk_tokenId")
+  )
+  @OnDelete(action = OnDeleteAction.SET_NULL)
+  private PasswordResetToken passwordResetToken;
+
   LocalDateTime createdAt;
 
   LocalDateTime updatedAt;
