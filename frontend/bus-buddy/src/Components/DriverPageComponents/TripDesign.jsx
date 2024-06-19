@@ -8,6 +8,8 @@ import ConductorIcon from "../../Assets/Driver/Conductor.png";
 import StartTime from "../../Assets/Driver/StartTime.png";
 
 const TripInformation = ({ startplace, endplace, conductor, startTime, endTime, status, onClick }) => {
+  let newStatus = status.replace("TRIP_STATUS_", "");
+  newStatus = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).toLowerCase();
   return (
     <div className="trip-container" onClick={onClick}>
       <div>
@@ -82,7 +84,7 @@ const TripInformation = ({ startplace, endplace, conductor, startTime, endTime, 
               <img style={{ height: 60, width: 60 }} src={icon2} alt="Status Icon" />
               <div className="d-flex flex-column">
                 <div className="trip-txt">Status</div>
-                <div className="trip-value">{status}</div>
+                <div className="trip-value">{newStatus}</div>
               </div>
             </div>
           </div>
