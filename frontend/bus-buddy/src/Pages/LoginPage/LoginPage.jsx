@@ -32,6 +32,7 @@ function LoginPage() {
       if (response.data) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("role",response.data.role); 
       }
 
       if (response.data.role === "ROLE_ADMIN") {
