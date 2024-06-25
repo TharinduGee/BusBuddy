@@ -2,6 +2,7 @@ package com.example.BusBuddy.repositories;
 
 import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Employee;
+import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
@@ -20,8 +21,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
   @Transactional
   Optional<User> findByEmail(String email);
 
-  Page<User> findByBusinessIsNull(Pageable pageable);
 
-  Page<User> findByBusinessIsNullAndEmailContainingIgnoreCase(String email , Pageable pageable);
+  @Query("SELECT u FROM users u WHERE u.business IS NULL AND (u.role =:role1 OR u.role =:role2)")
+  Page<User> findByBusinessIsNullAndRole(Pageable pageable,@Param("role1") Role role1 ,@Param("role2") Role role2);
+
+  @Query("SELECT u FROM users u WHERE u.business IS NULL AND u.email=:email AND (u.role =:role1 OR u.role =:role2)")
+  Page<User> findByBusinessIsNullAndEmailContainingIgnoreCaseAndRole(Pageable pageable,@Param("email") String email ,
+                                                              @Param("role1") Role role1 ,@Param("role2") Role role2);
+
+
   
 }
