@@ -71,7 +71,7 @@ root.render(
         </Route>
         <Route path="/SidebarDriver" element={<SidebarDriver />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/resetpassword" element={<PasswordResetPage />} />
+        <Route path="/user/changePassword" element={<PasswordResetPage />} />
         <Route path="/DriverDashboard" element={<DriverDashboard />} />
         <Route path="/DriverBusManagement" element={<DriverBusManagement />} />
         <Route path="/DriverFinancial" element={<DriverFinancial />} />
