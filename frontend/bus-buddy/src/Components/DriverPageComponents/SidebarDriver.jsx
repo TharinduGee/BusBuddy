@@ -129,28 +129,6 @@ function Sidebar({ children }) {
                 <span>Dashboard</span>
               </a>
             </li>
-            <li>
-              <a
-                href="/DriverFinancial"
-                className={
-                  activeLink === "/finacialcenter" ? "active-link" : ""
-                }
-              >
-                <img src={FinacialCenter} className="sidebaricon" />
-                <span>Financial Center</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="/driverBusManagement"
-                className={
-                  activeLink === "/fleetoperation" ? "active-link" : ""
-                }
-              >
-                <img src={FleetOperation} className="sidebaricon" />
-                <span>Bus Management</span>
-              </a>
-            </li>
           </ul>
         </nav>
         <div className="line"></div>

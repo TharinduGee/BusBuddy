@@ -73,8 +73,7 @@ const TripModal = ({ open, handleClose, refId }) => {
             <MenuItem value="" disabled>Select Type</MenuItem>
             <MenuItem value="TRANSACTION_TYPE_TICKET_INCOME">Ticket Income</MenuItem>
             <MenuItem value="TRANSACTION_TYPE_TICKET_EXPENSE">Ticket Expense</MenuItem>
-            <MenuItem value="TRANSACTION_TYPE_UNSPECIFIED">Unspecified</MenuItem>
-            <MenuItem value="TRANSACTION_TYPE_SERVICE">Service</MenuItem>
+            
           </Select>
           <TextField
             label="Amount"
