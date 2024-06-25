@@ -6,10 +6,7 @@ import com.example.BusBuddy.dto.Ledger.LedgerAddRequest;
 import com.example.BusBuddy.dto.Ledger.LedgerPaginationResponse;
 import com.example.BusBuddy.dto.Ledger.LedgerResponse;
 import com.example.BusBuddy.models.*;
-import com.example.BusBuddy.repositories.BusRepository;
-import com.example.BusBuddy.repositories.EmployeeRepository;
-import com.example.BusBuddy.repositories.LedgerRepository;
-import com.example.BusBuddy.repositories.TripRepository;
+import com.example.BusBuddy.repositories.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -37,6 +34,7 @@ public class LedgerService {
     private final TripRepository tripRepository;
     private final EmployeeRepository employeeRepository;
     private final BusRepository busRepository;
+    private final BusinessRepository businessRepository;
 
     @Transactional
     public String addEntry(HttpServletRequest httpServletRequest , @NotNull LedgerAddRequest ledgerAddRequest){
@@ -95,9 +93,10 @@ public class LedgerService {
         return "Ledger entry added successfully!";
     }
 
-    public LedgerPaginationResponse findAll(int pageNumber, int pageSize){
+    public LedgerPaginationResponse findAll(HttpServletRequest httpServletRequest, int pageNumber, int pageSize){
+        Business business = businessService.extractBId(httpServletRequest);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Ledger> ledgerPage = ledgerRepository.findAll(pageable);
+        Page<Ledger> ledgerPage = ledgerRepository.findByBusiness(business, pageable);
 
 
         List<Ledger> ledgerList = ledgerPage.getContent();
@@ -124,9 +123,10 @@ public class LedgerService {
 
     }
 
-    public LedgerPaginationResponse findAllByDate(LocalDate localDate, int pageNumber, int pageSize){
+    public LedgerPaginationResponse findAllByDate(HttpServletRequest httpServletRequest, LocalDate localDate, int pageNumber, int pageSize){
+        Business business = businessService.extractBId(httpServletRequest);
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Ledger> ledgerPage = ledgerRepository.findByTimestampBetween(localDate.atStartOfDay() ,localDate.atTime(LocalTime.MAX) ,pageable);
+        Page<Ledger> ledgerPage = ledgerRepository.findByBusinessAndTimestampBetween(business , localDate.atStartOfDay() ,localDate.atTime(LocalTime.MAX) ,pageable);
 
 
         List<Ledger> ledgerList = ledgerPage.getContent();

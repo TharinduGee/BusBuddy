@@ -29,16 +29,16 @@ public class LedgerController {
 
     @GetMapping("/findAll")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<LedgerPaginationResponse>  findAll(@RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+    public ResponseEntity<LedgerPaginationResponse>  findAll(HttpServletRequest httpServletRequest, @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                              @RequestParam(value = "pageSize", defaultValue = "20" , required = false)int pageSize){
-        return ResponseEntity.ok(ledgerService.findAll(pageNumber, pageSize));
+        return ResponseEntity.ok(ledgerService.findAll(httpServletRequest, pageNumber, pageSize));
     }
 
     @GetMapping("/findAllByDate")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<LedgerPaginationResponse>  findAllByDate(@RequestParam LocalDate date , @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
+    public ResponseEntity<LedgerPaginationResponse>  findAllByDate(HttpServletRequest httpServletRequest, @RequestParam LocalDate date , @RequestParam(value = "pageNo", defaultValue = "0" , required = false) int pageNumber,
                                                              @RequestParam(value = "pageSize", defaultValue = "20" , required = false)int pageSize){
-        return ResponseEntity.ok(ledgerService.findAllByDate(date , pageNumber, pageSize));
+        return ResponseEntity.ok(ledgerService.findAllByDate(httpServletRequest, date , pageNumber, pageSize));
     }
 
     @PostMapping("/addEntry")
