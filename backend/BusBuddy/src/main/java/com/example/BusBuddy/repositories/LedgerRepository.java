@@ -1,8 +1,10 @@
 package com.example.BusBuddy.repositories;
 
 import com.example.BusBuddy.dto.Ledger.DailyFinanceResponse;
+import com.example.BusBuddy.models.Bus;
 import com.example.BusBuddy.models.Business;
 import com.example.BusBuddy.models.Ledger;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,5 +30,7 @@ public interface LedgerRepository extends JpaRepository<Ledger, Long> {
             "FROM ledger WHERE business = ?1 AND timestamp BETWEEN ?2 AND ?3")
     Map<String, Double> dailyIncomeAndExpense(Business business, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
-    Page<Ledger> findByTimestampBetween(LocalDateTime startOfDay ,LocalDateTime endOfDay , Pageable pageable);
+    Page<Ledger> findByBusinessAndTimestampBetween(Business business, LocalDateTime startOfDay ,LocalDateTime endOfDay , Pageable pageable);
+
+    Page<Ledger> findByBusiness(Business business, Pageable pageable);
 }
