@@ -4,6 +4,7 @@ import com.example.BusBuddy.Exception.EntityNotFoundException;
 import com.example.BusBuddy.dto.User.UserDetailsResponse;
 import com.example.BusBuddy.dto.User.UserPaginationResponse;
 import com.example.BusBuddy.dto.User.UserResponse;
+import com.example.BusBuddy.models.Role;
 import com.example.BusBuddy.models.User;
 import com.example.BusBuddy.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,14 +50,18 @@ public class UserService {
         Page<User> userPage;
         if(email != null && !email.isEmpty()){
             userPage =
-                    userRepository.findByBusinessIsNullAndEmailContainingIgnoreCase(
+                    userRepository.findByBusinessIsNullAndEmailContainingIgnoreCaseAndRole(
+                            pageable,
                             email,
-                            pageable
+                            Role.ROLE_DRIVER,
+                            Role.ROLE_CONDUCTOR
                     );
         }else{
             userPage =
-                    userRepository.findByBusinessIsNull(
-                            pageable
+                    userRepository.findByBusinessIsNullAndRole(
+                            pageable,
+                            Role.ROLE_DRIVER,
+                            Role.ROLE_CONDUCTOR
                     );
         }
 
