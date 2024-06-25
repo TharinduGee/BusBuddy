@@ -6,14 +6,14 @@ import Logo from "../../../Assets/logo.png";
 import "./ForgotPassword.css";
 import { MdOutlineMailOutline } from "react-icons/md";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import Footer from "../../../Components/OnBoaringComponents/Footer/Footer";
 import Swal from "sweetalert2";
 import { ClipLoader } from "react-spinners";
 
 function ForgotPassword() {
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -34,6 +34,8 @@ function ForgotPassword() {
           icon: "success",
           title: "Email Sent",
           text: "A reset link has been sent to your email.",
+        }).then(() => {
+          navigate("/login", { replace: true });
         });
       } catch (error) {
         Swal.fire({
