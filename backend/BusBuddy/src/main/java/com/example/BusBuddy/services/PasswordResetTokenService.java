@@ -48,7 +48,7 @@ public class PasswordResetTokenService {
         userRepository.save(user);
 
         String appUrl = request.getScheme() + "://" + request.getServerName() +
-                ":" + 8081;
+                ":" + 3000;
         SimpleMailMessage simpleMailMessage = constructResetTokenEmail(appUrl, token , user);
         javaMailSender.send(simpleMailMessage);
 
