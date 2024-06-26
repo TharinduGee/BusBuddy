@@ -33,18 +33,24 @@ const textBoxTheme = createTheme({
     borderRadius: 12,
   },
 });
-
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 const validationSchemaStep2 = (value) => {
   if (value === "a") {
     return Yup.object().shape({
-      startDate_: Yup.date().required("Date is required"),
+      startDate_: Yup.date()
+        .required("Date is required")
+        .min(today, "Date cannot be before today"),
     });
   } else if (value === "b") {
     return Yup.object().shape({
-      startDate_: Yup.date().required("Start Date is required"),
+      startDate_: Yup.date()
+        .required("Start Date is required")
+        .min(today, "Start Date cannot be before today"),
       endDate_: Yup.date()
         .required("End Date is required")
-        .min(Yup.ref("startDate_"), "End Date must be after Start Date"),
+        .min(Yup.ref("startDate_"), "End Date must be after Start Date")
+        .min(today, "End Date cannot be before today"),
     });
   }
   return Yup.object();
@@ -170,6 +176,7 @@ export default function TripScheduleStepper() {
   }, [formValues, triggerDropDownInfo]);
 
   const handleButtonClick = (formik) => {
+    console.log("dsada" + formik);
     formik.handleSubmit();
     setTimeout(function () {
       setTriggerDropDownInfo(true);
@@ -178,156 +185,165 @@ export default function TripScheduleStepper() {
 
   const getDropDownInfo = () => {
     console.log("sadas" + formValues.startTime_);
-    const StartTime = formValues.startTime_.toDate();
-    const formattedStartTime = format(StartTime, "HH:mm:ss");
-    const EndTime = formValues.endTime_.toDate();
-    const formattedEndTime = format(EndTime, "HH:mm:ss");
+    if (formValues.startTime_ != null || formValues.endTime_ != null) {
+      const StartTime = formValues.startTime_.toDate();
+      const formattedStartTime = format(StartTime, "HH:mm:ss");
+      const EndTime = formValues.endTime_.toDate();
+      const formattedEndTime = format(EndTime, "HH:mm:ss");
 
-    const year = formValues.startDate_.year();
-    const month = formValues.startDate_.month() + 1;
-    const day = formValues.startDate_.date();
-    const formattedStartDate = `${year}-${String(month).padStart(
-      2,
-      "0"
-    )}-${String(day).padStart(2, "0")}`;
+      const year = formValues.startDate_.year();
+      const month = formValues.startDate_.month() + 1;
+      const day = formValues.startDate_.date();
+      const formattedStartDate = `${year}-${String(month).padStart(
+        2,
+        "0"
+      )}-${String(day).padStart(2, "0")}`;
 
-    var formattedEndDate = null;
-    if (formValues.endDate_ !== null) {
-      const eyear = formValues.endDate_.year();
-      const emonth = formValues.endDate_.month() + 1;
-      const eday = formValues.endDate_.date();
-      formattedEndDate = `${eyear}-${String(emonth).padStart(2, "0")}-${String(
-        eday
-      ).padStart(2, "0")}`;
-    }
+      var formattedEndDate = null;
+      if (formValues.endDate_ !== null) {
+        const eyear = formValues.endDate_.year();
+        const emonth = formValues.endDate_.month() + 1;
+        const eday = formValues.endDate_.date();
+        formattedEndDate = `${eyear}-${String(emonth).padStart(
+          2,
+          "0"
+        )}-${String(eday).padStart(2, "0")}`;
+      }
 
-    console.log(
-      "sDate : " + formattedEndDate + "\n eDate : " + formattedStartDate
-    );
-    try {
-      axios
-        .get(
-          `http://localhost:8081/api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
-            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
-          }`,
-          {
+      console.log(
+        "sDate : " + formattedEndDate + "\n eDate : " + formattedStartDate
+      );
+      try {
+        axios
+          .get(
+            `http://localhost:8081/api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+              formValues.endDate_ == null
+                ? formattedStartDate
+                : formattedEndDate
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const datafromApi = response.data;
+            const newOptions = datafromApi.map((item) => ({
+              value: item.empId,
+              label: item.name,
+            }));
+            console.log("response " + response.data);
+            setdriverIDoptions(newOptions);
+            console.log("drivers options " + newOptions);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        console.error("There was an error!", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
+        });
+      }
+
+      try {
+        axios
+          .get(
+            `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+              formValues.endDate_ == null
+                ? formattedStartDate
+                : formattedEndDate
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const datafromApi = response.data;
+            const newOptions = datafromApi.map((item) => ({
+              value: item.empId,
+              label: item.name,
+            }));
+            setConductorIDoptions(newOptions);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        console.error("There was an error!", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
+        });
+      }
+
+      try {
+        axios
+          .get(
+            `http://localhost:8081/api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+              formValues.endDate_ == null
+                ? formattedStartDate
+                : formattedEndDate
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const datafromApi = response.data;
+            const newOptions = datafromApi.map((item) => ({
+              value: item.busId,
+              label: item.numberPlate,
+            }));
+            setbusIDoptions(newOptions);
+            console.log(datafromApi);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
+        });
+        console.error("There was an error!", error);
+      }
+      try {
+        setLoading(true);
+        axios
+          .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
-        )
-        .then((response) => {
-          const datafromApi = response.data;
-          const newOptions = datafromApi.map((item) => ({
-            value: item.empId,
-            label: item.name,
-          }));
-          console.log("response " + response.data);
-          setdriverIDoptions(newOptions);
-          console.log("drivers options " + newOptions);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      console.error("There was an error!", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.response.data,
-      });
-    }
+          })
+          .then((response) => {
+            const busIDs = response.data;
 
-    try {
-      axios
-        .get(
-          `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
-            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          const datafromApi = response.data;
-          const newOptions = datafromApi.map((item) => ({
-            value: item.empId,
-            label: item.name,
-          }));
-          setConductorIDoptions(newOptions);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
+            const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+            setrouteIDoptions(newOptions);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        setLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
         });
-    } catch (error) {
-      console.error("There was an error!", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.response.data,
-      });
-    }
-
-    try {
-      axios
-        .get(
-          `http://localhost:8081/api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
-            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          const datafromApi = response.data;
-          const newOptions = datafromApi.map((item) => ({
-            value: item.busId,
-            label: item.numberPlate,
-          }));
-          setbusIDoptions(newOptions);
-          console.log(datafromApi);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.response.data,
-      });
-      console.error("There was an error!", error);
-    }
-    try {
-      setLoading(true);
-      axios
-        .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const busIDs = response.data;
-
-          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
-          setrouteIDoptions(newOptions);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      setLoading(false);
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: error.response.data,
-      });
-      console.error("There was an error!", error);
+        console.error("There was an error!", error);
+      }
     }
   };
 
