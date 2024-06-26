@@ -77,7 +77,7 @@ public class UserRepositoryTests {
         userRepository.save(user);
         Pageable pageable = PageRequest.of(1, 10);
 
-        Page<User> unenrolledUsersPage = userRepository.findByBusinessIsNull(pageable);
+        Page<User> unenrolledUsersPage = userRepository.findByBusinessIsNullAndRole(pageable, Role.ROLE_DRIVER,Role.ROLE_CONDUCTOR);
 
         for(User unenrolledUser : unenrolledUsersPage.getContent()){
             Assertions.assertThat(unenrolledUser.getBusiness()).isNull();
