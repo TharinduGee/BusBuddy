@@ -1,5 +1,5 @@
+// BusInfo.js
 import React, { useEffect, useState } from 'react';
-import avatar from '../../../Assets/Owner_assests/Avatar.png';
 import axios from 'axios';
 import './BusInfo.css';
 import Button from '@mui/material/Button';
@@ -8,10 +8,10 @@ import SidebarOwner from './SidebarOwner';
 function BusInfo() {
 	const token = localStorage.getItem('token');
 	const [username, setUsername] = useState('');
-	const [Data, setData] = useState({
+	const [imageData, setImageData] = useState(null);
+	const [data, setData] = useState({
 		businessName: '',
 		registrationNo: '',
-		// email: "",
 		address: '',
 	});
 
@@ -37,19 +37,34 @@ function BusInfo() {
 	useEffect(() => {
 		if (username === '') {
 			axios
-				.get(`http://localhost:8081/api/v1/user/getUsername`, {
+				.get('http://localhost:8081/api/v1/user/getUsername', {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				})
-				.then(function (response) {
+				.then((response) => {
 					setUsername(response.data);
 				})
-				.catch(function (error) {
-					console.error('Error posting data:', error);
+				.catch((error) => {
+					console.error('Error fetching username:', error);
 				});
 		}
 	}, [username, token]);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const data = await fetchImageData(
+				'http://localhost:8081/api/v1/user/getImage',
+				token
+			);
+			if (data) {
+				const base64Image = arrayBufferToBase64(data);
+				setImageData(`data:image/png;base64,${base64Image}`);
+			}
+		};
+
+		fetchData();
+	}, [token]);
 
 	const handleInputChange = (event) => {
 		const { id, value } = event.target;
@@ -62,10 +77,10 @@ function BusInfo() {
 
 	const handleUpdate = () => {
 		axios
-			.post('http://localhost:8081/api/v1/business/editBusinessInfo', Data, {
+			.post('http://localhost:8081/api/v1/business/editBusinessInfo', data, {
 				headers: { Authorization: `Bearer ${token}` },
 			})
-			.then((response) => {
+			.then(() => {
 				console.log('Update Successful');
 				setButtonDisabled(true);
 			})
@@ -74,6 +89,30 @@ function BusInfo() {
 			});
 	};
 
+	function arrayBufferToBase64(buffer) {
+		let binary = '';
+		const bytes = new Uint8Array(buffer);
+		for (let i = 0; i < bytes.byteLength; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		return btoa(binary);
+	}
+
+	async function fetchImageData(url, token) {
+		try {
+			const response = await axios.get(url, {
+				responseType: 'arraybuffer',
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			return response.data;
+		} catch (error) {
+			console.error('Error fetching image data:', error);
+			return null;
+		}
+	}
+
 	return (
 		<SidebarOwner>
 			<div className="d-flex flex-column align-items-center justify-content-center">
@@ -81,22 +120,22 @@ function BusInfo() {
 				<div className="op-main-container">
 					<div className="d-flex flex-row align-items-center">
 						<img
-							className="op-prof-pic  input-and-label "
-							src={avatar}
-							alt="Add Icon"
+							className="op-prof-pic input-and-label"
+							src={imageData}
+							alt="User"
 						/>
 						<div className="d-flex flex-column mx-4">
 							<label>{username}</label>
 						</div>
 					</div>
-					<div className="d-flex flex-wrap  justify-content-between two-fields">
+					<div className="d-flex flex-wrap justify-content-between two-fields">
 						<div className="input-and-label">
 							<label className="form-label">Business Name*</label>
 							<input
 								type="text"
 								id="businessName"
 								className="form-control input-field"
-								value={Data.businessName}
+								value={data.businessName}
 								onChange={handleInputChange}
 							/>
 						</div>
@@ -106,20 +145,10 @@ function BusInfo() {
 								type="text"
 								id="registrationNo"
 								className="form-control input-field"
-								value={Data.registrationNo}
+								value={data.registrationNo}
 								onChange={handleInputChange}
 							/>
 						</div>
-						{/* <div className="input-and-label">
-            <label className="form-label">Email*</label>
-            <input
-              type="text"
-              id="email"
-              className="form-control input-field"
-              value={Data.email}
-              onChange={handleInputChange}
-            />
-          </div> */}
 					</div>
 					<div className="input-and-label">
 						<label className="form-label">Address*</label>
@@ -127,7 +156,7 @@ function BusInfo() {
 							type="text"
 							id="address"
 							className="form-control address-text-field"
-							value={Data.address}
+							value={data.address}
 							onChange={handleInputChange}
 						/>
 					</div>
@@ -139,7 +168,7 @@ function BusInfo() {
 								width: '100%',
 								backgroundColor: buttonDisabled ? 'gray' : '#ff760d',
 							}}
-							className="d-flex  update-btn"
+							className="d-flex update-btn"
 							variant="contained"
 							onClick={handleUpdate}
 							disabled={buttonDisabled}
