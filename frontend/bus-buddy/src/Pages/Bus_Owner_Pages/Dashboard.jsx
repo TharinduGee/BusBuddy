@@ -17,8 +17,10 @@ function Dashboard() {
     conductorCount: null,
     busCount: null,
   });
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [loadgraph, setLoadGraph] = useState(false);
   useEffect(() => {
+    console.log("this is the envirmentt " + apiUrl);
     axios
       .get(`http://localhost:8081/api/v1/bus/count`, {
         headers: {
