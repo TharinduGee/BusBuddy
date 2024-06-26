@@ -261,11 +261,15 @@ public class EmployeeService {
                                                                          LocalDate startDate , LocalDate endDate ,
                                                                          LocalTime startTime , LocalTime endTime){
 
-        // if duration exceeds for another day should check other day and logic should be changed also. This should be implemented
 
         Business business = businessService.extractBId(httpServletRequest);
         List<Employee> allEmployees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_DRIVER);
-        List<Employee> invalidEmployees = tripRepository.findDistinctInvalidDrivers(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        List<Employee> invalidEmployees = null;
+        if(startTime.isAfter(endTime)){
+            invalidEmployees = tripRepository.findDistinctInvalidDriversSpanMidnight(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        }else{
+            invalidEmployees = tripRepository.findDistinctInvalidDriversNotSpanMidnight(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        }
 
         allEmployees.removeAll(invalidEmployees.stream().toList());
 
