@@ -33,7 +33,8 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
 //                                                LocalTime startTime, LocalTime endTime , TripStatus status);
 
     @Query("SELECT DISTINCT t.driver FROM trip t WHERE t.business = :business "
-        + "AND t.date <= :startDate AND t.date >= :endDate  " +
+        + "AND t.date BETWEEN :startDate AND  :endDate  " +
+            "OR (t.date = :startDate AND  t.date = :endDate)  " +
              "AND ((t.startTime BETWEEN :startTime AND :endTime)" +
             "OR (t.startTime = :startTime AND t.endTime = :endTime) " +
             "OR (t.endTime BETWEEN :startTime AND :endTime) " +
@@ -51,7 +52,8 @@ public interface TripRepository extends JpaRepository<Trip,Long> {
     );
 
     @Query("SELECT DISTINCT t.driver FROM trip t WHERE t.business = :business " +
-            "AND t.date <= :startDate AND t.date >= :endDate " +
+            "AND t.date BETWEEN :startDate AND :endDate " +
+            "OR (t.date = :startDate AND  t.date = :endDate)  " +
             "AND t.startTime > t.endTime " +
             "AND ((t.startTime = :startTime AND t.endTime = :endTime) " +
             "OR (:startTime < t.endTime AND :startTime > t.startTime) " +
