@@ -28,7 +28,7 @@ function ForgotPassword() {
       console.log(values.email);
       try {
         await axios.post(
-          `http://localhost:8081/api/v1/user/resetPassword?email=${values.email}`
+          `${process.env.REACT_APP_API_URL}api/v1/user/resetPassword?email=${values.email}`
         );
         Swal.fire({
           icon: "success",

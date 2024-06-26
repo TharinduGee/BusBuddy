@@ -45,7 +45,7 @@ function PasswordResetPage() {
       setLoading(true);
       try {
         await axios.post(
-          `http://localhost:8081/api/v1/user/updatePassword?token=${token}&password=${values.password}`
+          `${process.env.REACT_APP_API_URL}api/v1/user/updatePassword?token=${token}&password=${values.password}`
         );
         Swal.fire({
           icon: "success",

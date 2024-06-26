@@ -16,7 +16,7 @@ function Sidebar({ children }) {
   const [mainClass, setmainClass] = useState("main-content");
   const spans = document.querySelectorAll("span");
   const [activeLink, setActiveLink] = useState("");
-  const [username , setUsername] = useState("");
+  const [username, setUsername] = useState("");
   const location = useLocation();
   const token = localStorage.getItem("token");
 
@@ -64,21 +64,18 @@ function Sidebar({ children }) {
     }
   };
 
-  const handleLogOut = () =>{
+  const handleLogOut = () => {
     localStorage.clear();
     window.location.href = "/";
   };
 
-  useEffect(() =>{
+  useEffect(() => {
     axios
-      .get(
-        `http://localhost:8081/api/v1/user/getUsername`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(`${process.env.REACT_APP_API_URL}api/v1/user/getUsername`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(function (response) {
         setUsername(response.data);
         console.log("Data successfully fetched:", response.data);
@@ -86,10 +83,8 @@ function Sidebar({ children }) {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
+  }, [token]);
 
-  },[token]);
-
-  
   return (
     <div className="sidebar-container-driver">
       <div className="menu" onClick={togglemenu}>

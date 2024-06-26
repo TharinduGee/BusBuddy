@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import TripInformation from "./TripDesign"; 
+import TripInformation from "./TripDesign";
 import TripModal from "./TripModal";
-import '../../Pages/Bus_Driver_Pages/DriverDashboard.css';
+import "../../Pages/Bus_Driver_Pages/DriverDashboard.css";
 
 function TodayTrip() {
   const [tripData, setTripData] = useState([]);
   const [selectedDate] = useState(() => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    return today.toISOString().split("T")[0];
   });
   const [open, setOpen] = useState(false);
   const [selectedTrip, setSelectedTrip] = useState(null);
@@ -15,22 +15,25 @@ function TodayTrip() {
   useEffect(() => {
     const fetchTripData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8081/api/v1/trip/findForEmployee?date=${selectedDate}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}api/v1/trip/findForEmployee?date=${selectedDate}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
         if (response.ok) {
           const data = await response.json();
           setTripData(data);
         } else {
-          console.error('Failed to fetch trip data:', response.statusText);
+          console.error("Failed to fetch trip data:", response.statusText);
         }
       } catch (error) {
-        console.error('Error fetching trip data:', error);
+        console.error("Error fetching trip data:", error);
       }
     };
 

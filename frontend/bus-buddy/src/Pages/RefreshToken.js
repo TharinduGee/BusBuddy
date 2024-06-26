@@ -44,7 +44,7 @@ export function refreshTokenFetch(message) {
   const getRefreshToken = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
     const response = await axios.post(
-      `http://localhost:8081/api/v1/refreshToken?refreshToken=${refreshToken}`
+      `${process.env.REACT_APP_API_URL}api/v1/refreshToken?refreshToken=${refreshToken}`
     );
     if (response.data) {
       localStorage.setItem("token", response.data.token);

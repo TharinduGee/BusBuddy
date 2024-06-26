@@ -157,7 +157,7 @@ function ServiceAgreementPage() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/v1/document/findDocumentByType?docCategory=DOC_CATEGORY_SERVICE_AGREEMENT&docName=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          `${process.env.REACT_APP_API_URL}api/v1/document/findDocumentByType?docCategory=DOC_CATEGORY_SERVICE_AGREEMENT&docName=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -204,11 +204,14 @@ function ServiceAgreementPage() {
       setLoading(true);
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:8081/api/v1/document/remove?docId=${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .delete(
+            `${process.env.REACT_APP_API_URL}api/v1/document/remove?docId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             setLoading(false);
             console.log("Data successfully deleted:", response.data);
@@ -236,7 +239,7 @@ function ServiceAgreementPage() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:8081/api/v1/document/getDocument?docId=${id}`,
+        `${process.env.REACT_APP_API_URL}api/v1/document/getDocument?docId=${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

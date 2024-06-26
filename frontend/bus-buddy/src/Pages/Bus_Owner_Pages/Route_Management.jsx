@@ -278,7 +278,7 @@ function Route_Management() {
       setLoading(true);
       axios
         .post(
-          `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+          `${process.env.REACT_APP_API_URL}api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
           form,
           {
             headers: {
@@ -359,7 +359,7 @@ function Route_Management() {
       setLoading(true);
       axios
         .post(
-          `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
+          `${process.env.REACT_APP_API_URL}api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
           form,
           {
             headers: {
@@ -409,11 +409,14 @@ function Route_Management() {
       if (result.isConfirmed) {
         setLoading(true);
         axios
-          .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .delete(
+            `${process.env.REACT_APP_API_URL}api/v1/route/remove?routeId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             console.log("Data successfully deleted:", response.data);
             Swal.fire({
@@ -457,7 +460,7 @@ function Route_Management() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/v1/route/findRoutes?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&startDestination=${searchInput}`,
+          `${process.env.REACT_APP_API_URL}api/v1/route/findRoutes?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&startDestination=${searchInput}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import TripInformation from "./TripDesign"; 
+import TripInformation from "./TripDesign";
 import TripModal from "./TripModal";
-import '../../Pages/Bus_Driver_Pages/DriverDashboard.css';
+import "../../Pages/Bus_Driver_Pages/DriverDashboard.css";
 
 function TomorrowTrip() {
   // State variables to manage trip data and selected date
@@ -9,7 +9,7 @@ function TomorrowTrip() {
   const [selectedDate] = useState(() => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1); // Set the date to tomorrow
-    return tomorrow.toISOString().split('T')[0]; // Default to tomorrow's date
+    return tomorrow.toISOString().split("T")[0]; // Default to tomorrow's date
   });
 
   const [open, setOpen] = useState(false);
@@ -19,22 +19,25 @@ function TomorrowTrip() {
     // Function to fetch trip data for tomorrow
     const fetchTripData = async () => {
       try {
-        const token = localStorage.getItem('token'); // Get JWT token from local storage
-        const response = await fetch(`http://localhost:8081/api/v1/trip/findForEmployee?date=${selectedDate}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+        const token = localStorage.getItem("token"); // Get JWT token from local storage
+        const response = await fetch(
+          `${process.env.REACT_APP_API_URL}api/v1/trip/findForEmployee?date=${selectedDate}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
         if (response.ok) {
           const data = await response.json();
           setTripData(data);
         } else {
-          console.error('Failed to fetch trip data:', response.statusText);
+          console.error("Failed to fetch trip data:", response.statusText);
         }
       } catch (error) {
-        console.error('Error fetching trip data:', error);
+        console.error("Error fetching trip data:", error);
       }
     };
 
@@ -53,7 +56,9 @@ function TomorrowTrip() {
 
   return (
     <div className="d-flex flex-column justify-content-start">
-      <div className="get-trip"> {/* Add right margin for spacing */}
+      <div className="get-trip">
+        {" "}
+        {/* Add right margin for spacing */}
         <h5 className="trip-date-text">Tomorrow Trips</h5>
         <div>
           {tripData.map((data, index) => (

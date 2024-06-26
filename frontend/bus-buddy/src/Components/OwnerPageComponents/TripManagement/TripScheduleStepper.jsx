@@ -216,7 +216,9 @@ export default function TripScheduleStepper() {
       try {
         axios
           .get(
-            `http://localhost:8081/api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+            `${
+              process.env.REACT_APP_API_URL
+            }api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
               formValues.endDate_ == null
                 ? formattedStartDate
                 : formattedEndDate
@@ -252,7 +254,9 @@ export default function TripScheduleStepper() {
       try {
         axios
           .get(
-            `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+            `${
+              process.env.REACT_APP_API_URL
+            }api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
               formValues.endDate_ == null
                 ? formattedStartDate
                 : formattedEndDate
@@ -286,7 +290,9 @@ export default function TripScheduleStepper() {
       try {
         axios
           .get(
-            `http://localhost:8081/api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+            `${
+              process.env.REACT_APP_API_URL
+            }api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
               formValues.endDate_ == null
                 ? formattedStartDate
                 : formattedEndDate
@@ -320,7 +326,7 @@ export default function TripScheduleStepper() {
       try {
         setLoading(true);
         axios
-          .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
+          .get(`${process.env.REACT_APP_API_URL}api/v1/route/geRouteIds`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -821,7 +827,7 @@ export default function TripScheduleStepper() {
     setLoading(true);
     axios
       .post(
-        `http://localhost:8081/api/v1/trip/add?date=${formattedStartDate}`,
+        `${process.env.REACT_APP_API_URL}api/v1/trip/add?date=${formattedStartDate}`,
         passingData,
         {
           headers: {
@@ -890,7 +896,7 @@ export default function TripScheduleStepper() {
     setLoading(true);
     axios
       .post(
-        `http://localhost:8081/api/v1/trip/scheduleTripsForDuration`,
+        `${process.env.REACT_APP_API_URL}api/v1/trip/scheduleTripsForDuration`,
         passingData,
         {
           headers: {

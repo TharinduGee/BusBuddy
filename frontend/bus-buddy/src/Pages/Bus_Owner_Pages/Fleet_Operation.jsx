@@ -231,7 +231,7 @@ function Fleet_Operation() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/v1/bus/findBuses?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&numberPlate=${searchInput}`,
+          `${process.env.REACT_APP_API_URL}api/v1/bus/findBuses?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&numberPlate=${searchInput}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -309,11 +309,14 @@ function Fleet_Operation() {
       if (result.isConfirmed) {
         setLoading(true);
         axios
-          .delete(`http://localhost:8081/api/v1/bus/remove?busId=${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .delete(
+            `${process.env.REACT_APP_API_URL}api/v1/bus/remove?busId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             console.log("Data successfully deleted:", response.data);
             Swal.fire({
@@ -383,7 +386,7 @@ function Fleet_Operation() {
       setLoading(true);
       axios
         .post(
-          `http://localhost:8081/api/v1/bus/add?type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
+          `${process.env.REACT_APP_API_URL}api/v1/bus/add?type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
           form,
           {
             headers: {
@@ -448,7 +451,7 @@ function Fleet_Operation() {
       setLoading(true);
       axios
         .post(
-          `http://localhost:8081/api/v1/bus/edit?busId=${updateData.busId}&type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
+          `${process.env.REACT_APP_API_URL}api/v1/bus/edit?busId=${updateData.busId}&type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
           form,
           {
             headers: {

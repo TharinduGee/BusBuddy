@@ -151,7 +151,7 @@ function Finacial_Center() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/v1/ledger/findAll?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          `${process.env.REACT_APP_API_URL}api/v1/ledger/findAll?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -191,7 +191,7 @@ function Finacial_Center() {
 
       try {
         const response = await axios.get(
-          `http://localhost:8081/api/v1/ledger/findAllByDate?date=${firstformattedDate}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          `${process.env.REACT_APP_API_URL}api/v1/ledger/findAllByDate?date=${firstformattedDate}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -237,7 +237,7 @@ function Finacial_Center() {
       <h1 className="d-flex justify-content-center">Fincial Center</h1>
 
       {loading ? (
-        <div className="ringloader-position">
+        <div className="ringloader-position-fin">
           <RingLoader
             loading={loading}
             color="orange"
@@ -294,7 +294,7 @@ function Finacial_Center() {
                 setLoading(true);
                 try {
                   const response = await axios.post(
-                    `http://localhost:8081/api/v1/ledger/addEntry`,
+                    `${process.env.REACT_APP_API_URL}api/v1/ledger/addEntry`,
                     values,
                     {
                       headers: {

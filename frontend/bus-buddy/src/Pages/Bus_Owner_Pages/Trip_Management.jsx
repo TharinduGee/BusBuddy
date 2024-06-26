@@ -161,7 +161,7 @@ function Trip_Management() {
 
         try {
           const response = await axios.get(
-            `http://localhost:8081/api/v1/trip/findTrips?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&startDate=${firstformattedDate}&endDate=${lastformattedDate}`,
+            `${process.env.REACT_APP_API_URL}api/v1/trip/findTrips?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&startDate=${firstformattedDate}&endDate=${lastformattedDate}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -227,11 +227,14 @@ function Trip_Management() {
       if (result.isConfirmed) {
         setLoading(true);
         axios
-          .delete(`http://localhost:8081/api/v1/trip/remove?tripId=${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .delete(
+            `${process.env.REACT_APP_API_URL}api/v1/trip/remove?tripId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             console.log("Data successfully deleted:", response.data);
             Swal.fire({

@@ -149,7 +149,7 @@ function Team_Directory_Add_Employee() {
 
       axios
         .get(
-          `http://localhost:8081/api/v1/user/findUnEnrolledUsers?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&email=${searchInput}`,
+          `${process.env.REACT_APP_API_URL}api/v1/user/findUnEnrolledUsers?pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}&email=${searchInput}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -205,6 +205,7 @@ function Team_Directory_Add_Employee() {
 
   const AddEmployee = () => {
     const now = new Date();
+    setOpenPopup(!openPopup);
     const formattedDate = formatDate(now);
 
     const form = new FormData();
@@ -212,7 +213,7 @@ function Team_Directory_Add_Employee() {
     setLoading(true);
     axios
       .post(
-        `http://localhost:8081/api/v1/employee/add?salary=${salary}&joinedDate=${formattedDate}&email=${selectedemail}`,
+        `${process.env.REACT_APP_API_URL}api/v1/employee/add?salary=${salary}&joinedDate=${formattedDate}&email=${selectedemail}`,
         form,
         {
           headers: {
@@ -232,7 +233,7 @@ function Team_Directory_Add_Employee() {
         setLoading(false);
         console.log(pop);
         setRefresh(!refresh);
-        setOpenPopup(!openPopup);
+
         console.log("Data successfully posted:", response.data);
       })
       .catch(function (error) {

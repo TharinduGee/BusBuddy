@@ -91,7 +91,7 @@ function Team_Directory() {
     setLoading(true);
     axios
       .post(
-        `http://localhost:8081/api/v1/employee/edit?empId=${selectedID}&salary=${salary}&joinedDate=${joinedDate}`,
+        `${process.env.REACT_APP_API_URL}api/v1/employee/edit?empId=${selectedID}&salary=${salary}&joinedDate=${joinedDate}`,
 
         form,
         {
@@ -243,7 +243,7 @@ function Team_Directory() {
 
       axios
         .get(
-          `http://localhost:8081/api/v1/employee/findEmployees?name=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
+          `${process.env.REACT_APP_API_URL}api/v1/employee/findEmployees?name=${searchInput}&pageNo=${paginationModel.page}&pageSize=${paginationModel.pageSize}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -320,11 +320,14 @@ function Team_Directory() {
       if (result.isConfirmed) {
         setLoading(true);
         axios
-          .delete(`http://localhost:8081/api/v1/employee/remove?empId=${id}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .delete(
+            `${process.env.REACT_APP_API_URL}api/v1/employee/remove?empId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             console.log("Data successfully deleted:", response.data);
             Swal.fire({

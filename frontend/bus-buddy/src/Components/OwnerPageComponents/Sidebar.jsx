@@ -80,7 +80,7 @@ function Sidebar() {
     console.log(username);
     if (username == "") {
       axios
-        .get(`http://localhost:8081/api/v1/user/getUsername`, {
+        .get(`${process.env.REACT_APP_API_URL}api/v1/user/getUsername`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -123,7 +123,7 @@ function Sidebar() {
   useEffect(() => {
     const fetchData = async () => {
       var data = await fetchImageData(
-        "http://localhost:8081/api/v1/user/getImage"
+        `${process.env.REACT_APP_API_URL}api/v1/user/getImage`
       );
       if (data) {
         var base64Image = arrayBufferToBase64(data);

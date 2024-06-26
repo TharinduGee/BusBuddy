@@ -21,7 +21,7 @@ function Operation_hub() {
   useEffect(() => {
     if (token) {
       axios
-        .get("http://localhost:8081/api/v1/business/getInfo", {
+        .get(`${process.env.REACT_APP_API_URL}api/v1/business/getInfo`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -38,7 +38,7 @@ function Operation_hub() {
   useEffect(() => {
     if (username === "") {
       axios
-        .get(`http://localhost:8081/api/v1/user/getUsername`, {
+        .get(`${process.env.REACT_APP_API_URL}api/v1/user/getUsername`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -63,9 +63,13 @@ function Operation_hub() {
 
   const handleUpdate = () => {
     axios
-      .post("http://localhost:8081/api/v1/business/editBusinessInfo", Data, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .post(
+        `${process.env.REACT_APP_API_URL}api/v1/business/editBusinessInfo`,
+        Data,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         console.log("Update Successful");
         setButtonDisabled(true);

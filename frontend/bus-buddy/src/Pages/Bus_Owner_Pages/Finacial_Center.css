@@ -11,6 +11,12 @@
   width: 20dvw;
 }
 .ringloader-position {
+  height: 40dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ringloader-position-fin {
   height: 80dvh;
   display: flex;
   justify-content: center;

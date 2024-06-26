@@ -22,7 +22,7 @@ function Dashboard() {
   useEffect(() => {
     console.log("this is the envirmentt " + apiUrl);
     axios
-      .get(`http://localhost:8081/api/v1/bus/count`, {
+      .get(`${process.env.REACT_APP_API_URL}api/v1/bus/count`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,11 +34,14 @@ function Dashboard() {
         }));
 
         axios
-          .get(`http://localhost:8081/api/v1/employee/countEmployee`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .get(
+            `${process.env.REACT_APP_API_URL}api/v1/employee/countEmployee`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
           .then((response) => {
             setcount((prevCount) => ({
               ...prevCount,
@@ -62,7 +65,7 @@ function Dashboard() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8081/api/v1/ledger/dailyFinance`, {
+      .get(`${process.env.REACT_APP_API_URL}api/v1/ledger/dailyFinance`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -74,11 +77,14 @@ function Dashboard() {
         });
       });
     axios
-      .get(`http://localhost:8081/api/v1/ledger/getFinanceOfLastSevenDays`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .get(
+        `${process.env.REACT_APP_API_URL}api/v1/ledger/getFinanceOfLastSevenDays`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((response) => {
         const responseData = response.data;
 

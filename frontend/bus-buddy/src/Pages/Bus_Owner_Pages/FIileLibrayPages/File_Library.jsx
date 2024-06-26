@@ -31,7 +31,7 @@ function File_Library() {
       setLoading(true);
       axios
         .post(
-          `http://localhost:8081/api/v1/document/add?category=DOC_CATEGORY_UNSPECIFIED&name=${docName}`,
+          `${process.env.REACT_APP_API_URL}api/v1/document/add?category=DOC_CATEGORY_UNSPECIFIED&name=${docName}`,
           form,
           {
             headers: {
