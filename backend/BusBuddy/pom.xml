@@ -66,6 +66,11 @@
 			<artifactId>springfox-swagger2</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.google.cloud</groupId>-->
+<!--			<artifactId>spring-cloud-gcp-starter-sql-postgresql</artifactId>-->
+<!--			<version>5.2.0</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>io.debezium</groupId>
@@ -78,7 +83,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>io.debezium</groupId>
 			<artifactId>debezium-core</artifactId>
