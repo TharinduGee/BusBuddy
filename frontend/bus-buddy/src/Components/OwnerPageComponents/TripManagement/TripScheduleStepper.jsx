@@ -6,6 +6,7 @@ import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
+import RingLoader from "react-spinners/RingLoader";
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -32,18 +33,24 @@ const textBoxTheme = createTheme({
     borderRadius: 12,
   },
 });
-
+const today = new Date();
+today.setHours(0, 0, 0, 0);
 const validationSchemaStep2 = (value) => {
   if (value === "a") {
     return Yup.object().shape({
-      startDate_: Yup.date().required("Date is required"),
+      startDate_: Yup.date()
+        .required("Date is required")
+        .min(today, "Date cannot be before today"),
     });
   } else if (value === "b") {
     return Yup.object().shape({
-      startDate_: Yup.date().required("Start Date is required"),
+      startDate_: Yup.date()
+        .required("Start Date is required")
+        .min(today, "Start Date cannot be before today"),
       endDate_: Yup.date()
         .required("End Date is required")
-        .min(Yup.ref("startDate_"), "End Date must be after Start Date"),
+        .min(Yup.ref("startDate_"), "End Date must be after Start Date")
+        .min(today, "End Date cannot be before today"),
     });
   }
   return Yup.object();
@@ -111,6 +118,7 @@ const customTheme = createTheme({
 
 export default function TripScheduleStepper() {
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(false);
   const [busIDoptions, setbusIDoptions] = useState([]);
   const [routeIDoptions, setrouteIDoptions] = useState([]);
   const [driverIDoptions, setdriverIDoptions] = useState([]);
@@ -168,6 +176,7 @@ export default function TripScheduleStepper() {
   }, [formValues, triggerDropDownInfo]);
 
   const handleButtonClick = (formik) => {
+    console.log("dsada" + formik);
     formik.handleSubmit();
     setTimeout(function () {
       setTriggerDropDownInfo(true);
@@ -176,133 +185,165 @@ export default function TripScheduleStepper() {
 
   const getDropDownInfo = () => {
     console.log("sadas" + formValues.startTime_);
-    const StartTime = formValues.startTime_.toDate();
-    const formattedStartTime = format(StartTime, "HH:mm:ss");
-    const EndTime = formValues.endTime_.toDate();
-    const formattedEndTime = format(EndTime, "HH:mm:ss");
+    if (formValues.startTime_ != null || formValues.endTime_ != null) {
+      const StartTime = formValues.startTime_.toDate();
+      const formattedStartTime = format(StartTime, "HH:mm:ss");
+      const EndTime = formValues.endTime_.toDate();
+      const formattedEndTime = format(EndTime, "HH:mm:ss");
 
-    const year = formValues.startDate_.year();
-    const month = formValues.startDate_.month() + 1;
-    const day = formValues.startDate_.date();
-    const formattedStartDate = `${year}-${String(month).padStart(
-      2,
-      "0"
-    )}-${String(day).padStart(2, "0")}`;
+      const year = formValues.startDate_.year();
+      const month = formValues.startDate_.month() + 1;
+      const day = formValues.startDate_.date();
+      const formattedStartDate = `${year}-${String(month).padStart(
+        2,
+        "0"
+      )}-${String(day).padStart(2, "0")}`;
 
-    var formattedEndDate = null;
-    if (formValues.endDate_ !== null) {
-      const eyear = formValues.endDate_.year();
-      const emonth = formValues.endDate_.month() + 1;
-      const eday = formValues.endDate_.date();
-      formattedEndDate = `${eyear}-${String(emonth).padStart(2, "0")}-${String(
-        eday
-      ).padStart(2, "0")}`;
-    }
+      var formattedEndDate = null;
+      if (formValues.endDate_ !== null) {
+        const eyear = formValues.endDate_.year();
+        const emonth = formValues.endDate_.month() + 1;
+        const eday = formValues.endDate_.date();
+        formattedEndDate = `${eyear}-${String(emonth).padStart(
+          2,
+          "0"
+        )}-${String(eday).padStart(2, "0")}`;
+      }
 
-    console.log(
-      "sDate : " + formattedEndDate + "\n eDate : " + formattedStartDate
-    );
-    try {
-      axios
-        .get(
-          `http://localhost:8081/api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
-            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
-          }`,
-          {
+      console.log(
+        "sDate : " + formattedEndDate + "\n eDate : " + formattedStartDate
+      );
+      try {
+        axios
+          .get(
+            `http://localhost:8081/api/v1/employee/getDriverInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+              formValues.endDate_ == null
+                ? formattedStartDate
+                : formattedEndDate
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const datafromApi = response.data;
+            const newOptions = datafromApi.map((item) => ({
+              value: item.empId,
+              label: item.name,
+            }));
+            console.log("response " + response.data);
+            setdriverIDoptions(newOptions);
+            console.log("drivers options " + newOptions);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        console.error("There was an error!", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
+        });
+      }
+
+      try {
+        axios
+          .get(
+            `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+              formValues.endDate_ == null
+                ? formattedStartDate
+                : formattedEndDate
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const datafromApi = response.data;
+            const newOptions = datafromApi.map((item) => ({
+              value: item.empId,
+              label: item.name,
+            }));
+            setConductorIDoptions(newOptions);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        console.error("There was an error!", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
+        });
+      }
+
+      try {
+        axios
+          .get(
+            `http://localhost:8081/api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
+              formValues.endDate_ == null
+                ? formattedStartDate
+                : formattedEndDate
+            }`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((response) => {
+            const datafromApi = response.data;
+            const newOptions = datafromApi.map((item) => ({
+              value: item.busId,
+              label: item.numberPlate,
+            }));
+            setbusIDoptions(newOptions);
+            console.log(datafromApi);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
+        });
+        console.error("There was an error!", error);
+      }
+      try {
+        setLoading(true);
+        axios
+          .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
-        )
-        .then((response) => {
-          const datafromApi = response.data;
-          const newOptions = datafromApi.map((item) => ({
-            value: item.empId,
-            label: item.name,
-          }));
-          console.log("response " + response.data);
-          setdriverIDoptions(newOptions);
-          console.log("drivers options " + newOptions);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
+          })
+          .then((response) => {
+            const busIDs = response.data;
 
-    try {
-      axios
-        .get(
-          `http://localhost:8081/api/v1/employee/getConductorInfo?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
-            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          const datafromApi = response.data;
-          const newOptions = datafromApi.map((item) => ({
-            value: item.empId,
-            label: item.name,
-          }));
-          setConductorIDoptions(newOptions);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
+            const newOptions = busIDs.map((id) => ({ value: id, label: id }));
+            setrouteIDoptions(newOptions);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.error("There was an error!", error);
+          });
+      } catch (error) {
+        setLoading(false);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: error.response.data,
         });
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
-
-    try {
-      axios
-        .get(
-          `http://localhost:8081/api/v1/bus/getValidBuses?startTime=${formattedStartTime}&endTime=${formattedEndTime}&startDate=${formattedStartDate}&endDate=${
-            formValues.endDate_ == null ? formattedStartDate : formattedEndDate
-          }`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          const datafromApi = response.data;
-          const newOptions = datafromApi.map((item) => ({
-            value: item.busId,
-            label: item.numberPlate,
-          }));
-          setbusIDoptions(newOptions);
-          console.log(datafromApi);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      console.error("There was an error!", error);
-    }
-    try {
-      axios
-        .get(`http://localhost:8081/api/v1/route/geRouteIds`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((response) => {
-          const busIDs = response.data;
-
-          const newOptions = busIDs.map((id) => ({ value: id, label: id }));
-          setrouteIDoptions(newOptions);
-        })
-        .catch((error) => {
-          console.error("There was an error!", error);
-        });
-    } catch (error) {
-      console.error("There was an error!", error);
+        console.error("There was an error!", error);
+      }
     }
   };
 
@@ -750,7 +791,9 @@ export default function TripScheduleStepper() {
   ];
 
   const [refresh, setRefresh] = useState(true);
+
   useEffect(() => {}, [refresh]);
+
   const AddTripForTheDate = () => {
     const StartTime = formValues.startTime_.toDate();
     const formattedStartTime = format(StartTime, "HH:mm:ss");
@@ -775,7 +818,7 @@ export default function TripScheduleStepper() {
       conductorId: formValues.conductor_,
       expense: formValues.expenses_,
     };
-
+    setLoading(true);
     axios
       .post(
         `http://localhost:8081/api/v1/trip/add?date=${formattedStartDate}`,
@@ -793,6 +836,7 @@ export default function TripScheduleStepper() {
           text: "Trip Data Inserted Successfully!",
           icon: "success",
         });
+        setLoading(false);
       })
       .catch(function (error) {
         Swal.fire({
@@ -800,7 +844,7 @@ export default function TripScheduleStepper() {
           title: "Oops...",
           text: "Something went wrong!",
         });
-
+        setLoading(false);
         console.error("Error posting data:", error);
       });
     handleReset();
@@ -843,7 +887,7 @@ export default function TripScheduleStepper() {
       },
       lastDate: formattedEndDate,
     };
-
+    setLoading(true);
     axios
       .post(
         `http://localhost:8081/api/v1/trip/scheduleTripsForDuration`,
@@ -861,6 +905,7 @@ export default function TripScheduleStepper() {
           text: "Trip Data Inserted Successfully!",
           icon: "success",
         });
+        setLoading(false);
       })
       .catch(function (error) {
         Swal.fire({
@@ -868,6 +913,7 @@ export default function TripScheduleStepper() {
           title: "Oops...",
           text: "Something went wrong!",
         });
+        setLoading(false);
         console.error("Error posting data:", error);
       });
     handleReset();
@@ -884,47 +930,59 @@ export default function TripScheduleStepper() {
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Box sx={{ Width: "80%" }}>
-        <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepLabel>{step.label}</StepLabel>
-              <StepContent>
-                <Formik
-                  initialValues={formValues}
-                  validationSchema={
-                    index === 1
-                      ? validationSchemaStep2(value)
-                      : step.validationSchema
-                  }
-                  onSubmit={(values) => handleNext(values)}
-                >
-                  {(formik) => <Form>{step.content(formik)}</Form>}
-                </Formik>
-              </StepContent>
-            </Step>
-          ))}
-        </Stepper>
-        {activeStep === steps.length && (
-          <Paper square elevation={0} sx={{ p: 3 }}>
-            <Typography>All steps completed - you're finished</Typography>
-            <Box sx={{ mb: 2 }}>
-              <div>
-                <Button
-                  variant="contained"
-                  onClick={() => AddTrip()}
-                  sx={{ mt: 1, mr: 1 }}
-                >
-                  Submit
-                </Button>
-                <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
-                  Reset
-                </Button>
-              </div>
-            </Box>
-          </Paper>
-        )}
-      </Box>
+      {loading ? (
+        <div className="ringloader-position">
+          <RingLoader
+            loading={loading}
+            color="orange"
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      ) : (
+        <Box sx={{ Width: "80%" }}>
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StepLabel>{step.label}</StepLabel>
+                <StepContent>
+                  <Formik
+                    initialValues={formValues}
+                    validationSchema={
+                      index === 1
+                        ? validationSchemaStep2(value)
+                        : step.validationSchema
+                    }
+                    onSubmit={(values) => handleNext(values)}
+                  >
+                    {(formik) => <Form>{step.content(formik)}</Form>}
+                  </Formik>
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
+          {activeStep === steps.length && (
+            <Paper square elevation={0} sx={{ p: 3 }}>
+              <Typography>All steps completed - you're finished</Typography>
+              <Box sx={{ mb: 2 }}>
+                <div>
+                  <Button
+                    variant="contained"
+                    onClick={() => AddTrip()}
+                    sx={{ mt: 1, mr: 1 }}
+                  >
+                    Submit
+                  </Button>
+                  <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+                    Reset
+                  </Button>
+                </div>
+              </Box>
+            </Paper>
+          )}
+        </Box>
+      )}
     </ThemeProvider>
   );
 }

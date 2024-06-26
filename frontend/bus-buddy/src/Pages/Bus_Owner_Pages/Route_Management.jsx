@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import RingLoader from "react-spinners/RingLoader";
 import "./Team_Directory.css";
 import "./Route_Management.css";
 import EditNoteSharpIcon from "@mui/icons-material/EditNoteSharp";
@@ -19,7 +20,7 @@ import { IoIosFolderOpen } from "react-icons/io";
 
 function Route_Management() {
   const token = localStorage.getItem("token");
-
+  const [loading, setLoading] = useState(false);
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -274,7 +275,7 @@ function Route_Management() {
       ).padStart(2, "0")}`;
       const form = new FormData();
       form.append("file", file);
-
+      setLoading(true);
       axios
         .post(
           `http://localhost:8081/api/v1/route/add?startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
@@ -294,10 +295,12 @@ function Route_Management() {
             text: "Route Added Successfully!",
             icon: "success",
           });
+          setLoading(false);
           console.log("Data successfully posted:", response.data);
           setRefresh(!refresh);
         })
         .catch(function (error) {
+          setLoading(false);
           Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -353,6 +356,7 @@ function Route_Management() {
       ).padStart(2, "0")}`;
       const form = new FormData();
       form.append("file", file);
+      setLoading(true);
       axios
         .post(
           `http://localhost:8081/api/v1/route/edit?routeId=${updateData.routeId}&startDestination=${routeData.startDestination}&endDestination=${routeData.endDestination}&distance=${routeData.distance}&noOfSections=${routeData.noOfSections}&permitExpDate=${formattedDate}`,
@@ -374,10 +378,18 @@ function Route_Management() {
             text: "Route Information Updated Successfully!",
             icon: "success",
           });
+          setLoading(false);
           setRefresh(!refresh);
         })
         .catch(function (error) {
+          setLoading(false);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
           console.error("Error posting data:", error);
+          setLoading(false);
         });
 
       clear();
@@ -395,6 +407,7 @@ function Route_Management() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         axios
           .delete(`http://localhost:8081/api/v1/route/remove?routeId=${id}`, {
             headers: {
@@ -408,6 +421,7 @@ function Route_Management() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setLoading(false);
             setRefresh(!refresh);
           })
           .catch((error) => {
@@ -416,6 +430,7 @@ function Route_Management() {
               title: "Oops...",
               text: "Something went wrong!",
             });
+            setLoading(false);
             console.error("Error deleting data:", error.message);
           });
       }
@@ -490,6 +505,7 @@ function Route_Management() {
     <div>
       <div className="d-flex flex-column align-items-center  justify-content-end">
         <h1 className="pb-4">Route Managment</h1>
+
         <div
           style={{ width: "80%" }}
           className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
@@ -540,131 +556,143 @@ function Route_Management() {
         className="justify-content-center align-items-center d-flex py-4"
         style={{ width: "100%" }}
       >
-        <div className="op-main-container">
-          <div className="d-flex flex-wrap  justify-content-between two-fields">
-            <div className="input-and-label">
-              <label className="form-label">Start Destination*</label>
-              <input
-                type="text"
-                id="startDestination"
-                className="form-control input-field"
-                value={routeData.startDestination}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input-and-label">
-              <label className="form-label">End Destination*</label>
-              <input
-                type="text"
-                id="endDestination"
-                className="form-control input-field"
-                value={routeData.endDestination}
-                onChange={handleChange}
-              />
-            </div>
+        {loading ? (
+          <div className="ringloader-position">
+            <RingLoader
+              loading={loading}
+              color="orange"
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
           </div>
-          <div className="d-flex flex-wrap  justify-content-between two-fields">
-            <div className="input-and-label">
-              <label className="form-label">Distance*</label>
-              <input
-                type="number"
-                id="distance"
-                className="form-control input-field"
-                value={routeData.distance}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="input-and-label">
-              <label className="form-label">Number of Sections*</label>
-              <input
-                type="number"
-                id="noOfSections"
-                className="form-control input-field"
-                value={routeData.noOfSections}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="choosefile-expiredate">
-            <div className="d-flex flex-column input-and-label">
-              <label className="form-label">Permite Expire Date*</label>
-              <ThemeProvider theme={datepicker_theme}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    slotProps={{ field: { clearable: true } }}
-                    sx={{ width: 200 }}
-                    value={value}
-                    onChange={async (newValue) =>
-                      await setRouteDate(
-                        {
-                          ...routeData,
-                          permitExpDate: newValue,
-                        },
-                        setValue(newValue)
-                      )
-                    }
-                    id="permitExpDate"
-                  />
-                </LocalizationProvider>
-              </ThemeProvider>
-            </div>
-            <div
-              style={{
-                width: 300,
-                margin: 30,
-                marginBottom: 1,
-              }}
-              className="input-group "
-            >
-              <div className="d-flex flex-column align-items-center">
+        ) : (
+          <div className="op-main-container">
+            <div className="d-flex flex-wrap  justify-content-between two-fields">
+              <div className="input-and-label">
+                <label className="form-label">Start Destination*</label>
                 <input
-                  type="file"
-                  className="form-control input-field-choosefile "
-                  id="inputGroupFile02"
-                  onChange={handleFileChange}
-                  ref={inputRef}
+                  type="text"
+                  id="startDestination"
+                  className="form-control input-field"
+                  value={routeData.startDestination}
+                  onChange={handleChange}
                 />
-                <div className="normal-details-filename">{fileName}</div>
+              </div>
+              <div className="input-and-label">
+                <label className="form-label">End Destination*</label>
+                <input
+                  type="text"
+                  id="endDestination"
+                  className="form-control input-field"
+                  value={routeData.endDestination}
+                  onChange={handleChange}
+                />
               </div>
             </div>
-          </div>
+            <div className="d-flex flex-wrap  justify-content-between two-fields">
+              <div className="input-and-label">
+                <label className="form-label">Distance*</label>
+                <input
+                  type="number"
+                  id="distance"
+                  className="form-control input-field"
+                  value={routeData.distance}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="input-and-label">
+                <label className="form-label">Number of Sections*</label>
+                <input
+                  type="number"
+                  id="noOfSections"
+                  className="form-control input-field"
+                  value={routeData.noOfSections}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className="choosefile-expiredate">
+              <div className="d-flex flex-column input-and-label">
+                <label className="form-label">Permite Expire Date*</label>
+                <ThemeProvider theme={datepicker_theme}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      slotProps={{ field: { clearable: true } }}
+                      sx={{ width: 200 }}
+                      value={value}
+                      onChange={async (newValue) =>
+                        await setRouteDate(
+                          {
+                            ...routeData,
+                            permitExpDate: newValue,
+                          },
+                          setValue(newValue)
+                        )
+                      }
+                      id="permitExpDate"
+                    />
+                  </LocalizationProvider>
+                </ThemeProvider>
+              </div>
+              <div
+                style={{
+                  width: 300,
+                  margin: 30,
+                  marginBottom: 1,
+                }}
+                className="input-group "
+              >
+                <div className="d-flex flex-column align-items-center">
+                  <input
+                    type="file"
+                    className="form-control input-field-choosefile "
+                    id="inputGroupFile02"
+                    onChange={handleFileChange}
+                    ref={inputRef}
+                  />
+                  <div className="normal-details-filename">{fileName}</div>
+                </div>
+              </div>
+            </div>
 
-          <div className="d-flex flex-wrap justify-content-between two-fields">
-            <Button
-              style={buttonStyle_Add}
-              className="d-flex  update-btn"
-              variant="contained"
-              disabled={isAddButtonDisabled}
-              onClick={AddRoute}
-            >
-              Add Route
-            </Button>
-            <Button
-              style={{
-                borderRadius: 10,
-                margin: 30,
-                backgroundColor: "#ff760d",
-                color: "white",
-                width: "200px",
-              }}
-              className="d-flex  update-btn"
-              variant="contained"
-              onClick={clear}
-              disabled={false}
-            >
-              Clear
-            </Button>
-            <Button
-              style={buttonStyle_Update}
-              className="d-flex  update-btn"
-              variant="contained"
-              disabled={isUpdateButtonDisabled}
-              onClick={UpdateRoute}
-            >
-              Update Route
-            </Button>
+            <div className="d-flex flex-wrap justify-content-between two-fields">
+              <Button
+                style={buttonStyle_Add}
+                className="d-flex  update-btn"
+                variant="contained"
+                disabled={isAddButtonDisabled}
+                onClick={AddRoute}
+              >
+                Add Route
+              </Button>
+              <Button
+                style={{
+                  borderRadius: 10,
+                  margin: 30,
+                  backgroundColor: "#ff760d",
+                  color: "white",
+                  width: "200px",
+                }}
+                className="d-flex  update-btn"
+                variant="contained"
+                onClick={clear}
+                disabled={false}
+              >
+                Clear
+              </Button>
+              <Button
+                style={buttonStyle_Update}
+                className="d-flex  update-btn"
+                variant="contained"
+                disabled={isUpdateButtonDisabled}
+                onClick={UpdateRoute}
+              >
+                Update Route
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

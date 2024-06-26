@@ -9,12 +9,13 @@ import Button from "@mui/material-next/Button";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
 import Swal from "sweetalert2";
+import RingLoader from "react-spinners/RingLoader";
 
 function EmployeeDocumentPage() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
   const [refresh, setRefresh] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -175,6 +176,7 @@ function EmployeeDocumentPage() {
   const handleOpen = async (id) => {
     console.log(id);
     try {
+      setLoading(true);
       const response = await axios.get(
         `http://localhost:8081/api/v1/document/getDocument?docId=${id}`,
         {
@@ -186,8 +188,10 @@ function EmployeeDocumentPage() {
       );
       const blob = new Blob([response.data], { type: "application/pdf" });
       const url = URL.createObjectURL(blob);
+      setLoading(false);
       window.open(url);
     } catch (error) {
+      setLoading(false);
       console.error(`Error: ${error}`);
       Swal.fire("Error", "Failed to fetch PDF", "error");
     }
@@ -203,6 +207,7 @@ function EmployeeDocumentPage() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         axios
           .delete(`http://localhost:8081/api/v1/document/remove?docId=${id}`, {
             headers: {
@@ -216,9 +221,11 @@ function EmployeeDocumentPage() {
               text: "FIle Deleted Successfully.",
               icon: "success",
             });
+            setLoading(false);
             setRefresh(!refresh);
           })
           .catch((error) => {
+            setLoading(false);
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -272,26 +279,37 @@ function EmployeeDocumentPage() {
             </Button>
           </div>
         </div>
-
-        <div
-          className="justify-content-center align-items-center mt-2"
-          style={{ width: "80%", height: 600 }}
-        >
-          <ThemeProvider theme={table_theme}>
-            <DataGrid
-              rows={pageState.data}
-              page={pageState.page - 1}
-              columns={columns}
-              loading={pageState.isLoading}
-              rowCount={pageState.total}
-              paginationModel={paginationModel}
-              paginationMode="server"
-              onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={[10, 20]}
-              rowHeight={40}
+        {loading ? (
+          <div className="ringloader-position">
+            <RingLoader
+              loading={loading}
+              color="orange"
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
             />
-          </ThemeProvider>
-        </div>
+          </div>
+        ) : (
+          <div
+            className="justify-content-center align-items-center mt-2"
+            style={{ width: "80%", height: 600 }}
+          >
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={pageState.data}
+                page={pageState.page - 1}
+                columns={columns}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[10, 20]}
+                rowHeight={40}
+              />
+            </ThemeProvider>
+          </div>
+        )}
       </div>
     </div>
   );

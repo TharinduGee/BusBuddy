@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import { DataGrid } from "@mui/x-data-grid";
+import RingLoader from "react-spinners/RingLoader";
 import "./Finacial_Center.css";
 import "./Team_Directory.css";
 import "./Route_Management.css";
@@ -13,12 +14,10 @@ import * as Yup from "yup";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import Swal from "sweetalert2";
-import { orange } from "@mui/material/colors";
 
 function Finacial_Center() {
   const buttonStyle_Add = {
@@ -28,7 +27,7 @@ function Finacial_Center() {
     color: "white",
     width: "300px",
   };
-
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("token");
 
   const table_theme = createTheme({
@@ -54,52 +53,6 @@ function Finacial_Center() {
             height: 2,
             "&.MuiDataGrid-cell--selected": {
               borderColor: "transparent",
-            },
-          },
-        },
-      },
-    },
-  });
-
-  const customTheme = createTheme({
-    palette: {
-      primary: {
-        main: orange[800],
-      },
-      secondary: {
-        main: orange[600],
-      },
-    },
-    components: {
-      MuiStepLabel: {
-        styleOverrides: {
-          label: {
-            "&.Mui-active": {
-              color: orange[800],
-            },
-            "&.Mui-completed": {
-              color: orange[600],
-            },
-          },
-        },
-      },
-      MuiStepIcon: {
-        styleOverrides: {
-          root: {
-            "&.Mui-active": {
-              color: orange[800],
-            },
-            "&.Mui-completed": {
-              color: orange[600],
-            },
-          },
-        },
-      },
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            "&.Mui-disabled": {
-              color: orange[100],
             },
           },
         },
@@ -283,186 +236,201 @@ function Finacial_Center() {
     <div>
       <h1 className="d-flex justify-content-center">Fincial Center</h1>
 
-      <div className="d-flex flex-column align-items-center">
-        <div
-          className="d-flex flex-column  input-and-label mt-3 "
-          style={{ width: "80%" }}
-        >
-          <label class="form-label">Search By Date</label>
-          <ThemeProvider theme={text_box_the}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                sx={{ width: 200 }}
-                slotProps={{ field: { clearable: true } }}
-                value={searchDate}
-                onChange={(value) => {
-                  setSearchDate(value);
-                }}
-              />
-            </LocalizationProvider>
-          </ThemeProvider>
+      {loading ? (
+        <div className="ringloader-position">
+          <RingLoader
+            loading={loading}
+            color="orange"
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
         </div>
-        <div
-          className="justify-content-center align-items-center"
-          style={{ width: "80%", height: 325 }}
-        >
-          <ThemeProvider theme={table_theme}>
-            <DataGrid
-              rows={pageState.data}
-              page={pageState.page - 1}
-              columns={columns}
-              loading={pageState.isLoading}
-              rowCount={pageState.total}
-              paginationModel={paginationModel}
-              paginationMode="server"
-              onPaginationModelChange={setPaginationModel}
-              pageSizeOptions={[5, 10]}
-              rowHeight={40}
-            />
-          </ThemeProvider>
-        </div>
-
-        <div className="op-main-container">
-          <Formik
-            initialValues={formValues}
-            validationSchema={validationSchema}
-            onSubmit={async (values, { setSubmitting, resetForm }) => {
-              try {
-                const response = await axios.post(
-                  `http://localhost:8081/api/v1/ledger/addEntry`,
-                  values,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${token}`,
-                    },
-                  }
-                );
-
-                console.log("Data successfully posted:", response.data);
-                Swal.fire({
-                  title: "Good job!",
-                  text: "Ledger Data Inserted Successfully!",
-                  icon: "success",
-                });
-                setRefresh(!refresh);
-                resetForm();
-              } catch (error) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Oops...",
-                  text: error.response.data,
-                });
-              }
-
-              setSubmitting(false);
-            }}
+      ) : (
+        <div className="d-flex flex-column align-items-center">
+          <div
+            className="d-flex flex-column  input-and-label mt-3 "
+            style={{ width: "80%" }}
           >
-            {({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-              setFieldValue,
-            }) => (
-              <Form onSubmit={handleSubmit}>
-                <div className="field-container-finacial">
-                  <FormControl>
-                    <label className="form-label">
-                      Transaction Type<span className="text-danger">*</span>
-                    </label>
-                    <Select
-                      className="input-field-finacial"
-                      labelId="transaction-type-label"
-                      id="type"
-                      name="type"
-                      value={values.type}
-                      onChange={(event) =>
-                        setFieldValue("type", event.target.value, true)
-                      }
-                      error={touched.type && Boolean(errors.type)}
-                    >
-                      {TransactionType.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item.split("E_")[1]}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {touched.type && errors.type && (
-                      <Typography color="error">{errors.type}</Typography>
-                    )}
-                  </FormControl>
+            <label class="form-label">Search By Date</label>
+            <ThemeProvider theme={text_box_the}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  sx={{ width: 200 }}
+                  slotProps={{ field: { clearable: true } }}
+                  value={searchDate}
+                  onChange={(value) => {
+                    setSearchDate(value);
+                  }}
+                />
+              </LocalizationProvider>
+            </ThemeProvider>
+          </div>
+          <div
+            className="justify-content-center align-items-center"
+            style={{ width: "80%", height: 325 }}
+          >
+            <ThemeProvider theme={table_theme}>
+              <DataGrid
+                rows={pageState.data}
+                page={pageState.page - 1}
+                columns={columns}
+                loading={pageState.isLoading}
+                rowCount={pageState.total}
+                paginationModel={paginationModel}
+                paginationMode="server"
+                onPaginationModelChange={setPaginationModel}
+                pageSizeOptions={[5, 10]}
+                rowHeight={40}
+              />
+            </ThemeProvider>
+          </div>
 
-                  <div className="d-flex flex-column ">
-                    <label className="form-label">
-                      Transaction Name<span className="text-danger">*</span>
-                    </label>
-                    <TextField
-                      id="name"
-                      name="name"
-                      value={values.name}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.name && Boolean(errors.name)}
-                      helperText={touched.name && errors.name}
-                      className="input-field-finacial"
-                    />
-                  </div>
-                </div>
-                <div className="field-container-finacial">
-                  <div className="d-flex flex-column ">
-                    <label className="form-label">
-                      Amount<span className="text-danger">*</span>
-                    </label>
-                    <TextField
-                      type="number"
-                      id="amount"
-                      name="amount"
-                      value={values.amount}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      error={touched.amount && Boolean(errors.amount)}
-                      helperText={touched.amount && errors.amount}
-                      className="input-field-finacial"
-                    />
-                  </div>
-                  {values.type !== "TRANSACTION_TYPE_UNSPECIFIED" && (
-                    <div className="d-flex flex-column  ">
+          <div className="op-main-container">
+            <Formik
+              initialValues={formValues}
+              validationSchema={validationSchema}
+              onSubmit={async (values, { setSubmitting, resetForm }) => {
+                setLoading(true);
+                try {
+                  const response = await axios.post(
+                    `http://localhost:8081/api/v1/ledger/addEntry`,
+                    values,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                      },
+                    }
+                  );
+
+                  console.log("Data successfully posted:", response.data);
+                  Swal.fire({
+                    title: "Good job!",
+                    text: "Ledger Data Inserted Successfully!",
+                    icon: "success",
+                  });
+                  setLoading(false);
+                  setRefresh(!refresh);
+                  resetForm();
+                } catch (error) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: error.response.data,
+                  });
+                  setLoading(false);
+                }
+
+                setSubmitting(false);
+              }}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                setFieldValue,
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <div className="field-container-finacial">
+                    <FormControl>
                       <label className="form-label">
-                        Reference Id<span className="text-danger">*</span>
+                        Transaction Type<span className="text-danger">*</span>
+                      </label>
+                      <Select
+                        className="input-field-finacial"
+                        labelId="transaction-type-label"
+                        id="type"
+                        name="type"
+                        value={values.type}
+                        onChange={(event) =>
+                          setFieldValue("type", event.target.value, true)
+                        }
+                        error={touched.type && Boolean(errors.type)}
+                      >
+                        {TransactionType.map((item, index) => (
+                          <MenuItem key={index} value={item}>
+                            {item.split("E_")[1]}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {touched.type && errors.type && (
+                        <Typography color="error">{errors.type}</Typography>
+                      )}
+                    </FormControl>
+
+                    <div className="d-flex flex-column ">
+                      <label className="form-label">
+                        Transaction Name<span className="text-danger">*</span>
                       </label>
                       <TextField
-                        type="text"
-                        id="refId"
-                        name="refId"
-                        value={values.refId}
+                        id="name"
+                        name="name"
+                        value={values.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        error={touched.refId && Boolean(errors.refId)}
-                        helperText={touched.refId && errors.refId}
+                        error={touched.name && Boolean(errors.name)}
+                        helperText={touched.name && errors.name}
                         className="input-field-finacial"
                       />
                     </div>
-                  )}
-                </div>
-                <div className="d-flex justify-content-center">
-                  <Button
-                    type="submit"
-                    style={buttonStyle_Add}
-                    className="d-flex update-btn"
-                    variant="contained"
-                    disabled={isSubmitting}
-                  >
-                    Add Edger Entry
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
+                  </div>
+                  <div className="field-container-finacial">
+                    <div className="d-flex flex-column ">
+                      <label className="form-label">
+                        Amount<span className="text-danger">*</span>
+                      </label>
+                      <TextField
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        value={values.amount}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.amount && Boolean(errors.amount)}
+                        helperText={touched.amount && errors.amount}
+                        className="input-field-finacial"
+                      />
+                    </div>
+                    {values.type !== "TRANSACTION_TYPE_UNSPECIFIED" && (
+                      <div className="d-flex flex-column  ">
+                        <label className="form-label">
+                          Reference Id<span className="text-danger">*</span>
+                        </label>
+                        <TextField
+                          type="text"
+                          id="refId"
+                          name="refId"
+                          value={values.refId}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={touched.refId && Boolean(errors.refId)}
+                          helperText={touched.refId && errors.refId}
+                          className="input-field-finacial"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <Button
+                      type="submit"
+                      style={buttonStyle_Add}
+                      className="d-flex update-btn"
+                      variant="contained"
+                      disabled={isSubmitting}
+                    >
+                      Add Edger Entry
+                    </Button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

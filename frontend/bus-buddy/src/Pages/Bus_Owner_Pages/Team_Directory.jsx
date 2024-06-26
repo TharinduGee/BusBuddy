@@ -3,6 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material-next/Button";
 import add_icon from "./../../Assets/Owner_assests/add_icon.png";
 import avatar from "./../../Assets/Owner_assests/Avatar.png";
+import RingLoader from "react-spinners/RingLoader";
 import { DataGrid } from "@mui/x-data-grid";
 import { IoIosFolderOpen } from "react-icons/io";
 import "./Team_Directory.css";
@@ -18,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 function Team_Directory() {
   const token = localStorage.getItem("token");
+  const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const inputRef = useRef(null);
   const [salary, setSalary] = useState(null);
@@ -86,7 +88,7 @@ function Team_Directory() {
   const UpdateEmployee = () => {
     const form = new FormData();
     form.append("file", file);
-
+    setLoading(true);
     axios
       .post(
         `http://localhost:8081/api/v1/employee/edit?empId=${selectedID}&salary=${salary}&joinedDate=${joinedDate}`,
@@ -109,10 +111,12 @@ function Team_Directory() {
           text: "Employee Detailed Updated Successfully!",
           icon: "success",
         });
+        setLoading(false);
         setRefresh(!refresh);
       })
       .catch(function (error) {
         console.error("Error posting data:", error);
+        setLoading(false);
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -314,6 +318,7 @@ function Team_Directory() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         axios
           .delete(`http://localhost:8081/api/v1/employee/remove?empId=${id}`, {
             headers: {
@@ -327,6 +332,7 @@ function Team_Directory() {
               text: "User removed from your business.",
               icon: "success",
             });
+            setLoading(false);
             setRefresh(!refresh);
           })
           .catch((error) => {
@@ -335,6 +341,7 @@ function Team_Directory() {
               title: "Oops...",
               text: "Something went wrong!",
             });
+            setLoading(false);
             console.error("Error deleting data:", error.message);
           });
       }
@@ -406,30 +413,42 @@ function Team_Directory() {
             </ThemeProvider>
           </div>
         </div>
-        <div
-          className={
-            selectedID !== ""
-              ? "d-flex flex-wrap justify-content-center align-items-center"
-              : "hidden-schedule"
-          }
-        >
-          <div>
-            <img className="photo-view" src={avatar} alt="profile Icon" />
+        {loading ? (
+          <div className="ringloader-position">
+            <RingLoader
+              loading={loading}
+              color="orange"
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
           </div>
+        ) : (
+          <div
+            className={
+              selectedID !== ""
+                ? "d-flex flex-wrap justify-content-center align-items-center"
+                : "hidden-schedule"
+            }
+          >
+            <div>
+              <img className="photo-view" src={avatar} alt="profile Icon" />
+            </div>
 
-          <div className="d-flex flex-column">
-            <lable className="profession">{selectedRole}</lable>
-            <lable class="name-avatar">{selectedfullname}</lable>
-            <div className="normal-details">
-              <lable>ID :</lable>
-              <lable> {selectedID}</lable>
-            </div>
-            <div className="normal-details">
-              <lable>Salary :</lable>
-              <lable> {selectedSalary}</lable>
+            <div className="d-flex flex-column">
+              <lable className="profession">{selectedRole}</lable>
+              <lable class="name-avatar">{selectedfullname}</lable>
+              <div className="normal-details">
+                <lable>ID :</lable>
+                <lable> {selectedID}</lable>
+              </div>
+              <div className="normal-details">
+                <lable>Salary :</lable>
+                <lable> {selectedSalary}</lable>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
       <Popup
         title="Update Employee"

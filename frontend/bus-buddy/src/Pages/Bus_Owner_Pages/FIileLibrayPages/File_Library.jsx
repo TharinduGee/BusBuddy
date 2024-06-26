@@ -5,11 +5,13 @@ import "./FileLibrary.css";
 import Button from "@mui/material-next/Button";
 import axios from "axios";
 import Swal from "sweetalert2";
+import RingLoader from "react-spinners/RingLoader";
 
 function File_Library() {
   const token = localStorage.getItem("token");
   const [docName, setDocName] = useState("");
   const childRef = useRef();
+  const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
   const handleFileChange = (e) => {
     const nwfile = e;
@@ -26,7 +28,7 @@ function File_Library() {
     } else {
       const form = new FormData();
       form.append("file", file);
-
+      setLoading(true);
       axios
         .post(
           `http://localhost:8081/api/v1/document/add?category=DOC_CATEGORY_UNSPECIFIED&name=${docName}`,
@@ -46,6 +48,7 @@ function File_Library() {
             text: "File Added Successfully!",
             icon: "success",
           });
+          setLoading(false);
           childRef.current?.resetform();
           console.log("Data successfully posted:", response.data);
         })
@@ -55,6 +58,7 @@ function File_Library() {
             title: "Oops...",
             text: "Something went wrong!",
           });
+          setLoading(false);
           console.error("Error posting data:", error);
         });
       clear();
@@ -98,8 +102,19 @@ function File_Library() {
             }}
           />
         </div>
-
-        <Uploader ref={childRef} handleFileChange={handleFileChange} />
+        {loading ? (
+          <div className="ringloader-position">
+            <RingLoader
+              loading={loading}
+              color="orange"
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+        ) : (
+          <Uploader ref={childRef} handleFileChange={handleFileChange} />
+        )}
       </div>
 
       <Button

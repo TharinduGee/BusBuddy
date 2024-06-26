@@ -10,7 +10,12 @@
 .input-field-finacial {
   width: 20dvw;
 }
-
+.ringloader-position {
+  height: 80dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 @media (max-width: 700px) {
   .field-container-finacial {
     display: grid;
