@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../../../Assets/bus.png';
-import './SidebarOwner.css';
+import '../../Bus_Owner_Pages/Owner_profile_setting/SidebarOwner.css';
 import { IoIosMenu, IoIosClose } from 'react-icons/io';
 import { FiLogOut } from 'react-icons/fi';
 import { useLocation } from 'react-router-dom';
@@ -8,7 +8,8 @@ import axios from 'axios';
 import { IoIosArrowBack } from 'react-icons/io';
 import Button from '@mui/material-next/Button';
 
-function SidebarOwner({ children }) {
+
+function SidebarInfoDriver({ children }) {
 	const [sidebarOwnerClass, setSidebarOwnerClass] = useState('sidebarOwner');
 	const [mainClass, setmainClass] = useState('main-content');
 	const spans = document.querySelectorAll('span');
@@ -113,21 +114,21 @@ function SidebarOwner({ children }) {
 					<ul className="px-3">
 						<li>
 							<a
-								href="/Bus_Info"
+								href="/Bus_Info_Driver"
 								className={
-									activeOwnerLink === '/Bus_Info'
+									activeOwnerLink === '/Bus_Info_Driver'
 										? 'activeOwner-link'
 										: 'notactiveOwner-link'
 								}
 							>
-								{activeOwnerLink === '/Bus_Info' ? (
-									<span>| Bus Info</span>
+								{activeOwnerLink === '/Bus_Info_Driver' ? (
+									<span>| Profile Info</span>
 								) : (
 									<span>Bus Info</span>
 								)}
 							</a>
 						</li>
-						<li>
+						{/*<li>
 							<a
 								href="/contactInfo"
 								className={
@@ -158,17 +159,17 @@ function SidebarOwner({ children }) {
 									<span>Membership</span>
 								)}
 							</a>
-						</li>
+						</li>*/}
 						<li>
 							<a
-								href="/passwordSecurity"
+								href="/passwordSecurityDriver"
 								className={
-									activeOwnerLink === '/passwordSecurity'
+									activeOwnerLink === '/passwordSecurityDriver'
 										? 'activeOwner-link'
 										: 'notactiveOwner-link'
 								}
 							>
-								{activeOwnerLink === '/passwordSecurity' ? (
+								{activeOwnerLink === '/passwordSecurityDriver' ? (
 									<span>| Password & Security</span>
 								) : (
 									<span>Password & Security</span>
@@ -183,7 +184,7 @@ function SidebarOwner({ children }) {
 				</a> */}
 				<div className="mx-5 justify-content-center">
 					<Button
-						href="/dashboard"
+						href="/DriverDashboard"
 						className="d-flex flex-row justify-content-start owner-settings-back"
 						// size="large"
 						variant="text"
@@ -199,4 +200,4 @@ function SidebarOwner({ children }) {
 	);
 }
 
-export default SidebarOwner;
+export default SidebarInfoDriver;

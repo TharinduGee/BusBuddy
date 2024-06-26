@@ -3,9 +3,9 @@ import avatar from '../../../Assets/Owner_assests/Avatar.png';
 import axios from 'axios';
 import './BusInfoDriver.css';
 import Button from '@mui/material/Button';
-import SidebarOwner from './SidebarOwner';
+import SidebarInfoDriver from './SidebarInfoDriver';
 
-function BusInfo() {
+function BusInfoDriver() {
 	const token = localStorage.getItem('token');
 	const [username, setUsername] = useState('');
 	const [Data, setData] = useState({
@@ -75,9 +75,9 @@ function BusInfo() {
 	};
 
 	return (
-		<SidebarOwner>
+		<SidebarInfoDriver>
 			<div className="d-flex flex-column align-items-center justify-content-center">
-				<h1 className="d-flex pb-3">Bus Business Information</h1>
+				<h1 className="d-flex pb-3">Profile Information</h1>
 				<div className="op-main-container">
 					<div className="d-flex flex-row align-items-center">
 						<img
@@ -149,8 +149,8 @@ function BusInfo() {
 					</div>
 				</div>
 			</div>
-		</SidebarOwner>
+		</SidebarInfoDriver>
 	);
 }
 
-export default BusInfo;
+export default BusInfoDriver;

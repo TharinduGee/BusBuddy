@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
 
 :root {
-	--sidebarOwner-color: rgb(255, 255, 255);
+	--sidebarInforDriver-color: rgb(255, 255, 255);
 	--text-color: rgb(0, 0, 0);
 	--menu-text-color: rgb(0, 0, 0);
 	--settings-hover-text-color: #ff760d;
 	--button-color: rgb(0, 0, 0);
-	--button-text-color: rgb(255, 255, 255);
+	--button-text-color: rgb(255, 255), 
 	--line-color: rgb(180, 180, 180);
 	--switch-base-color: rgb(201, 202, 206);
 	--switch-circle-color: rgb(241, 241, 241);
@@ -21,7 +21,7 @@
 	text-decoration: none;
 	font-family: 'Outfit', sans-serif;
 }
-.sidebarOwner-container {
+.sidebarInforDriver-container {
 	display: flex;
 }
 
@@ -63,7 +63,7 @@
 	display: none;
 }
 
-.sidebarOwnericon_main {
+.sidebarInforDrivericon_main {
 	width: 40px;
 	padding-left: 10px;
 	margin-right: 20px;
@@ -105,7 +105,7 @@
 	color: var(--menu-text-color);
 }
 
-.sidebarOwner {
+.sidebarInforDriver {
 	position: fixed;
 	display: flex;
 	flex-direction: column;
@@ -114,7 +114,7 @@
 	height: 100%;
 	overflow: hidden;
 	padding: 20px 0px;
-	background-color: var(--sidebarOwner-color);
+	background-color: var(--sidebarInforDriver-color);
 	transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
 	z-index: 50;
 	box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
@@ -123,11 +123,11 @@
 	display: none;
 }
 
-.mini-sidebarOwner {
+.mini-sidebarInforDriver {
 	width: 80px;
 }
 
-.sidebarOwner span {
+.sidebarInforDriver span {
 	margin-left: 0;
 	margin-right: 5px;
 	width: 100px;
@@ -138,13 +138,13 @@
 	transition: opacity 0.5s ease, width 0.5s ease;
 }
 
-.sidebarOwner span.hidden {
+.sidebarInforDriver span.hidden {
 	opacity: 0;
 	width: 0;
 }
 
 /*------------> Page Name */
-.sidebarOwner .page-name {
+.sidebarInforDriver .page-name {
 	width: 100%;
 	height: 45px;
 	color: var(--text-color);
@@ -153,43 +153,43 @@
 	align-items: center;
 }
 
-.sidebarOwner .page-name ion-icon {
+.sidebarInforDriver .page-name ion-icon {
 	min-width: 50px;
 	font-size: 40px;
 	cursor: pointer;
 }
 
-.sidebarOwner .page-name span {
+.sidebarInforDriver .page-name span {
 	margin-left: 5px;
 	font-size: 25px;
 }
 
-.sidebarOwner .navigation {
+.sidebarInforDriver .navigation {
 	height: 100%;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
 
-.sidebarOwner .navigation::-webkit-scrollbar {
+.sidebarInforDriver .navigation::-webkit-scrollbar {
 	width: 5px;
 }
 
-.sidebarOwner .navigation::-webkit-scrollbar-thumb {
+.sidebarInforDriver .navigation::-webkit-scrollbar-thumb {
 	background-color: var(--scroll-color);
 	border-radius: 5px;
 }
 
-.sidebarOwner .navigation::-webkit-scrollbar-thumb:hover {
+.sidebarInforDriver .navigation::-webkit-scrollbar-thumb:hover {
 	background-color: var(--scroll-hover-color);
 }
 
-.sidebarOwner .navigation li {
+.sidebarInforDriver .navigation li {
 	list-style: none;
 	display: flex;
 	margin-bottom: 25px;
 }
 
-.sidebarOwner .navigation a {
+.sidebarInforDriver .navigation a {
 	width: 100%;
 	height: 45px;
 	display: flex;
@@ -197,19 +197,19 @@
 	text-decoration: none;
 	border-radius: 10px;
 }
-.activeOwner-link {
+.activeInforDriver-link {
 	color: #ff760d;
 	font-weight: 600;
 }
-.notactiveOwner-link {
+.notactiveInforDriver-link {
 	color: black;
 }
-.sidebarOwner .navigation a:hover {
+.sidebarInforDriver .navigation a:hover {
 	color: var(--settings-hover-text-color);
 	background-color: whitesmoke;
 }
 
-.sidebarOwner .line {
+.sidebarInforDriver .line {
 	width: 100%;
 	height: 1px;
 	margin-top: 15px;
@@ -217,18 +217,18 @@
 	background-color: var(--line-color);
 }
 
-.sidebarOwner .user {
+.sidebarInforDriver .user {
 	width: 100%;
 	display: flex;
 }
 
-.sidebarOwner .user img {
+.sidebarInforDriver .user img {
 	width: 50px;
 	min-width: 50px;
 	border-radius: 10px;
 }
 
-.sidebarOwner .user .user-info {
+.sidebarInforDriver .user .user-info {
 	width: 100%;
 	display: flex;
 	align-items: center;
@@ -237,39 +237,39 @@
 	overflow: hidden;
 }
 
-.sidebarOwner .user .name-email {
+.sidebarInforDriver .user .name-email {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
 	margin-left: 5px;
 }
 
-.sidebarOwner .user .name {
+.sidebarInforDriver .user .name {
 	font-size: 15px;
 	font-weight: 600;
 }
 
-.sidebarOwner .user .email {
+.sidebarInforDriver .user .email {
 	font-size: 13px;
 }
 
-.sidebarOwner .user ion-icon {
+.sidebarInforDriver .user ion-icon {
 	font-size: 20px;
 }
 
 @media (max-height: 660px) {
-	.sidebarOwner .page-name {
+	.sidebarInforDriver .page-name {
 		margin-bottom: 5px;
 	}
 }
 
 @media (max-width: 600px) {
-	.sidebarOwner {
+	.sidebarInforDriver {
 		position: fixed;
 		left: -250px;
 	}
 
-	.max-sidebarOwner {
+	.max-sidebarInforDriver {
 		left: 0;
 	}
 
@@ -293,7 +293,7 @@
 	margin: top 5px;
 }
 
-.owner-settings-back {
+.inforDriver-settings-back {
 	width: 150px;
 	font-size: large;
 }
