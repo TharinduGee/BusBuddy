@@ -287,7 +287,12 @@ public class EmployeeService {
 
         Business business = businessService.extractBId(httpServletRequest);
         List<Employee> allEmployees = employeeRepository.findByBusinessAndDesignation(business , EmployeeType.EMPLOYEE_TYPE_CONDUCTOR);
-        List<Employee> invalidEmployees = tripRepository.findDistinctInvalidConductors(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        List<Employee> invalidEmployees = null;
+        if(startTime.isAfter(endTime)){
+            invalidEmployees = tripRepository.findDistinctInvalidConductorsSpanMidnight(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        }else{
+            invalidEmployees = tripRepository.findDistinctInvalidConductorsNotSpanMidnight(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        }
 
         allEmployees.removeAll(invalidEmployees.stream().toList());
 
@@ -295,6 +300,9 @@ public class EmployeeService {
             return EmployeeInfo.builder().empId(employee.getEmpId()).name(employee.getName()).build();
         }).toList();
     }
+
+
+
 
 
 //    public List<Long> getConductorIds(HttpServletRequest httpServletRequest){
