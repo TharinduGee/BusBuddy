@@ -210,7 +210,13 @@ public class BusService {
 
         Business business = businessService.extractBId(httpServletRequest);
         List<Bus> allBuses = busRepository.findByBusiness(business);
-        List<Bus> invalidBuses = tripRepository.findDistinctInvalidBuses(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        List<Bus> invalidBuses = null;
+        if(startTime.isAfter(endTime)){
+            invalidBuses = tripRepository.findDistinctInvalidBusesSpanMidnight(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        }else{
+            invalidBuses = tripRepository.findDistinctInvalidBusesNotSpanMidnight(business , startDate, endDate ,startTime ,endTime, TripStatus.TRIP_STATUS_COMPLETED);
+        }
+
 
         allBuses.removeAll(invalidBuses.stream().toList());
 
