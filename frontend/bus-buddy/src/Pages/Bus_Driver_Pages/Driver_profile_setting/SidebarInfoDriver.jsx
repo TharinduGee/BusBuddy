@@ -124,7 +124,7 @@ function SidebarInfoDriver({ children }) {
 								{activeOwnerLink === '/Bus_Info_Driver' ? (
 									<span>| Profile Info</span>
 								) : (
-									<span>Bus Info</span>
+									<span>Profile</span>
 								)}
 							</a>
 						</li>

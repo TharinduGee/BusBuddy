@@ -1,155 +1,189 @@
 import React, { useEffect, useState } from 'react';
-import avatar from '../../../Assets/Owner_assests/Avatar.png';
 import axios from 'axios';
-import './BusInfoDriver.css';
+import '../../Bus_Owner_Pages/Owner_profile_setting/BusInfo.css';
 import Button from '@mui/material/Button';
-import SidebarInfoDriver from './SidebarInfoDriver';
+import AddIcon from '@mui/icons-material/Add';
+import SidebarOwner from './SidebarInfoDriver';
+import Swal from 'sweetalert2';
 
 function BusInfoDriver() {
 	const token = localStorage.getItem('token');
-	const [username, setUsername] = useState('');
-	const [Data, setData] = useState({
-		businessName: '',
-		registrationNo: '',
-		// email: "",
-		address: '',
-	});
-
-	const [buttonDisabled, setButtonDisabled] = useState(true);
+	const [userData, setUserData] = useState({});
+	const [imageData, setImageData] = useState(null);
+	const [file, setFile] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		if (token) {
 			axios
-				.get('http://localhost:8081/api/v1/business/getInfo', {
-					headers: { Authorization: `Bearer ${token}` },
-				})
-				.then((response) => {
-					if (response && response.data) {
-						setData(response.data);
-					}
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		}
-	}, [token]);
-
-	useEffect(() => {
-		if (username === '') {
-			axios
-				.get(`http://localhost:8081/api/v1/user/getUsername`, {
+				.get('http://localhost:8081/api/v1/user/getUserDetails', {
 					headers: {
 						Authorization: `Bearer ${token}`,
 					},
 				})
 				.then(function (response) {
-					setUsername(response.data);
+					setUserData(response.data);
+					console.log('Data successfully fetched:', response.data);
 				})
 				.catch(function (error) {
-					console.error('Error posting data:', error);
+					console.error('Error fetching user data:', error);
 				});
+		} else {
+			console.error('No token found in local storage');
 		}
-	}, [username, token]);
+	}, [token]);
 
-	const handleInputChange = (event) => {
-		const { id, value } = event.target;
-		setData((prevData) => ({
-			...prevData,
-			[id]: value,
-		}));
-		setButtonDisabled(false); // Enable the button when input changes
+	useEffect(() => {
+		fetchImage();
+	}, [token]);
+
+	const fetchImage = async () => {
+		try {
+			const response = await axios.get(
+				'http://localhost:8081/api/v1/user/getImage',
+				{
+					responseType: 'arraybuffer',
+					headers: { Authorization: `Bearer ${token}` },
+				}
+			);
+
+			if (response.data) {
+				const base64Image = arrayBufferToBase64(response.data);
+				setImageData(`data:image/png;base64,${base64Image}`);
+			}
+		} catch (error) {
+			console.error('Error fetching image data:', error);
+		}
 	};
 
-	const handleUpdate = () => {
+	const handleFileChange = (event) => {
+		const selectedFile = event.target.files[0];
+		setFile(selectedFile);
+	};
+
+	const handleUpload = () => {
+		if (!file) {
+			console.error('No file selected.');
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append('image', file);
+
+		setLoading(true);
 		axios
-			.post('http://localhost:8081/api/v1/business/editBusinessInfo', Data, {
-				headers: { Authorization: `Bearer ${token}` },
+			.post('http://localhost:8081/api/v1/user/uploadImage', formData, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+					'Content-Type': 'multipart/form-data',
+				},
 			})
 			.then((response) => {
-				console.log('Update Successful');
-				setButtonDisabled(true);
+				console.log('Profile picture updated successfully:', response.data);
+				fetchImage();
+				Swal.fire({
+					title: 'Good job!',
+					text: 'Image Added Successfully!',
+					icon: 'success',
+				});
 			})
 			.catch((error) => {
-				console.error('Update Failed:', error);
+				console.error('Error updating profile picture:', error);
+				Swal.fire({
+					icon: 'error',
+					title: 'Oops...',
+					text: 'Something went wrong!',
+				});
+			})
+			.finally(() => {
+				setLoading(false);
 			});
 	};
 
+	function arrayBufferToBase64(buffer) {
+		let binary = '';
+		const bytes = new Uint8Array(buffer);
+		for (let i = 0; i < bytes.byteLength; i++) {
+			binary += String.fromCharCode(bytes[i]);
+		}
+		return btoa(binary);
+	}
+
 	return (
-		<SidebarInfoDriver>
-			<div className="d-flex flex-column align-items-center justify-content-center">
+		<SidebarOwner>
+			<div className="d-flex flex-column align-items-center justify-content-center" style={{ height: '100vh' }}>
 				<h1 className="d-flex pb-3">Profile Information</h1>
-				<div className="op-main-container">
-					<div className="d-flex flex-row align-items-center">
-						<img
-							className="op-prof-pic  input-and-label "
-							src={avatar}
-							alt="Add Icon"
-						/>
-						<div className="d-flex flex-column mx-4">
-							<label>{username}</label>
-						</div>
-					</div>
-					<div className="d-flex flex-wrap  justify-content-between two-fields">
-						<div className="input-and-label">
-							<label className="form-label">Business Name*</label>
-							<input
-								type="text"
-								id="businessName"
-								className="form-control input-field"
-								value={Data.businessName}
-								onChange={handleInputChange}
+				<div className="op-main-container d-flex flex-column align-items-center">
+					<div className="d-flex flex-column align-items-center">
+						<div style={{ 
+							border: '5px solid #ff760d', 
+							borderRadius: '50%', 
+							padding: '10px', 
+							marginBottom: '20px' 
+						}}>
+							<img
+								className="op-prof-pic-set input-and-label"
+								src={imageData}
+								alt="User"
+								style={{ 
+									width: '200px', 
+									height: '200px', 
+									borderRadius: '50%', 
+								}}
 							/>
 						</div>
-						<div className="input-and-label">
-							<label className="form-label">Registration ID*</label>
+						<div className="d-flex justify-content-center mt-3">
 							<input
-								type="text"
-								id="registrationNo"
-								className="form-control input-field"
-								value={Data.registrationNo}
-								onChange={handleInputChange}
+								accept="image/*"
+								id="icon-button-file"
+								type="file"
+								style={{ display: 'none' }}
+								onChange={handleFileChange}
 							/>
+							<Button
+								style={{
+									backgroundColor: 'Gray',
+									color: 'white',
+									marginRight: '10px',
+								}}
+								variant="contained"
+								component="label"
+								htmlFor="icon-button-file"
+								startIcon={<AddIcon />}
+							>
+								Select Image
+							</Button>
+							<Button
+								style={{
+									backgroundColor: '#ff760d',
+									color: 'white',
+									marginLeft: '10px',
+									padding: '10px 20px',
+									borderRadius: '5px',
+									fontSize: '16px',
+								}}
+								className="d-flex update-btn"
+								variant="contained"
+								onClick={handleUpload}
+								disabled={loading}
+							>
+								{loading ? 'Uploading...' : 'Upload Image'}
+							</Button>
 						</div>
-						{/* <div className="input-and-label">
-            <label className="form-label">Email*</label>
-            <input
-              type="text"
-              id="email"
-              className="form-control input-field"
-              value={Data.email}
-              onChange={handleInputChange}
-            />
-          </div> */}
 					</div>
-					<div className="input-and-label">
-						<label className="form-label">Address*</label>
-						<input
-							type="text"
-							id="address"
-							className="form-control address-text-field"
-							value={Data.address}
-							onChange={handleInputChange}
-						/>
-					</div>
-					<div className="d-flex justify-content-center">
-						<Button
-							style={{
-								borderRadius: 10,
-								margin: 30,
-								width: '100%',
-								backgroundColor: buttonDisabled ? 'gray' : '#ff760d',
-							}}
-							className="d-flex  update-btn"
-							variant="contained"
-							onClick={handleUpdate}
-							disabled={buttonDisabled}
-						>
-							Update Information
-						</Button>
+					<div className="d-flex flex-column align-items-center mt-4">
+						<label style={{ fontSize: '20px', fontWeight: 'bold' }}>
+							{userData.firstName} {userData.lastName}
+						</label>
+						<label>Email: {userData.email}</label>
+						<label>Mobile Number: {userData.mobileNo}</label>
+						<label>Age: {userData.age}</label>
+						<label>Birthday: {new Date(userData.bday).toLocaleDateString()}</label>
+						<label>Salary: ${userData.salary}</label>
 					</div>
 				</div>
 			</div>
-		</SidebarInfoDriver>
+		</SidebarOwner>
 	);
 }
 
