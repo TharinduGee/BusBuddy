@@ -11,12 +11,15 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import RingLoader from "react-spinners/RingLoader";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { IoIosFolderOpen } from "react-icons/io";
+
 function Fleet_Operation() {
   const token = localStorage.getItem("token");
   const [searchInput, setSearchInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const table_theme = createTheme({
     components: {
       MuiDataGrid: {
@@ -304,6 +307,7 @@ function Fleet_Operation() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         axios
           .delete(`http://localhost:8081/api/v1/bus/remove?busId=${id}`, {
             headers: {
@@ -317,9 +321,11 @@ function Fleet_Operation() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setLoading(false);
             setRefresh(!refresh);
           })
           .catch((error) => {
+            setLoading(false);
             Swal.fire("Error", "Oops Somthing Happened", "error");
             console.error("Error deleting data:", error.message);
           });
@@ -374,7 +380,7 @@ function Fleet_Operation() {
       const form = new FormData();
       form.append("file", file);
       console.log(file);
-
+      setLoading(true);
       axios
         .post(
           `http://localhost:8081/api/v1/bus/add?type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
@@ -395,10 +401,17 @@ function Fleet_Operation() {
             text: "Bus Added Successfully!",
             icon: "success",
           });
+          setLoading(false);
           setRefresh(!refresh);
         })
         .catch(function (error) {
           console.error("Error posting data:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong",
+          });
+          setLoading(false);
         });
       clear();
     }
@@ -432,7 +445,7 @@ function Fleet_Operation() {
       ).padStart(2, "0")}`;
       const form = new FormData();
       form.append("file", file);
-
+      setLoading(true);
       axios
         .post(
           `http://localhost:8081/api/v1/bus/edit?busId=${updateData.busId}&type=${busData.type}&numberPlate=${busData.numberPlate}&lastServicedDate=${formattedDate}&seats=${busData.Seats}&regNo=${busData.regNo}`,
@@ -452,6 +465,7 @@ function Fleet_Operation() {
             text: "Bus Detailed Updated Successfully!",
             icon: "success",
           });
+          setLoading(false);
           setRefresh(!refresh);
         })
         .catch(function (error) {
@@ -460,6 +474,7 @@ function Fleet_Operation() {
             title: "Oops...",
             text: "Something went wrong",
           });
+          setLoading(false);
           console.error("Error posting data:", error);
         });
 
@@ -481,191 +496,209 @@ function Fleet_Operation() {
 
   return (
     <div>
-      <div className="d-flex flex-column align-items-center  justify-content-end">
-        <h1 className="pb-4">Fleet Operations</h1>
-        <div
-          style={{ width: "80%" }}
-          className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
-        >
-          <ThemeProvider theme={theme}>
-            <TextField
-              id="outlined-basic"
-              label="Search by Bus ID"
-              variant="outlined"
-              onChange={handleSearchInputChange}
-              InputProps={{
-                sx: {
-                  backgroundColor: "#F4F4F4",
-                  width: 250,
-                  borderRadius: 10,
-                  borderColor: "FF760D",
-                },
-              }}
-            />
-          </ThemeProvider>
+      <h1 className="pb-4 text-center">Fleet Operations</h1>
+      {loading ? (
+        <div className="ringloader-position">
+          <RingLoader
+            loading={loading}
+            color="orange"
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
         </div>
-        <div
-          className="justify-content-center align-items-center d-flex py-4"
-          style={{ height: 400, width: "100%" }}
-        >
-          <div
-            className="justify-content-center align-items-center"
-            style={{ width: "80%", height: 325 }}
-          >
-            <ThemeProvider theme={table_theme}>
-              <DataGrid
-                rows={pageState.data}
-                page={pageState.page - 1}
-                columns={columns}
-                loading={pageState.isLoading}
-                rowCount={pageState.total}
-                paginationModel={paginationModel}
-                paginationMode="server"
-                onPaginationModelChange={setPaginationModel}
-                pageSizeOptions={[5, 10]}
-                rowHeight={40}
-              />
-            </ThemeProvider>
-          </div>
-        </div>
-      </div>
-      <div
-        className="justify-content-center align-items-center d-flex py-4"
-        style={{ width: "100%" }}
-      >
-        <div className="trip-main-container ">
-          <div className="pair-container-fleet ">
-            <div className="input-and-label">
-              <label className="form-label">Number Plate*</label>
-              <input
-                type="text"
-                id="numberPlate"
-                className="form-control input-field-trip"
-                value={busData.numberPlate}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="input-and-label">
-              <label className="form-label">Registration No*</label>
-              <input
-                type="text"
-                id="regNo"
-                className="form-control input-field-trip"
-                value={busData.regNo}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className="pair-container-fleet ">
-            <div className="input-and-label">
-              <label className="form-label">Number of Seats*</label>
-              <input
-                type="number"
-                id="Seats"
-                className="form-control input-field-trip"
-                value={busData.Seats}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="input-and-label">
-              <label className="form-label">Bus Type*</label>
-              <select
-                id="type"
-                className="form-select input-field-trip"
-                value={value}
-                onChange={(newValue) => {
-                  setBusDate((prevState) => ({
-                    ...prevState,
-                    type: newValue.target.value,
-                  }));
-                  setValue(newValue.target.value);
-                  console.log("one change date", busData.type);
-                }}
-              >
-                <option value="NORMAL">NORMAL</option>
-                <option value="SEMI_LUXURY">SEMI_LUXURY</option>
-                <option value="LUXURY">LUXURY</option>
-              </select>
-            </div>
-          </div>
-          <div className="file-field-pair">
-            <div className="d-flex flex-column input-and-label mb-0">
-              <label className="form-label">Service Date*</label>
-              <ThemeProvider theme={datepicker_theme}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    sx={{ width: 200 }}
-                    slotProps={{ field: { clearable: true } }}
-                    value={value_date}
-                    onChange={(newValue) => {
-                      setBusDate((prevState) => ({
-                        ...prevState,
-                        lastServiceDate: newValue,
-                      }));
-
-                      setValue_date(newValue);
-                      console.log("one change date", busData.lastServiceDate);
-                    }}
-                    id="lastServiceDate"
-                  />
-                </LocalizationProvider>
+      ) : (
+        <div>
+          <div className="d-flex flex-column align-items-center  justify-content-end">
+            <div
+              style={{ width: "80%" }}
+              className="d-flex flex-wrap-reverse align-items-center  justify-content-between"
+            >
+              <ThemeProvider theme={theme}>
+                <TextField
+                  id="outlined-basic"
+                  label="Search by Bus ID"
+                  variant="outlined"
+                  onChange={handleSearchInputChange}
+                  InputProps={{
+                    sx: {
+                      backgroundColor: "#F4F4F4",
+                      width: 250,
+                      borderRadius: 10,
+                      borderColor: "FF760D",
+                    },
+                  }}
+                />
               </ThemeProvider>
             </div>
 
             <div
-              className="d-flex flex-column align-items-center justify-items-center "
-              style={{ margin: 30, marginBottom: 0 }}
+              className="justify-content-center align-items-center d-flex py-4"
+              style={{ height: 400, width: "100%" }}
             >
-              <input
-                type="file"
-                className="form-control input-field-choosefile "
-                id="inputGroupFile02"
-                onChange={handleFileChange}
-                ref={inputRef}
-              />
-              {fileName && (
-                <div className="normal-details-filename">{fileName}</div>
-              )}
+              <div
+                className="justify-content-center align-items-center"
+                style={{ width: "80%", height: 325 }}
+              >
+                <ThemeProvider theme={table_theme}>
+                  <DataGrid
+                    rows={pageState.data}
+                    page={pageState.page - 1}
+                    columns={columns}
+                    loading={pageState.isLoading}
+                    rowCount={pageState.total}
+                    paginationModel={paginationModel}
+                    paginationMode="server"
+                    onPaginationModelChange={setPaginationModel}
+                    pageSizeOptions={[5, 10]}
+                    rowHeight={40}
+                  />
+                </ThemeProvider>
+              </div>
             </div>
           </div>
-          <div className="d-flex flex-wrap mt-4 justify-content-between two-fields">
-            <Button
-              style={buttonStyle_Add}
-              className="d-flex  update-btn"
-              variant="contained"
-              disabled={isAddButtonDisabled}
-              onClick={AddBus}
-            >
-              Add Bus
-            </Button>
-            <Button
-              style={{
-                borderRadius: 10,
-                width: 200,
-                margin: 20,
-                backgroundColor: "#ff760d",
-                color: "white",
-              }}
-              className="d-flex  update-btn"
-              variant="contained"
-              onClick={clear}
-            >
-              Clear
-            </Button>
-            <Button
-              style={buttonStyle_Update}
-              className="d-flex  update-btn"
-              variant="contained"
-              disabled={isUpdateButtonDisabled}
-              onClick={UpdateBusData}
-            >
-              Update Bus
-            </Button>
+          <div
+            className="justify-content-center align-items-center d-flex py-4"
+            style={{ width: "100%" }}
+          >
+            <div className="trip-main-container ">
+              <div className="pair-container-fleet ">
+                <div className="input-and-label">
+                  <label className="form-label">Number Plate*</label>
+                  <input
+                    type="text"
+                    id="numberPlate"
+                    className="form-control input-field-trip"
+                    value={busData.numberPlate}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-and-label">
+                  <label className="form-label">Registration No*</label>
+                  <input
+                    type="text"
+                    id="regNo"
+                    className="form-control input-field-trip"
+                    value={busData.regNo}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className="pair-container-fleet ">
+                <div className="input-and-label">
+                  <label className="form-label">Number of Seats*</label>
+                  <input
+                    type="number"
+                    id="Seats"
+                    className="form-control input-field-trip"
+                    value={busData.Seats}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="input-and-label">
+                  <label className="form-label">Bus Type*</label>
+                  <select
+                    id="type"
+                    className="form-select input-field-trip"
+                    value={value}
+                    onChange={(newValue) => {
+                      setBusDate((prevState) => ({
+                        ...prevState,
+                        type: newValue.target.value,
+                      }));
+                      setValue(newValue.target.value);
+                      console.log("one change date", busData.type);
+                    }}
+                  >
+                    <option value="NORMAL">NORMAL</option>
+                    <option value="SEMI_LUXURY">SEMI_LUXURY</option>
+                    <option value="LUXURY">LUXURY</option>
+                  </select>
+                </div>
+              </div>
+              <div className="file-field-pair">
+                <div className="d-flex flex-column input-and-label mb-0">
+                  <label className="form-label">Service Date*</label>
+                  <ThemeProvider theme={datepicker_theme}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        sx={{ width: 200 }}
+                        slotProps={{ field: { clearable: true } }}
+                        value={value_date}
+                        onChange={(newValue) => {
+                          setBusDate((prevState) => ({
+                            ...prevState,
+                            lastServiceDate: newValue,
+                          }));
+
+                          setValue_date(newValue);
+                          console.log(
+                            "one change date",
+                            busData.lastServiceDate
+                          );
+                        }}
+                        id="lastServiceDate"
+                      />
+                    </LocalizationProvider>
+                  </ThemeProvider>
+                </div>
+
+                <div
+                  className="d-flex flex-column align-items-center justify-items-center "
+                  style={{ margin: 30, marginBottom: 0 }}
+                >
+                  <input
+                    type="file"
+                    className="form-control input-field-choosefile "
+                    id="inputGroupFile02"
+                    onChange={handleFileChange}
+                    ref={inputRef}
+                  />
+                  {fileName && (
+                    <div className="normal-details-filename">{fileName}</div>
+                  )}
+                </div>
+              </div>
+              <div className="d-flex flex-wrap mt-4 justify-content-between two-fields">
+                <Button
+                  style={buttonStyle_Add}
+                  className="d-flex  update-btn"
+                  variant="contained"
+                  disabled={isAddButtonDisabled}
+                  onClick={AddBus}
+                >
+                  Add Bus
+                </Button>
+                <Button
+                  style={{
+                    borderRadius: 10,
+                    width: 200,
+                    margin: 20,
+                    backgroundColor: "#ff760d",
+                    color: "white",
+                  }}
+                  className="d-flex  update-btn"
+                  variant="contained"
+                  onClick={clear}
+                >
+                  Clear
+                </Button>
+                <Button
+                  style={buttonStyle_Update}
+                  className="d-flex  update-btn"
+                  variant="contained"
+                  disabled={isUpdateButtonDisabled}
+                  onClick={UpdateBusData}
+                >
+                  Update Bus
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

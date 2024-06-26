@@ -10,7 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Swal from "sweetalert2";
 import TripScheduleStepper from "../../Components/OwnerPageComponents/TripManagement/TripScheduleStepper";
-
+import RingLoader from "react-spinners/RingLoader";
 function Trip_Management() {
   const [searchDates, setsearchDates] = useState({
     firstDate: null,
@@ -21,7 +21,7 @@ function Trip_Management() {
     data: [],
     total: 0,
   });
-
+  const [loading, setLoading] = useState(false);
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 5,
@@ -225,6 +225,7 @@ function Trip_Management() {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        setLoading(true);
         axios
           .delete(`http://localhost:8081/api/v1/trip/remove?tripId=${id}`, {
             headers: {
@@ -238,6 +239,7 @@ function Trip_Management() {
               text: "Your file has been deleted.",
               icon: "success",
             });
+            setLoading(false);
             setTimeout(function () {
               setRefresh(!refresh);
             }, 90);
@@ -249,6 +251,7 @@ function Trip_Management() {
               title: "Oops...",
               text: "Something went wrong!",
             });
+            setLoading(false);
             console.error("Error deleting data:", error.message);
           });
       }
@@ -332,11 +335,24 @@ function Trip_Management() {
           </div>
         </div>
       </div>
+
       <div
         className="justify-content-center align-items-center d-flex "
         style={{ width: "100%" }}
       >
-        <TripScheduleStepper />
+        {loading ? (
+          <div className="ringloader-position">
+            <RingLoader
+              loading={loading}
+              color="orange"
+              size={150}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+        ) : (
+          <TripScheduleStepper />
+        )}
       </div>
     </div>
   );
