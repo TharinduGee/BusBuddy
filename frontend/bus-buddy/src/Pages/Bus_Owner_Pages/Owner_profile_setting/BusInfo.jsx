@@ -43,7 +43,7 @@ function BusInfo() {
   useEffect(() => {
     if (token) {
       axios
-        .get("http://localhost:8081/api/v1/business/getInfo", {
+        .get(`${process.env.REACT_APP_API_URL}api/v1/business/getInfo`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((response) => {
@@ -90,7 +90,7 @@ function BusInfo() {
     axios
       .post(
         `${process.env.REACT_APP_API_URL}api/v1/business/editBusinessInfo`,
-        Data,
+        data,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
