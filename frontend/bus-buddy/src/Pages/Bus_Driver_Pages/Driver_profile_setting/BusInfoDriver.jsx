@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../Bus_Owner_Pages/Owner_profile_setting/BusInfo.css';
+import './BusInfoDriver.css';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import SidebarOwner from './SidebarInfoDriver';
@@ -111,25 +112,15 @@ function BusInfoDriver() {
 
 	return (
 		<SidebarOwner>
-			<div className="d-flex flex-column align-items-center justify-content-center" style={{ height: '100vh' }}>
+			<div className="container-fluid d-flex flex-column align-items-center justify-content-center full-screen">
 				<h1 className="d-flex pb-3">Profile Information</h1>
 				<div className="op-main-container d-flex flex-column align-items-center">
-					<div className="d-flex flex-column align-items-center">
-						<div style={{ 
-							border: '5px solid #ff760d', 
-							borderRadius: '50%', 
-							padding: '10px', 
-							marginBottom: '20px' 
-						}}>
+					<div className="d-flex flex-column align-items-center mb-4">
+						<div className="profile-picture-container">
 							<img
-								className="op-prof-pic-set input-and-label"
+								className="op-prof-pic-set"
 								src={imageData}
 								alt="User"
-								style={{ 
-									width: '200px', 
-									height: '200px', 
-									borderRadius: '50%', 
-								}}
 							/>
 						</div>
 						<div className="d-flex justify-content-center mt-3">
@@ -171,15 +162,38 @@ function BusInfoDriver() {
 							</Button>
 						</div>
 					</div>
-					<div className="d-flex flex-column align-items-center mt-4">
-						<label style={{ fontSize: '20px', fontWeight: 'bold' }}>
-							{userData.firstName} {userData.lastName}
-						</label>
-						<label>Email: {userData.email}</label>
-						<label>Mobile Number: {userData.mobileNo}</label>
-						<label>Age: {userData.age}</label>
-						<label>Birthday: {new Date(userData.bday).toLocaleDateString()}</label>
-						<label>Salary: ${userData.salary}</label>
+					<label className="full-name-label">
+						{userData.firstName} {userData.lastName}
+					</label>
+					<div className="row justify-content-center details-container">
+						<div className="col-md-6 p-3">
+							<div className="form-group row">
+								<label className="col-sm-4 col-form-label col-form-label-lg">Email</label>
+								<div className="col-sm-8">
+									<input type="text" readOnly className="form-control form-control-lg" value={userData.email} />
+								</div>
+							</div>
+							<div className="form-group row">
+								<label className="col-sm-4 col-form-label col-form-label-lg">Mobile Number</label>
+								<div className="col-sm-8">
+									<input type="text" readOnly className="form-control form-control-lg" value={userData.mobileNo} />
+								</div>
+							</div>
+						</div>
+						<div className="col-md-6 p-3">
+							<div className="form-group row">
+								<label className="col-sm-4 col-form-label col-form-label-lg">Birthday</label>
+								<div className="col-sm-8">
+									<input type="text" readOnly className="form-control form-control-lg" value={new Date(userData.bday).toLocaleDateString()} />
+								</div>
+							</div>
+							<div className="form-group row">
+								<label className="col-sm-4 col-form-label col-form-label-lg">Salary</label>
+								<div className="col-sm-8">
+									<input type="text" readOnly className="form-control form-control-lg" value={`$${userData.salary}`} />
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
