@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500&display=swap');
+
+:root {
+	--sidebarInforDriver-color: rgb(255, 255, 255);
+	--text-color: rgb(0, 0, 0);
+	--menu-text-color: rgb(0, 0, 0);
+	--settings-hover-text-color: #ff760d;
+	--button-color: rgb(0, 0, 0);
+	--button-text-color: rgb(255, 255), 
+	--line-color: rgb(180, 180, 180);
+	--switch-base-color: rgb(201, 202, 206);
+	--switch-circle-color: rgb(241, 241, 241);
+	--scroll-color: rgb(192, 192, 192);
+	--scroll-hover-color: rgb(134, 134, 134);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	text-decoration: none;
+	font-family: 'Outfit', sans-serif;
+}
+.sidebarInforDriver-container {
+	display: flex;
+}
+
+/* .menu {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: var(--button-color);
+  color: var(--button-text-color);
+  right: 15px;
+  top: 15px;
+  z-index: 100;
+} */
+
+.main-content {
+	width: 100%;
+	margin-left: 250px;
+	padding: 20px;
+	transition: margin-left 0.5s ease;
+}
+.main-content-hidden {
+	margin-left: 80px;
+	padding: 20px;
+	transition: margin-left 0.5s ease;
+	width: 100%;
+}
+
+.menuIconOpen {
+	display: block;
+	height: 100px;
+}
+.menu .menuIconClose {
+	display: none;
+}
+
+.sidebarInforDrivericon_main {
+	width: 40px;
+	padding-left: 10px;
+	margin-right: 20px;
+	margin-left: 15px;
+	height: auto;
+}
+.sidebarOwnericon {
+	width: 40px;
+	padding-left: 10px;
+	margin-right: 20px;
+	height: auto;
+}
+
+.sidebarOwnericon2 {
+	width: 33px;
+	padding-left: 10px;
+	margin-left: 4px;
+
+	margin-right: 17px;
+	height: auto;
+}
+
+.logout-btn {
+	width: 33px;
+	padding-left: 10px;
+	margin-left: 4px;
+	color: black;
+	margin-right: 17px;
+	height: auto;
+}
+
+.logout {
+	width: 100%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	border-radius: 10px;
+	color: var(--menu-text-color);
+}
+
+.sidebarInforDriver {
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 250px;
+	height: 100%;
+	overflow: hidden;
+	padding: 20px 0px;
+	background-color: var(--sidebarInforDriver-color);
+	transition: width 0.5s ease, background-color 0.3s ease, left 0.5s ease;
+	z-index: 50;
+	box-shadow: 0 0 50px 0 rgba(0, 0, 0, 0.1);
+}
+.hide {
+	display: none;
+}
+
+.mini-sidebarInforDriver {
+	width: 80px;
+}
+
+.sidebarInforDriver span {
+	margin-left: 0;
+	margin-right: 5px;
+	width: 100px;
+	white-space: nowrap;
+	font-size: 18px;
+	text-align: left;
+	opacity: 1;
+	transition: opacity 0.5s ease, width 0.5s ease;
+}
+
+.sidebarInforDriver span.hidden {
+	opacity: 0;
+	width: 0;
+}
+
+/*------------> Page Name */
+.sidebarInforDriver .page-name {
+	width: 100%;
+	height: 45px;
+	color: var(--text-color);
+	margin-bottom: 40px;
+	display: flex;
+	align-items: center;
+}
+
+.sidebarInforDriver .page-name ion-icon {
+	min-width: 50px;
+	font-size: 40px;
+	cursor: pointer;
+}
+
+.sidebarInforDriver .page-name span {
+	margin-left: 5px;
+	font-size: 25px;
+}
+
+.sidebarInforDriver .navigation {
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.sidebarInforDriver .navigation::-webkit-scrollbar {
+	width: 5px;
+}
+
+.sidebarInforDriver .navigation::-webkit-scrollbar-thumb {
+	background-color: var(--scroll-color);
+	border-radius: 5px;
+}
+
+.sidebarInforDriver .navigation::-webkit-scrollbar-thumb:hover {
+	background-color: var(--scroll-hover-color);
+}
+
+.sidebarInforDriver .navigation li {
+	list-style: none;
+	display: flex;
+	margin-bottom: 25px;
+}
+
+.sidebarInforDriver .navigation a {
+	width: 100%;
+	height: 45px;
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	border-radius: 10px;
+}
+.activeInforDriver-link {
+	color: #ff760d;
+	font-weight: 600;
+}
+.notactiveInforDriver-link {
+	color: black;
+}
+.sidebarInforDriver .navigation a:hover {
+	color: var(--settings-hover-text-color);
+	background-color: whitesmoke;
+}
+
+.sidebarInforDriver .line {
+	width: 100%;
+	height: 1px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	background-color: var(--line-color);
+}
+
+.sidebarInforDriver .user {
+	width: 100%;
+	display: flex;
+}
+
+.sidebarInforDriver .user img {
+	width: 50px;
+	min-width: 50px;
+	border-radius: 10px;
+}
+
+.sidebarInforDriver .user .user-info {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	color: var(--text-color);
+	overflow: hidden;
+}
+
+.sidebarInforDriver .user .name-email {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	margin-left: 5px;
+}
+
+.sidebarInforDriver .user .name {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.sidebarInforDriver .user .email {
+	font-size: 13px;
+}
+
+.sidebarInforDriver .user ion-icon {
+	font-size: 20px;
+}
+
+@media (max-height: 660px) {
+	.sidebarInforDriver .page-name {
+		margin-bottom: 5px;
+	}
+}
+
+@media (max-width: 600px) {
+	.sidebarInforDriver {
+		position: fixed;
+		left: -250px;
+	}
+
+	.max-sidebarInforDriver {
+		left: 0;
+	}
+
+	.menu {
+		display: flex;
+	}
+
+	.main-content {
+		margin-left: 0;
+	}
+
+	.main-content-hidden {
+		margin-left: 0px;
+	}
+}
+
+.title-text {
+	text-align: center;
+	font-weight: bold;
+	font-size: 40px;
+	margin: top 5px;
+}
+
+.inforDriver-settings-back {
+	width: 150px;
+	font-size: large;
+}

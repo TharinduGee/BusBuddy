@@ -9,6 +9,7 @@ import FleetOperation from "../../Assets/Navbar/Fleet_Operations.png";
 import { IoIosMenu, IoIosClose } from "react-icons/io";
 import { FiLogOut } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
+import { refreshTokenFetch } from "../../Pages/RefreshToken.js";
 import { Icon } from "@mui/material";
 
 function Sidebar({ children }) {
@@ -19,6 +20,7 @@ function Sidebar({ children }) {
   const [username, setUsername] = useState("");
   const location = useLocation();
   const token = localStorage.getItem("token");
+  const [imageData, setImageData] = useState(null);
 
   const [menuIcon, setMenuIcon] = useState(<IoIosMenu name="menu-outline" />);
 
@@ -83,7 +85,45 @@ function Sidebar({ children }) {
       .catch(function (error) {
         console.error("Error posting data:", error);
       });
-  }, [token]);
+  }, [username, token]);
+
+  function arrayBufferToBase64(buffer) {
+    var binary = "";
+    var bytes = new Uint8Array(buffer);
+    for (let i = 0; i < bytes.byteLength; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  }
+
+  async function fetchImageData(url) {
+    try {
+      const response = await axios.get(url, {
+        responseType: "arraybuffer",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching image data:", error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      var data = await fetchImageData(
+        "http://localhost:8081/api/v1/user/getImage"
+      );
+      if (data) {
+        var base64Image = arrayBufferToBase64(data);
+        setImageData(`data:image/png;base64,${base64Image}`);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="sidebar-container-driver">
@@ -102,8 +142,8 @@ function Sidebar({ children }) {
             <span>BusBuddy</span>
           </div>
         </div>
-        <div className="user ms-3">
-          <img name="ellipsis-vertical-outline" src={Driver} />
+        <a href="/bus_info_driver" className="user ms-3">
+          <img name="ellipsis-vertical-outline" src={imageData} />
 
           <div className="user-info">
             <div className="name-email">
@@ -111,7 +151,7 @@ function Sidebar({ children }) {
               <span className="email">ID: LH001238905</span>
             </div>
           </div>
-        </div>
+        </a>
         <div className="line"></div>
         <nav className="navigation">
           <ul className="px-3">

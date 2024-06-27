@@ -18,12 +18,11 @@ import TaxInsight from "./Pages/Bus_Owner_Pages/Tax_Insight";
 import RouteManagement from "./Pages/Bus_Owner_Pages/Route_Management";
 import TripManagement from "./Pages/Bus_Owner_Pages/Trip_Management";
 import DriverDashboard from "./Pages/Bus_Driver_Pages/DriverDashboard";
-import DriverBusManagement from "./Pages/Bus_Driver_Pages/DriverBusManagement";
-import DriverFinancial from "./Pages/Bus_Driver_Pages/DriverFinancial";
 import AddEmployee from "./Pages/Bus_Owner_Pages/Team_Directory_Add_Employee";
 import Membership from "./Pages/Bus_Owner_Pages/Owner_profile_setting/Membership";
 import ContactInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/ContactInfo";
 import BusInfo from "./Pages/Bus_Owner_Pages/Owner_profile_setting/BusInfo";
+import BusInfoDriver from "./Pages/Bus_Driver_Pages/Driver_profile_setting/BusInfoDriver";
 import PasswordSecurity from "./Pages/Bus_Owner_Pages/Owner_profile_setting/PasswordSecurity";
 import BusDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/BusDocumentPage";
 import OtherDocument from "./Pages/Bus_Owner_Pages/FIileLibrayPages/OtherDocument";
@@ -31,6 +30,7 @@ import RouteDocumentPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/RouteDoc
 import ServiceAgreementPage from "./Pages/Bus_Owner_Pages/FIileLibrayPages/ServiceAgreementPage";
 import ForgotPassword from "./Pages/LoginPage/Password_Reset/ForgotPassword";
 import PasswordResetPage from "./Pages/LoginPage/Password_Reset/PasswordResetPage";
+import PasswordSecurityDriver from "./Pages/Bus_Driver_Pages/Driver_profile_setting/PasswordSecurityDriver";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -55,30 +55,21 @@ root.render(
           <Route path="routemanagement" element={<RouteManagement />} />
           <Route path="tripmanagement" element={<TripManagement />} />
           <Route path="teamdirectory/addemployee" element={<AddEmployee />} />
-          <Route
-            path="filelibrary/BUS DOCUMENT"
-            element={<BusDocumentPage />}
-          />
+          <Route path="filelibrary/BUS DOCUMENT"element={<BusDocumentPage />} />
           <Route path="filelibrary/OTHER" element={<OtherDocument />} />
-          <Route
-            path="filelibrary/ROUTE PERMIT"
-            element={<RouteDocumentPage />}
-          />
-          <Route
-            path="filelibrary/SERVICE AGREEMENT"
-            element={<ServiceAgreementPage />}
-          />
+          <Route path="filelibrary/ROUTE PERMIT" element={<RouteDocumentPage />}  />
+          <Route path="filelibrary/SERVICE AGREEMENT" element={<ServiceAgreementPage />}   />
         </Route>
         <Route path="/SidebarDriver" element={<SidebarDriver />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/user/changePassword" element={<PasswordResetPage />} />
         <Route path="/DriverDashboard" element={<DriverDashboard />} />
-        <Route path="/DriverBusManagement" element={<DriverBusManagement />} />
-        <Route path="/DriverFinancial" element={<DriverFinancial />} />
         <Route path="/membership" element={<Membership />} />
         <Route path="/contactInfo" element={<ContactInfo />} />
         <Route path="/Bus_Info" element={<BusInfo Info />} />
+        <Route path="/Bus_Info_Driver" element={<BusInfoDriver Info />} />
         <Route path="/passwordSecurity" element={<PasswordSecurity />} />
+        <Route path="/passwordSecurityDriver" element={<PasswordSecurityDriver />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

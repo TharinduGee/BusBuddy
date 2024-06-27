@@ -1,0 +1,47 @@
+.full-screen {
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.op-main-container {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.profile-picture-container {
+  border: 5px solid #ff760d;
+  border-radius: 50%;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.op-prof-pic-set {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.full-name-label {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.details-container {
+  width: 100%;
+  margin-left: 0;
+}
+
+.form-group .col-form-label-lg {
+  font-size: 1.25rem;
+}
+
+.form-group .form-control-lg {
+  height: 75px;
+  width: 250px;
+}
+
+.form-group .col-sm-8 {
+  display: flex;
+}
