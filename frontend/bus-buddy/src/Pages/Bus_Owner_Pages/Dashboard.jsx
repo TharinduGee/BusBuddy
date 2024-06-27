@@ -4,6 +4,7 @@ import "./Dashboard.css";
 import IncomeExpensesViewer from "../../Components/OwnerPageComponents/Income_Expenses_Viewer/IncomeExpensesViewer";
 import EmployeeCountCard from "../../Components/OwnerPageComponents/EmployeeCountCard/EmployeeCountCard";
 import axios from "axios";
+import RingLoader from "react-spinners/RingLoader";
 function Dashboard() {
   const [chartData, setChartData] = useState([]);
   const token = localStorage.getItem("token");
@@ -11,6 +12,7 @@ function Dashboard() {
     income: 0,
     expense: 0,
   });
+  const [loading, setLoading] = useState(false);
   const [count, setcount] = useState({
     totalCount: null,
     driverCount: null,
@@ -19,7 +21,9 @@ function Dashboard() {
   });
   const apiUrl = process.env.REACT_APP_API_URL;
   const [loadgraph, setLoadGraph] = useState(false);
+
   useEffect(() => {
+    setLoading(true);
     console.log("this is the envirmentt " + apiUrl);
     axios
       .get(`${process.env.REACT_APP_API_URL}api/v1/bus/count`, {
@@ -49,6 +53,7 @@ function Dashboard() {
               driverCount: response.data.driverCount,
               conductorCount: response.data.conductorCount,
             }));
+            setLoading(false);
 
             setTimeout(function () {
               setLoadGraph(true);
@@ -117,10 +122,23 @@ function Dashboard() {
           <IncomeExpensesViewer data={income_expenses} />
         </div>
       </div>
-
-      <div className="chart-container">
-        {loadgraph && <Chart title="Income" aspect={3 / 1} data={chartData} />}
-      </div>
+      {loading ? (
+        <div className="ringloader-position">
+          <RingLoader
+            loading={loading}
+            color="orange"
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      ) : (
+        <div className="chart-container">
+          {loadgraph && (
+            <Chart title="Income" aspect={3 / 1} data={chartData} />
+          )}
+        </div>
+      )}
     </div>
   );
 }

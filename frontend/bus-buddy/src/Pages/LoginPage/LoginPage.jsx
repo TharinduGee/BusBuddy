@@ -178,9 +178,11 @@ function LoginPage() {
           </div>
         </div>
       )}
-      <div className="footer-pos">
-        <Footer />
-      </div>
+      {!loading && (
+        <div className="footer-full">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }

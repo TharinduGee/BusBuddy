@@ -43,9 +43,7 @@ function RegistrationPage() {
           text: "You have being registered succesfully",
           icon: "success",
         });
-        setTimeout(function () {
-          setLoadGraph(true);
-        }, 1000);
+        setTimeout(function () {}, 1000);
         navigate("/login");
       } catch (error) {
         Swal.fire({
